@@ -1,0 +1,18 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# ESLint Yapılandırması ve Hata Çözme Felsefesi
+
+Bu proje, kod kalitesini ve tutarlılığını sağlamak için ESLint kullanmaktadır. ESLint yapılandırması [eslint.config.mjs](mdc:eslint.config.mjs) dosyasında tanımlanmıştır.
+
+## Temel İlkeler
+
+1.  **Minimum Hata Yoksayma:** ESLint kurallarını devre dışı bırakmaktan veya hataları yoksaymaktan mümkün olduğunca kaçınırız. Amacımız, hataları geçici olarak gizlemek yerine kök nedenini anlayıp çözmektir.
+2.  **Doğru Çözümü Bulma:** Bir ESLint hatasıyla karşılaşıldığında, ilk adım hatanın nedenini anlamaktır. Kuralları hemen devre dışı bırakmak yerine, ilgili kütüphanenin veya ESLint kuralının belgelerini inceleyerek doğru kodlama pratiğini bulmaya çalışırız.
+3.  **Context7 MCP Kullanımı:** Doğru belgelere ve en iyi pratiklere ulaşmak için Context7 MCP araçlarından (`mcp_context7_resolve-library-id` ve `mcp_context7_get-library-docs`) aktif olarak yararlanırız. Bu, özellikle yeni kütüphane sürümleri veya karmaşık entegrasyonlarla çalışırken önemlidir.
+4.  **İstisnalar:** Çok nadir durumlarda, özellikle üçüncü parti kod entegrasyonlarında veya bilinen, çözümü olmayan lint hatalarında, belirli bir satır için `// eslint-disable-next-line` yorumu kullanılabilir. Ancak bu, son çare olmalı ve nedeni açıkça belirtilmelidir. Genel kural devre dışı bırakmalardan kaçınılmalıdır.
+
+Bu yaklaşım, projenin uzun vadede daha sürdürülebilir, okunabilir ve hatasız olmasını sağlamayı hedefler.
+

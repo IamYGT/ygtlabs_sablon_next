@@ -1,0 +1,118 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Next.js App Router Kılavuzu
+
+Bu projede Next.js 15.3 sürümü ve App Router mimarisi kullanılmaktadır. Aşağıda bu mimari ile ilgili temel bilgiler ve en iyi uygulamalar bulunmaktadır.
+
+## Context7 MCP Kullanımı
+
+**ÖNEMLİ:** Next.js App Router ile ilgili işlemler yapmadan önce, her zaman Context7 MCP'yi kullanarak ilgili belgeleri alın:
+
+```
+mcp_context7_resolve-library-id(libraryName: "Next.js")
+mcp_context7_get-library-docs(context7CompatibleLibraryID: "/vercel/next.js", topic: "app router")
+```
+
+## App Router Yapısı
+
+App Router, dosya sistemi tabanlı yönlendirme kullanır:
+
+```
+- app/
+  - (main)/           # Grup - URL'ye etki etmez
+    - dashboard/      # /dashboard rotası
+      - page.tsx      # Dashboard ana sayfası
+      - layout.tsx    # Dashboard düzeni
+      - [id]/         # Dinamik segment - /dashboard/123 gibi
+  - api/              # API rotaları
+    - users/
+      - route.ts      # API işleyicileri
+```
+
+## Konvansiyonlar
+
+App Router'da kullanılan temel konvansiyonlar:
+
+- `page.tsx`: Rotayı tanımlayan UI bileşeni
+- `layout.tsx`: Alt rotaları saran düzen bileşeni
+- `loading.tsx`: Yükleme durumları için suspense fallback
+- `error.tsx`: Hata sınırı bileşeni
+- `not-found.tsx`: 404 durumları için özel UI
+- `route.ts`: API endpoint tanımları
+
+## Server ve Client Components
+
+Next.js 15'te tüm bileşenler varsayılan olarak Server Component'tir:
+
+```typescript
+// Bu bir Server Component'tir (varsayılan)
+export default function ServerComponent() {
+  // Server tarafında veri alabilirsiniz
+  // useState veya useEffect kullanamaz
+  return <div>Server Component</div>;
+}
+```
+
+Client Component kullanmak için 'use client' direktifi eklenmelidir:
+
+```typescript
+'use client';
+
+// Bu bir Client Component'tir
+export default function ClientComponent() {
+  // useState, useEffect, olay işleyicileri vb. kullanabilirsiniz
+  return <div>Client Component</div>;
+}
+```
+
+## Veri Alma Yöntemleri
+
+App Router'da veri almak için birkaç yöntem bulunmaktadır:
+
+1. Server Component'lerde direk async/await:
+```typescript
+export default async function Page() {
+  const data = await fetchData();
+  return <div>{data.title}</div>;
+}
+```
+
+2. Paralel veri alma:
+```typescript
+import { Suspense } from 'react';
+import { UserSection, ProductSection } from '@/components';
+
+export default function Dashboard() {
+  return (
+    <div>
+      <Suspense fallback={<p>Kullanıcı yükleniyor...</p>}>
+        <UserSection />
+      </Suspense>
+      <Suspense fallback={<p>Ürünler yükleniyor...</p>}>
+        <ProductSection />
+      </Suspense>
+    </div>
+  );
+}
+```
+
+## Route Handlers
+
+API endpoint'leri `app/api` dizininde `route.ts` dosyalarıyla tanımlanır:
+
+```typescript
+import { NextResponse } from 'next/server';
+
+export async function GET() {
+  return NextResponse.json({ message: 'Merhaba Dünya' });
+}
+
+export async function POST(request: Request) {
+  const data = await request.json();
+  // İşlemler...
+  return NextResponse.json({ success: true });
+}
+```

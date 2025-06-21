@@ -1,0 +1,74 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Kimlik Doğrulama ve Admin-Only Giriş
+
+Bu proje, sadece admin kullanıcılarının giriş yapabildiği bir kimlik doğrulama sistemiyle tasarlanmıştır.
+
+## Context7 MCP Kullanımı
+
+**ÖNEMLİ:** Kimlik doğrulama ile ilgili herhangi bir değişiklik yapmadan önce, her zaman Context7 MCP'yi kullanarak ilgili belgeleri alın:
+
+```
+mcp_context7_resolve-library-id(libraryName: "Next.js")
+mcp_context7_get-library-docs(context7CompatibleLibraryID: "/vercel/next.js", topic: "authentication")
+```
+
+## Kimlik Doğrulama Akışı
+
+1. Kullanıcı admin giriş formunu doldurur
+2. Giriş bilgileri API rotasına gönderilir
+3. Sistem, kullanıcının admin yetkisine sahip olup olmadığını kontrol eder
+4. Kimlik doğrulaması başarılıysa bir oturum oluşturulur
+5. Korumalı rotalara yalnızca doğrulanmış admin kullanıcıları erişebilir
+
+## Middleware ile Yetkilendirme
+
+Next.js middleware kullanılarak, korumalı sayfalara erişimde yetki kontrolü yapılabilir:
+
+```typescript
+// middleware.ts
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+
+export function middleware(request: NextRequest) {
+  const isAuthenticated = // ... kimlik doğrulama kontrolü
+
+  if (!isAuthenticated) {
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
+
+  return NextResponse.next()
+}
+
+export const config = {
+  matcher: ['/admin/:path*', '/dashboard/:path*'],
+}
+```
+
+## Admin Yetkilendirmesi
+
+Prisma kullanarak yöneticileri doğrulama örneği:
+
+```typescript
+// lib/auth.ts
+import { prisma } from '@/lib/prisma'
+
+export async function verifyAdmin(email: string, password: string) {
+  const user = await prisma.user.findUnique({
+    where: { email },
+  })
+  
+  if (!user || !user.isAdmin) {
+    return null
+  }
+  
+  // Şifre kontrolü ve oturum oluşturma
+  // ...
+  
+  return user
+}
+```
+

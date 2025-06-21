@@ -1,0 +1,55 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Veri Alma ve Context7 MCP Kullanımı
+
+Bu projede veri alma (data fetching) işlemleri için Next.js App Router içindeki modern yaklaşımlar kullanılmaktadır.
+
+## Context7 MCP Gerekliliği
+
+**ÖNEMLİ:** Her prompt öncesinde Context7 MCP kullanılmalıdır. Herhangi bir iş yapmadan önce, ilgili kütüphane belgelerine erişmek için:
+
+1. `mcp_context7_resolve-library-id` çağrısı yaparak kütüphane tanımlayıcısını alın
+2. `mcp_context7_get-library-docs` çağrısı yaparak belgeleri alın
+
+## Server Component'lerde Veri Alma
+
+Server Component'lerde doğrudan async/await kullanarak veri alabilirsiniz:
+
+```typescript
+// Bu bir Server Component'tir (varsayılan)
+export default async function ProductsPage() {
+  // Server tarafında veri alma işlemi
+  const products = await getProducts();
+  
+  return (
+    <div>
+      {products.map(product => (
+        <div key={product.id}>{product.name}</div>
+      ))}
+    </div>
+  );
+}
+```
+
+## Fetch API Seçenekleri
+
+- `cache: 'force-cache'` - Varsayılan, getStaticProps benzeri davranış
+- `cache: 'no-store'` - Dinamik veri, getServerSideProps benzeri davranış
+- `next: { revalidate: 10 }` - ISR benzeri davranış, 10 saniyede bir yeniden doğrulama
+
+## Prisma ile Veri Erişimi
+
+Veritabanı işlemleri için Prisma ORM kullanılmaktadır:
+
+```typescript
+import { prisma } from '@/lib/prisma';
+
+async function getUsers() {
+  const users = await prisma.user.findMany();
+  return users;
+}
+```
+

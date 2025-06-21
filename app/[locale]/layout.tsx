@@ -1,0 +1,52 @@
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { ClientThemeProvider } from "./components/ClientThemeProvider";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
+import { notFound } from "next/navigation";
+import { routing } from "@/src/i18n/routing";
+import { QueryProvider } from "@/lib/providers/query-provider";
+
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: "ECU Sistem - Yönetim Paneli",
+  description: "Modern yönetim paneli uygulaması",
+};
+
+export default async function RootLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+
+  // Ensure that the incoming `locale` is valid
+  if (!routing.locales.includes(locale as (typeof routing.locales)[number])) {
+    notFound();
+  }
+
+  // Providing all messages to the client
+  // side is the easiest way to get started
+  const messages = await getMessages();
+
+  return (
+    <html lang={locale} suppressHydrationWarning>
+      <body className={inter.className} suppressHydrationWarning>
+        <NextIntlClientProvider messages={messages}>
+          <QueryProvider>
+            <ClientThemeProvider>
+              {children}
+            </ClientThemeProvider>
+          </QueryProvider>
+        </NextIntlClientProvider>
+      </body>
+    </html>
+  );
+}
+
+// Bu layout kullanıcı çerezi okuduğundan statik ön üretim yerine her istekte dinamiktir
+export const dynamic = 'force-dynamic';

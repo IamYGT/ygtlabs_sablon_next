@@ -1,0 +1,68 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Prisma Veritabanı Kılavuzu
+
+Bu projede veritabanı yönetimi Prisma ORM kullanılarak yapılmaktadır. Aşağıda Prisma ile ilgili temel bilgiler bulunmaktadır.
+
+## Context7 MCP Kullanımı
+
+**ÖNEMLİ:** Prisma ile ilgili işlemler yapmadan önce, her zaman Context7 MCP'yi kullanarak ilgili belgeleri alın:
+
+```
+mcp_context7_resolve-library-id(libraryName: "Prisma")
+mcp_context7_get-library-docs(context7CompatibleLibraryID: "prisma/prisma", topic: "databases")
+```
+
+## Prisma Şeması
+
+Veritabanı modeli tanımları [prisma/schema.prisma](mdc:prisma/schema.prisma) dosyasında bulunmaktadır. Ana modeller şunlardır:
+
+- User: Kullanıcı hesapları
+- Article: Makaleler
+- Category: Kategoriler
+- Tag: Etiketler
+- QuizCategory: Quiz kategorileri
+- QuizQuestion: Quiz soruları
+- QuizResult: Quiz sonuçları
+
+## Veritabanı İşlemleri
+
+Veritabanı erişimi [lib/prisma.ts](mdc:lib/prisma.ts) dosyasındaki Prisma istemcisi aracılığıyla yapılır:
+
+```typescript
+import { prisma } from '@/lib/prisma';
+
+// Veri alma örneği
+async function getArticle(id: number) {
+  return await prisma.article.findUnique({
+    where: { id },
+    include: { category: true, author: true, tags: true }
+  });
+}
+```
+
+## ÖNEMLİ Uyarılar
+
+- **CANLI PROJEDE ÇALIŞIYORUZ - Veritabanını sıfırlamayın!**
+- Veritabanı şema değişiklikleri yaparken `migrate dev` komutunu kullanın, ancak dikkatli olun
+- **ASLA** `migrate reset` veya `force-reset` komutlarını kullanmayın
+- Şema değişikliklerinden önce veritabanının yedeğinin alındığından emin olun
+
+## Prisma MCP Kullanımı
+
+Veritabanı işlemleri için Prisma MCP'lerini kullanabilirsiniz, ancak veritabanı sıfırlaması yapan komutları ASLA kullanmayın:
+
+- ✅ `mcp_prisma_migrate-status`: Veritabanı durumunu kontrol etmek için kullanılabilir
+- ✅ `mcp_prisma_migrate-dev`: Dikkatli kullanılması gereken, şema değişiklikleri uygular
+- ❌ `mcp_prisma_migrate-reset`: **ASLA KULLANILMAMALIDIR**
+
+## Prisma Studio
+
+Veritabanını görsel olarak incelemek için Prisma Studio kullanılabilir:
+
+```
+npx prisma studio
+```

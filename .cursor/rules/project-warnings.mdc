@@ -1,0 +1,36 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Proje Uyarıları ve Önemli Bilgiler
+
+## ÖNEMLİ: Canlı Proje Ortamı!
+
+**Bu canlı bir projedir.** Aşağıdaki uyarılara kesinlikle dikkat edilmelidir:
+
+### VERİTABANI UYARILARI
+
+- **ASLA** veritabanını sıfırlamayın!
+- **ASLA** `force-reset` kullanmayın!
+- Veritabanı şemasında değişiklik yapmadan önce yedek alın
+- Veritabanı değişiklikleri için Prisma Migrate Dev kullanırken aşırı dikkatli olun
+
+### Kod Geliştirme Prosedürü
+
+1. Her kod geliştirme işleminde önce [package.json](mdc:package.json) dosyasını inceleyin
+2. İlgili teknolojilerin güncel dokümantasyonlarını Context7 MCP kullanarak alın
+3. Mevcut paketlerin kullanımını maksimize edin
+4. Kod yazarken MCP'lerden faydalanarak kod kalitesini ve güvenliğini artırın
+
+### Next.js Sürüm Bilgisi
+
+- Next.js 15.3 ve App Router kullanılmaktadır
+- React 19.0.0 sürümü mevcuttur
+- TypeScript tabanlı geliştirme yapılmaktadır
+
+### Kritik Yapılar
+
+- **Prisma**: Veritabanı işlemleri [lib/prisma.ts](mdc:lib/prisma.ts) kullanılarak yapılmaktadır
+- **Auth**: Kimlik doğrulama [auth.ts](mdc:auth.ts) dosyasında yönetilmektedir
+- **API Rotaları**: `/app/api` altında bulunmaktadır

@@ -1,0 +1,195 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../node_modules/.prisma/client"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["public"]
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  // Multi-session support
+  tabId             String? // Browser tab identifier
+  deviceFingerprint String? // Device fingerprint hash
+  sessionType       String  @default("normal") // normal, incognito, mobile
+  parentSessionId   String? // Parent session reference
+  sessionGroup      String? // Session group identifier
+
+  // Enhanced metadata
+  ipAddress       String?
+  userAgent       String?
+  location        String?
+  deviceInfo      Json?
+  sessionMetadata Json? // Extended session info
+
+  // Activity tracking
+  lastActive    DateTime @default(now())
+  lastHeartbeat DateTime @default(now())
+  createdAt     DateTime @default(now())
+
+  // Session state
+  isActive      Boolean   @default(true)
+  revokedAt     DateTime?
+  revokedBy     String?
+  revokedReason String?
+  loginMethod   String?
+
+  // Concurrent session management
+  maxConcurrentSessions Int? @default(10)
+
+  // Relations
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parentSession Session?  @relation("SessionHierarchy", fields: [parentSessionId], references: [id])
+  childSessions Session[] @relation("SessionHierarchy")
+
+  @@index([userId])
+  @@index([lastActive])
+  @@index([isActive])
+  @@index([sessionGroup])
+  @@index([tabId])
+  @@index([deviceFingerprint])
+  @@index([parentSessionId])
+  @@schema("public")
+}
+
+model User {
+  id                   String            @id @default(uuid())
+  name                 String?
+  email                String?           @unique
+  emailVerified        DateTime?
+  image                String?
+  profileImage         String?
+  password             String
+  tokenVersion         Int               @default(0)
+  isActive             Boolean           @default(true)
+  lastLoginAt          DateTime?
+  failedLoginAttempts  Int               @default(0)
+  resetPasswordToken   String?
+  resetPasswordExpires DateTime?
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+  roleAssignedAt       DateTime?
+  roleAssignedById     String?
+  roleId               String?
+  createdRoles         AuthRole[]        @relation("RoleCreatedBy")
+  updatedRoles         AuthRole[]        @relation("RoleUpdatedBy")
+  sessions             Session[]
+  assignedByUser       User?             @relation("RoleAssignedBy", fields: [roleAssignedById], references: [id])
+  assignedUsers        User[]            @relation("RoleAssignedBy")
+  role                 AuthRole?         @relation("UserRole", fields: [roleId], references: [id])
+  activityLogs         UserActivityLog[]
+  createdPermissions   Permission[]      @relation("PermissionCreatedBy")
+  updatedPermissions   Permission[]      @relation("PermissionUpdatedBy")
+  grantedRolePermissions RoleHasPermission[] @relation("RolePermissionGrantedBy")
+
+  @@schema("public")
+}
+
+model UserActivityLog {
+  id        String   @id @default(uuid())
+  userId    String
+  action    String
+  details   Json?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@schema("public")
+}
+
+// Sistem yetkilerini tanımlar
+model Permission {
+  id             String @id @default(uuid())
+  name           String @unique // 'layout.admin.access', 'function.roles.create'
+  category       String // 'layout', 'view', 'function'
+  resourcePath   String // 'admin', '/admin/users', 'users'
+  action         String // 'access', 'view', 'create', 'edit', 'delete'
+  permissionType String @default("user") // 'admin', 'user' - Yetkinin türünü belirtir
+
+  // Çok dilli yetki detayları (JSON)
+  displayName Json? // {"tr": "Admin Paneli Erişimi", "en": "Admin Panel Access"}
+  description Json? // {"tr": "Admin paneline erişim yetkisi", "en": "Access permission to admin panel"}
+
+  // Durum ve kontrol
+  isActive  Boolean @default(true) // Yetkinin aktif olup olmadığı
+
+  // Audit trail
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String? // Yetkiyi oluşturan kullanıcı
+  updatedById String? // Yetkiyi güncelleyen kullanıcı
+
+  // Relations
+  createdBy User? @relation("PermissionCreatedBy", fields: [createdById], references: [id])
+  updatedBy User? @relation("PermissionUpdatedBy", fields: [updatedById], references: [id])
+  rolePermissions RoleHasPermission[]
+
+  @@index([category])
+  @@index([resourcePath])
+  @@index([permissionType])
+  @@index([isActive])
+  @@index([category, permissionType])
+  @@schema("public")
+}
+
+// Roller ve yetkiler arasındaki ilişkiyi yönetir
+model RoleHasPermission {
+  id             String @id @default(uuid())
+  roleName       String
+  permissionName String
+
+  // Durum ve kontrol
+  isAllowed Boolean @default(true)
+  isActive  Boolean @default(true)
+
+  // Şartlar (opsiyonel)
+  conditions Json? // Flexible conditions for advanced permissions
+
+  // Audit trail
+  grantedAt   DateTime @default(now())
+  grantedById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  role       AuthRole   @relation(fields: [roleName], references: [name], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionName], references: [name], onDelete: Cascade)
+  grantedBy  User?      @relation("RolePermissionGrantedBy", fields: [grantedById], references: [id])
+
+  @@unique([roleName, permissionName])
+  @@index([roleName])
+  @@index([permissionName])
+  @@index([isActive])
+  @@index([roleName, isActive])
+  @@schema("public")
+}
+
+model AuthRole {
+  id              String       @id @default(uuid())
+  name            String       @unique
+  displayName     String
+  description     String?
+  color           String?
+  isSystemDefault Boolean      @default(false)
+  isActive        Boolean      @default(true)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  createdById     String?
+  updatedById     String?
+  layoutType      String       @default("user")
+  createdBy       User?        @relation("RoleCreatedBy", fields: [createdById], references: [id])
+  updatedBy       User?        @relation("RoleUpdatedBy", fields: [updatedById], references: [id])
+  users           User[]       @relation("UserRole")
+  rolePermissions RoleHasPermission[]
+
+  @@schema("public")
+}
