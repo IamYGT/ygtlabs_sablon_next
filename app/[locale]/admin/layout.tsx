@@ -4,7 +4,6 @@ import { AdminSidebar } from '@/app/[locale]/components/AdminSidebar';
 import { AdminHeader } from '@/app/[locale]/components/AdminHeader';
 import { Toaster } from 'sonner';
 import { LogoutModalProvider } from '@/app/[locale]/components/LogoutModalProvider';
-import { SidebarProvider } from '@/components/ui/sidebar';
 import { NextIntlClientProvider } from 'next-intl';
 import { AdminGuard } from '@/app/[locale]/components/AuthGuards';
 
@@ -40,31 +39,29 @@ export default async function AdminLayout({ children, params }: AdminLayoutProps
                 <LogoutModalProvider>
                     {/* Z-Index Hierarchy: Sidebar(9999) < Toaster(10000) < Modal(99999) */}
                     <div className="relative z-0">
-                        <SidebarProvider>
-                            {/* Corporate Professional Layout - Banking/Finance Style */}
-                            <div className="flex h-screen bg-blue-100 dark:bg-slate-800">
-                                {/* Sidebar - Desktop: Fixed, Mobile: Overlay */}
-                                <div className="relative z-[9999]">
-                                    <AdminSidebar />
-                                </div>
-
-                                {/* Ana İçerik Alanı - Rounded Design */}
-                                <div className="flex flex-1 flex-col overflow-hidden md:rounded-tl-[1.5rem] md:rounded-bl-[1.5rem] bg-blue-100 dark:bg-neutral-900 relative z-10">
-                                    {/* Header - Responsive */}
-                                    <AdminHeader
-                                        title="Kurumsal Yönetim Paneli"
-                                        subtitle="Finansal kontrol ve sistem yönetimi merkezi"
-                                    />
-
-                                    {/* Sayfa İçeriği - Corporate Professional Padding */}
-                                    <main className="flex-1 overflow-y-auto p-4 md:p-8 lg:p-10 bg-gray-50/50 dark:bg-slate-900">
-                                        <div className="max-w-7xl mx-auto">
-                                            {children}
-                                        </div>
-                                    </main>
-                                </div>
+                        {/* Corporate Professional Layout - Banking/Finance Style */}
+                        <div className="flex h-screen bg-blue-100 dark:bg-slate-800">
+                            {/* Sidebar - Desktop: Fixed, Mobile: Overlay */}
+                            <div className="relative z-[9999]">
+                                <AdminSidebar />
                             </div>
-                        </SidebarProvider>
+
+                            {/* Ana İçerik Alanı - Rounded Design */}
+                            <div className="flex flex-1 flex-col overflow-hidden md:rounded-tl-[1.5rem] md:rounded-bl-[1.5rem] bg-blue-100 dark:bg-neutral-900 relative z-10">
+                                {/* Header - Responsive */}
+                                <AdminHeader
+                                    title="Kurumsal Yönetim Paneli"
+                                    subtitle="Finansal kontrol ve sistem yönetimi merkezi"
+                                />
+
+                                {/* Sayfa İçeriği - Corporate Professional Padding */}
+                                <main className="flex-1 overflow-y-auto p-4 md:p-8 lg:p-10 bg-gray-50/50 dark:bg-slate-900">
+                                    <div className="max-w-7xl mx-auto">
+                                        {children}
+                                    </div>
+                                </main>
+                            </div>
+                        </div>
                     </div>
 
                     {/* Toast Notifications - Higher z-index */}

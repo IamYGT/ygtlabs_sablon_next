@@ -1,6 +1,7 @@
 // ============================================================================
 // UI STORE - Global UI State Management with Zustand
-// Manages loading states, modals, notifications, sidebar, and theme
+// Manages loading states, modals, notifications, and sidebar
+// Theme management is handled by next-themes
 // ============================================================================
 
 import { create } from "zustand";
@@ -50,22 +51,18 @@ interface UIStore {
   toggleSidebarCollapse: () => void;
   setSidebarCollapsed: (isCollapsed: boolean) => void;
 
-  // Theme management
-  theme: "light" | "dark" | "system";
-  setTheme: (theme: "light" | "dark" | "system") => void;
-
   // Global actions
   reset: () => void;
 }
 
 // ============================================================================
-// UI STORE IMPLEMENTATION
+// ZUSTAND STORE IMPLEMENTATION
 // ============================================================================
 
 export const useUIStore = create<UIStore>()(
   persist(
     (set, get) => ({
-      // Loading states
+      // Loading state
       loading: {},
       setLoading: (key: string, loading: boolean) => {
         set((state) => ({
@@ -79,7 +76,7 @@ export const useUIStore = create<UIStore>()(
         set({ loading: {} });
       },
 
-      // Modal management
+      // Modal state
       modals: {},
       openModal: (key: string, data?: unknown) => {
         set((state) => ({
@@ -104,57 +101,44 @@ export const useUIStore = create<UIStore>()(
         }));
       },
       closeAllModals: () => {
-        const { modals } = get();
-        const closedModals = Object.keys(modals).reduce((acc, key) => {
-          acc[key] = { ...modals[key], isOpen: false };
-          return acc;
-        }, {} as { [key: string]: ModalState });
-
-        set({ modals: closedModals });
+        set((state) => {
+          const updatedModals = { ...state.modals };
+          Object.keys(updatedModals).forEach((key) => {
+            updatedModals[key] = {
+              ...updatedModals[key],
+              isOpen: false,
+            };
+          });
+          return { modals: updatedModals };
+        });
       },
       isModalOpen: (key: string) => {
-        const { modals } = get();
-        return modals[key]?.isOpen || false;
+        return get().modals[key]?.isOpen || false;
       },
       getModalData: (key: string) => {
-        const { modals } = get();
-        return modals[key]?.data;
+        return get().modals[key]?.data;
       },
 
       // Notification system
       notifications: [],
       addNotification: (notification) => {
-        const id = `notification-${Date.now()}-${Math.random()
-          .toString(36)
-          .substr(2, 9)}`;
+        const id = Date.now().toString() + Math.random().toString(36);
         const newNotification: NotificationState = {
           ...notification,
           id,
           createdAt: new Date(),
-          duration:
-            notification.duration || NOTIFICATION_CONFIG.DEFAULT_DURATION,
         };
 
-        set((state) => {
-          const notifications = [...state.notifications, newNotification];
+        set((state) => ({
+          notifications: [...state.notifications, newNotification],
+        }));
 
-          // Limit the number of notifications
-          if (notifications.length > NOTIFICATION_CONFIG.MAX_NOTIFICATIONS) {
-            notifications.splice(
-              0,
-              notifications.length - NOTIFICATION_CONFIG.MAX_NOTIFICATIONS
-            );
-          }
-
-          return { notifications };
-        });
-
-        // Auto-remove notification after duration
-        if (newNotification.duration && newNotification.duration > 0) {
-          setTimeout(() => {
-            get().removeNotification(id);
-          }, newNotification.duration);
-        }
+        // Auto-remove after duration
+        setTimeout(() => {
+          set((state) => ({
+            notifications: state.notifications.filter((n) => n.id !== id),
+          }));
+        }, notification.duration || NOTIFICATION_CONFIG.DEFAULT_DURATION);
       },
       removeNotification: (id: string) => {
         set((state) => ({
@@ -237,12 +221,6 @@ export const useUIStore = create<UIStore>()(
         }));
       },
 
-      // Theme management
-      theme: "system",
-      setTheme: (theme: "light" | "dark" | "system") => {
-        set({ theme });
-      },
-
       // Global actions
       reset: () => {
         set({
@@ -253,7 +231,6 @@ export const useUIStore = create<UIStore>()(
             isOpen: true,
             isCollapsed: false,
           },
-          theme: "system",
         });
       },
     }),
@@ -261,14 +238,13 @@ export const useUIStore = create<UIStore>()(
       name: STORAGE_KEYS.PREFERENCES,
       partialize: (state) => ({
         sidebar: state.sidebar,
-        theme: state.theme,
       }),
     }
   )
 );
 
 // ============================================================================
-// SELECTOR HOOKS
+// SELECTOR HOOKS - Optimized to prevent infinite loops
 // ============================================================================
 
 // Loading selectors
@@ -314,31 +290,54 @@ export const useIsSidebarOpen = () =>
 export const useIsSidebarCollapsed = () =>
   useUIStore((state) => state.sidebar.isCollapsed);
 
-// Theme selectors
-export const useTheme = () => useUIStore((state) => state.theme);
+// Action selectors - Optimized with individual selectors
+export const useSetLoading = () => useUIStore((state) => state.setLoading);
+export const useClearAllLoading = () =>
+  useUIStore((state) => state.clearAllLoading);
+export const useOpenModal = () => useUIStore((state) => state.openModal);
+export const useCloseModal = () => useUIStore((state) => state.closeModal);
+export const useCloseAllModals = () =>
+  useUIStore((state) => state.closeAllModals);
+export const useAddNotification = () =>
+  useUIStore((state) => state.addNotification);
+export const useRemoveNotification = () =>
+  useUIStore((state) => state.removeNotification);
+export const useClearAllNotifications = () =>
+  useUIStore((state) => state.clearAllNotifications);
+export const useShowSuccess = () => useUIStore((state) => state.showSuccess);
+export const useShowError = () => useUIStore((state) => state.showError);
+export const useShowWarning = () => useUIStore((state) => state.showWarning);
+export const useShowInfo = () => useUIStore((state) => state.showInfo);
+export const useToggleSidebar = () =>
+  useUIStore((state) => state.toggleSidebar);
+export const useSetSidebarOpen = () =>
+  useUIStore((state) => state.setSidebarOpen);
+export const useToggleSidebarCollapse = () =>
+  useUIStore((state) => state.toggleSidebarCollapse);
+export const useSetSidebarCollapsed = () =>
+  useUIStore((state) => state.setSidebarCollapsed);
+export const useResetUI = () => useUIStore((state) => state.reset);
 
-// Action selectors
-export const useUIActions = () =>
-  useUIStore((state) => ({
-    setLoading: state.setLoading,
-    clearAllLoading: state.clearAllLoading,
-    openModal: state.openModal,
-    closeModal: state.closeModal,
-    closeAllModals: state.closeAllModals,
-    addNotification: state.addNotification,
-    removeNotification: state.removeNotification,
-    clearAllNotifications: state.clearAllNotifications,
-    showSuccess: state.showSuccess,
-    showError: state.showError,
-    showWarning: state.showWarning,
-    showInfo: state.showInfo,
-    toggleSidebar: state.toggleSidebar,
-    setSidebarOpen: state.setSidebarOpen,
-    toggleSidebarCollapse: state.toggleSidebarCollapse,
-    setSidebarCollapsed: state.setSidebarCollapsed,
-    setTheme: state.setTheme,
-    reset: state.reset,
-  }));
+// Legacy useUIActions - Now uses individual selectors to prevent infinite loops
+export const useUIActions = () => ({
+  setLoading: useUIStore.getState().setLoading,
+  clearAllLoading: useUIStore.getState().clearAllLoading,
+  openModal: useUIStore.getState().openModal,
+  closeModal: useUIStore.getState().closeModal,
+  closeAllModals: useUIStore.getState().closeAllModals,
+  addNotification: useUIStore.getState().addNotification,
+  removeNotification: useUIStore.getState().removeNotification,
+  clearAllNotifications: useUIStore.getState().clearAllNotifications,
+  showSuccess: useUIStore.getState().showSuccess,
+  showError: useUIStore.getState().showError,
+  showWarning: useUIStore.getState().showWarning,
+  showInfo: useUIStore.getState().showInfo,
+  toggleSidebar: useUIStore.getState().toggleSidebar,
+  setSidebarOpen: useUIStore.getState().setSidebarOpen,
+  toggleSidebarCollapse: useUIStore.getState().toggleSidebarCollapse,
+  setSidebarCollapsed: useUIStore.getState().setSidebarCollapsed,
+  reset: useUIStore.getState().reset,
+});
 
 // ============================================================================
 // UTILITY HOOKS
@@ -347,7 +346,7 @@ export const useUIActions = () =>
 // Hook for managing component loading state
 export const useComponentLoading = (componentName: string) => {
   const isLoading = useIsLoading(componentName);
-  const setLoading = useUIStore((state) => state.setLoading);
+  const setLoading = useSetLoading();
 
   return {
     isLoading,
@@ -359,7 +358,8 @@ export const useComponentLoading = (componentName: string) => {
 // Hook for managing modal state
 export const useModalControl = (modalKey: string) => {
   const { isOpen, data } = useModal(modalKey);
-  const { openModal, closeModal } = useUIActions();
+  const openModal = useOpenModal();
+  const closeModal = useCloseModal();
 
   return {
     isOpen,
@@ -370,16 +370,12 @@ export const useModalControl = (modalKey: string) => {
 };
 
 // Hook for showing notifications with consistent API
-export const useNotify = () => {
-  const { showSuccess, showError, showWarning, showInfo } = useUIActions();
-
-  return {
-    success: showSuccess,
-    error: showError,
-    warning: showWarning,
-    info: showInfo,
-  };
-};
+export const useNotify = () => ({
+  success: useShowSuccess(),
+  error: useShowError(),
+  warning: useShowWarning(),
+  info: useShowInfo(),
+});
 
 // ============================================================================
 // HELPER FUNCTIONS
@@ -411,10 +407,11 @@ export const countNotificationsByType = (
 export const clearNotificationsByType = (
   type: NotificationState["type"]
 ): void => {
-  const { notifications, removeNotification } = useUIStore.getState();
-  notifications
-    .filter((n) => n.type === type)
-    .forEach((n) => removeNotification(n.id));
+  const state = useUIStore.getState();
+  const filteredNotifications = state.notifications.filter(
+    (n) => n.type !== type
+  );
+  useUIStore.setState({ notifications: filteredNotifications });
 };
 
 // Export store for direct access if needed

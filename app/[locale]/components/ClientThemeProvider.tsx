@@ -17,7 +17,13 @@ export function ClientThemeProvider({ children, ...props }: React.ComponentProps
     }
 
     return (
-        <NextThemesProvider {...props}>
+        <NextThemesProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+            {...props}
+        >
             {children}
         </NextThemesProvider>
     );
