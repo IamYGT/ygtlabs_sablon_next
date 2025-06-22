@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import '../styles/landing.css'; // Landing page CSS'ini import ediyoruz
 import Header from './Header';
 import Hero from './Hero';
 import ServiceIcons from './ServiceIcons';
