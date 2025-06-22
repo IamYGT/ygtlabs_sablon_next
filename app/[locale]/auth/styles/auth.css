@@ -1,5 +1,100 @@
 @import "tailwindcss";
 
+@theme {
+    /* Auth Colors */
+    --color-auth-primary: #3b82f6;
+    --color-auth-primary-light: #60a5fa;
+    --color-auth-primary-dark: #2563eb;
+    --color-auth-secondary: #6b7280;
+    --color-auth-accent: #10b981;
+    --color-auth-danger: #ef4444;
+    --color-auth-warning: #f59e0b;
+    --color-auth-dark: #1f2937;
+    --color-auth-light: #f9fafb;
+
+    /* Auth Gradients */
+    --gradient-auth-primary: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    --gradient-auth-secondary: linear-gradient(135deg, #6b7280 0%, #374151 100%);
+
+    /* Auth Shadows */
+    --shadow-auth-card: 0 4px 6px rgba(0, 0, 0, 0.05);
+    --shadow-auth-hover: 0 8px 25px rgba(0, 0, 0, 0.1);
+    --shadow-auth-focus: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Auth Specific Styles */
+.auth-container {
+    @apply min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800;
+}
+
+.auth-card {
+    @apply bg-white dark:bg-gray-800 rounded-xl shadow-[--shadow-auth-card] border border-gray-200 dark:border-gray-700 p-8;
+}
+
+.auth-card:hover {
+    @apply shadow-[--shadow-auth-hover];
+}
+
+.auth-input {
+    @apply w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-[--color-auth-primary] focus:border-transparent transition-all duration-200;
+}
+
+.auth-input:focus {
+    @apply shadow-[--shadow-auth-focus];
+}
+
+.auth-btn-primary {
+    @apply w-full bg-[--color-auth-primary] hover:bg-[--color-auth-primary-dark] text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 transform hover:scale-[1.02] focus:ring-2 focus:ring-[--color-auth-primary] focus:ring-offset-2;
+}
+
+.auth-btn-secondary {
+    @apply w-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100 font-semibold py-3 px-4 rounded-lg transition-all duration-200 border border-gray-300 dark:border-gray-600;
+}
+
+.auth-btn-danger {
+    @apply bg-[--color-auth-danger] hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors;
+}
+
+.auth-link {
+    @apply text-[--color-auth-primary] hover:text-[--color-auth-primary-dark] font-medium transition-colors;
+}
+
+.auth-error {
+    @apply text-[--color-auth-danger] text-sm mt-1;
+}
+
+.auth-success {
+    @apply text-[--color-auth-accent] text-sm mt-1;
+}
+
+.auth-divider {
+    @apply relative flex items-center justify-center my-6;
+}
+
+.auth-divider::before {
+    @apply content-[''] flex-1 h-px bg-gray-300 dark:bg-gray-600;
+}
+
+.auth-divider::after {
+    @apply content-[''] flex-1 h-px bg-gray-300 dark:bg-gray-600;
+}
+
+.auth-divider span {
+    @apply px-4 text-sm text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800;
+}
+
+.auth-logo {
+    @apply w-12 h-12 mx-auto mb-6;
+}
+
+.auth-title {
+    @apply text-2xl font-bold text-gray-900 dark:text-gray-100 text-center mb-2;
+}
+
+.auth-subtitle {
+    @apply text-gray-600 dark:text-gray-400 text-center mb-8;
+}
+
 /* Auth Pages Özel Stilleri */
 :root {
     --auth-primary: #3b82f6;
