@@ -9,4 +9,65 @@ export const routing = defineRouting({
 
   // Locale prefix'i sadece default olmayan diller için göster
   localePrefix: "as-needed",
+
+  // Pathname translations - Türkçe URL'ler için
+  pathnames: {
+    // Auth routes
+    "/auth/login": {
+      en: "/login",
+      tr: "/giris",
+    },
+    "/auth/register": {
+      en: "/register",
+      tr: "/kayit-ol",
+    },
+    "/auth/forgot-password": {
+      en: "/forgot-password",
+      tr: "/sifremi-unuttum",
+    },
+    "/auth/forbidden": {
+      en: "/forbidden",
+      tr: "/erisim-engellendi",
+    },
+    "/auth/unauthorized": {
+      en: "/unauthorized",
+      tr: "/yetkisiz",
+    },
+    "/auth/error": {
+      en: "/error",
+      tr: "/hata",
+    },
+
+    // Admin routes
+    "/admin/dashboard": {
+      en: "/admin/dashboard",
+      tr: "/admin/panel",
+    },
+    "/admin/users": {
+      en: "/admin/users",
+      tr: "/admin/kullanicilar",
+    },
+    "/admin/roles": {
+      en: "/admin/roles",
+      tr: "/admin/roller",
+    },
+    "/admin/permissions": {
+      en: "/admin/permissions",
+      tr: "/admin/yetkiler",
+    },
+    "/admin/profile": {
+      en: "/admin/profile",
+      tr: "/admin/profil",
+    },
+
+    // User routes
+    "/users/dashboard": {
+      en: "/users/dashboard",
+      tr: "/kullanicilar/panel",
+    },
+  },
 });
+
+// Type exports for better TypeScript support
+export type Pathnames = keyof typeof routing.pathnames;
+export type Locale = (typeof routing.locales)[number];

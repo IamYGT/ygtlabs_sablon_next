@@ -1,20 +1,16 @@
 "use client";
 
-import Link from "next/link";
 import React, { useState, Suspense, useCallback, memo } from 'react';
 import { toast } from "sonner";
-import Logo from "@/app/[locale]/components/Logo";
-import { useSearchParams, useParams } from "next/navigation";
-// Auth provider imports removed - using direct API calls
-
-// Shadcn bileşenleri
+import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { Loader2 } from "lucide-react";
-import { GuestGuard } from "@/app/[locale]/components/AuthGuards";
+import { Loader2, Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
+import { motion } from "framer-motion";
+import { Link } from '@/src/i18n/navigation';
 
 // Optimized loading component
 const LoadingSpinner = memo(({ className, ...props }: React.SVGProps<SVGSVGElement>) => (
@@ -22,25 +18,11 @@ const LoadingSpinner = memo(({ className, ...props }: React.SVGProps<SVGSVGEleme
 ));
 LoadingSpinner.displayName = "LoadingSpinner";
 
-// Loading fallback component
-const LoadingFallback = memo(() => (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground p-4">
-        <div className="w-full max-w-md space-y-6">
-            <div className="text-center">
-                <h1 className="text-2xl font-bold">Yükleniyor...</h1>
-                <div className="mt-4 flex justify-center">
-                    <LoadingSpinner className="h-8 w-8" />
-                </div>
-            </div>
-        </div>
-    </div>
-));
-LoadingFallback.displayName = "LoadingFallback";
-
 // Optimized login form with memoization
 const UnifiedAuthLoginForm = memo(() => {
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({ email: "", password: "" });
+    const [showPassword, setShowPassword] = useState(false);
     const params = useParams();
     const locale = (params.locale as string) || 'en';
 
@@ -58,6 +40,11 @@ const UnifiedAuthLoginForm = memo(() => {
     const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+    }, []);
+
+    // Toggle password visibility
+    const togglePasswordVisibility = useCallback(() => {
+        setShowPassword(prev => !prev);
     }, []);
 
     // Memoized submit handler
@@ -93,10 +80,9 @@ const UnifiedAuthLoginForm = memo(() => {
                 const hasAdminAccess = result.user.permissions?.includes('layout.admin.access') ||
                     result.user.userRoles?.includes('super_admin');
 
-                // Redirect to appropriate dashboard with locale
-                const dashboardUrl = hasAdminAccess
-                    ? `/${locale}/admin/dashboard`
-                    : `/${locale}/users/dashboard`;
+                // Redirect to appropriate dashboard with proper i18n routing
+                const dashboardPath = hasAdminAccess ? '/admin/dashboard' : '/users/dashboard';
+                const dashboardUrl = locale === 'en' ? dashboardPath : `/${locale}${dashboardPath}`;
 
                 // Hard redirect ile tam geçiş
                 window.location.replace(dashboardUrl);
@@ -112,130 +98,158 @@ const UnifiedAuthLoginForm = memo(() => {
     }, [formData.email, formData.password, loading, locale]);
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-                <Label htmlFor="email">E-posta Adresi</Label>
-                <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    placeholder="ornek@adres.com"
-                    disabled={loading}
-                    value={formData.email}
-                    onChange={handleChange}
-                />
-            </div>
+        <div className="p-6 sm:p-8">
+            <CardHeader className="text-center pb-6 px-0">
+                <motion.div
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <CardTitle className="text-2xl font-bold text-foreground">
+                        Hoş Geldiniz
+                    </CardTitle>
+                    <CardDescription className="mt-2 text-muted-foreground">
+                        Hesabınıza giriş yaparak devam edin
+                    </CardDescription>
+                </motion.div>
+            </CardHeader>
 
-            <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                    <Label htmlFor="password">Şifre</Label>
-                    <Link href="#" className="text-sm font-medium text-primary hover:underline">
-                        Şifremi Unuttum
-                    </Link>
-                </div>
-                <Input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="current-password"
-                    required
-                    disabled={loading}
-                    value={formData.password}
-                    onChange={handleChange}
-                />
-            </div>
+            <CardContent className="px-0">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <motion.div
+                        className="space-y-2"
+                        initial={{ x: -20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.1 }}
+                    >
+                        <Label htmlFor="email" className="text-sm font-medium text-foreground">
+                            E-posta Adresi
+                        </Label>
+                        <div className="relative">
+                            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                            <Input
+                                id="email"
+                                name="email"
+                                type="email"
+                                autoComplete="email"
+                                required
+                                placeholder="ornek@adres.com"
+                                disabled={loading}
+                                value={formData.email}
+                                onChange={handleChange}
+                                className="pl-10 h-12 bg-background border-border focus:border-primary focus:ring-primary/20 transition-all duration-200"
+                            />
+                        </div>
+                    </motion.div>
 
-            <Button
-                type="submit"
-                className="w-full"
-                disabled={loading}
-                size="lg"
-            >
-                {loading ? (
-                    <span className="flex items-center justify-center">
-                        <LoadingSpinner className="mr-2 h-5 w-5" />
-                        Giriş Yapılıyor...
-                    </span>
-                ) : (
-                    "Giriş Yap"
-                )}
-            </Button>
-        </form>
+                    <motion.div
+                        className="space-y-2"
+                        initial={{ x: -20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                    >
+                        <div className="flex items-center justify-between">
+                            <Label htmlFor="password" className="text-sm font-medium text-foreground">
+                                Şifre
+                            </Label>
+                            <Link
+                                href="/auth/forgot-password"
+                                className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+                            >
+                                Şifremi Unuttum
+                            </Link>
+                        </div>
+                        <div className="relative">
+                            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                            <Input
+                                id="password"
+                                name="password"
+                                type={showPassword ? "text" : "password"}
+                                autoComplete="current-password"
+                                required
+                                disabled={loading}
+                                value={formData.password}
+                                onChange={handleChange}
+                                className="pl-10 pr-10 h-12 bg-background border-border focus:border-primary focus:ring-primary/20 transition-all duration-200"
+                            />
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 hover:bg-muted/50"
+                                onClick={togglePasswordVisibility}
+                                disabled={loading}
+                            >
+                                {showPassword ? (
+                                    <EyeOff className="h-4 w-4 text-muted-foreground" />
+                                ) : (
+                                    <Eye className="h-4 w-4 text-muted-foreground" />
+                                )}
+                            </Button>
+                        </div>
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.3 }}
+                    >
+                        <Button
+                            type="submit"
+                            className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl"
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <span className="flex items-center justify-center">
+                                    <LoadingSpinner className="mr-2 h-5 w-5" />
+                                    Giriş Yapılıyor...
+                                </span>
+                            ) : (
+                                <span className="flex items-center justify-center">
+                                    Giriş Yap
+                                    <ArrowRight className="ml-2 h-4 w-4" />
+                                </span>
+                            )}
+                        </Button>
+                    </motion.div>
+
+                    <motion.div
+                        className="text-center pt-4 border-t border-border"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.4 }}
+                    >
+                        <p className="text-sm text-muted-foreground">
+                            Henüz hesabınız yok mu?{" "}
+                            <Link
+                                href="/auth/register"
+                                className="font-medium text-primary hover:text-primary/80 transition-colors"
+                            >
+                                Kayıt Olun
+                            </Link>
+                        </p>
+                    </motion.div>
+                </form>
+            </CardContent>
+        </div>
     );
 });
 UnifiedAuthLoginForm.displayName = "UnifiedAuthLoginForm";
 
-// Optimized login page header
-const LoginHeader = memo(() => (
-    <div className="text-center flex flex-col items-center justify-center">
-        <div className="mb-6">
-            <Logo width={180} height={60} />
-        </div>
-        <h1 className="text-3xl font-semibold tracking-tight text-primary">
-            Admin Paneline Giriş
-        </h1>
-    </div>
-));
-LoginHeader.displayName = "LoginHeader";
-
-// Optimized footer
-const LoginFooter = memo(() => (
-    <div className="text-center text-xs text-muted-foreground pt-6">
-        <p>&copy; {new Date().getFullYear()} Dünya Ekonomi. Tüm hakları saklıdır.</p>
-    </div>
-));
-LoginFooter.displayName = "LoginFooter";
-
 // Client-side component with optimizations
 function LoginPageClient() {
-    const searchParams = useSearchParams();
-    const callbackUrl = searchParams?.get('callbackUrl') || '/dashboard';
-
-    return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground p-4">
-            <div className="w-full max-w-md space-y-6">
-                <LoginHeader />
-
-                <Card>
-                    <CardHeader className="text-center">
-                        <CardTitle className="text-2xl">Giriş Yap</CardTitle>
-                        <CardDescription className="text-muted-foreground">
-                            Hesabınıza erişmek için bilgilerinizi girin.
-                            {callbackUrl !== '/dashboard' && (
-                                <div className="mt-2 text-sm text-amber-600 dark:text-amber-400">
-                                    Giriş yaptıktan sonra istediğiniz sayfaya yönlendirileceksiniz.
-                                </div>
-                            )}
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <UnifiedAuthLoginForm />
-                    </CardContent>
-                    <CardFooter className="flex flex-col items-center justify-center gap-2 border-t pt-6">
-                        <div className="text-sm text-muted-foreground">
-                            Hesabınız yok mu?{' '}
-                            <Link href="/auth/register" className="font-semibold text-primary hover:underline">
-                                Hemen Kayıt Olun
-                            </Link>
-                        </div>
-                    </CardFooter>
-                </Card>
-
-                <LoginFooter />
-            </div>
-        </div>
-    );
+    return <UnifiedAuthLoginForm />;
 }
 
-// Main page component with optimized Suspense
+// Main page component with Suspense
 export default function LoginPage() {
     return (
-        <GuestGuard>
-            <Suspense fallback={<LoadingFallback />}>
-                <LoginPageClient />
-            </Suspense>
-        </GuestGuard>
+        <Suspense fallback={
+            <div className="flex items-center justify-center p-8">
+                <LoadingSpinner className="h-8 w-8" />
+            </div>
+        }>
+            <LoginPageClient />
+        </Suspense>
     );
 }
