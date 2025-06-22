@@ -52,7 +52,7 @@ function extractLocale(
     const pathWithoutLocale = "/" + segments.slice(1).join("/") || "/";
     return { locale, pathWithoutLocale };
   }
-  return { locale: "tr", pathWithoutLocale: pathname };
+  return { locale: "en", pathWithoutLocale: pathname };
 }
 
 function isAuthPath(path: string): boolean {

@@ -9,7 +9,7 @@ export default function LocaleHomePage() {
     const { isLoading: queryLoading } = useCurrentUser();
     const router = useRouter();
     const params = useParams();
-    const locale = (params.locale as string) || 'tr';
+    const locale = (params.locale as string) || 'en';
 
     useEffect(() => {
         // Loading sırasında redirect yapma

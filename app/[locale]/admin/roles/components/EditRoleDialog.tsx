@@ -18,7 +18,6 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { Progress } from '@/components/ui/progress';
-import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
     Select,
@@ -42,12 +41,7 @@ import {
     Activity,
     Search,
     Plus,
-    Minus,
-    ArrowRight,
-    ArrowLeft,
-    X,
-    Layout,
-    Zap
+    X
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
@@ -331,28 +325,7 @@ export default function EditRoleDialog({
         setCurrentStep(prev => Math.max(prev - 1, 0));
     };
 
-    // Permission helpers
-    const togglePermission = (permission: Permission) => {
-        const newSelected = new Set(selectedPermissions);
-        if (newSelected.has(permission.id)) {
-            newSelected.delete(permission.id);
-        } else {
-            newSelected.add(permission.id);
-        }
-        setSelectedPermissions(newSelected);
-    };
-
-    const toggleCategoryPermissions = (category: string, permissions: Permission[]) => {
-        const newSelected = new Set(selectedPermissions);
-        const allSelected = permissions.every(p => newSelected.has(p.id));
-
-        if (allSelected) {
-            permissions.forEach(p => newSelected.delete(p.id));
-        } else {
-            permissions.forEach(p => newSelected.add(p.id));
-        }
-        setSelectedPermissions(newSelected);
-    };
+    // Permission helpers - removed unused functions
 
     // Group permissions by category with filtering
     const groupedPermissions = useMemo(() => {
@@ -409,27 +382,6 @@ export default function EditRoleDialog({
             case 'function': return <Activity className="w-4 h-4" />;
             default: return <Shield className="w-4 h-4" />;
         }
-    };
-
-    const getCategoryColor = (category: string) => {
-        switch (category) {
-            case 'layout': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
-            case 'view': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-            case 'function': return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200';
-            default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
-        }
-    };
-
-    const getCategoryDisplayName = (category: string) => {
-        const names: Record<string, string> = {
-            layout: 'Layout',
-            view: 'Görüntüleme',
-            function: 'İşlevler',
-            admin: 'Yönetim',
-            user: 'Kullanıcı',
-            system: 'Sistem'
-        };
-        return names[category] || category;
     };
 
     // Submit form
@@ -689,7 +641,6 @@ export default function EditRoleDialog({
     );
 
     const renderPermissionsStep = () => {
-        const categories = Object.keys(groupedPermissions).sort();
         const filteredPermissions = Object.values(groupedPermissions).flat();
 
         // Mevcut yetkileri al

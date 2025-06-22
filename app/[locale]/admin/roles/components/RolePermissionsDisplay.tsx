@@ -9,10 +9,7 @@ import {
     FileText,
     Zap,
     Shield,
-    AlertCircle,
-    Users,
-    Activity,
-    Settings
+    AlertCircle
 } from "lucide-react";
 // Utility fonksiyonları
 interface LocalizedValue {
@@ -130,18 +127,7 @@ interface RolePermissionsDisplayProps {
     roleId: string;
 }
 
-const getResourceTypeIcon = (type: string) => {
-    switch (type) {
-        case 'layout':
-            return <Layout className="h-4 w-4" />;
-        case 'page':
-            return <FileText className="h-4 w-4" />;
-        case 'function':
-            return <Zap className="h-4 w-4" />;
-        default:
-            return <Shield className="h-4 w-4" />;
-    }
-};
+// Removed unused getResourceTypeIcon function
 
 const getCategoryIcon = (category: string) => {
     switch (category) {

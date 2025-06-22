@@ -27,7 +27,7 @@ export function AdminGuard({ children, fallback }: AuthGuardProps) {
     const { isLoading: queryLoading } = useCurrentUser();
     const router = useRouter();
     const params = useParams();
-    const locale = (params.locale as string) || 'tr';
+    const locale = (params.locale as string) || 'en';
 
     // Loading durumu
     const loading = isLoading || queryLoading;
@@ -73,7 +73,7 @@ export function UserGuard({ children, fallback }: AuthGuardProps) {
     const { isLoading: queryLoading } = useCurrentUser();
     const router = useRouter();
     const params = useParams();
-    const locale = (params.locale as string) || 'tr';
+    const locale = (params.locale as string) || 'en';
 
     // Loading durumu
     const loading = isLoading || queryLoading;
@@ -119,7 +119,7 @@ export function GuestGuard({ children, fallback }: AuthGuardProps) {
     const { isLoading: queryLoading } = useCurrentUser();
     const router = useRouter();
     const params = useParams();
-    const locale = (params.locale as string) || 'tr';
+    const locale = (params.locale as string) || 'en';
 
     // Loading durumu
     const loading = isLoading || queryLoading;
@@ -157,7 +157,7 @@ export function AuthRequiredGuard({ children, fallback }: AuthGuardProps) {
     const { isLoading: queryLoading } = useCurrentUser();
     const router = useRouter();
     const params = useParams();
-    const locale = (params.locale as string) || 'tr';
+    const locale = (params.locale as string) || 'en';
 
     // Loading durumu
     const loading = isLoading || queryLoading;

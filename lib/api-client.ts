@@ -215,32 +215,17 @@ export const apiClient = new ModernAPIClient();
 // ORGANIZED API FUNCTIONS
 // =============================================================================
 
-// Helper function to get current locale
-const getCurrentLocale = (): string => {
-  if (typeof window !== "undefined") {
-    // Client-side: get from URL
-    const pathname = window.location.pathname;
-    const segments = pathname.split("/").filter(Boolean);
-    if (segments.length > 0 && ["tr", "en"].includes(segments[0])) {
-      return segments[0];
-    }
-  }
-  return "tr"; // Default locale
-};
+// Helper function to get current locale (removed - not needed anymore)
 
-// Helper function to create locale-aware endpoints
-const createLocaleEndpoint = (endpoint: string): string => {
-  const locale = getCurrentLocale();
-  return `/${locale}${endpoint}`;
-};
+// Helper function to create locale-aware endpoints (removed - not needed for API routes)
 
 // Auth API functions
 export const authAPI = {
   login: (data: { email: string; password: string }) =>
-    apiClient.post(createLocaleEndpoint(API_ENDPOINTS.AUTH_LOGIN), data),
+    apiClient.post(API_ENDPOINTS.AUTH_LOGIN, data),
 
   logout: (logoutAllSessions = false) =>
-    apiClient.post(createLocaleEndpoint(API_ENDPOINTS.AUTH_LOGOUT), {
+    apiClient.post(API_ENDPOINTS.AUTH_LOGOUT, {
       logoutAllSessions,
     }),
 

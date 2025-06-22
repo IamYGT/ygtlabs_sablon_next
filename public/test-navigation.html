@@ -115,7 +115,7 @@
       async function testCurrentUser() {
         const resultDiv = document.getElementById("currentUserResult");
         try {
-          const response = await fetch("/tr/api/auth/current-user", {
+          const response = await fetch("/api/auth/current-user", {
             credentials: "include",
           });
           const data = await response.json();
@@ -196,7 +196,7 @@
         try {
           resultDiv.innerHTML = "⏳ Testing login...";
 
-          const response = await fetch("/tr/api/auth/login", {
+          const response = await fetch("/api/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),

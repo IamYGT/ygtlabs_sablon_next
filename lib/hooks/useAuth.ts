@@ -47,7 +47,6 @@ export function useAuth() {
  * Current user query - TanStack Query ile cache'li
  */
 export function useCurrentUser() {
-
   return useQuery({
     queryKey: QUERY_KEYS.AUTH,
     queryFn: async () => {
@@ -84,7 +83,7 @@ export function useCurrentUser() {
             currentPath.includes("/admin") ||
             currentPath.includes("/users")
           ) {
-            const locale = currentPath.split("/")[1] || "tr";
+            const locale = currentPath.split("/")[1] || "en";
             window.location.href = `/${locale}/auth/login?callbackUrl=${encodeURIComponent(
               currentPath
             )}`;
@@ -113,7 +112,7 @@ export function useLogin() {
   const queryClient = useQueryClient();
   const { showSuccess, showError } = useUIStore();
   const params = useParams();
-  const locale = (params.locale as string) || "tr";
+  const locale = (params.locale as string) || "en";
   const router = useRouter();
 
   return useMutation({
@@ -173,7 +172,7 @@ export function useLogin() {
 export function useLogout() {
   const { showSuccess } = useUIStore();
   const params = useParams();
-  const locale = (params.locale as string) || "tr";
+  const locale = (params.locale as string) || "en";
 
   return useMutation<void, Error, boolean>({
     mutationFn: async (logoutAllSessions = false): Promise<void> => {
@@ -258,7 +257,7 @@ export function useUserAuth(): SimpleUser | null {
 export function useAuthGuard(requiredPermission?: string) {
   const { user, isAuthenticated, hasPermission, isLoading } = useAuth();
   const params = useParams();
-  const locale = (params.locale as string) || "tr";
+  const locale = (params.locale as string) || "en";
   const router = useRouter();
 
   // Loading durumu

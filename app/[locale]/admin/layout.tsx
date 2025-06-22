@@ -27,9 +27,9 @@ interface AdminLayoutProps {
 export default async function AdminLayout({ children, params }: AdminLayoutProps) {
     const { locale } = await params;
 
-    // Validate locale and fallback to 'tr' if invalid
-    const validLocales = ['tr', 'en'];
-    const validLocale = validLocales.includes(locale) ? locale : 'tr';
+    // Validate locale and fallback to 'en' if invalid
+    const validLocales = ['en', 'tr'];
+    const validLocale = validLocales.includes(locale) ? locale : 'en';
 
     // Admin için özel mesajları yükle
     const adminMessages = (await import(`../../../messages/admin/admin_${validLocale}.json`)).default;

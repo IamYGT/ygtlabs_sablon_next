@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import React from 'react';
 
 export default function RegisterPage() {
     const router = useRouter();
+    const params = useParams();
+    const locale = (params.locale as string) || 'en';
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -40,10 +42,7 @@ export default function RegisterPage() {
 
         // API isteği gönder
         try {
-            // Get locale from pathname
-            const locale = window.location.pathname.split('/')[1] || 'tr';
-
-            const response = await fetch(`/${locale}/api/auth/register`, {
+            const response = await fetch(`/api/auth/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

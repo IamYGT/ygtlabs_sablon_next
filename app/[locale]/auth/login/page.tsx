@@ -4,7 +4,7 @@ import Link from "next/link";
 import React, { useState, Suspense, useCallback, memo } from 'react';
 import { toast } from "sonner";
 import Logo from "@/app/[locale]/components/Logo";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useParams } from "next/navigation";
 // Auth provider imports removed - using direct API calls
 
 // Shadcn bileşenleri
@@ -41,6 +41,8 @@ LoadingFallback.displayName = "LoadingFallback";
 const UnifiedAuthLoginForm = memo(() => {
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({ email: "", password: "" });
+    const params = useParams();
+    const locale = (params.locale as string) || 'en';
 
     // URL'den logout parametresini kontrol et ve form state'ini temizle
     React.useEffect(() => {
@@ -68,10 +70,7 @@ const UnifiedAuthLoginForm = memo(() => {
         toast.loading("Giriş yapılıyor...", { id: toastId });
 
         try {
-            // Get locale from pathname
-            const locale = window.location.pathname.split('/')[1] || 'tr';
-
-            const response = await fetch(`/${locale}/api/auth/login`, {
+            const response = await fetch(`/api/auth/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -110,7 +109,7 @@ const UnifiedAuthLoginForm = memo(() => {
             toast.error("Beklenmeyen bir hata oluştu.", { id: toastId });
             setLoading(false);
         }
-    }, [formData.email, formData.password, loading]);
+    }, [formData.email, formData.password, loading, locale]);
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
