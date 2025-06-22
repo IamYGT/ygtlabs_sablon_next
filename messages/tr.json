@@ -126,5 +126,69 @@
         "selectLanguage": "Dil Seçin",
         "changeLanguage": "Dil Değiştir",
         "currentLanguage": "Mevcut Dil"
+    },
+    "Header": {
+        "navigation": {
+            "home": "ANASAYFA",
+            "chiptuning": "CHIPTUNING",
+            "corporate": "KURUMSAL",
+            "services": "HİZMETLER",
+            "onsiteService": "YERİNDE HİZMET",
+            "blog": "BLOG",
+            "dealers": "BAYİLER",
+            "contact": "İLETİŞİM"
+        },
+        "topBar": {
+            "dealershipApplication": "Bayilik Başvurusu",
+            "faq": "Sık Sorulan Sorular"
+        },
+        "mobile": {
+            "languageSelection": "Dil Seçimi",
+            "socialMedia": "Sosyal Medya"
+        }
+    },
+    "Footer": {
+        "description": "ATA Performance olarak, araç performansınızı en üst seviyeye çıkarmak için profesyonel chiptuning hizmetleri sunuyoruz.",
+        "quickLinks": "Hızlı Linkler",
+        "contact": "İletişim",
+        "services": "Hizmetler",
+        "corporate": "Kurumsal",
+        "blog": "Blog",
+        "home": "Anasayfa",
+        "phone": "+90 XXX XXX XX XX",
+        "email": "info@ataperformance.com",
+        "address": "İstanbul, Türkiye",
+        "copyright": "© 2024 ATA Performance. Tüm hakları saklıdır.",
+        "newsletter": "Bülten",
+        "newsletterDesc": "En son güncellemeler ve özel teklifler için bültenimize abone olun.",
+        "subscribe": "Abone Ol",
+        "enterEmail": "E-posta adresinizi girin",
+        "followUs": "Bizi Takip Edin",
+        "workingHours": "Çalışma Saatleri",
+        "weekdays": "Pazartesi - Cuma: 09:00 - 18:00",
+        "saturday": "Cumartesi: 09:00 - 16:00",
+        "sunday": "Pazar: Kapalı"
+    },
+    "Hero": {
+        "badge": "#1 Chiptuning Merkezi",
+        "title": {
+            "line1": "Özel Tuning",
+            "line2": "Zamanı"
+        },
+        "description": "Özel Chiptuning deneyimi için elinizden veya aracınızın bulunduğu yerde profesyonel hizmet",
+        "buttons": {
+            "discoverPower": "GÜCÜ KEŞFET",
+            "onsiteService": "YERİNDE HİZMET"
+        },
+        "features": {
+            "premiumService": {
+                "title": "Premium Hizmet",
+                "subtitle": "Uzman Ekip"
+            },
+            "fastDelivery": {
+                "title": "Hızlı Teslimat",
+                "subtitle": "Aynı Gün"
+            }
+        }
     }
 }

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from '../../../../src/i18n/navigation';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useRouter, usePathname } from '../../../../src/i18n/navigation';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -24,6 +24,7 @@ export default function Header() {
     const locale = useLocale();
     const router = useRouter();
     const pathname = usePathname();
+    const t = useTranslations('Header');
 
     const handleScroll = useCallback(() => {
         setIsScrolled(window.scrollY > 0);
@@ -88,13 +89,13 @@ export default function Header() {
     };
 
     const menuItems = [
-        { href: '/landing', label: 'ANASAYFA' },
-        { href: '/landing/chiptuning', label: 'CHIPTUNING' },
-        { href: '/landing/corporate', label: 'KURUMSAL' },
-        { href: '/landing/services', label: 'HİZMETLER' },
-        { href: '/landing/onsite-service', label: 'YERİNDE HİZMET' },
-        { href: '/landing/blog', label: 'BLOG' },
-        { href: '/landing/dealers', label: 'BAYİLER' }
+        { href: '/landing', label: t('navigation.home') },
+        { href: '/landing/chiptuning', label: t('navigation.chiptuning') },
+        { href: '/landing/corporate', label: t('navigation.corporate') },
+        { href: '/landing/services', label: t('navigation.services') },
+        { href: '/landing/onsite-service', label: t('navigation.onsiteService') },
+        { href: '/landing/blog', label: t('navigation.blog') },
+        { href: '/landing/dealers', label: t('navigation.dealers') }
     ] as const;
 
     return (
@@ -104,7 +105,7 @@ export default function Header() {
                     }`}
             >
                 {/* Top Bar */}
-                <div className="bg-gradient-to-r from-primary to-primary/95 text-white transition-all duration-300">
+                <div className={`backdrop-blur-md transition-all duration-300 ${isScrolled ? 'bg-black text-white' : 'bg-transparent text-white'}`}>
                     <div className="container mx-auto px-4">
                         <div className="flex justify-between items-center h-8">
                             <div className="flex items-center space-x-2">
@@ -134,13 +135,13 @@ export default function Header() {
                                     href="/landing/dealership"
                                     className="text-sm text-white/80 hover:text-white transition-colors"
                                 >
-                                    Bayilik Başvurusu
+                                    {t('topBar.dealershipApplication')}
                                 </Link>
                                 <Link
                                     href="/landing/faq"
                                     className="text-sm text-white/80 hover:text-white transition-colors"
                                 >
-                                    Sık Sorulan Sorular
+                                    {t('topBar.faq')}
                                 </Link>
 
                                 {/* Language Switcher */}
@@ -203,15 +204,17 @@ export default function Header() {
 
                 {/* Main Navigation */}
                 <nav
-                    className={`bg-white/95 backdrop-blur-md transition-all duration-300 ${isScrolled ? 'py-2 shadow-lg' : 'py-3'
+                    className={`backdrop-blur-md transition-all duration-300 ${isScrolled
+                        ? 'bg-white/95 py-2 shadow-lg'
+                        : 'bg-transparent py-3'
                         }`}
                 >
                     <div className="container mx-auto px-4 lg:px-8 xl:px-12">
                         <div className="flex items-center justify-between">
                             <Link href="/landing" className="flex-shrink-0 mr-8 lg:mr-16">
                                 <Image
-                                    src="/images/ata_yan_siyah.webp"
-                                    alt="ATA Performance"
+                                    src={isScrolled ? "/logo/revvsiyah.png" : "/logo/RevvTuned.png"}
+                                    alt="RevvTuned"
                                     width={200}
                                     height={40}
                                     className={`w-auto transition-all duration-300 ${isScrolled ? 'h-7 lg:h-8' : 'h-8 lg:h-10'
@@ -225,7 +228,8 @@ export default function Header() {
                                     <Link
                                         key={item.href}
                                         href={item.href}
-                                        className="relative text-gray-800 text-[13px] lg:text-sm font-medium group overflow-hidden px-1 py-2 whitespace-nowrap"
+                                        className={`relative text-[13px] lg:text-sm font-medium group overflow-hidden px-1 py-2 whitespace-nowrap transition-colors duration-300 ${isScrolled ? 'text-gray-800' : 'text-white'
+                                            }`}
                                     >
                                         <span className="relative z-10 transition-colors duration-300 group-hover:text-primary">
                                             {item.label}
@@ -237,7 +241,7 @@ export default function Header() {
                                     href="/landing/contact"
                                     className="relative overflow-hidden bg-primary text-white px-4 lg:px-6 py-2 rounded-lg text-[13px] lg:text-sm font-medium transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 group ml-2 lg:ml-4"
                                 >
-                                    <span className="relative z-10">İLETİŞİM</span>
+                                    <span className="relative z-10">{t('navigation.contact')}</span>
                                     <span className="absolute inset-0 bg-white/20 transform -skew-x-12 translate-x-full group-hover:translate-x-0 transition-transform duration-500"></span>
                                 </Link>
                             </div>
@@ -245,7 +249,10 @@ export default function Header() {
                             {/* Mobile Menu Button */}
                             <button
                                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                                className="md:hidden w-10 h-10 flex items-center justify-center text-gray-700 hover:text-primary transition-colors rounded-lg hover:bg-gray-100"
+                                className={`md:hidden w-10 h-10 flex items-center justify-center hover:text-primary transition-colors rounded-lg ${isScrolled
+                                    ? 'text-gray-700 hover:bg-gray-100'
+                                    : 'text-white hover:bg-white/10'
+                                    }`}
                             >
                                 <Menu className="w-6 h-6" />
                             </button>
@@ -280,8 +287,8 @@ export default function Header() {
                                 {/* Menu Header */}
                                 <div className="sticky top-0 flex items-center justify-between px-4 py-3 sm:p-6 border-b border-gray-100 bg-white/95 backdrop-blur-md z-10">
                                     <Image
-                                        src="/images/ata_yan_siyah.webp"
-                                        alt="ATA Performance"
+                                        src="/logo/revvsiyah.png"
+                                        alt="RevvTuned"
                                         width={120}
                                         height={32}
                                         className="h-6 sm:h-8 w-auto transform hover:scale-105 transition-transform duration-300"
@@ -314,15 +321,126 @@ export default function Header() {
                                                 <Link
                                                     href={item.href}
                                                     onClick={closeMenu}
-                                                    className="block px-4 py-3 text-gray-800 font-medium rounded-lg hover:bg-primary/10 hover:text-primary transition-all duration-300 group"
+                                                    className="block px-4 py-3 text-gray-800 font-medium rounded-lg hover:bg-primary/10 hover:text-primary transition-all duration-300 group relative overflow-hidden"
                                                 >
                                                     <div className="flex items-center justify-between">
-                                                        <span>{item.label}</span>
-                                                        <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300" />
+                                                        <span className="relative z-10">{item.label}</span>
+                                                        <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300 relative z-10" />
                                                     </div>
+                                                    <span className="absolute bottom-0 left-4 right-4 h-0.5 bg-primary transform origin-left scale-x-0 transition-transform duration-500 ease-out group-hover:scale-x-100"></span>
                                                 </Link>
                                             </motion.div>
                                         ))}
+
+                                        {/* Mobile Menu Additional Links */}
+                                        <div className="pt-4 border-t border-gray-200 mt-6 space-y-2">
+                                            <motion.div
+                                                initial={{ opacity: 0, x: 20 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                transition={{ delay: menuItems.length * 0.1 }}
+                                            >
+                                                <Link
+                                                    href="/landing/dealership"
+                                                    onClick={closeMenu}
+                                                    className="block px-4 py-3 text-gray-600 text-sm font-medium rounded-lg hover:bg-primary/10 hover:text-primary transition-all duration-300 group relative overflow-hidden"
+                                                >
+                                                    <div className="flex items-center justify-between">
+                                                        <span className="relative z-10">{t('topBar.dealershipApplication')}</span>
+                                                        <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300 relative z-10" />
+                                                    </div>
+                                                    <span className="absolute bottom-0 left-4 right-4 h-0.5 bg-primary transform origin-left scale-x-0 transition-transform duration-500 ease-out group-hover:scale-x-100"></span>
+                                                </Link>
+                                            </motion.div>
+
+                                            <motion.div
+                                                initial={{ opacity: 0, x: 20 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                transition={{ delay: (menuItems.length + 1) * 0.1 }}
+                                            >
+                                                <Link
+                                                    href="/landing/faq"
+                                                    onClick={closeMenu}
+                                                    className="block px-4 py-3 text-gray-600 text-sm font-medium rounded-lg hover:bg-primary/10 hover:text-primary transition-all duration-300 group relative overflow-hidden"
+                                                >
+                                                    <div className="flex items-center justify-between">
+                                                        <span className="relative z-10">{t('topBar.faq')}</span>
+                                                        <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300 relative z-10" />
+                                                    </div>
+                                                    <span className="absolute bottom-0 left-4 right-4 h-0.5 bg-primary transform origin-left scale-x-0 transition-transform duration-500 ease-out group-hover:scale-x-100"></span>
+                                                </Link>
+                                            </motion.div>
+                                        </div>
+
+                                        {/* Language Switcher for Mobile */}
+                                        <div className="pt-4 border-t border-gray-200 mt-6">
+                                            <motion.div
+                                                initial={{ opacity: 0, x: 20 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                transition={{ delay: (menuItems.length + 2) * 0.1 }}
+                                            >
+                                                <div className="px-4 py-2">
+                                                    <h3 className="text-sm font-semibold text-gray-700 mb-3">{t('mobile.languageSelection')}</h3>
+                                                    <div className="space-y-2">
+                                                        {languages.map((lang) => (
+                                                            <button
+                                                                key={lang.code}
+                                                                onClick={() => {
+                                                                    handleLanguageChange(lang.code);
+                                                                    closeMenu();
+                                                                }}
+                                                                className={`w-full flex items-center space-x-3 px-3 py-2 text-sm rounded-lg transition-all duration-300 group ${locale === lang.code
+                                                                    ? 'bg-primary/10 text-primary border border-primary/20'
+                                                                    : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                                                                    }`}
+                                                            >
+                                                                <div className="h-6 w-6 overflow-hidden rounded-full border-2 border-gray-200 shadow-sm">
+                                                                    <Image
+                                                                        alt={lang.code}
+                                                                        className="h-full w-full object-cover"
+                                                                        src={lang.flag}
+                                                                        width={24}
+                                                                        height={24}
+                                                                    />
+                                                                </div>
+                                                                <span className="font-medium">{lang.name}</span>
+                                                                {locale === lang.code && (
+                                                                    <div className="ml-auto w-2 h-2 bg-primary rounded-full"></div>
+                                                                )}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </motion.div>
+                                        </div>
+
+                                        {/* Social Links for Mobile */}
+                                        <div className="pt-4 border-t border-gray-200 mt-6">
+                                            <motion.div
+                                                initial={{ opacity: 0, x: 20 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                transition={{ delay: (menuItems.length + 3) * 0.1 }}
+                                            >
+                                                <div className="px-4 py-2">
+                                                    <h3 className="text-sm font-semibold text-gray-700 mb-3">{t('mobile.socialMedia')}</h3>
+                                                    <div className="flex items-center space-x-4">
+                                                        <a href="#" className="text-gray-600 hover:text-primary transition-colors p-2 rounded-lg hover:bg-primary/10">
+                                                            <Facebook className="w-5 h-5" />
+                                                        </a>
+                                                        <a href="#" className="text-gray-600 hover:text-primary transition-colors p-2 rounded-lg hover:bg-primary/10">
+                                                            <Instagram className="w-5 h-5" />
+                                                        </a>
+                                                        <a
+                                                            href="https://ataperformance.co.uk"
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-xs text-gray-600 hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/10 font-medium"
+                                                        >
+                                                            ataperformance.co.uk
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </motion.div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -334,7 +452,7 @@ export default function Header() {
                                         className="flex items-center justify-center bg-primary text-white px-6 py-4 rounded-xl text-sm font-medium hover:bg-primary/90 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:translate-y-[-2px] relative overflow-hidden group"
                                     >
                                         <span className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></span>
-                                        <span className="relative z-10">İLETİŞİM</span>
+                                        <span className="relative z-10">{t('navigation.contact')}</span>
                                     </Link>
                                 </div>
                             </div>

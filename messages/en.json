@@ -125,5 +125,69 @@
         "selectLanguage": "Select Language",
         "changeLanguage": "Change Language",
         "currentLanguage": "Current Language"
+    },
+    "Header": {
+        "navigation": {
+            "home": "HOME",
+            "chiptuning": "CHIPTUNING",
+            "corporate": "CORPORATE",
+            "services": "SERVICES",
+            "onsiteService": "ON-SITE SERVICE",
+            "blog": "BLOG",
+            "dealers": "DEALERS",
+            "contact": "CONTACT"
+        },
+        "topBar": {
+            "dealershipApplication": "Dealership Application",
+            "faq": "Frequently Asked Questions"
+        },
+        "mobile": {
+            "languageSelection": "Language Selection",
+            "socialMedia": "Social Media"
+        }
+    },
+    "Footer": {
+        "description": "As ATA Performance, we provide professional chiptuning services to maximize your vehicle performance.",
+        "quickLinks": "Quick Links",
+        "contact": "Contact",
+        "services": "Services",
+        "corporate": "Corporate",
+        "blog": "Blog",
+        "home": "Home",
+        "phone": "+90 XXX XXX XX XX",
+        "email": "info@ataperformance.com",
+        "address": "Istanbul, Turkey",
+        "copyright": "© 2024 ATA Performance. All rights reserved.",
+        "newsletter": "Newsletter",
+        "newsletterDesc": "Subscribe to our newsletter for the latest updates and special offers.",
+        "subscribe": "Subscribe",
+        "enterEmail": "Enter your email address",
+        "followUs": "Follow Us",
+        "workingHours": "Working Hours",
+        "weekdays": "Monday - Friday: 9:00 - 18:00",
+        "saturday": "Saturday: 9:00 - 16:00",
+        "sunday": "Sunday: Closed"
+    },
+    "Hero": {
+        "badge": "#1 Chiptuning Center",
+        "title": {
+            "line1": "Custom Tuning",
+            "line2": "Time"
+        },
+        "description": "Professional service at your location or where your vehicle is located for a special Chiptuning experience",
+        "buttons": {
+            "discoverPower": "DISCOVER POWER",
+            "onsiteService": "ON-SITE SERVICE"
+        },
+        "features": {
+            "premiumService": {
+                "title": "Premium Service",
+                "subtitle": "Expert Team"
+            },
+            "fastDelivery": {
+                "title": "Fast Delivery",
+                "subtitle": "Same Day"
+            }
+        }
     }
 }
