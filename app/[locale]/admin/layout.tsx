@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import React from 'react';
-import { AdminSidebar } from '@/app/[locale]/components/AdminSidebar';
-import { AdminHeader } from '@/app/[locale]/components/AdminHeader';
+import { AdminSidebar } from '@/components/panel/AdminSidebar';
+import { AdminHeader } from '@/components/panel/AdminHeader';
 import { Toaster } from 'sonner';
-import { LogoutModalProvider } from '@/app/[locale]/components/LogoutModalProvider';
+import { LogoutModalProvider } from '@/components/panel/LogoutModalProvider';
 import { NextIntlClientProvider } from 'next-intl';
-import { AdminGuard } from '@/app/[locale]/components/AuthGuards';
+import { AdminGuard } from '@/components/panel/AuthGuards';
 
 export const metadata: Metadata = {
     title: "Admin Paneli - ECU Sistem",

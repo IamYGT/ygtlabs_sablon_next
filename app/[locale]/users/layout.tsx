@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import React from 'react';
-import { UserGuard } from '@/app/[locale]/components/AuthGuards';
+import { UserGuard } from '@/components/panel/AuthGuards';
 
 export const metadata: Metadata = {
     title: "Kullanıcı Paneli - ECU Sistem",

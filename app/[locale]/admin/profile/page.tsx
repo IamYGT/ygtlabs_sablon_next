@@ -21,8 +21,8 @@ import {
     Activity
 } from "lucide-react";
 import { toast } from "sonner";
-import ChangePasswordModal from "@/app/[locale]/components/ChangePasswordModal";
-import ProfileImageUpload from "@/app/[locale]/components/ProfileImageUpload";
+import ChangePasswordModal from "@/components/panel/ChangePasswordModal";
+import ProfileImageUpload from "@/components/panel/ProfileImageUpload";
 
 export default function AdminProfilePage() {
     const admin = useAdminAuth();

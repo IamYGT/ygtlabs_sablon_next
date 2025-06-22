@@ -8,10 +8,22 @@ export const routing = defineRouting({
   defaultLocale: "en",
 
   // Locale prefix'i sadece default olmayan diller için göster
-  localePrefix: "as-needed",
+  localePrefix: {
+    mode: "as-needed",
+    prefixes: {
+      // 'en' has no prefix
+      tr: "/tr",
+    },
+  },
 
   // Pathname translations - Türkçe URL'ler için
   pathnames: {
+    // Landing page
+    "/landing": {
+      en: "/landing",
+      tr: "/anasayfa",
+    },
+
     // Auth routes
     "/auth/login": {
       en: "/login",
@@ -41,7 +53,7 @@ export const routing = defineRouting({
     // Admin routes
     "/admin/dashboard": {
       en: "/admin/dashboard",
-      tr: "/admin/panel",
+      tr: "/admin/kontrol-paneli",
     },
     "/admin/users": {
       en: "/admin/users",
@@ -63,7 +75,7 @@ export const routing = defineRouting({
     // User routes
     "/users/dashboard": {
       en: "/users/dashboard",
-      tr: "/kullanicilar/panel",
+      tr: "/kullanicilar/kontrol-paneli",
     },
   },
 });

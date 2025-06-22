@@ -2,7 +2,6 @@
 
 import React, { useState, useCallback, memo } from 'react';
 import { toast } from "sonner";
-import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -80,8 +79,6 @@ const ForgotPasswordForm = memo(() => {
     const [loading, setLoading] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [submittedEmail, setSubmittedEmail] = useState("");
-    const params = useParams();
-    const locale = (params.locale as string) || 'en';
 
     const handleEmailChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);

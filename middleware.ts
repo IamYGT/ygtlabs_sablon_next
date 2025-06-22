@@ -132,9 +132,9 @@ export async function middleware(request: NextRequest) {
       console.log(`🔄 Root redirect to dashboard: ${dashboardUrl}`);
       return NextResponse.redirect(new URL(dashboardUrl, request.url));
     } else {
-      const loginUrl = getLoginUrl(locale);
-      console.log(`🔄 Root redirect to login: ${loginUrl}`);
-      return NextResponse.redirect(new URL(loginUrl, request.url));
+      // Let unauthenticated users see the landing page at root
+      console.log(`🏠 Root access allowed for landing page`);
+      return i18nResponse;
     }
   }
 

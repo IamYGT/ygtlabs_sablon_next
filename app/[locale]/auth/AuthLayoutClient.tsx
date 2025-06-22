@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ThemeToggle } from '@/app/[locale]/components/ThemeToggle';
-import LanguageSwitcher from '@/app/[locale]/components/LanguageSwitcher';
-import Logo from '@/app/[locale]/components/Logo';
+import { ThemeToggle } from '@/components/panel/ThemeToggle';
+import LanguageSwitcher from '@/components/panel/LanguageSwitcher';
+import Logo from '@/components/panel/Logo';
 import { Card } from '@/components/ui/card';
 import { Toaster } from 'sonner';
 

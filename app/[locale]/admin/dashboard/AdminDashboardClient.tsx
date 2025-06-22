@@ -6,7 +6,7 @@ import { Activity, Users, FileText, Shield, Clock, ArrowRight, BarChart3, PieCha
 import { useAdminAuth } from "@/lib/hooks/useAuth";
 import { type SimpleUser as AuthUser } from "@/lib";
 import { useTranslations } from 'next-intl';
-import LanguageSwitcher from '../../components/LanguageSwitcher';
+import LanguageSwitcher from '@/components/panel/LanguageSwitcher';
 import Link from 'next/link';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import React from 'react';
 import { NextIntlClientProvider } from 'next-intl';
-import { GuestGuard } from '@/app/[locale]/components/AuthGuards';
+import { GuestGuard } from '@/components/panel/AuthGuards';
 import { AuthLayoutClient } from './AuthLayoutClient';
 
 export const metadata: Metadata = {
