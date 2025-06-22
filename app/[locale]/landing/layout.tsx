@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import "../landing/styles/landing.css"; // Landing page'e özel stil dosyası
+import "./styles/landing.css"; // Landing page'e özel stil dosyası
 
 export const metadata: Metadata = {
     title: "RevvTuned - ECU Chip Tuning Hizmetleri",

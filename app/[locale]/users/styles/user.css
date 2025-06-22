@@ -3,130 +3,153 @@
 /* User Panel Özel Stilleri */
 :root {
     --user-primary: #059669;
+    --user-primary-light: #10b981;
     --user-primary-dark: #047857;
-    --user-secondary: #6b7280;
-    --user-accent: #0891b2;
+    --user-secondary: #0d9488;
+    --user-accent: #06b6d4;
     --user-success: #10b981;
     --user-warning: #f59e0b;
     --user-error: #ef4444;
-    --user-bg: #f9fafb;
+    --user-bg: #f0fdf4;
     --user-card: #ffffff;
-    --user-border: #e5e7eb;
-    --user-text: #374151;
+    --user-border: #d1fae5;
+    --user-text: #064e3b;
     --user-text-light: #6b7280;
 }
 
 .dark {
-    --user-primary: #34d399;
-    --user-primary-dark: #10b981;
-    --user-secondary: #9ca3af;
-    --user-accent: #06b6d4;
-    --user-success: #34d399;
-    --user-warning: #fbbf24;
-    --user-error: #f87171;
-    --user-bg: #111827;
-    --user-card: #1f2937;
-    --user-border: #374151;
-    --user-text: #f3f4f6;
-    --user-text-light: #9ca3af;
+    --user-bg: #064e3b;
+    --user-card: #065f46;
+    --user-border: #047857;
+    --user-text: #ecfdf5;
+    --user-text-light: #a7f3d0;
 }
 
 @layer base {
     .user-layout {
-        @apply bg-user-bg text-user-text min-h-screen;
+        @apply min-h-screen bg-user-bg;
     }
 }
 
 @layer components {
 
-    /* User Card Styles */
+    /* User Layout */
+    .user-layout {
+        @apply min-h-screen;
+        background-color: var(--user-bg);
+    }
+
+    .user-header {
+        @apply bg-white shadow-sm px-6 py-4;
+        border-bottom: 1px solid var(--user-border);
+    }
+
+    .user-sidebar {
+        @apply w-64 h-full;
+        background-color: var(--user-card);
+        border-right: 1px solid var(--user-border);
+    }
+
+    .user-main {
+        @apply flex-1 p-6;
+        background-color: var(--user-bg);
+    }
+
+    /* User Cards */
     .user-card {
-        @apply bg-user-card border border-user-border rounded-xl shadow-sm hover:shadow-lg transition-all duration-300;
+        @apply rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 relative overflow-hidden;
+        background-color: var(--user-card);
+        border: 1px solid var(--user-border);
+    }
+
+    .user-card::before {
+        content: '';
+        @apply absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-user-primary to-user-accent;
     }
 
     .user-card-header {
-        @apply px-6 py-4 border-b border-user-border bg-gradient-to-r from-user-primary/5 to-user-accent/5;
+        @apply p-6 border-b border-user-border;
     }
 
     .user-card-content {
         @apply p-6;
     }
 
-    /* User Button Styles */
+    .user-card-footer {
+        @apply p-6 border-t border-user-border bg-green-50/50;
+    }
+
+    /* Profile Cards */
+    .profile-card {
+        @apply bg-gradient-to-br from-user-primary to-user-secondary text-white rounded-xl shadow-lg p-6 relative overflow-hidden;
+    }
+
+    .profile-card::before {
+        content: '';
+        @apply absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 transition-opacity duration-300;
+    }
+
+    .profile-card:hover::before {
+        @apply opacity-100;
+    }
+
+    .profile-avatar {
+        @apply w-20 h-20 rounded-full border-4 border-white/20 shadow-lg;
+    }
+
+    .profile-name {
+        @apply text-2xl font-bold text-white mb-1;
+    }
+
+    .profile-role {
+        @apply text-green-100 text-sm;
+    }
+
+    /* Dashboard Grid */
+    .dashboard-grid {
+        @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6;
+    }
+
+    .dashboard-item {
+        @apply user-card hover:scale-105 transform transition-all duration-300;
+    }
+
+    /* User Buttons */
     .user-btn {
-        @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 transform hover:scale-105;
+        @apply px-4 py-2 rounded-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 transform hover:scale-105;
     }
 
     .user-btn-primary {
-        @apply bg-user-primary text-white hover:bg-user-primary-dark focus:ring-user-primary shadow-lg hover:shadow-xl;
+        @apply bg-user-primary text-white hover:bg-user-primary-dark focus:ring-user-primary shadow-md hover:shadow-lg;
     }
 
     .user-btn-secondary {
-        @apply bg-user-secondary text-white hover:bg-user-secondary/90 focus:ring-user-secondary shadow-md hover:shadow-lg;
+        @apply bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-500;
+    }
+
+    .user-btn-success {
+        @apply bg-user-success text-white hover:bg-emerald-600 focus:ring-user-success;
     }
 
     .user-btn-outline {
-        @apply border-2 border-user-primary text-user-primary hover:bg-user-primary hover:text-white focus:ring-user-primary;
+        @apply border-2 border-user-primary text-user-primary hover:bg-user-primary hover:text-white;
     }
 
-    /* User Profile Styles */
-    .user-profile-card {
-        @apply user-card overflow-hidden;
+    .user-btn-glass {
+        @apply bg-white/80 backdrop-blur-sm border border-white/20 text-user-primary hover:bg-white;
     }
 
-    .user-profile-header {
-        @apply bg-gradient-to-r from-user-primary to-user-accent p-6 text-white;
-    }
-
-    .user-profile-avatar {
-        @apply w-20 h-20 rounded-full border-4 border-white shadow-lg;
-    }
-
-    .user-profile-name {
-        @apply text-xl font-bold mt-3;
-    }
-
-    .user-profile-role {
-        @apply text-user-primary/80 text-sm;
-    }
-
-    /* User Dashboard Styles */
-    .user-dashboard-grid {
-        @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
-    }
-
-    .user-stat-card {
-        @apply user-card p-6 text-center hover:scale-105 transition-transform duration-300;
-    }
-
-    .user-stat-icon {
-        @apply w-12 h-12 mx-auto mb-4 p-3 rounded-full bg-user-primary/10 text-user-primary;
-    }
-
-    .user-stat-value {
-        @apply text-3xl font-bold text-user-text mb-2;
-    }
-
-    .user-stat-label {
-        @apply text-user-text-light text-sm;
-    }
-
-    /* User Navigation Styles */
-    .user-nav {
-        @apply bg-user-card border-b border-user-border shadow-sm;
-    }
-
+    /* User Navigation */
     .user-nav-item {
-        @apply flex items-center px-4 py-3 text-user-text hover:text-user-primary hover:bg-user-primary/5 transition-all duration-200 rounded-lg;
+        @apply flex items-center px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-user-primary transition-all duration-300 rounded-lg mx-2 mb-1 group;
     }
 
     .user-nav-item.active {
-        @apply text-user-primary bg-user-primary/10 font-medium;
+        @apply bg-user-primary text-white hover:bg-user-primary-dark;
     }
 
-    /* User Form Styles */
-    .user-form-group {
-        @apply mb-6;
+    .user-nav-icon {
+        @apply w-5 h-5 mr-3 transition-transform duration-300 group-hover:scale-110;
     }
 
     .user-input {

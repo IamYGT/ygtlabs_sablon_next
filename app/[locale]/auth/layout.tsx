@@ -3,7 +3,7 @@ import React from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 import { GuestGuard } from '@/components/panel/AuthGuards';
 import { AuthLayoutClient } from './AuthLayoutClient';
-import "../auth/styles/auth.css"; // Auth pages'e özel stil dosyası
+import "./styles/auth.css"; // Auth pages'e özel stil dosyası
 
 export const metadata: Metadata = {
     title: "Giriş - ECU Sistem",

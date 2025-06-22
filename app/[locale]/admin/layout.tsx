@@ -6,7 +6,7 @@ import { Toaster } from 'sonner';
 import { LogoutModalProvider } from '@/components/panel/LogoutModalProvider';
 import { NextIntlClientProvider } from 'next-intl';
 import { AdminGuard } from '@/components/panel/AuthGuards';
-import "../admin/styles/admin.css"; // Admin panel'e özel stil dosyası
+import "./styles/admin.css"; // Admin panel'e özel stil dosyası
 
 export const metadata: Metadata = {
     title: "Admin Paneli - ECU Sistem",

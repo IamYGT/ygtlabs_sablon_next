@@ -60,6 +60,3 @@ export default async function RootLayout({
     </html>
   );
 }
-
-// Bu layout kullanıcı çerezi okuduğundan statik ön üretim yerine her istekte dinamiktir
-export const dynamic = 'force-dynamic';

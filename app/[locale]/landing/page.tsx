@@ -2,24 +2,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import {
     ArrowRight,
-    Zap,
-    Shield,
-    Users,
-    TrendingUp,
-    Star,
     Phone,
     Mail,
     MapPin,
     ChevronRight,
     Car,
     Gauge,
-    Settings,
-    Award
-} from 'lucide-react';
+    Settings} from 'lucide-react';
 
 // Panel componentlerini import et
 import Logo from '@/components/panel/Logo';
@@ -27,7 +19,6 @@ import { ThemeToggle } from '@/components/panel/ThemeToggle';
 import LanguageSwitcher from '@/components/panel/LanguageSwitcher';
 
 export default function LandingPageContent() {
-    const t = useTranslations();
     const [isVisible, setIsVisible] = useState(false);
     const [stats, setStats] = useState({
         customers: 0,
