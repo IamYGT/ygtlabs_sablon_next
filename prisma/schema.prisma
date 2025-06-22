@@ -61,34 +61,36 @@ model Session {
 }
 
 model User {
-  id                   String            @id @default(uuid())
-  name                 String?
-  email                String?           @unique
-  emailVerified        DateTime?
-  image                String?
-  profileImage         String?
-  password             String
-  tokenVersion         Int               @default(0)
-  isActive             Boolean           @default(true)
-  lastLoginAt          DateTime?
-  failedLoginAttempts  Int               @default(0)
-  resetPasswordToken   String?
-  resetPasswordExpires DateTime?
-  createdAt            DateTime          @default(now())
-  updatedAt            DateTime          @updatedAt
-  roleAssignedAt       DateTime?
-  roleAssignedById     String?
-  roleId               String?
-  createdRoles         AuthRole[]        @relation("RoleCreatedBy")
-  updatedRoles         AuthRole[]        @relation("RoleUpdatedBy")
-  sessions             Session[]
-  assignedByUser       User?             @relation("RoleAssignedBy", fields: [roleAssignedById], references: [id])
-  assignedUsers        User[]            @relation("RoleAssignedBy")
-  role                 AuthRole?         @relation("UserRole", fields: [roleId], references: [id])
-  activityLogs         UserActivityLog[]
-  createdPermissions   Permission[]      @relation("PermissionCreatedBy")
-  updatedPermissions   Permission[]      @relation("PermissionUpdatedBy")
+  id                     String              @id @default(uuid())
+  name                   String?
+  email                  String?             @unique
+  emailVerified          DateTime?
+  image                  String?
+  profileImage           String?
+  password               String
+  tokenVersion           Int                 @default(0)
+  isActive               Boolean             @default(true)
+  lastLoginAt            DateTime?
+  failedLoginAttempts    Int                 @default(0)
+  resetPasswordToken     String?
+  resetPasswordExpires   DateTime?
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
+  roleAssignedAt         DateTime?
+  roleAssignedById       String?
+  roleId                 String?
+  createdRoles           AuthRole[]          @relation("RoleCreatedBy")
+  updatedRoles           AuthRole[]          @relation("RoleUpdatedBy")
+  sessions               Session[]
+  assignedByUser         User?               @relation("RoleAssignedBy", fields: [roleAssignedById], references: [id])
+  assignedUsers          User[]              @relation("RoleAssignedBy")
+  role                   AuthRole?           @relation("UserRole", fields: [roleId], references: [id])
+  activityLogs           UserActivityLog[]
+  createdPermissions     Permission[]        @relation("PermissionCreatedBy")
+  updatedPermissions     Permission[]        @relation("PermissionUpdatedBy")
   grantedRolePermissions RoleHasPermission[] @relation("RolePermissionGrantedBy")
+  createdHeroSliders     HeroSlider[]        @relation("HeroSliderCreatedBy")
+  updatedHeroSliders     HeroSlider[]        @relation("HeroSliderUpdatedBy")
 
   @@schema("public")
 }
@@ -120,7 +122,7 @@ model Permission {
   description Json? // {"tr": "Admin paneline erişim yetkisi", "en": "Access permission to admin panel"}
 
   // Durum ve kontrol
-  isActive  Boolean @default(true) // Yetkinin aktif olup olmadığı
+  isActive Boolean @default(true) // Yetkinin aktif olup olmadığı
 
   // Audit trail
   createdAt   DateTime @default(now())
@@ -129,8 +131,8 @@ model Permission {
   updatedById String? // Yetkiyi güncelleyen kullanıcı
 
   // Relations
-  createdBy User? @relation("PermissionCreatedBy", fields: [createdById], references: [id])
-  updatedBy User? @relation("PermissionUpdatedBy", fields: [updatedById], references: [id])
+  createdBy       User?               @relation("PermissionCreatedBy", fields: [createdById], references: [id])
+  updatedBy       User?               @relation("PermissionUpdatedBy", fields: [updatedById], references: [id])
   rolePermissions RoleHasPermission[]
 
   @@index([category])
@@ -174,22 +176,49 @@ model RoleHasPermission {
 }
 
 model AuthRole {
-  id              String       @id @default(uuid())
-  name            String       @unique
+  id              String              @id @default(uuid())
+  name            String              @unique
   displayName     String
   description     String?
   color           String?
-  isSystemDefault Boolean      @default(false)
-  isActive        Boolean      @default(true)
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
+  isSystemDefault Boolean             @default(false)
+  isActive        Boolean             @default(true)
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
   createdById     String?
   updatedById     String?
-  layoutType      String       @default("user")
-  createdBy       User?        @relation("RoleCreatedBy", fields: [createdById], references: [id])
-  updatedBy       User?        @relation("RoleUpdatedBy", fields: [updatedById], references: [id])
-  users           User[]       @relation("UserRole")
+  layoutType      String              @default("user")
+  createdBy       User?               @relation("RoleCreatedBy", fields: [createdById], references: [id])
+  updatedBy       User?               @relation("RoleUpdatedBy", fields: [updatedById], references: [id])
+  users           User[]              @relation("UserRole")
   rolePermissions RoleHasPermission[]
 
+  @@schema("public")
+}
+
+// Hero Slider Yönetimi
+model HeroSlider {
+  id              String   @id @default(uuid())
+  title           Json // {"tr": "Başlık", "en": "Title"}
+  subtitle        Json? // {"tr": "Alt başlık", "en": "Subtitle"}
+  description     Json // {"tr": "Açıklama", "en": "Description"}
+  badge           Json? // {"tr": "Rozet", "en": "Badge"}
+  backgroundImage String // Arka plan resmi URL'si
+  primaryButton   Json // {"tr": {"text": "Buton", "url": "/link"}, "en": {"text": "Button", "url": "/link"}}
+  secondaryButton Json? // {"tr": {"text": "Buton 2", "url": "/link"}, "en": {"text": "Button 2", "url": "/link"}}
+  statistics      Json // [{"tr": {"label": "Müşteri", "value": "5K+"}, "en": {"label": "Customers", "value": "5K+"}}]
+  isActive        Boolean  @default(true)
+  order           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  createdById     String?
+  updatedById     String?
+
+  // Relations
+  createdBy User? @relation("HeroSliderCreatedBy", fields: [createdById], references: [id])
+  updatedBy User? @relation("HeroSliderUpdatedBy", fields: [updatedById], references: [id])
+
+  @@index([isActive])
+  @@index([order])
   @@schema("public")
 }

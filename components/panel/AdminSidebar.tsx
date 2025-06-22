@@ -9,6 +9,7 @@ import {
     User,
     Lock,
     Unlock,
+    Monitor,
 } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -25,6 +26,13 @@ export function AdminSidebar() {
             href: "/admin/dashboard",
             icon: (
                 <LayoutDashboard className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+            ),
+        },
+        {
+            label: "Hero Slider",
+            href: "/admin/hero-slider",
+            icon: (
+                <Monitor className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
             ),
         },
         {
