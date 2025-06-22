@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import Link from 'next/link';
+import { Link } from '../../../../src/i18n/navigation';
+import { useLocale } from 'next-intl';
+import { useRouter, usePathname } from '../../../../src/i18n/navigation';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -10,12 +12,18 @@ import {
     Menu,
     X,
     ArrowRight,
-    Star
+    Star,
+    ChevronDown
 } from 'lucide-react';
 
 export default function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
+
+    const locale = useLocale();
+    const router = useRouter();
+    const pathname = usePathname();
 
     const handleScroll = useCallback(() => {
         setIsScrolled(window.scrollY > 0);
@@ -25,6 +33,20 @@ export default function Header() {
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
     }, [handleScroll]);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (isLangMenuOpen) {
+                const target = event.target as Element;
+                if (!target.closest('.language-switcher')) {
+                    setIsLangMenuOpen(false);
+                }
+            }
+        };
+
+        document.addEventListener('click', handleClickOutside);
+        return () => document.removeEventListener('click', handleClickOutside);
+    }, [isLangMenuOpen]);
 
     useEffect(() => {
         if (isMenuOpen) {
@@ -45,15 +67,35 @@ export default function Header() {
         setIsMenuOpen(false);
     };
 
+    const languages = [
+        {
+            code: 'en',
+            name: 'English',
+            flag: 'https://flagcdn.com/w160/gb.png'
+        },
+        {
+            code: 'tr',
+            name: 'Türkçe',
+            flag: 'https://flagcdn.com/w160/tr.png'
+        }
+    ];
+
+    const currentLang = languages.find(lang => lang.code === locale) || languages[0];
+
+    const handleLanguageChange = (langCode: string) => {
+        setIsLangMenuOpen(false);
+        router.push(pathname, { locale: langCode });
+    };
+
     const menuItems = [
-        { href: '/', label: 'ANASAYFA' },
+        { href: '/landing', label: 'ANASAYFA' },
         { href: '/landing/chiptuning', label: 'CHIPTUNING' },
         { href: '/landing/corporate', label: 'KURUMSAL' },
         { href: '/landing/services', label: 'HİZMETLER' },
         { href: '/landing/onsite-service', label: 'YERİNDE HİZMET' },
         { href: '/landing/blog', label: 'BLOG' },
         { href: '/landing/dealers', label: 'BAYİLER' }
-    ];
+    ] as const;
 
     return (
         <>
@@ -100,6 +142,60 @@ export default function Header() {
                                 >
                                     Sık Sorulan Sorular
                                 </Link>
+
+                                {/* Language Switcher */}
+                                <div className="relative language-switcher">
+                                    <button
+                                        onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
+                                        className="flex items-center focus:outline-none"
+                                    >
+                                        <div className="flex items-center space-x-2">
+                                            <div className="h-6 w-6 overflow-hidden rounded-full border-2 border-white/20 shadow-lg ring-1 ring-white/30 transition-all duration-200 hover:ring-2 hover:ring-white/50 hover:shadow-xl">
+                                                <Image
+                                                    alt={currentLang.code}
+                                                    className="h-full w-full object-cover"
+                                                    src={currentLang.flag}
+                                                    width={40}
+                                                    height={40}
+                                                />
+                                            </div>
+                                            <ChevronDown className="h-4 w-4 text-white/80 transition-transform duration-200" />
+                                        </div>
+                                    </button>
+
+                                    {/* Dropdown Menu */}
+                                    <AnimatePresence>
+                                        {isLangMenuOpen && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: -10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: -10 }}
+                                                transition={{ duration: 0.2 }}
+                                                className="absolute top-full right-0 mt-3 w-44 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50 backdrop-blur-sm"
+                                            >
+                                                {languages.map((lang) => (
+                                                    <button
+                                                        key={lang.code}
+                                                        onClick={() => handleLanguageChange(lang.code)}
+                                                        className={`w-full flex items-center space-x-3 px-4 py-3 text-sm hover:bg-gray-50 transition-all duration-200 rounded-md group ${locale === lang.code ? 'bg-primary/5 text-primary border-l-2 border-primary' : 'text-gray-700 hover:text-gray-900'
+                                                            }`}
+                                                    >
+                                                        <div className="h-6 w-6 overflow-hidden rounded-full border-2 border-gray-200 shadow-md ring-1 ring-gray-100 transition-all duration-200 group-hover:ring-2 group-hover:ring-primary/20 group-hover:shadow-lg">
+                                                            <Image
+                                                                alt={lang.code}
+                                                                className="h-full w-full object-cover"
+                                                                src={lang.flag}
+                                                                width={40}
+                                                                height={40}
+                                                            />
+                                                        </div>
+                                                        <span className="font-medium transition-colors duration-200">{lang.name}</span>
+                                                    </button>
+                                                ))}
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -112,7 +208,7 @@ export default function Header() {
                 >
                     <div className="container mx-auto px-4 lg:px-8 xl:px-12">
                         <div className="flex items-center justify-between">
-                            <Link href="#home" className="flex-shrink-0 mr-8 lg:mr-16">
+                            <Link href="/landing" className="flex-shrink-0 mr-8 lg:mr-16">
                                 <Image
                                     src="/images/ata_yan_siyah.webp"
                                     alt="ATA Performance"
@@ -134,7 +230,7 @@ export default function Header() {
                                         <span className="relative z-10 transition-colors duration-300 group-hover:text-primary">
                                             {item.label}
                                         </span>
-                                        <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
+                                        <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform origin-left scale-x-0 transition-transform duration-500 ease-out group-hover:scale-x-100"></span>
                                     </Link>
                                 ))}
                                 <Link

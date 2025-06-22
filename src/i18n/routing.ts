@@ -20,10 +20,45 @@ export const routing = defineRouting({
   pathnames: {
     // Landing page
     "/landing": {
-      en: "/landing",
-      tr: "/anasayfa",
+      en: "/",
+      tr: "/",
     },
-
+    "/landing/chiptuning": {
+      en: "/chiptuning",
+      tr: "/chiptuning",
+    },
+    "/landing/corporate": {
+      en: "/corporate",
+      tr: "/kurumsal",
+    },
+    "/landing/services": {
+      en: "/services",
+      tr: "/hizmetler",
+    },
+    "/landing/onsite-service": {
+      en: "/onsite-service",
+      tr: "/yerinde-hizmet",
+    },
+    "/landing/blog": {
+      en: "/blog",
+      tr: "/blog",
+    },
+    "/landing/dealers": {
+      en: "/dealers",
+      tr: "/bayiler",
+    },
+    "/landing/contact": {
+      en: "/contact",
+      tr: "/iletisim",
+    },
+    "/landing/dealership": {
+      en: "/dealership",
+      tr: "/bayilik-basvurusu",
+    },
+    "/landing/faq": {
+      en: "/faq",
+      tr: "/sss",
+    },
     // Auth routes
     "/auth/login": {
       en: "/login",
