@@ -33,8 +33,8 @@ export default function Footer() {
           <div className="lg:col-span-2 space-y-6">
             <div className="group">
               <Image
-                src="/images/ata-logo.png"
-                alt="ATA Performance"
+                src="/images/revv-tuned-logo.png"
+                alt="Revv Tuned"
                 width={140}
                 height={56}
                 className="h-14 w-auto mb-6 transition-transform duration-300 group-hover:scale-105"

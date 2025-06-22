@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import ServicesClient from './components/ServicesClient';
 
 export const metadata: Metadata = {
-  title: 'Hizmetler - ATA Performance',
+  title: 'Hizmetler - Revv Tuned',
   description: 'Chiptuning, ECU remapping, performans testleri ve daha fazlası. Tüm hizmetlerimizi keşfedin.',
 };
 

@@ -18,7 +18,7 @@ export default function DealersClient() {
   const dealers = [
     {
       id: 1,
-      name: 'ATA Performance Ankara',
+      name: 'Revv Tuned Ankara',
       address: 'Atatürk Cad. No:123 Çankaya/Ankara',
       phone: '+90 312 123 45 67',
       email: 'ankara@ataperformance.com',
@@ -29,7 +29,7 @@ export default function DealersClient() {
     },
     {
       id: 2,
-      name: 'ATA Performance İstanbul',
+      name: 'Revv Tuned İstanbul',
       address: 'Bağdat Cad. No:456 Kadıköy/İstanbul',
       phone: '+90 216 987 65 43',
       email: 'istanbul@ataperformance.com',
@@ -40,7 +40,7 @@ export default function DealersClient() {
     },
     {
       id: 3,
-      name: 'ATA Performance İzmir',
+      name: 'Revv Tuned İzmir',
       address: 'Kordon Boyu No:789 Konak/İzmir',
       phone: '+90 232 555 44 33',
       email: 'izmir@ataperformance.com',
@@ -51,7 +51,7 @@ export default function DealersClient() {
     },
     {
       id: 4,
-      name: 'ATA Performance Bursa',
+      name: 'Revv Tuned Bursa',
       address: 'Atatürk Cad. No:321 Osmangazi/Bursa',
       phone: '+90 224 777 88 99',
       email: 'bursa@ataperformance.com',
@@ -62,7 +62,7 @@ export default function DealersClient() {
     },
     {
       id: 5,
-      name: 'ATA Performance Antalya',
+      name: 'Revv Tuned Antalya',
       address: 'Lara Cad. No:654 Muratpaşa/Antalya',
       phone: '+90 242 333 22 11',
       email: 'antalya@ataperformance.com',
@@ -73,7 +73,7 @@ export default function DealersClient() {
     },
     {
       id: 6,
-      name: 'ATA Performance Adana',
+      name: 'Revv Tuned Adana',
       address: 'Seyhan Cad. No:987 Seyhan/Adana',
       phone: '+90 322 444 55 66',
       email: 'adana@ataperformance.com',
@@ -104,7 +104,7 @@ export default function DealersClient() {
               Bayi Ağımız<span className="text-primary">.</span>
             </h1>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Türkiye genelindeki ATA Performance bayilerimizi keşfedin. Size en yakın bayi ile iletişime geçin.
+              Türkiye genelindeki Revv Tuned bayilerimizi keşfedin. Size en yakın bayi ile iletişime geçin.
             </p>
           </motion.div>
 
@@ -226,7 +226,7 @@ export default function DealersClient() {
               Bayi Olmak İster misiniz<span className="text-primary">?</span>
             </h2>
             <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-              ATA Performance bayi ağına katılın ve bölgenizdeki müşterilere profesyonel chiptuning hizmetleri sunun.
+              Revv Tuned bayi ağına katılın ve bölgenizdeki müşterilere profesyonel chiptuning hizmetleri sunun.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
               <div className="text-center">

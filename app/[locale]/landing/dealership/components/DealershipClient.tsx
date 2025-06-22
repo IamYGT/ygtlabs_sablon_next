@@ -116,7 +116,7 @@ export default function DealershipClient() {
               # BAYİLİK FIRSATI
             </span>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              ATA Performance Ailesine Katılın<span className="text-primary">.</span>
+              Revv Tuned Ailesine Katılın<span className="text-primary">.</span>
             </h1>
             <p className="text-gray-600 max-w-2xl mx-auto">
               Türkiye&apos;nin lider chiptuning markası ile işinizi büyütün ve geleceğe yatırım yapın.

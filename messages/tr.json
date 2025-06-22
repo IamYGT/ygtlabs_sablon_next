@@ -129,14 +129,14 @@
     },
     "Header": {
         "navigation": {
-            "home": "ANASAYFA",
-            "chiptuning": "CHIPTUNING",
-            "corporate": "KURUMSAL",
-            "services": "HİZMETLER",
-            "onsiteService": "YERİNDE HİZMET",
-            "blog": "BLOG",
-            "dealers": "BAYİLER",
-            "contact": "İLETİŞİM"
+            "home": "Anasayfa",
+            "chiptuning": "Chiptuning",
+            "corporate": "Kurumsal",
+            "services": "Hizmetler",
+            "onsiteService": "Yerinde Hizmet",
+            "blog": "Blog",
+            "dealers": "Bayiler",
+            "contact": "İletişim"
         },
         "topBar": {
             "dealershipApplication": "Bayilik Başvurusu",
@@ -148,7 +148,7 @@
         }
     },
     "Footer": {
-        "description": "ATA Performance olarak, araç performansınızı en üst seviyeye çıkarmak için profesyonel chiptuning hizmetleri sunuyoruz.",
+        "description": "Revv Tuned olarak, araç performansınızı en üst seviyeye çıkarmak için profesyonel chiptuning hizmetleri sunuyoruz.",
         "quickLinks": "Hızlı Linkler",
         "contact": "İletişim",
         "services": "Hizmetler",
@@ -158,7 +158,7 @@
         "phone": "+90 XXX XXX XX XX",
         "email": "info@ataperformance.com",
         "address": "İstanbul, Türkiye",
-        "copyright": "© 2024 ATA Performance. Tüm hakları saklıdır.",
+        "copyright": "© 2024 Revv Tuned. Tüm hakları saklıdır.",
         "newsletter": "Bülten",
         "newsletterDesc": "En son güncellemeler ve özel teklifler için bültenimize abone olun.",
         "subscribe": "Abone Ol",
@@ -177,8 +177,8 @@
         },
         "description": "Özel Chiptuning deneyimi için elinizden veya aracınızın bulunduğu yerde profesyonel hizmet",
         "buttons": {
-            "discoverPower": "GÜCÜ KEŞFET",
-            "onsiteService": "YERİNDE HİZMET"
+            "discoverPower": "Gücü Keşfet",
+            "onsiteService": "Yerinde Hizmet"
         },
         "features": {
             "premiumService": {
@@ -189,6 +189,13 @@
                 "title": "Hızlı Teslimat",
                 "subtitle": "Aynı Gün"
             }
-        }
+        },
+        "stats": {
+            "customers": "Müşteri",
+            "years": "Yıl",
+            "success": "Başarı",
+            "support": "Destek"
+        },
+        "scroll": "Kaydır"
     }
 }

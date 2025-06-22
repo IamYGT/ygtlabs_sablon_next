@@ -62,7 +62,7 @@ export default function CorporateClient() {
     {
       year: '2018',
       title: 'Şirket Kuruluşu',
-      description: 'ATA Performance olarak faaliyetlerimize başladık'
+      description: 'Revv Tuned olarak faaliyetlerimize başladık'
     },
     {
       year: '2019',
@@ -108,7 +108,7 @@ export default function CorporateClient() {
               # KURUMSAL
             </span>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              ATA Performance<span className="text-primary">.</span>
+              Revv Tuned<span className="text-primary">.</span>
             </h1>
             <p className="text-gray-600 max-w-2xl mx-auto">
               2018 yılından beri otomotiv sektöründe profesyonel chiptuning ve performans hizmetleri sunuyoruz.
@@ -127,7 +127,7 @@ export default function CorporateClient() {
                 Hakkımızda<span className="text-primary">.</span>
               </h2>
               <p className="text-gray-600 mb-6">
-                ATA Performance olarak, otomotiv sektöründe kaliteli ve güvenilir hizmet anlayışıyla 
+                Revv Tuned olarak, otomotiv sektöründe kaliteli ve güvenilir hizmet anlayışıyla 
                 müşterilerimizin araçlarının performansını en üst düzeye çıkarmayı hedefliyoruz.
               </p>
               <p className="text-gray-600 mb-6">
@@ -149,7 +149,7 @@ export default function CorporateClient() {
             <div className="relative">
               <Image
                 src="/images/about-hero.jpg"
-                alt="ATA Performance"
+                alt="Revv Tuned"
                 width={600}
                 height={400}
                 className="w-full h-full object-cover rounded-xl shadow-xl"

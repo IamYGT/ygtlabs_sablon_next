@@ -128,14 +128,14 @@
     },
     "Header": {
         "navigation": {
-            "home": "HOME",
-            "chiptuning": "CHIPTUNING",
-            "corporate": "CORPORATE",
-            "services": "SERVICES",
-            "onsiteService": "ON-SITE SERVICE",
-            "blog": "BLOG",
-            "dealers": "DEALERS",
-            "contact": "CONTACT"
+            "home": "Home",
+            "chiptuning": "Chiptuning",
+            "corporate": "Corporate",
+            "services": "Services",
+            "onsiteService": "On-Site Service",
+            "blog": "Blog",
+            "dealers": "Dealers",
+            "contact": "Contact"
         },
         "topBar": {
             "dealershipApplication": "Dealership Application",
@@ -147,7 +147,7 @@
         }
     },
     "Footer": {
-        "description": "As ATA Performance, we provide professional chiptuning services to maximize your vehicle performance.",
+        "description": "As Revv Tuned, we provide professional chiptuning services to maximize your vehicle performance.",
         "quickLinks": "Quick Links",
         "contact": "Contact",
         "services": "Services",
@@ -157,7 +157,7 @@
         "phone": "+90 XXX XXX XX XX",
         "email": "info@ataperformance.com",
         "address": "Istanbul, Turkey",
-        "copyright": "© 2024 ATA Performance. All rights reserved.",
+        "copyright": "© 2024 Revv Tuned. All rights reserved.",
         "newsletter": "Newsletter",
         "newsletterDesc": "Subscribe to our newsletter for the latest updates and special offers.",
         "subscribe": "Subscribe",
@@ -188,6 +188,13 @@
                 "title": "Fast Delivery",
                 "subtitle": "Same Day"
             }
-        }
+        },
+        "stats": {
+            "customers": "Customers",
+            "years": "Years",
+            "success": "Success",
+            "support": "Support"
+        },
+        "scroll": "Scroll"
     }
 }

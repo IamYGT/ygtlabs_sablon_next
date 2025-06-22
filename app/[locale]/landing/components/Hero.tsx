@@ -65,9 +65,10 @@ export default function Hero() {
                             transition={{ delay: 0.6, duration: 0.6 }}
                             className="flex flex-col sm:flex-row gap-4 justify-center"
                         >
-                            <button className="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-lg font-semibold transition-colors duration-300 flex items-center justify-center space-x-2">
-                                <span>{t('buttons.discoverPower')}</span>
-                                <ArrowRight className="w-5 h-5" />
+                            <button className="group relative bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-white px-10 py-4 rounded-xl font-bold transition-all duration-500 flex items-center justify-center space-x-3 shadow-2xl hover:shadow-primary/25 hover:scale-105 transform">
+                                <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                <span className="relative z-10 text-lg tracking-wide">{t('buttons.discoverPower')}</span>
+                                <ArrowRight className="w-6 h-6 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
                             </button>
 
                             <button className="border-2 border-white/30 hover:border-white text-white hover:bg-white/10 px-8 py-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2">
@@ -85,19 +86,19 @@ export default function Hero() {
                         >
                             <div className="text-center">
                                 <div className="text-3xl font-bold text-white">5K+</div>
-                                <div className="text-gray-300 text-sm">Customers</div>
+                                <div className="text-gray-300 text-sm">{t('stats.customers')}</div>
                             </div>
                             <div className="text-center">
                                 <div className="text-3xl font-bold text-white">15+</div>
-                                <div className="text-gray-300 text-sm">Years</div>
+                                <div className="text-gray-300 text-sm">{t('stats.years')}</div>
                             </div>
                             <div className="text-center">
                                 <div className="text-3xl font-bold text-white">98%</div>
-                                <div className="text-gray-300 text-sm">Success</div>
+                                <div className="text-gray-300 text-sm">{t('stats.success')}</div>
                             </div>
                             <div className="text-center">
                                 <div className="text-3xl font-bold text-white">24/7</div>
-                                <div className="text-gray-300 text-sm">Support</div>
+                                <div className="text-gray-300 text-sm">{t('stats.support')}</div>
                             </div>
                         </motion.div>
                     </div>
@@ -131,7 +132,7 @@ export default function Hero() {
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                     className="text-white/70 text-xs font-light tracking-[0.2em] uppercase"
                 >
-                    Scroll
+                    {t('scroll')}
                 </motion.span>
             </motion.div>
         </div>

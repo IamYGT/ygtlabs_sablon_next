@@ -196,7 +196,7 @@ export default function ServicesClient() {
             className="mb-24"
           >
             <h2 className="text-3xl font-bold text-center mb-12">
-              Neden ATA Performance<span className="text-primary">?</span>
+              Neden Revv Tuned<span className="text-primary">?</span>
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {advantages.map((advantage, index) => (

@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import OnsiteServiceClient from './components/OnsiteServiceClient';
 
 export const metadata: Metadata = {
-  title: 'Yerinde Hizmet - ATA Performance',
+  title: 'Yerinde Hizmet - Revv Tuned',
   description: 'Mobil chiptuning hizmeti. Aracınızı getirmeden, istediğiniz yerde profesyonel chiptuning.',
 };
 

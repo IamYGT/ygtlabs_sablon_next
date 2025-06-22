@@ -89,8 +89,6 @@ export default function Header() {
     };
 
     const menuItems = [
-        { href: '/landing', label: t('navigation.home') },
-        { href: '/landing/chiptuning', label: t('navigation.chiptuning') },
         { href: '/landing/corporate', label: t('navigation.corporate') },
         { href: '/landing/services', label: t('navigation.services') },
         { href: '/landing/onsite-service', label: t('navigation.onsiteService') },
@@ -105,8 +103,8 @@ export default function Header() {
                     }`}
             >
                 {/* Top Bar */}
-                <div className={`backdrop-blur-md transition-all duration-300 ${isScrolled ? 'bg-black text-white' : 'bg-transparent text-white'}`}>
-                    <div className="container mx-auto px-4">
+                <div className={`transition-all duration-300 ${isScrolled ? 'bg-black text-white' : 'bg-transparent text-white'}`}>
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-20 xl:px-28 2xl:px-32">
                         <div className="flex justify-between items-center h-8">
                             <div className="flex items-center space-x-2">
                                 <div className="flex items-center space-x-1">
@@ -114,7 +112,7 @@ export default function Header() {
                                         <Star key={i} className="w-3 h-3 fill-current text-yellow-400" />
                                     ))}
                                 </div>
-                                <span className="text-sm font-medium text-white/90">5/5.0</span>
+                                <span className="text-xs font-normal text-white/90 font-sans">5/5.0</span>
                             </div>
                             <div className="hidden md:flex items-center space-x-6">
                                 <a href="#" className="text-white/80 hover:text-white transition-colors">
@@ -127,19 +125,19 @@ export default function Header() {
                                     href="https://ataperformance.co.uk"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-sm text-white/80 hover:text-white transition-colors"
+                                    className="text-xs text-white/80 hover:text-white transition-colors font-sans"
                                 >
                                     ataperformance.co.uk
                                 </a>
                                 <Link
                                     href="/landing/dealership"
-                                    className="text-sm text-white/80 hover:text-white transition-colors"
+                                    className="text-xs text-white/80 hover:text-white transition-colors font-sans"
                                 >
                                     {t('topBar.dealershipApplication')}
                                 </Link>
                                 <Link
                                     href="/landing/faq"
-                                    className="text-sm text-white/80 hover:text-white transition-colors"
+                                    className="text-xs text-white/80 hover:text-white transition-colors font-sans"
                                 >
                                     {t('topBar.faq')}
                                 </Link>
@@ -204,31 +202,31 @@ export default function Header() {
 
                 {/* Main Navigation */}
                 <nav
-                    className={`backdrop-blur-md transition-all duration-300 ${isScrolled
-                        ? 'bg-white/95 py-2 shadow-lg'
-                        : 'bg-transparent py-3'
+                    className={`transition-all duration-300 ${isScrolled
+                        ? 'bg-white py-1 sm:py-2 shadow-lg'
+                        : 'bg-transparent py-2 sm:py-3'
                         }`}
                 >
-                    <div className="container mx-auto px-4 lg:px-8 xl:px-12">
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-20 xl:px-28 2xl:px-32">
                         <div className="flex items-center justify-between">
-                            <Link href="/landing" className="flex-shrink-0 mr-8 lg:mr-16">
+                            <Link href="/landing" className="flex-shrink-0 mr-4 sm:mr-8 lg:mr-32 xl:mr-40">
                                 <Image
                                     src={isScrolled ? "/logo/revvsiyah.png" : "/logo/RevvTuned.png"}
                                     alt="RevvTuned"
-                                    width={200}
-                                    height={40}
-                                    className={`w-auto transition-all duration-300 ${isScrolled ? 'h-7 lg:h-8' : 'h-8 lg:h-10'
+                                    width={280}
+                                    height={60}
+                                    className={`w-auto transition-all duration-300 ${isScrolled ? 'h-6 sm:h-7 lg:h-8' : 'h-10 sm:h-12 lg:h-14'
                                         }`}
                                 />
                             </Link>
 
                             {/* Desktop Menu */}
-                            <div className="hidden md:flex items-center justify-end flex-1 md:space-x-3 lg:space-x-5 xl:space-x-8">
+                            <div className="hidden md:flex items-center justify-end flex-1 md:space-x-2 lg:space-x-6 xl:space-x-10 2xl:space-x-14">
                                 {menuItems.map((item) => (
                                     <Link
                                         key={item.href}
                                         href={item.href}
-                                        className={`relative text-[13px] lg:text-sm font-medium group overflow-hidden px-1 py-2 whitespace-nowrap transition-colors duration-300 ${isScrolled ? 'text-gray-800' : 'text-white'
+                                        className={`relative text-xs lg:text-sm font-normal group overflow-hidden px-1 py-2 whitespace-nowrap transition-colors duration-300 font-sans tracking-wide ${isScrolled ? 'text-gray-700' : 'text-white/90'
                                             }`}
                                     >
                                         <span className="relative z-10 transition-colors duration-300 group-hover:text-primary">
@@ -239,7 +237,7 @@ export default function Header() {
                                 ))}
                                 <Link
                                     href="/landing/contact"
-                                    className="relative overflow-hidden bg-primary text-white px-4 lg:px-6 py-2 rounded-lg text-[13px] lg:text-sm font-medium transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 group ml-2 lg:ml-4"
+                                    className="relative overflow-hidden bg-primary text-white px-3 md:px-4 lg:px-5 py-2 rounded-lg text-xs lg:text-sm font-normal transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 group ml-2 md:ml-4 lg:ml-8 xl:ml-12 font-sans tracking-wide"
                                 >
                                     <span className="relative z-10">{t('navigation.contact')}</span>
                                     <span className="absolute inset-0 bg-white/20 transform -skew-x-12 translate-x-full group-hover:translate-x-0 transition-transform duration-500"></span>
@@ -271,7 +269,7 @@ export default function Header() {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.2 }}
-                            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[998] md:hidden"
+                            className="fixed inset-0 bg-black/50 z-[998] md:hidden"
                             onClick={closeMenu}
                         />
 
@@ -285,7 +283,7 @@ export default function Header() {
                         >
                             <div className="flex flex-col h-full">
                                 {/* Menu Header */}
-                                <div className="sticky top-0 flex items-center justify-between px-4 py-3 sm:p-6 border-b border-gray-100 bg-white/95 backdrop-blur-md z-10">
+                                <div className="sticky top-0 flex items-center justify-between px-4 py-3 sm:p-6 border-b border-gray-100 bg-white z-10">
                                     <Image
                                         src="/logo/revvsiyah.png"
                                         alt="RevvTuned"

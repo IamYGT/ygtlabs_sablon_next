@@ -16,7 +16,7 @@ export default function ServiceIcons() {
     ];
 
     return (
-        <div className="relative -mt-20 z-30 pb-20">
+        <div className="relative -mt-28 z-30 pb-20">
             <div className="container mx-auto px-4">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
