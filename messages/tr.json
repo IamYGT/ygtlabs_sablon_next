@@ -197,5 +197,19 @@
             "support": "Destek"
         },
         "scroll": "Kaydır"
+    },
+    "MainContent": {
+        "title": {
+            "line1": "Güvenilir Güç",
+            "highlight": "Düşük Yakıt"
+        },
+        "description": "Aracınızın performans potansiyelini en üst seviyeye çıkarın. Profesyonel ekibimiz ve son teknoloji ekipmanlarımızla hizmetinizdeyiz.",
+        "features": {
+            "dealership": "Bayilik Başvurusu",
+            "onsiteService": "Yerinde Hizmet",
+            "reviews": "Değerlendirmeler",
+            "faq": "Sık Sorulan Sorular"
+        },
+        "experience": "Yıllık Deneyim"
     }
 }

@@ -196,5 +196,19 @@
             "support": "Support"
         },
         "scroll": "Scroll"
+    },
+    "MainContent": {
+        "title": {
+            "line1": "Reliable Power",
+            "highlight": "Low Fuel"
+        },
+        "description": "Maximize your vehicle's performance potential to the highest level. We are at your service with our professional team and state-of-the-art equipment.",
+        "features": {
+            "dealership": "Dealership Application",
+            "onsiteService": "On-site Service",
+            "reviews": "Reviews",
+            "faq": "Frequently Asked Questions"
+        },
+        "experience": "Years of Experience"
     }
 }
