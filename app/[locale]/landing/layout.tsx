@@ -1,18 +1,17 @@
-import type { Metadata } from "next";
-import React from 'react';
-import { NextIntlClientProvider } from 'next-intl';
+import { Metadata } from "next";
+import "../landing/styles/landing.css"; // Landing page'e özel stil dosyası
 
 export const metadata: Metadata = {
-    title: "ECU Sistem - Chip Tuning ve Performans Çözümleri",
-    description: "Profesyonel chip tuning, ECU yazılımı ve araç performans optimizasyonu hizmetleri",
-    keywords: "chip tuning, ecu, performans, yazılım, araç, motor, optimizasyon",
+    title: "RevvTuned - ECU Chip Tuning Hizmetleri",
+    description: "Profesyonel ECU chip tuning hizmetleri ile aracınızın performansını artırın. Uzman ekibimiz ve son teknoloji ile güvenli tuning çözümleri.",
+    keywords: "ecu tuning, chip tuning, performans artırma, motor tuning, araç modifikasyonu",
     robots: {
         index: true,
         follow: true,
     },
     openGraph: {
-        title: "ECU Sistem - Chip Tuning Uzmanları",
-        description: "Aracınızın performansını maksimuma çıkarın. Profesyonel chip tuning hizmetleri.",
+        title: "RevvTuned - ECU Chip Tuning Hizmetleri",
+        description: "Profesyonel ECU chip tuning hizmetleri ile aracınızın performansını artırın.",
         type: "website",
         locale: "tr_TR",
     },
@@ -20,24 +19,10 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic';
 
-interface LandingLayoutProps {
+export default function LandingLayout({
+    children,
+}: {
     children: React.ReactNode;
-    params: Promise<{ locale: string }>;
-}
-
-export default async function LandingLayout({ children, params }: LandingLayoutProps) {
-    const { locale } = await params;
-
-    // Validate locale and fallback to 'en' if invalid
-    const validLocales = ['en', 'tr'];
-    const validLocale = validLocales.includes(locale) ? locale : 'en';
-
-    // Landing page için normal mesajları yükle
-    const messages = (await import(`../../../messages/${validLocale}.json`)).default;
-
-    return (
-        <NextIntlClientProvider messages={messages}>
-            {children}
-        </NextIntlClientProvider>
-    );
+}) {
+    return <>{children}</>;
 } 

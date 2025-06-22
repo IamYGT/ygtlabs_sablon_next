@@ -1,0 +1,212 @@
+@import "tailwindcss";
+
+/* Admin Panel Özel Stilleri */
+:root {
+    --admin-primary: #3b82f6;
+    --admin-primary-dark: #1d4ed8;
+    --admin-secondary: #64748b;
+    --admin-accent: #06b6d4;
+    --admin-success: #10b981;
+    --admin-warning: #f59e0b;
+    --admin-error: #ef4444;
+    --admin-bg: #f8fafc;
+    --admin-card: #ffffff;
+    --admin-border: #e2e8f0;
+    --admin-text: #334155;
+    --admin-text-light: #64748b;
+}
+
+.dark {
+    --admin-primary: #60a5fa;
+    --admin-primary-dark: #3b82f6;
+    --admin-secondary: #94a3b8;
+    --admin-accent: #22d3ee;
+    --admin-success: #34d399;
+    --admin-warning: #fbbf24;
+    --admin-error: #f87171;
+    --admin-bg: #0f172a;
+    --admin-card: #1e293b;
+    --admin-border: #334155;
+    --admin-text: #f1f5f9;
+    --admin-text-light: #94a3b8;
+}
+
+@layer base {
+    .admin-layout {
+        @apply bg-admin-bg text-admin-text min-h-screen;
+    }
+}
+
+@layer components {
+
+    /* Admin Card Styles */
+    .admin-card {
+        @apply bg-admin-card border border-admin-border rounded-lg shadow-sm hover:shadow-md transition-all duration-200;
+    }
+
+    .admin-card-header {
+        @apply px-6 py-4 border-b border-admin-border;
+    }
+
+    .admin-card-content {
+        @apply p-6;
+    }
+
+    /* Admin Button Styles */
+    .admin-btn {
+        @apply px-4 py-2 rounded-md font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+    }
+
+    .admin-btn-primary {
+        @apply bg-admin-primary text-white hover:bg-admin-primary-dark focus:ring-admin-primary;
+    }
+
+    .admin-btn-secondary {
+        @apply bg-admin-secondary text-white hover:bg-admin-secondary/90 focus:ring-admin-secondary;
+    }
+
+    .admin-btn-outline {
+        @apply border border-admin-border text-admin-text hover:bg-admin-border/50 focus:ring-admin-primary;
+    }
+
+    /* Admin Table Styles */
+    .admin-table {
+        @apply w-full border-collapse;
+    }
+
+    .admin-table th {
+        @apply px-6 py-3 text-left text-xs font-medium text-admin-text-light uppercase tracking-wider border-b border-admin-border;
+    }
+
+    .admin-table td {
+        @apply px-6 py-4 whitespace-nowrap text-sm text-admin-text border-b border-admin-border;
+    }
+
+    .admin-table tr:hover {
+        @apply bg-admin-border/30;
+    }
+
+    /* Admin Form Styles */
+    .admin-input {
+        @apply w-full px-3 py-2 border border-admin-border rounded-md bg-admin-card text-admin-text placeholder-admin-text-light focus:outline-none focus:ring-2 focus:ring-admin-primary focus:border-admin-primary;
+    }
+
+    .admin-label {
+        @apply block text-sm font-medium text-admin-text mb-2;
+    }
+
+    /* Admin Sidebar Styles */
+    .admin-sidebar {
+        @apply bg-admin-card border-r border-admin-border;
+    }
+
+    .admin-sidebar-item {
+        @apply flex items-center px-4 py-3 text-admin-text hover:bg-admin-border/30 transition-colors duration-200;
+    }
+
+    .admin-sidebar-item.active {
+        @apply bg-admin-primary text-white;
+    }
+
+    /* Admin Stats Cards */
+    .admin-stats-card {
+        @apply admin-card p-6;
+    }
+
+    .admin-stats-value {
+        @apply text-2xl font-bold text-admin-text;
+    }
+
+    .admin-stats-label {
+        @apply text-sm text-admin-text-light;
+    }
+
+    .admin-stats-change {
+        @apply text-xs font-medium;
+    }
+
+    .admin-stats-change.positive {
+        @apply text-admin-success;
+    }
+
+    .admin-stats-change.negative {
+        @apply text-admin-error;
+    }
+
+    /* Admin Badge Styles */
+    .admin-badge {
+        @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+    }
+
+    .admin-badge-success {
+        @apply bg-admin-success/10 text-admin-success;
+    }
+
+    .admin-badge-warning {
+        @apply bg-admin-warning/10 text-admin-warning;
+    }
+
+    .admin-badge-error {
+        @apply bg-admin-error/10 text-admin-error;
+    }
+
+    .admin-badge-info {
+        @apply bg-admin-accent/10 text-admin-accent;
+    }
+
+    /* Admin Loading States */
+    .admin-skeleton {
+        @apply animate-pulse bg-admin-border rounded;
+    }
+
+    .admin-spinner {
+        @apply animate-spin rounded-full border-2 border-admin-border border-t-admin-primary;
+    }
+}
+
+/* Admin Animations */
+@keyframes admin-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes admin-slide-in {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+.admin-fade-in {
+    animation: admin-fade-in 0.3s ease-out;
+}
+
+.admin-slide-in {
+    animation: admin-slide-in 0.3s ease-out;
+}
+
+/* Admin Responsive */
+@media (max-width: 768px) {
+    .admin-card {
+        @apply mx-4;
+    }
+
+    .admin-table {
+        @apply text-sm;
+    }
+
+    .admin-table th,
+    .admin-table td {
+        @apply px-3 py-2;
+    }
+}

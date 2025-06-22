@@ -1,0 +1,296 @@
+@import "tailwindcss";
+
+/* User Panel Özel Stilleri */
+:root {
+    --user-primary: #059669;
+    --user-primary-dark: #047857;
+    --user-secondary: #6b7280;
+    --user-accent: #0891b2;
+    --user-success: #10b981;
+    --user-warning: #f59e0b;
+    --user-error: #ef4444;
+    --user-bg: #f9fafb;
+    --user-card: #ffffff;
+    --user-border: #e5e7eb;
+    --user-text: #374151;
+    --user-text-light: #6b7280;
+}
+
+.dark {
+    --user-primary: #34d399;
+    --user-primary-dark: #10b981;
+    --user-secondary: #9ca3af;
+    --user-accent: #06b6d4;
+    --user-success: #34d399;
+    --user-warning: #fbbf24;
+    --user-error: #f87171;
+    --user-bg: #111827;
+    --user-card: #1f2937;
+    --user-border: #374151;
+    --user-text: #f3f4f6;
+    --user-text-light: #9ca3af;
+}
+
+@layer base {
+    .user-layout {
+        @apply bg-user-bg text-user-text min-h-screen;
+    }
+}
+
+@layer components {
+
+    /* User Card Styles */
+    .user-card {
+        @apply bg-user-card border border-user-border rounded-xl shadow-sm hover:shadow-lg transition-all duration-300;
+    }
+
+    .user-card-header {
+        @apply px-6 py-4 border-b border-user-border bg-gradient-to-r from-user-primary/5 to-user-accent/5;
+    }
+
+    .user-card-content {
+        @apply p-6;
+    }
+
+    /* User Button Styles */
+    .user-btn {
+        @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 transform hover:scale-105;
+    }
+
+    .user-btn-primary {
+        @apply bg-user-primary text-white hover:bg-user-primary-dark focus:ring-user-primary shadow-lg hover:shadow-xl;
+    }
+
+    .user-btn-secondary {
+        @apply bg-user-secondary text-white hover:bg-user-secondary/90 focus:ring-user-secondary shadow-md hover:shadow-lg;
+    }
+
+    .user-btn-outline {
+        @apply border-2 border-user-primary text-user-primary hover:bg-user-primary hover:text-white focus:ring-user-primary;
+    }
+
+    /* User Profile Styles */
+    .user-profile-card {
+        @apply user-card overflow-hidden;
+    }
+
+    .user-profile-header {
+        @apply bg-gradient-to-r from-user-primary to-user-accent p-6 text-white;
+    }
+
+    .user-profile-avatar {
+        @apply w-20 h-20 rounded-full border-4 border-white shadow-lg;
+    }
+
+    .user-profile-name {
+        @apply text-xl font-bold mt-3;
+    }
+
+    .user-profile-role {
+        @apply text-user-primary/80 text-sm;
+    }
+
+    /* User Dashboard Styles */
+    .user-dashboard-grid {
+        @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+    }
+
+    .user-stat-card {
+        @apply user-card p-6 text-center hover:scale-105 transition-transform duration-300;
+    }
+
+    .user-stat-icon {
+        @apply w-12 h-12 mx-auto mb-4 p-3 rounded-full bg-user-primary/10 text-user-primary;
+    }
+
+    .user-stat-value {
+        @apply text-3xl font-bold text-user-text mb-2;
+    }
+
+    .user-stat-label {
+        @apply text-user-text-light text-sm;
+    }
+
+    /* User Navigation Styles */
+    .user-nav {
+        @apply bg-user-card border-b border-user-border shadow-sm;
+    }
+
+    .user-nav-item {
+        @apply flex items-center px-4 py-3 text-user-text hover:text-user-primary hover:bg-user-primary/5 transition-all duration-200 rounded-lg;
+    }
+
+    .user-nav-item.active {
+        @apply text-user-primary bg-user-primary/10 font-medium;
+    }
+
+    /* User Form Styles */
+    .user-form-group {
+        @apply mb-6;
+    }
+
+    .user-input {
+        @apply w-full px-4 py-3 border border-user-border rounded-lg bg-user-card text-user-text placeholder-user-text-light focus:outline-none focus:ring-2 focus:ring-user-primary focus:border-user-primary transition-all duration-200;
+    }
+
+    .user-label {
+        @apply block text-sm font-medium text-user-text mb-2;
+    }
+
+    .user-textarea {
+        @apply user-input resize-none h-32;
+    }
+
+    /* User Badge Styles */
+    .user-badge {
+        @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
+    }
+
+    .user-badge-success {
+        @apply bg-user-success/20 text-user-success border border-user-success/30;
+    }
+
+    .user-badge-warning {
+        @apply bg-user-warning/20 text-user-warning border border-user-warning/30;
+    }
+
+    .user-badge-error {
+        @apply bg-user-error/20 text-user-error border border-user-error/30;
+    }
+
+    .user-badge-info {
+        @apply bg-user-accent/20 text-user-accent border border-user-accent/30;
+    }
+
+    /* User Activity Timeline */
+    .user-timeline {
+        @apply relative;
+    }
+
+    .user-timeline::before {
+        @apply absolute left-4 top-0 bottom-0 w-0.5 bg-user-border;
+        content: '';
+    }
+
+    .user-timeline-item {
+        @apply relative pl-10 pb-6;
+    }
+
+    .user-timeline-marker {
+        @apply absolute left-2 w-4 h-4 bg-user-primary rounded-full border-2 border-user-card;
+    }
+
+    .user-timeline-content {
+        @apply user-card p-4;
+    }
+
+    /* User Progress Styles */
+    .user-progress {
+        @apply w-full bg-user-border rounded-full h-2;
+    }
+
+    .user-progress-bar {
+        @apply bg-gradient-to-r from-user-primary to-user-accent h-2 rounded-full transition-all duration-500;
+    }
+
+    /* User Notification Styles */
+    .user-notification {
+        @apply user-card p-4 border-l-4 border-user-primary;
+    }
+
+    .user-notification.success {
+        @apply border-user-success bg-user-success/5;
+    }
+
+    .user-notification.warning {
+        @apply border-user-warning bg-user-warning/5;
+    }
+
+    .user-notification.error {
+        @apply border-user-error bg-user-error/5;
+    }
+}
+
+/* User Animations */
+@keyframes user-bounce-in {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+
+    70% {
+        transform: scale(0.9);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes user-slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes user-fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.user-bounce-in {
+    animation: user-bounce-in 0.6s ease-out;
+}
+
+.user-slide-up {
+    animation: user-slide-up 0.4s ease-out;
+}
+
+.user-fade-in {
+    animation: user-fade-in 0.3s ease-out;
+}
+
+/* User Hover Effects */
+.user-hover-lift {
+    @apply transition-all duration-300;
+}
+
+.user-hover-lift:hover {
+    @apply transform -translate-y-1 shadow-lg;
+}
+
+.user-hover-glow:hover {
+    box-shadow: 0 0 20px rgba(5, 150, 105, 0.3);
+}
+
+/* User Responsive */
+@media (max-width: 768px) {
+    .user-dashboard-grid {
+        @apply grid-cols-1;
+    }
+
+    .user-card {
+        @apply mx-2;
+    }
+
+    .user-btn {
+        @apply w-full;
+    }
+}
