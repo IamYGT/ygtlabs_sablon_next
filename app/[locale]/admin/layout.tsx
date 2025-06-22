@@ -6,6 +6,7 @@ import { Toaster } from 'sonner';
 import { LogoutModalProvider } from '@/components/panel/LogoutModalProvider';
 import { NextIntlClientProvider } from 'next-intl';
 import { AdminGuard } from '@/components/panel/AuthGuards';
+import './styles/admin.css';
 
 
 export const metadata: Metadata = {

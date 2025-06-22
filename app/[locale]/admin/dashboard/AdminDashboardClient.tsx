@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import '../styles/admin.css'; // Admin CSS'ini import ediyoruz
 import { Card, CardContent } from "@/components/ui/card";
 import { Activity, Users, FileText, Shield, Clock, ArrowRight, BarChart3, PieChart, Calendar } from "lucide-react";
 import { useAdminAuth } from "@/lib/hooks/useAuth";
