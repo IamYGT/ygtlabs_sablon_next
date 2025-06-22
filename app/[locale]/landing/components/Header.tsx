@@ -26,14 +26,29 @@ export default function Header() {
     const pathname = usePathname();
     const t = useTranslations('Header');
 
+    // Home page kontrolü
+    const isHomePage = pathname === '/landing';
+    
     const handleScroll = useCallback(() => {
-        setIsScrolled(window.scrollY > 0);
-    }, []);
+        // Sadece home page'de scroll efekti aktif
+        if (isHomePage) {
+            setIsScrolled(window.scrollY > 0);
+        } else {
+            setIsScrolled(true); // Diğer sayfalarda her zaman solid background
+        }
+    }, [isHomePage]);
 
     useEffect(() => {
+        // İlk yüklemede home page değilse solid background yap
+        if (!isHomePage) {
+            setIsScrolled(true);
+        } else {
+            setIsScrolled(window.scrollY > 0);
+        }
+        
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [handleScroll]);
+    }, [handleScroll, isHomePage]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
