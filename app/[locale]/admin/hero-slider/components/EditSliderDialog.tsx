@@ -18,10 +18,24 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ImageUpload } from "@/components/ui/image-upload";
 import { Plus, Trash2 } from "lucide-react";
 
+interface HeroSlider {
+    id: string;
+    title: unknown;
+    subtitle?: unknown;
+    description: unknown;
+    badge?: unknown;
+    backgroundImage: string;
+    primaryButton: unknown;
+    secondaryButton?: unknown;
+    statistics: unknown;
+    isActive: boolean;
+    order: number;
+}
+
 interface EditSliderDialogProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    slider: any;
+    slider: HeroSlider | null;
     onSuccess: () => void;
 }
 
@@ -41,7 +55,7 @@ interface StatisticField {
 }
 
 // JSON field parse etme fonksiyonu
-function parseJSONField(value: any): MultilingualField {
+function parseJSONField(value: unknown): MultilingualField {
     if (typeof value === 'string') {
         try {
             const parsed = JSON.parse(value);
@@ -55,16 +69,17 @@ function parseJSONField(value: any): MultilingualField {
     }
 
     if (typeof value === 'object' && value !== null) {
+        const obj = value as Record<string, unknown>;
         return {
-            tr: value.tr || '',
-            en: value.en || ''
+            tr: String(obj.tr || ''),
+            en: String(obj.en || '')
         };
     }
 
     return { tr: '', en: '' };
 }
 
-function parseButtonField(value: any): ButtonField {
+function parseButtonField(value: unknown): ButtonField {
     if (typeof value === 'string') {
         try {
             const parsed = JSON.parse(value);
@@ -81,14 +96,15 @@ function parseButtonField(value: any): ButtonField {
     }
 
     if (typeof value === 'object' && value !== null) {
+        const obj = value as Record<string, { text?: string; url?: string }>;
         return {
             tr: {
-                text: value.tr?.text || '',
-                url: value.tr?.url || ''
+                text: obj.tr?.text || '',
+                url: obj.tr?.url || ''
             },
             en: {
-                text: value.en?.text || '',
-                url: value.en?.url || ''
+                text: obj.en?.text || '',
+                url: obj.en?.url || ''
             }
         };
     }
@@ -99,7 +115,7 @@ function parseButtonField(value: any): ButtonField {
     };
 }
 
-function parseStatisticsField(value: any): StatisticField[] {
+function parseStatisticsField(value: unknown): StatisticField[] {
     if (typeof value === 'string') {
         try {
             const parsed = JSON.parse(value);
@@ -201,6 +217,11 @@ export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: Edit
             return;
         }
 
+        if (!slider?.id) {
+            toast.error("Slider bilgisi bulunamadı");
+            return;
+        }
+
         try {
             setLoading(true);
 
@@ -231,9 +252,9 @@ export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: Edit
             toast.success("Slider başarıyla güncellendi");
             onSuccess();
             onOpenChange(false);
-        } catch (error: any) {
+        } catch (error) {
             console.error("Update slider error:", error);
-            toast.error(error.message || "Slider güncellenirken hata oluştu");
+            toast.error(error instanceof Error ? error.message : "Slider güncellenirken hata oluştu");
         } finally {
             setLoading(false);
         }

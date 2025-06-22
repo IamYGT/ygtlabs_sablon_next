@@ -99,7 +99,7 @@ export async function PUT(
     }
 
     // Güncelleme verilerini hazırla
-    const updateData: any = {
+    const updateData: Record<string, unknown> = {
       updatedById: currentUser.id,
     };
 

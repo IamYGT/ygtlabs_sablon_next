@@ -6,21 +6,39 @@ import { useTranslations, useLocale } from 'next-intl';
 import { ArrowRight, MapPin } from 'lucide-react';
 import Link from 'next/link';
 
+interface LocalizedContent {
+    [key: string]: string;
+}
+
+interface ButtonConfig {
+    [key: string]: {
+        text: string;
+        url: string;
+    };
+}
+
+interface StatisticsConfig {
+    [key: string]: {
+        value: string;
+        label: string;
+    };
+}
+
 interface HeroSlider {
     id: string;
-    title: any; // JSON
-    subtitle?: any; // JSON
-    description: any; // JSON
-    badge?: any; // JSON
+    title: LocalizedContent | string;
+    subtitle?: LocalizedContent | string;
+    description: LocalizedContent | string;
+    badge?: LocalizedContent | string;
     backgroundImage: string;
-    primaryButton: any; // JSON
-    secondaryButton?: any; // JSON
-    statistics: any; // JSON
+    primaryButton: ButtonConfig | string;
+    secondaryButton?: ButtonConfig | string;
+    statistics: StatisticsConfig[] | string;
     order: number;
 }
 
 // JSON field parse etme fonksiyonu
-function parseJSONField(value: any, locale: string): string {
+function parseJSONField(value: LocalizedContent | string | null | undefined, locale: string): string {
     if (typeof value === 'string') {
         try {
             const parsed = JSON.parse(value);
@@ -40,7 +58,6 @@ function parseJSONField(value: any, locale: string): string {
 export default function Hero() {
     const t = useTranslations('Hero');
     const locale = useLocale();
-    const [sliders, setSliders] = useState<HeroSlider[]>([]);
     const [currentSlider, setCurrentSlider] = useState<HeroSlider | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -51,7 +68,6 @@ export default function Hero() {
                 const response = await fetch('/api/hero-slider?limit=1');
                 if (response.ok) {
                     const data = await response.json();
-                    setSliders(data.sliders || []);
                     if (data.sliders && data.sliders.length > 0) {
                         setCurrentSlider(data.sliders[0]);
                     }

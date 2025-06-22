@@ -152,9 +152,9 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
             resetForm();
             onSuccess();
             onOpenChange(false);
-        } catch (error: any) {
+        } catch (error) {
             console.error("Create slider error:", error);
-            toast.error(error.message || "Slider oluşturulurken hata oluştu");
+            toast.error(error instanceof Error ? error.message : "Slider oluşturulurken hata oluştu");
         } finally {
             setLoading(false);
         }

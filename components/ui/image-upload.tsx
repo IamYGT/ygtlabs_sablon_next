@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import { Loader2, Upload, X, Eye, Trash2, Link } from "lucide-react";
+import { Loader2, Upload, Eye, Trash2, Link } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface ImageUploadProps {
     value?: string;
@@ -64,20 +64,20 @@ export function ImageUpload({
         e.stopPropagation();
     }, []);
 
-    const validateFile = (file: File): string | null => {
+    const validateFile = useCallback((file: File): string | null => {
         if (!file.type.startsWith('image/')) {
             return "Sadece görsel dosyaları desteklenir";
         }
 
         const maxSizeBytes = maxSize * 1024 * 1024;
         if (file.size > maxSizeBytes) {
-            return `Dosya boyutu ${maxSize}MB'dan küçük olmalıdır`;
+            return `Dosya boyutu ${maxSize}MB&apos;dan küçük olmalıdır`;
         }
 
         return null;
-    };
+    }, [maxSize]);
 
-    const uploadFile = async (file: File) => {
+    const uploadFile = useCallback(async (file: File) => {
         const validationError = validateFile(file);
         if (validationError) {
             setError(validationError);
@@ -124,7 +124,7 @@ export function ImageUpload({
             setUploadProgress(0);
             setIsUploading(false);
         }
-    };
+    }, [uploadEndpoint, onChange, validateFile]);
 
     const handleDrop = useCallback((e: React.DragEvent) => {
         e.preventDefault();
@@ -136,7 +136,7 @@ export function ImageUpload({
         if (files.length > 0) {
             uploadFile(files[0]);
         }
-    }, []);
+    }, [uploadFile]);
 
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
@@ -158,14 +158,6 @@ export function ImageUpload({
         setError(null);
     };
 
-    const formatFileSize = (bytes: number) => {
-        if (bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-    };
-
     return (
         <div className={cn("space-y-4", className)}>
             {label && <Label>{label}</Label>}
@@ -177,10 +169,16 @@ export function ImageUpload({
             {value && (
                 <div className="relative group">
                     <div className="relative w-full h-48 rounded-lg border-2 border-dashed border-gray-300 overflow-hidden">
-                        <img
+                        <Image
                             src={value}
                             alt="Preview"
-                            className="w-full h-full object-cover"
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            quality={85}
+                            placeholder="blur"
+                            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+                            onError={() => setError('Görsel yüklenirken hata oluştu')}
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 flex items-center justify-center">
                             <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-2">
@@ -284,7 +282,7 @@ export function ImageUpload({
             <Dialog open={showUrlInput} onOpenChange={setShowUrlInput}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Görsel URL'si Girin</DialogTitle>
+                        <DialogTitle>Görsel URL&apos;si Girin</DialogTitle>
                     </DialogHeader>
                     <div className="space-y-4">
                         <Input
@@ -307,17 +305,28 @@ export function ImageUpload({
 
             {/* Full Size Preview Dialog */}
             <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
-                <DialogContent className="max-w-4xl max-h-[90vh] p-0">
+                <DialogContent className="max-w-4xl max-h-[90vh] p-0 overflow-hidden">
                     <DialogHeader className="p-6 pb-0">
                         <DialogTitle>Görsel Önizleme</DialogTitle>
                     </DialogHeader>
                     <div className="p-6 pt-0">
                         {value && (
-                            <img
-                                src={value}
-                                alt="Full size preview"
-                                className="w-full h-auto max-h-[70vh] object-contain rounded-lg"
-                            />
+                            <div className="relative w-full">
+                                <Image
+                                    src={value}
+                                    alt="Full size preview"
+                                    width={800}
+                                    height={600}
+                                    className="w-full h-auto max-h-[70vh] object-contain rounded-lg"
+                                    priority={true}
+                                    quality={95}
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+                                    placeholder="blur"
+                                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+                                    onLoad={() => setError('')}
+                                    onError={() => setError('Görsel yüklenirken hata oluştu')}
+                                />
+                            </div>
                         )}
                     </div>
                 </DialogContent>

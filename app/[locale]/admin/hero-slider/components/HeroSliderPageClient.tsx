@@ -35,16 +35,32 @@ import { CreateSliderDialog } from "./CreateSliderDialog";
 import { EditSliderDialog } from "./EditSliderDialog";
 import Image from "next/image";
 
+// JSON field tiplerini tanımla
+type LocalizedContent = {
+    tr: string;
+    en: string;
+};
+
+type ButtonConfig = {
+    tr: { text: string; href: string };
+    en: { text: string; href: string };
+};
+
+type StatisticsConfig = {
+    tr: Array<{ label: string; value: string; icon?: string }>;
+    en: Array<{ label: string; value: string; icon?: string }>;
+};
+
 interface HeroSlider {
     id: string;
-    title: any; // JSON
-    subtitle?: any; // JSON
-    description: any; // JSON
-    badge?: any; // JSON
+    title: LocalizedContent | string;
+    subtitle?: LocalizedContent | string;
+    description: LocalizedContent | string;
+    badge?: LocalizedContent | string;
     backgroundImage: string;
-    primaryButton: any; // JSON
-    secondaryButton?: any; // JSON
-    statistics: any; // JSON
+    primaryButton: ButtonConfig | string;
+    secondaryButton?: ButtonConfig | string;
+    statistics: StatisticsConfig | string;
     isActive: boolean;
     order: number;
     createdAt: string;
@@ -62,21 +78,22 @@ interface HeroSlider {
 }
 
 // JSON field parse etme fonksiyonu
-function parseJSONField(value: any, locale: string = 'tr'): string {
+function parseJSONField(value: LocalizedContent | string | unknown, locale: string = 'tr'): string {
     if (typeof value === 'string') {
         try {
-            const parsed = JSON.parse(value);
-            return parsed?.[locale] || value;
+            const parsed = JSON.parse(value) as LocalizedContent;
+            return parsed?.[locale as keyof LocalizedContent] || value;
         } catch {
             return value;
         }
     }
 
     if (typeof value === 'object' && value !== null) {
-        return value[locale] || value.en || Object.values(value)[0] || '';
+        const obj = value as Record<string, string>;
+        return obj[locale] || obj.en || Object.values(obj)[0] || '';
     }
 
-    return value || '';
+    return String(value || '');
 }
 
 export function HeroSliderPageClient() {
@@ -128,9 +145,10 @@ export function HeroSliderPageClient() {
 
             toast.success("Slider başarıyla silindi");
             fetchSliders();
-        } catch (error: any) {
+        } catch (error) {
             console.error("Slider delete error:", error);
-            toast.error(error.message || "Slider silinirken bir hata oluştu");
+            const errorMessage = error instanceof Error ? error.message : "Slider silinirken bir hata oluştu";
+            toast.error(errorMessage);
         }
     };
 
@@ -149,9 +167,10 @@ export function HeroSliderPageClient() {
 
             toast.success(`Slider ${!currentStatus ? "aktif edildi" : "devre dışı bırakıldı"}`);
             fetchSliders();
-        } catch (error: any) {
+        } catch (error) {
             console.error("Toggle status error:", error);
-            toast.error(error.message || "Durum güncellenirken hata oluştu");
+            const errorMessage = error instanceof Error ? error.message : "Durum güncellenirken hata oluştu";
+            toast.error(errorMessage);
         }
     };
 
@@ -185,9 +204,10 @@ export function HeroSliderPageClient() {
 
             toast.success("Sıralama güncellendi");
             fetchSliders();
-        } catch (error: any) {
+        } catch (error) {
             console.error("Order update error:", error);
-            toast.error(error.message || "Sıralama güncellenirken hata oluştu");
+            const errorMessage = error instanceof Error ? error.message : "Sıralama güncellenirken hata oluştu";
+            toast.error(errorMessage);
         }
     };
 
@@ -196,7 +216,7 @@ export function HeroSliderPageClient() {
             <div className="flex items-center justify-center h-64">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-                    <p>Slider'lar yükleniyor...</p>
+                    <p>Slider&apos;lar yükleniyor...</p>
                 </div>
             </div>
         );
@@ -209,7 +229,7 @@ export function HeroSliderPageClient() {
                 <div>
                     <h1 className="text-3xl font-bold">Hero Slider Yönetimi</h1>
                     <p className="text-muted-foreground">
-                        Ana sayfa slider'larını oluşturun ve yönetin
+                        Ana sayfa slider&apos;larını oluşturun ve yönetin
                     </p>
                 </div>
                 <Button onClick={() => setCreateDialogOpen(true)}>
@@ -283,6 +303,8 @@ export function HeroSliderPageClient() {
                                                         alt="Slider"
                                                         fill
                                                         className="object-cover"
+                                                        sizes="80px"
+                                                        quality={75}
                                                     />
                                                     <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200 flex items-center justify-center">
                                                         <Eye className="h-4 w-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
@@ -395,7 +417,7 @@ export function HeroSliderPageClient() {
                                 onClick={() => setCreateDialogOpen(true)}
                                 className="mt-4"
                             >
-                                İlk Slider'ınızı Oluşturun
+                                İlk Slider&apos;ınızı Oluşturun
                             </Button>
                         </div>
                     )}
@@ -420,17 +442,27 @@ export function HeroSliderPageClient() {
 
             {/* Image Preview Dialog */}
             <Dialog open={imagePreviewOpen} onOpenChange={setImagePreviewOpen}>
-                <DialogContent className="max-w-4xl max-h-[90vh] p-0">
+                <DialogContent className="max-w-4xl max-h-[90vh] p-0 overflow-hidden">
                     <DialogHeader className="p-6 pb-0">
                         <DialogTitle>Görsel Önizleme</DialogTitle>
                     </DialogHeader>
                     <div className="p-6 pt-0">
                         {previewImageUrl && (
-                            <img
-                                src={previewImageUrl}
-                                alt="Slider Preview"
-                                className="w-full h-auto max-h-[70vh] object-contain rounded-lg"
-                            />
+                            <div className="relative w-full">
+                                <Image
+                                    src={previewImageUrl}
+                                    alt="Slider Preview"
+                                    width={800}
+                                    height={600}
+                                    className="w-full h-auto max-h-[70vh] object-contain rounded-lg"
+                                    priority={true}
+                                    quality={95}
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+                                    placeholder="blur"
+                                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+                                    onError={() => console.error('Slider görsel yüklenirken hata oluştu')}
+                                />
+                            </div>
                         )}
                     </div>
                 </DialogContent>
