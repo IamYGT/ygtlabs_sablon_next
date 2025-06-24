@@ -15,28 +15,16 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { ImageUpload } from "@/components/ui/image-upload";
 import {
     Plus,
     Trash2,
-    Sparkles,
-    Globe,
-    Image as ImageIcon,
-    Type,
-    FileText,
-    Tag,
-    Link,
-    BarChart3,
-    Settings,
     Save,
     X,
-    CheckCircle,
-    AlertCircle,
     Info,
     Edit
 } from "lucide-react";
-import { TR, US } from 'country-flag-icons/react/3x2';
+import { FlagWrapper } from '@/components/ui/flag-wrapper';
 
 interface HeroSlider {
     id: string;
@@ -293,7 +281,7 @@ export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: Edit
                                 Hero Slider Düzenle
                             </span>
                             <p className="text-sm font-normal text-gray-600 dark:text-gray-400 mt-1">
-                                Mevcut slider'ınızı güncelleyin ve düzenleyin
+                                Mevcut slider&apos;ınızı güncelleyin ve düzenleyin
                             </p>
                         </div>
                     </DialogTitle>
@@ -308,7 +296,7 @@ export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: Edit
                                 className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-200 font-semibold"
                             >
                                 <div className="flex items-center gap-2">
-                                    <TR className="w-5 h-3 rounded-sm object-cover shadow-sm" />
+                                    <FlagWrapper locale="tr" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
                                     <span>Türkçe</span>
                                 </div>
                             </TabsTrigger>
@@ -317,7 +305,7 @@ export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: Edit
                                 className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-200 font-semibold"
                             >
                                 <div className="flex items-center gap-2">
-                                    <US className="w-5 h-3 rounded-sm object-cover shadow-sm" />
+                                    <FlagWrapper locale="en" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
                                     <span>English</span>
                                 </div>
                             </TabsTrigger>

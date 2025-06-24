@@ -51,7 +51,7 @@ import { EditSliderDialog } from "./EditSliderDialog";
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import Image from "next/image";
-import { TR, US } from 'country-flag-icons/react/3x2';
+import { FlagWrapper } from '@/components/ui/flag-wrapper';
 
 // JSON field tiplerini tanımla
 type LocalizedContent = {
@@ -530,13 +530,13 @@ export function HeroSliderPageClient() {
                                 <SelectContent className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-blue-200 dark:border-blue-800">
                                     <SelectItem value="tr">
                                         <div className="flex items-center gap-2">
-                                            <TR className="w-5 h-3 rounded-sm object-cover shadow-sm" />
+                                            <FlagWrapper locale="tr" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
                                             Türkçe
                                         </div>
                                     </SelectItem>
                                     <SelectItem value="en">
                                         <div className="flex items-center gap-2">
-                                            <US className="w-5 h-3 rounded-sm object-cover shadow-sm" />
+                                            <FlagWrapper locale="en" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
                                             English
                                         </div>
                                     </SelectItem>
@@ -621,17 +621,8 @@ export function HeroSliderPageClient() {
                         </CardHeader>
                         <CardContent className="relative">
                             <div className="text-2xl font-bold text-purple-800 dark:text-purple-200 flex items-center gap-3">
-                                {locale === 'tr' ? (
-                                    <>
-                                        <TR className="w-8 h-5 rounded-md object-cover shadow-md" />
-                                        <span>TR</span>
-                                    </>
-                                ) : (
-                                    <>
-                                        <US className="w-8 h-5 rounded-md object-cover shadow-md" />
-                                        <span>EN</span>
-                                    </>
-                                )}
+                                <FlagWrapper locale={locale} className="w-8 h-5 rounded-md object-cover shadow-md" />
+                                <span>{locale.toUpperCase()}</span>
                             </div>
                             <p className="text-xs text-purple-600 dark:text-purple-400 mt-1">Seçili dil</p>
                         </CardContent>
@@ -651,17 +642,8 @@ export function HeroSliderPageClient() {
                                     {sliders.length} slider
                                 </Badge>
                                 <Badge variant="outline" className="ml-2 border-purple-300 dark:border-purple-600 text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/50 flex items-center gap-1.5">
-                                    {locale === 'tr' ? (
-                                        <>
-                                            <TR className="w-4 h-2.5 rounded-sm object-cover" />
-                                            Türkçe
-                                        </>
-                                    ) : (
-                                        <>
-                                            <US className="w-4 h-2.5 rounded-sm object-cover" />
-                                            English
-                                        </>
-                                    )}
+                                    <FlagWrapper locale={locale} className="w-4 h-2.5 rounded-sm object-cover" />
+                                    {locale === 'tr' ? 'Türkçe' : 'English'}
                                 </Badge>
                             </div>
                         </CardTitle>

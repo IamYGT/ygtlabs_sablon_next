@@ -35,7 +35,7 @@ import {
     AlertCircle,
     Info
 } from "lucide-react";
-import { TR, US } from 'country-flag-icons/react/3x2';
+import { FlagWrapper } from '@/components/ui/flag-wrapper';
 
 interface CreateSliderDialogProps {
     open: boolean;
@@ -214,7 +214,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                 className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-200 font-semibold"
                             >
                                 <div className="flex items-center gap-2">
-                                    <TR className="w-5 h-3 rounded-sm object-cover shadow-sm" />
+                                    <FlagWrapper locale="tr" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
                                     <span>Türkçe</span>
                                 </div>
                             </TabsTrigger>
@@ -223,7 +223,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                 className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-200 font-semibold"
                             >
                                 <div className="flex items-center gap-2">
-                                    <US className="w-5 h-3 rounded-sm object-cover shadow-sm" />
+                                    <FlagWrapper locale="en" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
                                     <span>English</span>
                                 </div>
                             </TabsTrigger>
@@ -240,7 +240,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                             </div>
                                             Türkçe İçerik
                                             <Badge variant="outline" className="bg-blue-50 dark:bg-blue-950/50 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 flex items-center gap-1">
-                                                <TR className="w-4 h-2.5 rounded-sm object-cover" />
+                                                <FlagWrapper locale="tr" className="w-4 h-2.5 rounded-sm object-cover" />
                                                 TR
                                             </Badge>
                                         </CardTitle>
@@ -398,7 +398,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                             </div>
                                             English Content
                                             <Badge variant="outline" className="bg-indigo-50 dark:bg-indigo-950/50 border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 flex items-center gap-1">
-                                                <US className="w-4 h-2.5 rounded-sm object-cover" />
+                                                <FlagWrapper locale="en" className="w-4 h-2.5 rounded-sm object-cover" />
                                                 EN
                                             </Badge>
                                         </CardTitle>
