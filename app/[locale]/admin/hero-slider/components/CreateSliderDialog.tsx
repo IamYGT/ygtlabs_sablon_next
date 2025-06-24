@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from 'next-intl';
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -59,6 +60,7 @@ interface StatisticField {
 }
 
 export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSliderDialogProps) {
+    const t = useTranslations('HeroSlider');
     const [loading, setLoading] = useState(false);
 
     // Form verileri
@@ -129,22 +131,22 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
     const handleSubmit = async () => {
         // Validasyon
         if (!title.tr || !title.en) {
-            toast.error("Başlık alanları zorunludur");
+            toast.error(t('validation.titleRequired'));
             return;
         }
 
         if (!description.tr || !description.en) {
-            toast.error("Açıklama alanları zorunludur");
+            toast.error(t('validation.descriptionRequired'));
             return;
         }
 
         if (!backgroundImage) {
-            toast.error("Arka plan görseli zorunludur");
+            toast.error(t('validation.imageRequired'));
             return;
         }
 
         if (!primaryButton.tr.text || !primaryButton.en.text) {
-            toast.error("Ana buton metni zorunludur");
+            toast.error(t('validation.primaryButtonRequired'));
             return;
         }
 
@@ -172,16 +174,16 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
 
             if (!response.ok) {
                 const error = await response.json();
-                throw new Error(error.error || "Slider oluşturulamadı");
+                throw new Error(error.error || t('messages.createError'));
             }
 
-            toast.success("Slider başarıyla oluşturuldu");
+            toast.success(t('messages.createSuccess'));
             resetForm();
             onSuccess();
             onOpenChange(false);
         } catch (error) {
             console.error("Create slider error:", error);
-            toast.error(error instanceof Error ? error.message : "Slider oluşturulurken hata oluştu");
+            toast.error(error instanceof Error ? error.message : t('messages.createError'));
         } finally {
             setLoading(false);
         }
@@ -197,10 +199,10 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                         </div>
                         <div>
                             <span className="bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-700 bg-clip-text text-transparent">
-                                Yeni Hero Slider Oluştur
+                                {t('createSlider')}
                             </span>
                             <p className="text-sm font-normal text-gray-600 dark:text-gray-400 mt-1">
-                                Ana sayfanız için etkileyici bir slider oluşturun
+                                {t('createSliderDescription')}
                             </p>
                         </div>
                     </DialogTitle>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from 'next-intl';
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -149,6 +150,7 @@ function parseStatisticsField(value: unknown): StatisticField[] {
 }
 
 export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: EditSliderDialogProps) {
+    const t = useTranslations('HeroSlider');
     const [loading, setLoading] = useState(false);
 
     // Form verileri
@@ -278,10 +280,10 @@ export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: Edit
                         </div>
                         <div>
                             <span className="bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-700 bg-clip-text text-transparent">
-                                Hero Slider Düzenle
+                                {t('editSlider')}
                             </span>
                             <p className="text-sm font-normal text-gray-600 dark:text-gray-400 mt-1">
-                                Mevcut slider&apos;ınızı güncelleyin ve düzenleyin
+                                {t('editSliderDescription')}
                             </p>
                         </div>
                     </DialogTitle>

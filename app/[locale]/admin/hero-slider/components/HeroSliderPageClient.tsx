@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useTranslations } from 'next-intl';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -350,6 +351,8 @@ function DraggableRow({
 }
 
 export function HeroSliderPageClient() {
+    const t = useTranslations('HeroSlider');
+
     const [sliders, setSliders] = useState<HeroSlider[]>([]);
     const [loading, setLoading] = useState(true);
     const [createDialogOpen, setCreateDialogOpen] = useState(false);
@@ -365,7 +368,7 @@ export function HeroSliderPageClient() {
             const response = await fetch("/api/admin/hero-slider?limit=100");
 
             if (!response.ok) {
-                throw new Error("Slider'lar getirilemedi");
+                throw new Error(t('messages.fetchError'));
             }
 
             const data = await response.json();
@@ -374,7 +377,7 @@ export function HeroSliderPageClient() {
             setSliders(sortedSliders);
         } catch (error) {
             console.error("Slider fetch error:", error);
-            toast.error("Slider'lar getirilemedi");
+            toast.error(t('messages.fetchError'));
         } finally {
             setLoading(false);
         }
@@ -385,7 +388,7 @@ export function HeroSliderPageClient() {
     }, []);
 
     const handleDeleteSlider = async (sliderId: string) => {
-        if (!confirm("Bu slider'ı silmek istediğinizden emin misiniz?")) {
+        if (!confirm(t('messages.deleteConfirm'))) {
             return;
         }
 
@@ -399,11 +402,11 @@ export function HeroSliderPageClient() {
                 throw new Error(error.error || "Slider silinemedi");
             }
 
-            toast.success("Slider başarıyla silindi");
+            toast.success(t('messages.deleteSuccess'));
             fetchSliders();
         } catch (error) {
             console.error("Slider delete error:", error);
-            const errorMessage = error instanceof Error ? error.message : "Slider silinirken bir hata oluştu";
+            const errorMessage = error instanceof Error ? error.message : t('messages.deleteError');
             toast.error(errorMessage);
         }
     };
@@ -421,11 +424,11 @@ export function HeroSliderPageClient() {
                 throw new Error(error.error || "Durum güncellenemedi");
             }
 
-            toast.success(`Slider ${!currentStatus ? "aktif edildi" : "devre dışı bırakıldı"}`);
+            toast.success(!currentStatus ? t('messages.activateSuccess') : t('messages.deactivateSuccess'));
             fetchSliders();
         } catch (error) {
             console.error("Toggle status error:", error);
-            const errorMessage = error instanceof Error ? error.message : "Durum güncellenirken hata oluştu";
+            const errorMessage = error instanceof Error ? error.message : t('messages.updateError');
             toast.error(errorMessage);
         }
     };
@@ -470,10 +473,10 @@ export function HeroSliderPageClient() {
             );
 
             await Promise.all(updatePromises);
-            toast.success("Sıralama güncellendi");
+            toast.success(t('messages.sortingSuccess'));
         } catch (error) {
             console.error("Order update error:", error);
-            toast.error("Sıralama güncellenirken hata oluştu");
+            toast.error(t('messages.sortingError'));
             // Hata durumunda verileri yeniden yükle
             fetchSliders();
         }
@@ -487,8 +490,8 @@ export function HeroSliderPageClient() {
                         <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-200 border-t-blue-600 mx-auto mb-4"></div>
                         <div className="absolute inset-0 rounded-full h-12 w-12 border-4 border-transparent border-t-blue-400 animate-ping mx-auto opacity-20"></div>
                     </div>
-                    <p className="text-gray-600 dark:text-gray-400 font-medium">Slider&apos;lar yükleniyor...</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">Lütfen bekleyiniz</p>
+                    <p className="text-gray-600 dark:text-gray-400 font-medium">{t('loading')}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">{t('loadingWait')}</p>
                 </div>
             </div>
         );
@@ -511,10 +514,10 @@ export function HeroSliderPageClient() {
                                 </div>
                                 <div>
                                     <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-700 bg-clip-text text-transparent">
-                                        Hero Slider Yönetimi
+                                        {t('title')}
                                     </h1>
                                     <p className="text-gray-600 dark:text-gray-400 mt-1 font-medium">
-                                        Ana sayfa slider&apos;larını oluşturun, düzenleyin ve sürükle-bırak ile sıralayın
+                                        {t('subtitle')}
                                     </p>
                                 </div>
                             </div>
@@ -547,7 +550,7 @@ export function HeroSliderPageClient() {
                                 className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 font-semibold"
                             >
                                 <Plus className="h-4 w-4 mr-2" />
-                                Yeni Slider
+                                {t('newSlider')}
                             </Button>
                         </div>
                     </div>
@@ -562,14 +565,14 @@ export function HeroSliderPageClient() {
                                 <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
                                     <BarChart3 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                                 </div>
-                                Toplam Slider
+                                {t('stats.total')}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="relative">
                             <div className="text-3xl font-bold text-blue-800 dark:text-blue-200">
                                 {sliders.length}
                             </div>
-                            <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">Kayıtlı slider sayısı</p>
+                            <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">{t('stats.totalDesc')}</p>
                         </CardContent>
                     </Card>
 
@@ -580,14 +583,14 @@ export function HeroSliderPageClient() {
                                 <div className="p-2 bg-green-100 dark:bg-green-900/50 rounded-lg">
                                     <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
                                 </div>
-                                Aktif Slider
+                                {t('stats.active')}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="relative">
                             <div className="text-3xl font-bold text-green-800 dark:text-green-200">
                                 {activeSliders.length}
                             </div>
-                            <p className="text-xs text-green-600 dark:text-green-400 mt-1">Yayında olan slider</p>
+                            <p className="text-xs text-green-600 dark:text-green-400 mt-1">{t('stats.activeDesc')}</p>
                         </CardContent>
                     </Card>
 
@@ -598,14 +601,14 @@ export function HeroSliderPageClient() {
                                 <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
                                     <XCircle className="h-4 w-4 text-gray-600 dark:text-gray-400" />
                                 </div>
-                                Pasif Slider
+                                {t('stats.inactive')}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="relative">
                             <div className="text-3xl font-bold text-gray-800 dark:text-gray-200">
                                 {inactiveSliders.length}
                             </div>
-                            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Devre dışı slider</p>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{t('stats.inactiveDesc')}</p>
                         </CardContent>
                     </Card>
 
@@ -616,7 +619,7 @@ export function HeroSliderPageClient() {
                                 <div className="p-2 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
                                     <Languages className="h-4 w-4 text-purple-600 dark:text-purple-400" />
                                 </div>
-                                Görüntülenen Dil
+                                {t('stats.currentLanguage')}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="relative">
@@ -624,7 +627,7 @@ export function HeroSliderPageClient() {
                                 <FlagWrapper locale={locale} className="w-8 h-5 rounded-md object-cover shadow-md" />
                                 <span>{locale.toUpperCase()}</span>
                             </div>
-                            <p className="text-xs text-purple-600 dark:text-purple-400 mt-1">Seçili dil</p>
+                            <p className="text-xs text-purple-600 dark:text-purple-400 mt-1">{t('stats.currentLanguageDesc')}</p>
                         </CardContent>
                     </Card>
                 </div>
@@ -637,9 +640,9 @@ export function HeroSliderPageClient() {
                                 <ArrowUpDown className="h-5 w-5 text-white" />
                             </div>
                             <div>
-                                <span className="text-xl font-bold">Slider Listesi</span>
+                                <span className="text-xl font-bold">{t('listTitle')}</span>
                                 <Badge variant="outline" className="ml-3 border-indigo-300 dark:border-indigo-600 text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/50">
-                                    {sliders.length} slider
+                                    {sliders.length} {t('slider')}
                                 </Badge>
                                 <Badge variant="outline" className="ml-2 border-purple-300 dark:border-purple-600 text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/50 flex items-center gap-1.5">
                                     <FlagWrapper locale={locale} className="w-4 h-2.5 rounded-sm object-cover" />
@@ -655,12 +658,12 @@ export function HeroSliderPageClient() {
                                     <TableHeader>
                                         <TableRow className="bg-gradient-to-r from-gray-50 to-slate-50 dark:from-gray-800/50 dark:to-slate-800/50 border-b border-gray-200 dark:border-gray-700 hover:bg-gradient-to-r hover:from-gray-100 hover:to-slate-100 dark:hover:from-gray-700/50 dark:hover:to-slate-700/50">
                                             <TableHead className="w-10 font-semibold text-gray-700 dark:text-gray-300"></TableHead>
-                                            <TableHead className="w-24 font-semibold text-gray-700 dark:text-gray-300">Görsel</TableHead>
-                                            <TableHead className="font-semibold text-gray-700 dark:text-gray-300">Başlık & İçerik</TableHead>
-                                            <TableHead className="font-semibold text-gray-700 dark:text-gray-300">Açıklama</TableHead>
-                                            <TableHead className="text-center w-16 font-semibold text-gray-700 dark:text-gray-300">Sıra</TableHead>
-                                            <TableHead className="w-28 font-semibold text-gray-700 dark:text-gray-300">Durum</TableHead>
-                                            <TableHead className="w-36 font-semibold text-gray-700 dark:text-gray-300">Oluşturan</TableHead>
+                                            <TableHead className="w-24 font-semibold text-gray-700 dark:text-gray-300">{t('table.image')}</TableHead>
+                                            <TableHead className="font-semibold text-gray-700 dark:text-gray-300">{t('table.titleContent')}</TableHead>
+                                            <TableHead className="font-semibold text-gray-700 dark:text-gray-300">{t('table.description')}</TableHead>
+                                            <TableHead className="text-center w-16 font-semibold text-gray-700 dark:text-gray-300">{t('table.order')}</TableHead>
+                                            <TableHead className="w-28 font-semibold text-gray-700 dark:text-gray-300">{t('table.status')}</TableHead>
+                                            <TableHead className="w-36 font-semibold text-gray-700 dark:text-gray-300">{t('table.creator')}</TableHead>
                                             <TableHead className="w-12 font-semibold text-gray-700 dark:text-gray-300"></TableHead>
                                         </TableRow>
                                     </TableHeader>
@@ -687,17 +690,17 @@ export function HeroSliderPageClient() {
                                     <ImageIcon className="h-10 w-10 text-blue-600 dark:text-blue-400" />
                                 </div>
                                 <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                                    Henüz slider oluşturulmamış
+                                    {t('noSliders')}
                                 </h3>
                                 <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
-                                    İlk hero slider&apos;ınızı oluşturarak ziyaretçilerinizi etkileyici görsellerle karşılayın
+                                    {t('noSlidersDescription')}
                                 </p>
                                 <Button
                                     onClick={() => setCreateDialogOpen(true)}
                                     className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 font-semibold px-8 py-3"
                                 >
                                     <Plus className="h-5 w-5 mr-2" />
-                                    İlk Slider&apos;ınızı Oluşturun
+                                    {t('createFirstSlider')}
                                 </Button>
                             </div>
                         )}
@@ -728,7 +731,7 @@ export function HeroSliderPageClient() {
                                 <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg shadow-lg">
                                     <Eye className="h-5 w-5 text-white" />
                                 </div>
-                                <span className="text-xl font-bold">Görsel Önizleme</span>
+                                <span className="text-xl font-bold">{t('actions.imagePreview')}</span>
                             </DialogTitle>
                         </DialogHeader>
                         <div className="p-6 pt-4">
@@ -740,7 +743,7 @@ export function HeroSliderPageClient() {
                                         width={1200}
                                         height={600}
                                         className="w-full h-auto max-h-[70vh] object-contain rounded-xl"
-                                        onError={() => console.error('Slider görsel yüklenirken hata oluştu')}
+                                        onError={() => console.error(t('messages.imageLoadError'))}
                                     />
                                 </div>
                             )}

@@ -36,7 +36,7 @@ export default async function AdminLayout({ children, params }: AdminLayoutProps
     const adminMessages = (await import(`../../../messages/admin/admin_${validLocale}.json`)).default;
 
     return (
-        <NextIntlClientProvider messages={adminMessages}>
+        <NextIntlClientProvider messages={adminMessages} locale={validLocale}>
             <AdminGuard>
                 <LogoutModalProvider>
                     {/* Z-Index Hierarchy: Sidebar(9999) < Toaster(10000) < Modal(99999) */}
