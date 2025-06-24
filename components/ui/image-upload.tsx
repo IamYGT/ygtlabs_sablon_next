@@ -168,19 +168,16 @@ export function ImageUpload({
             {/* Current Image Preview */}
             {value && (
                 <div className="relative group">
-                    <div className="relative w-full h-48 rounded-lg border-2 border-dashed border-gray-300 overflow-hidden">
+                    <div className="relative w-full h-48 rounded-lg border-2 border-gray-300 overflow-hidden bg-gray-50">
                         <Image
                             src={value}
                             alt="Preview"
                             fill
                             className="object-cover"
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                            quality={85}
-                            placeholder="blur"
-                            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+                            onLoad={() => setError(null)}
                             onError={() => setError('Görsel yüklenirken hata oluştu')}
                         />
-                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 flex items-center justify-center">
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-200 flex items-center justify-center">
                             <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-2">
                                 <Button
                                     size="sm"
@@ -317,7 +314,10 @@ export function ImageUpload({
                                     alt="Full size preview"
                                     width={800}
                                     height={600}
-                                    className="w-full h-auto max-h-[70vh] object-contain rounded-lg"
+                                    className="w-full h-auto max-h-[70vh] rounded-lg"
+                                    style={{
+                                        objectFit: 'contain'
+                                    }}
                                     priority={true}
                                     quality={95}
                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"

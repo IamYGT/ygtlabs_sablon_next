@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -19,6 +19,13 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
 import {
     Plus,
@@ -28,12 +35,24 @@ import {
     Eye,
     EyeOff,
     Image as ImageIcon,
-    ArrowUp,
-    ArrowDown
+    GripVertical,
+    Languages,
+    BarChart3,
+    Clock,
+    User,
+    CheckCircle,
+    XCircle,
+    Calendar,
+    ArrowUpDown,
+    Sparkles,
+    Zap,
+    Star,
+    TrendingUp
 } from "lucide-react";
 import { CreateSliderDialog } from "./CreateSliderDialog";
 import { EditSliderDialog } from "./EditSliderDialog";
-import Image from "next/image";
+import { DndProvider, useDrag, useDrop } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 // JSON field tiplerini tanımla
 type LocalizedContent = {
@@ -77,6 +96,11 @@ interface HeroSlider {
     };
 }
 
+// Drag and Drop constants
+const ItemTypes = {
+    SLIDER: 'slider'
+};
+
 // JSON field parse etme fonksiyonu
 function parseJSONField(value: LocalizedContent | string | unknown, locale: string = 'tr'): string {
     if (typeof value === 'string') {
@@ -96,6 +120,234 @@ function parseJSONField(value: LocalizedContent | string | unknown, locale: stri
     return String(value || '');
 }
 
+// Draggable Table Row Component
+interface DraggableRowProps {
+    slider: HeroSlider;
+    index: number;
+    moveSlider: (dragIndex: number, hoverIndex: number) => void;
+    onEdit: (slider: HeroSlider) => void;
+    onDelete: (sliderId: string) => void;
+    onToggleActive: (sliderId: string, currentStatus: boolean) => void;
+    onImagePreview: (imageUrl: string) => void;
+    locale: string;
+}
+
+function DraggableRow({
+    slider,
+    index,
+    moveSlider,
+    onEdit,
+    onDelete,
+    onToggleActive,
+    onImagePreview,
+    locale
+}: DraggableRowProps) {
+    const [{ isDragging }, drag, preview] = useDrag({
+        type: ItemTypes.SLIDER,
+        item: { index, id: slider.id },
+        collect: (monitor) => ({
+            isDragging: monitor.isDragging(),
+        }),
+    });
+
+    const [{ isOver }, drop] = useDrop({
+        accept: ItemTypes.SLIDER,
+        hover: (item: { index: number }) => {
+            if (item.index !== index) {
+                moveSlider(item.index, index);
+                item.index = index;
+            }
+        },
+        collect: (monitor) => ({
+            isOver: monitor.isOver(),
+        }),
+    });
+
+    const attachRef = (node: HTMLTableRowElement | null) => {
+        preview(drop(node));
+    };
+
+    const attachDragRef = (node: HTMLDivElement | null) => {
+        drag(node);
+    };
+
+    const formatDate = (dateString: string) => {
+        return new Date(dateString).toLocaleDateString('tr-TR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
+
+    return (
+        <TableRow
+            ref={attachRef}
+            className={`
+                transition-all duration-300 border-b border-gray-100 dark:border-gray-800 group
+                ${isDragging ? 'opacity-40 scale-[0.98] shadow-2xl z-50' : 'opacity-100 scale-100'} 
+                ${isOver ? 'bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 border-blue-200 dark:border-blue-700 shadow-md' : ''}
+                hover:bg-gradient-to-r hover:from-gray-50 hover:to-slate-50 dark:hover:from-gray-800/50 dark:hover:to-slate-800/50
+                hover:shadow-sm hover:-translate-y-0.5
+            `}
+        >
+            <TableCell className="w-10 py-4">
+                <div
+                    ref={attachDragRef}
+                    className="cursor-grab active:cursor-grabbing p-2 rounded-lg hover:bg-gradient-to-br hover:from-blue-100 hover:to-indigo-100 dark:hover:from-blue-900/50 dark:hover:to-indigo-900/50 transition-all duration-200 hover:shadow-sm"
+                >
+                    <GripVertical className="h-4 w-4 text-gray-400 hover:text-blue-600 transition-colors" />
+                </div>
+            </TableCell>
+
+            <TableCell className="py-4">
+                <div
+                    className="relative w-20 h-12 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 rounded-xl overflow-hidden cursor-pointer hover:ring-2 hover:ring-blue-500 hover:ring-offset-2 transition-all duration-300 group/image hover:shadow-lg hover:scale-105"
+                    onClick={() => slider.backgroundImage && onImagePreview(slider.backgroundImage)}
+                >
+                    {slider.backgroundImage ? (
+                        <>
+                            <img
+                                src={slider.backgroundImage}
+                                alt="Slider"
+                                className="w-full h-full object-cover transition-transform duration-300 group-hover/image:scale-110"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover/image:opacity-100 transition-all duration-300 flex items-center justify-center">
+                                <div className="bg-white/90 dark:bg-gray-900/90 rounded-full p-1.5 transform scale-75 group-hover/image:scale-100 transition-transform duration-200">
+                                    <Eye className="h-3 w-3 text-gray-700 dark:text-gray-300" />
+                                </div>
+                            </div>
+                        </>
+                    ) : (
+                        <div className="flex items-center justify-center h-full">
+                            <div className="bg-gray-200 dark:bg-gray-700 rounded-full p-2">
+                                <ImageIcon className="h-4 w-4 text-gray-400" />
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </TableCell>
+
+            <TableCell className="py-4 max-w-xs">
+                <div className="space-y-2">
+                    <div className="font-semibold text-sm text-gray-900 dark:text-gray-100 leading-tight group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors">
+                        {parseJSONField(slider.title, locale)}
+                    </div>
+                    {slider.subtitle && (
+                        <div className="text-xs text-gray-500 dark:text-gray-400 leading-tight">
+                            {parseJSONField(slider.subtitle, locale)}
+                        </div>
+                    )}
+                    {slider.badge && (
+                        <Badge variant="outline" className="text-xs h-5 px-2 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300">
+                            {parseJSONField(slider.badge, locale)}
+                        </Badge>
+                    )}
+                </div>
+            </TableCell>
+
+            <TableCell className="py-4 max-w-sm">
+                <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 leading-relaxed">
+                    {parseJSONField(slider.description, locale)}
+                </p>
+            </TableCell>
+
+            <TableCell className="py-4 text-center">
+                <div className="flex items-center justify-center">
+                    <Badge variant="secondary" className="font-mono text-xs bg-gradient-to-r from-slate-100 to-gray-100 dark:from-slate-800 dark:to-gray-800 border border-slate-200 dark:border-slate-700 shadow-sm">
+                        #{slider.order}
+                    </Badge>
+                </div>
+            </TableCell>
+
+            <TableCell className="py-4">
+                <div className="flex items-center gap-2">
+                    <div className={`p-1 rounded-full ${slider.isActive ? 'bg-green-100 dark:bg-green-900/30' : 'bg-gray-100 dark:bg-gray-800'}`}>
+                        {slider.isActive ? (
+                            <CheckCircle className="h-3 w-3 text-green-600 dark:text-green-400" />
+                        ) : (
+                            <XCircle className="h-3 w-3 text-gray-400" />
+                        )}
+                    </div>
+                    <Badge
+                        variant={slider.isActive ? "default" : "secondary"}
+                        className={`text-xs font-medium ${slider.isActive
+                            ? 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border-green-200 dark:from-green-900/50 dark:to-emerald-900/50 dark:text-green-100 dark:border-green-700'
+                            : 'bg-gradient-to-r from-gray-100 to-slate-100 text-gray-600 border-gray-200 dark:from-gray-800 dark:to-slate-800 dark:text-gray-300 dark:border-gray-700'
+                            }`}
+                    >
+                        {slider.isActive ? (
+                            <span className="flex items-center gap-1">
+                                <Zap className="h-3 w-3" />
+                                Aktif
+                            </span>
+                        ) : (
+                            "Pasif"
+                        )}
+                    </Badge>
+                </div>
+            </TableCell>
+
+            <TableCell className="py-4">
+                <div className="space-y-1">
+                    <div className="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400">
+                        <div className="bg-blue-100 dark:bg-blue-900/30 rounded-full p-1">
+                            <User className="h-2.5 w-2.5 text-blue-600 dark:text-blue-400" />
+                        </div>
+                        <span className="font-medium">{slider.createdBy?.name || "Sistem"}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-500">
+                        <div className="bg-gray-100 dark:bg-gray-800 rounded-full p-1">
+                            <Calendar className="h-2.5 w-2.5 text-gray-500" />
+                        </div>
+                        <span>{formatDate(slider.createdAt)}</span>
+                    </div>
+                </div>
+            </TableCell>
+
+            <TableCell className="py-4">
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-gradient-to-br hover:from-gray-100 hover:to-slate-100 dark:hover:from-gray-800 dark:hover:to-slate-800 transition-all duration-200">
+                            <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border border-gray-200 dark:border-gray-700 shadow-xl">
+                        <DropdownMenuItem onClick={() => onEdit(slider)} className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 dark:hover:from-blue-950/30 dark:hover:to-indigo-950/30">
+                            <Edit className="h-4 w-4 mr-2 text-blue-600" />
+                            <span className="font-medium">Düzenle</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={() => onToggleActive(slider.id, slider.isActive)}
+                            className="hover:bg-gradient-to-r hover:from-amber-50 hover:to-yellow-50 dark:hover:from-amber-950/30 dark:hover:to-yellow-950/30"
+                        >
+                            {slider.isActive ? (
+                                <>
+                                    <EyeOff className="h-4 w-4 mr-2 text-amber-600" />
+                                    <span className="font-medium">Devre Dışı Bırak</span>
+                                </>
+                            ) : (
+                                <>
+                                    <Eye className="h-4 w-4 mr-2 text-green-600" />
+                                    <span className="font-medium">Aktif Et</span>
+                                </>
+                            )}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={() => onDelete(slider.id)}
+                            className="text-red-600 focus:text-red-600 dark:text-red-400 hover:bg-gradient-to-r hover:from-red-50 hover:to-rose-50 dark:hover:from-red-950/30 dark:hover:to-rose-950/30"
+                        >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            <span className="font-medium">Sil</span>
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </TableCell>
+        </TableRow>
+    );
+}
+
 export function HeroSliderPageClient() {
     const [sliders, setSliders] = useState<HeroSlider[]>([]);
     const [loading, setLoading] = useState(true);
@@ -104,6 +356,7 @@ export function HeroSliderPageClient() {
     const [selectedSlider, setSelectedSlider] = useState<HeroSlider | null>(null);
     const [imagePreviewOpen, setImagePreviewOpen] = useState(false);
     const [previewImageUrl, setPreviewImageUrl] = useState("");
+    const [locale, setLocale] = useState<'tr' | 'en'>('tr');
 
     const fetchSliders = async () => {
         try {
@@ -115,7 +368,9 @@ export function HeroSliderPageClient() {
             }
 
             const data = await response.json();
-            setSliders(data.sliders || []);
+            // Sıralamaya göre düzenle
+            const sortedSliders = (data.sliders || []).sort((a: HeroSlider, b: HeroSlider) => a.order - b.order);
+            setSliders(sortedSliders);
         } catch (error) {
             console.error("Slider fetch error:", error);
             toast.error("Slider'lar getirilemedi");
@@ -184,289 +439,312 @@ export function HeroSliderPageClient() {
         setImagePreviewOpen(true);
     };
 
-    const handleOrderChange = async (sliderId: string, direction: 'up' | 'down') => {
-        const slider = sliders.find(s => s.id === sliderId);
-        if (!slider) return;
+    const moveSlider = useCallback(async (dragIndex: number, hoverIndex: number) => {
+        const draggedSlider = sliders[dragIndex];
+        const hoveredSlider = sliders[hoverIndex];
 
-        const newOrder = direction === 'up' ? slider.order - 1 : slider.order + 1;
+        if (!draggedSlider || !hoveredSlider) return;
+
+        // Optimistic update - UI'ı hemen güncelle
+        const newSliders = [...sliders];
+        newSliders.splice(dragIndex, 1);
+        newSliders.splice(hoverIndex, 0, draggedSlider);
+
+        // Order değerlerini güncelle
+        const updatedSliders = newSliders.map((slider, index) => ({
+            ...slider,
+            order: index + 1
+        }));
+
+        setSliders(updatedSliders);
 
         try {
-            const response = await fetch(`/api/admin/hero-slider/${sliderId}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ order: newOrder }),
-            });
+            // Backend'e batch update gönder
+            const updatePromises = updatedSliders.map((slider, index) =>
+                fetch(`/api/admin/hero-slider/${slider.id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ order: index + 1 }),
+                })
+            );
 
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || "Sıralama güncellenemedi");
-            }
-
+            await Promise.all(updatePromises);
             toast.success("Sıralama güncellendi");
-            fetchSliders();
         } catch (error) {
             console.error("Order update error:", error);
-            const errorMessage = error instanceof Error ? error.message : "Sıralama güncellenirken hata oluştu";
-            toast.error(errorMessage);
+            toast.error("Sıralama güncellenirken hata oluştu");
+            // Hata durumunda verileri yeniden yükle
+            fetchSliders();
         }
-    };
+    }, [sliders]);
 
     if (loading) {
         return (
             <div className="flex items-center justify-center h-64">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-                    <p>Slider&apos;lar yükleniyor...</p>
+                    <div className="relative">
+                        <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-200 border-t-blue-600 mx-auto mb-4"></div>
+                        <div className="absolute inset-0 rounded-full h-12 w-12 border-4 border-transparent border-t-blue-400 animate-ping mx-auto opacity-20"></div>
+                    </div>
+                    <p className="text-gray-600 dark:text-gray-400 font-medium">Slider&apos;lar yükleniyor...</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">Lütfen bekleyiniz</p>
                 </div>
             </div>
         );
     }
 
+    const activeSliders = sliders.filter(s => s.isActive);
+    const inactiveSliders = sliders.filter(s => !s.isActive);
+
     return (
-        <div className="space-y-6">
-            {/* Header */}
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-3xl font-bold">Hero Slider Yönetimi</h1>
-                    <p className="text-muted-foreground">
-                        Ana sayfa slider&apos;larını oluşturun ve yönetin
-                    </p>
-                </div>
-                <Button onClick={() => setCreateDialogOpen(true)}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Yeni Slider
-                </Button>
-            </div>
-
-            {/* İstatistikler */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Card>
-                    <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium">Toplam Slider</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">{sliders.length}</div>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium">Aktif Slider</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold text-green-600">
-                            {sliders.filter(s => s.isActive).length}
+        <DndProvider backend={HTML5Backend}>
+            <div className="space-y-8 p-1">
+                {/* Enhanced Header */}
+                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-950/50 dark:via-indigo-950/50 dark:to-purple-950/50 border border-blue-100 dark:border-blue-900/50">
+                    <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+                    <div className="relative flex items-center justify-between p-8">
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-3">
+                                <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg">
+                                    <Sparkles className="h-6 w-6 text-white" />
+                                </div>
+                                <div>
+                                    <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-700 bg-clip-text text-transparent">
+                                        Hero Slider Yönetimi
+                                    </h1>
+                                    <p className="text-gray-600 dark:text-gray-400 mt-1 font-medium">
+                                        Ana sayfa slider&apos;larını oluşturun, düzenleyin ve sürükle-bırak ile sıralayın
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium">Pasif Slider</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold text-gray-500">
-                            {sliders.filter(s => !s.isActive).length}
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-
-            {/* Slider Listesi */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>Slider Listesi ({sliders.length})</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead className="w-[120px]">Görsel</TableHead>
-                                <TableHead>Başlık</TableHead>
-                                <TableHead>Açıklama</TableHead>
-                                <TableHead>Sıra</TableHead>
-                                <TableHead>Durum</TableHead>
-                                <TableHead>Oluşturan</TableHead>
-                                <TableHead className="w-[50px]"></TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {sliders.map((slider) => (
-                                <TableRow key={slider.id}>
-                                    <TableCell>
-                                        <div
-                                            className="relative w-20 h-12 bg-gray-100 rounded overflow-hidden cursor-pointer hover:ring-2 hover:ring-primary transition-all group"
-                                            onClick={() => slider.backgroundImage && handleImagePreview(slider.backgroundImage)}
-                                        >
-                                            {slider.backgroundImage ? (
-                                                <>
-                                                    <Image
-                                                        src={slider.backgroundImage}
-                                                        alt="Slider"
-                                                        fill
-                                                        className="object-cover"
-                                                        sizes="80px"
-                                                        quality={75}
-                                                    />
-                                                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200 flex items-center justify-center">
-                                                        <Eye className="h-4 w-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                                                    </div>
-                                                </>
-                                            ) : (
-                                                <div className="flex items-center justify-center h-full">
-                                                    <ImageIcon className="h-4 w-4 text-gray-400" />
-                                                </div>
-                                            )}
+                        <div className="flex items-center gap-4">
+                            <Select value={locale} onValueChange={(value: 'tr' | 'en') => setLocale(value)}>
+                                <SelectTrigger className="w-36 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-blue-200 dark:border-blue-800 shadow-lg hover:shadow-xl transition-all duration-200">
+                                    <div className="flex items-center gap-2">
+                                        <Languages className="h-4 w-4 text-blue-600" />
+                                        <SelectValue />
+                                    </div>
+                                </SelectTrigger>
+                                <SelectContent className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-blue-200 dark:border-blue-800">
+                                    <SelectItem value="tr">
+                                        <div className="flex items-center gap-2">
+                                            🇹🇷 Türkçe
                                         </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <div>
-                                            <div className="font-medium">
-                                                {parseJSONField(slider.title)}
-                                            </div>
-                                            {slider.subtitle && (
-                                                <div className="text-sm text-muted-foreground">
-                                                    {parseJSONField(slider.subtitle)}
-                                                </div>
-                                            )}
+                                    </SelectItem>
+                                    <SelectItem value="en">
+                                        <div className="flex items-center gap-2">
+                                            🇺🇸 English
                                         </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="max-w-xs truncate">
-                                            {parseJSONField(slider.description)}
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="flex items-center space-x-1">
-                                            <span className="font-mono text-sm">{slider.order}</span>
-                                            <div className="flex flex-col">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    className="h-4 w-4 p-0"
-                                                    onClick={() => handleOrderChange(slider.id, 'up')}
-                                                >
-                                                    <ArrowUp className="h-3 w-3" />
-                                                </Button>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    className="h-4 w-4 p-0"
-                                                    onClick={() => handleOrderChange(slider.id, 'down')}
-                                                >
-                                                    <ArrowDown className="h-3 w-3" />
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Badge variant={slider.isActive ? "default" : "secondary"}>
-                                            {slider.isActive ? "Aktif" : "Pasif"}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="text-sm">
-                                            {slider.createdBy?.name || slider.createdBy?.email || "Bilinmeyen"}
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button variant="ghost" size="sm">
-                                                    <MoreHorizontal className="h-4 w-4" />
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end">
-                                                <DropdownMenuItem onClick={() => handleEditSlider(slider)}>
-                                                    <Edit className="h-4 w-4 mr-2" />
-                                                    Düzenle
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    onClick={() => handleToggleActive(slider.id, slider.isActive)}
-                                                >
-                                                    {slider.isActive ? (
-                                                        <>
-                                                            <EyeOff className="h-4 w-4 mr-2" />
-                                                            Devre Dışı Bırak
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            <Eye className="h-4 w-4 mr-2" />
-                                                            Aktif Et
-                                                        </>
-                                                    )}
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    onClick={() => handleDeleteSlider(slider.id)}
-                                                    className="text-destructive"
-                                                >
-                                                    <Trash2 className="h-4 w-4 mr-2" />
-                                                    Sil
-                                                </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-
-                    {sliders.length === 0 && (
-                        <div className="text-center py-8">
-                            <ImageIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                            <p className="text-muted-foreground">Henüz slider oluşturulmamış.</p>
+                                    </SelectItem>
+                                </SelectContent>
+                            </Select>
                             <Button
                                 onClick={() => setCreateDialogOpen(true)}
-                                className="mt-4"
+                                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 font-semibold"
                             >
-                                İlk Slider&apos;ınızı Oluşturun
+                                <Plus className="h-4 w-4 mr-2" />
+                                Yeni Slider
                             </Button>
                         </div>
-                    )}
-                </CardContent>
-            </Card>
+                    </div>
+                </div>
 
-            {/* Dialogs */}
-            <CreateSliderDialog
-                open={createDialogOpen}
-                onOpenChange={setCreateDialogOpen}
-                onSuccess={fetchSliders}
-            />
+                {/* Enhanced Statistics */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <Card className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/50 dark:to-blue-900/50">
+                        <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-400/20 to-blue-600/20 rounded-full -translate-y-10 translate-x-10"></div>
+                        <CardHeader className="pb-3 relative">
+                            <CardTitle className="text-sm font-semibold flex items-center gap-2 text-blue-700 dark:text-blue-300">
+                                <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
+                                    <BarChart3 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                                </div>
+                                Toplam Slider
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="relative">
+                            <div className="text-3xl font-bold text-blue-800 dark:text-blue-200">
+                                {sliders.length}
+                            </div>
+                            <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">Kayıtlı slider sayısı</p>
+                        </CardContent>
+                    </Card>
 
-            {selectedSlider && (
-                <EditSliderDialog
-                    open={editDialogOpen}
-                    onOpenChange={setEditDialogOpen}
-                    slider={selectedSlider}
-                    onSuccess={fetchSliders}
-                />
-            )}
+                    <Card className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-950/50 dark:to-emerald-900/50">
+                        <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-green-400/20 to-emerald-600/20 rounded-full -translate-y-10 translate-x-10"></div>
+                        <CardHeader className="pb-3 relative">
+                            <CardTitle className="text-sm font-semibold flex items-center gap-2 text-green-700 dark:text-green-300">
+                                <div className="p-2 bg-green-100 dark:bg-green-900/50 rounded-lg">
+                                    <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
+                                </div>
+                                Aktif Slider
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="relative">
+                            <div className="text-3xl font-bold text-green-800 dark:text-green-200">
+                                {activeSliders.length}
+                            </div>
+                            <p className="text-xs text-green-600 dark:text-green-400 mt-1">Yayında olan slider</p>
+                        </CardContent>
+                    </Card>
 
-            {/* Image Preview Dialog */}
-            <Dialog open={imagePreviewOpen} onOpenChange={setImagePreviewOpen}>
-                <DialogContent className="max-w-4xl max-h-[90vh] p-0 overflow-hidden">
-                    <DialogHeader className="p-6 pb-0">
-                        <DialogTitle>Görsel Önizleme</DialogTitle>
-                    </DialogHeader>
-                    <div className="p-6 pt-0">
-                        {previewImageUrl && (
-                            <div className="relative w-full">
-                                <Image
-                                    src={previewImageUrl}
-                                    alt="Slider Preview"
-                                    width={800}
-                                    height={600}
-                                    className="w-full h-auto max-h-[70vh] object-contain rounded-lg"
-                                    priority={true}
-                                    quality={95}
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
-                                    placeholder="blur"
-                                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
-                                    onError={() => console.error('Slider görsel yüklenirken hata oluştu')}
-                                />
+                    <Card className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-gray-50 to-slate-100 dark:from-gray-950/50 dark:to-slate-900/50">
+                        <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-gray-400/20 to-slate-600/20 rounded-full -translate-y-10 translate-x-10"></div>
+                        <CardHeader className="pb-3 relative">
+                            <CardTitle className="text-sm font-semibold flex items-center gap-2 text-gray-700 dark:text-gray-300">
+                                <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                                    <XCircle className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                                </div>
+                                Pasif Slider
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="relative">
+                            <div className="text-3xl font-bold text-gray-800 dark:text-gray-200">
+                                {inactiveSliders.length}
+                            </div>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Devre dışı slider</p>
+                        </CardContent>
+                    </Card>
+
+                    <Card className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-purple-50 to-violet-100 dark:from-purple-950/50 dark:to-violet-900/50">
+                        <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-purple-400/20 to-violet-600/20 rounded-full -translate-y-10 translate-x-10"></div>
+                        <CardHeader className="pb-3 relative">
+                            <CardTitle className="text-sm font-semibold flex items-center gap-2 text-purple-700 dark:text-purple-300">
+                                <div className="p-2 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
+                                    <Languages className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                                </div>
+                                Görüntülenen Dil
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="relative">
+                            <div className="text-2xl font-bold text-purple-800 dark:text-purple-200 flex items-center gap-2">
+                                {locale === 'tr' ? (
+                                    <>🇹🇷 <span>TR</span></>
+                                ) : (
+                                    <>🇺🇸 <span>EN</span></>
+                                )}
+                            </div>
+                            <p className="text-xs text-purple-600 dark:text-purple-400 mt-1">Seçili dil</p>
+                        </CardContent>
+                    </Card>
+                </div>
+
+                {/* Enhanced Slider List */}
+                <Card className="border-0 shadow-xl bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm">
+                    <CardHeader className="border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50 to-slate-50 dark:from-gray-800/80 dark:to-slate-800/80 backdrop-blur-sm">
+                        <CardTitle className="flex items-center gap-3 text-gray-900 dark:text-gray-100">
+                            <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg shadow-lg">
+                                <ArrowUpDown className="h-5 w-5 text-white" />
+                            </div>
+                            <div>
+                                <span className="text-xl font-bold">Slider Listesi</span>
+                                <Badge variant="outline" className="ml-3 border-indigo-300 dark:border-indigo-600 text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/50">
+                                    {sliders.length} slider
+                                </Badge>
+                                <Badge variant="outline" className="ml-2 border-purple-300 dark:border-purple-600 text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/50">
+                                    {locale === 'tr' ? 'Türkçe' : 'English'}
+                                </Badge>
+                            </div>
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-0">
+                        {sliders.length > 0 ? (
+                            <div className="overflow-hidden">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow className="bg-gradient-to-r from-gray-50 to-slate-50 dark:from-gray-800/50 dark:to-slate-800/50 border-b border-gray-200 dark:border-gray-700 hover:bg-gradient-to-r hover:from-gray-100 hover:to-slate-100 dark:hover:from-gray-700/50 dark:hover:to-slate-700/50">
+                                            <TableHead className="w-10 font-semibold text-gray-700 dark:text-gray-300"></TableHead>
+                                            <TableHead className="w-24 font-semibold text-gray-700 dark:text-gray-300">Görsel</TableHead>
+                                            <TableHead className="font-semibold text-gray-700 dark:text-gray-300">Başlık & İçerik</TableHead>
+                                            <TableHead className="font-semibold text-gray-700 dark:text-gray-300">Açıklama</TableHead>
+                                            <TableHead className="text-center w-16 font-semibold text-gray-700 dark:text-gray-300">Sıra</TableHead>
+                                            <TableHead className="w-28 font-semibold text-gray-700 dark:text-gray-300">Durum</TableHead>
+                                            <TableHead className="w-36 font-semibold text-gray-700 dark:text-gray-300">Oluşturan</TableHead>
+                                            <TableHead className="w-12 font-semibold text-gray-700 dark:text-gray-300"></TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {sliders.map((slider, index) => (
+                                            <DraggableRow
+                                                key={slider.id}
+                                                slider={slider}
+                                                index={index}
+                                                moveSlider={moveSlider}
+                                                onEdit={handleEditSlider}
+                                                onDelete={handleDeleteSlider}
+                                                onToggleActive={handleToggleActive}
+                                                onImagePreview={handleImagePreview}
+                                                locale={locale}
+                                            />
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        ) : (
+                            <div className="text-center py-16">
+                                <div className="mx-auto w-24 h-24 bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-full flex items-center justify-center mb-6 shadow-lg">
+                                    <ImageIcon className="h-10 w-10 text-blue-600 dark:text-blue-400" />
+                                </div>
+                                <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                                    Henüz slider oluşturulmamış
+                                </h3>
+                                <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
+                                    İlk hero slider&apos;ınızı oluşturarak ziyaretçilerinizi etkileyici görsellerle karşılayın
+                                </p>
+                                <Button
+                                    onClick={() => setCreateDialogOpen(true)}
+                                    className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 font-semibold px-8 py-3"
+                                >
+                                    <Plus className="h-5 w-5 mr-2" />
+                                    İlk Slider&apos;ınızı Oluşturun
+                                </Button>
                             </div>
                         )}
-                    </div>
-                </DialogContent>
-            </Dialog>
-        </div>
+                    </CardContent>
+                </Card>
+
+                {/* Dialogs */}
+                <CreateSliderDialog
+                    open={createDialogOpen}
+                    onOpenChange={setCreateDialogOpen}
+                    onSuccess={fetchSliders}
+                />
+
+                {selectedSlider && (
+                    <EditSliderDialog
+                        open={editDialogOpen}
+                        onOpenChange={setEditDialogOpen}
+                        slider={selectedSlider}
+                        onSuccess={fetchSliders}
+                    />
+                )}
+
+                {/* Enhanced Image Preview Dialog */}
+                <Dialog open={imagePreviewOpen} onOpenChange={setImagePreviewOpen}>
+                    <DialogContent className="max-w-5xl max-h-[90vh] p-0 overflow-hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-0 shadow-2xl">
+                        <DialogHeader className="p-6 pb-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50/80 to-slate-50/80 dark:from-gray-800/80 dark:to-slate-800/80">
+                            <DialogTitle className="flex items-center gap-3 text-gray-900 dark:text-gray-100">
+                                <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg shadow-lg">
+                                    <Eye className="h-5 w-5 text-white" />
+                                </div>
+                                <span className="text-xl font-bold">Görsel Önizleme</span>
+                            </DialogTitle>
+                        </DialogHeader>
+                        <div className="p-6 pt-4">
+                            {previewImageUrl && (
+                                <div className="relative w-full bg-gradient-to-br from-gray-50 to-slate-50 dark:from-gray-900 dark:to-slate-900 rounded-xl overflow-hidden shadow-inner">
+                                    <img
+                                        src={previewImageUrl}
+                                        alt="Slider Preview"
+                                        className="w-full h-auto max-h-[70vh] object-contain rounded-xl"
+                                        onError={() => console.error('Slider görsel yüklenirken hata oluştu')}
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    </DialogContent>
+                </Dialog>
+            </div>
+        </DndProvider>
     );
 } 

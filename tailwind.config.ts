@@ -7,6 +7,7 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/**/*.{ts,tsx}",
   ],
+  plugins: [require("@tailwindcss/line-clamp")],
 };
 
 export default config;
