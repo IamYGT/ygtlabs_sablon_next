@@ -15,42 +15,44 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { useAdminAuth } from "@/lib/hooks/useAuth";
 import LogoutButton from "@/components/panel/LogoutButton";
+import { useTranslations } from 'next-intl';
 
 export function AdminSidebar() {
     const admin = useAdminAuth();
+    const t = useTranslations('AdminNavigation');
     const { open, locked: _locked, setLocked: _setLocked } = useSidebar();
 
     const links = [
         {
-            label: "Dashboard",
+            label: t('dashboard'),
             href: "/admin/dashboard",
             icon: (
                 <LayoutDashboard className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
             ),
         },
         {
-            label: "Hero Slider",
+            label: t('heroSlider'),
             href: "/admin/hero-slider",
             icon: (
                 <Monitor className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
             ),
         },
         {
-            label: "Kullanıcılar",
+            label: t('users'),
             href: "/admin/users",
             icon: (
                 <Users className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
             ),
         },
         {
-            label: "Roller",
+            label: t('roles'),
             href: "/admin/roles",
             icon: (
                 <Shield className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
             ),
         },
         {
-            label: "Profil",
+            label: t('profile'),
             href: "/admin/profile",
             icon: (
                 <User className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />

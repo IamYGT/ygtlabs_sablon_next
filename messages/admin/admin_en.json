@@ -147,6 +147,7 @@
     },
     "AdminNavigation": {
         "dashboard": "Dashboard",
+        "heroSlider": "Hero Slider Management",
         "users": "Users",
         "roles": "Roles",
         "permissions": "Permissions",
