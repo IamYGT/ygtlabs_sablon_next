@@ -12,7 +12,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -34,10 +33,9 @@ import {
     X,
     CheckCircle,
     AlertCircle,
-    Info,
-    FolderOpen,
-    Layers
+    Info
 } from "lucide-react";
+import { TR, US } from 'country-flag-icons/react/3x2';
 
 interface CreateSliderDialogProps {
     open: boolean;
@@ -191,7 +189,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-6xl max-h-[95vh] overflow-hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-0 shadow-2xl">
+            <DialogContent className="max-w-6xl max-h-[95vh] bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-0 shadow-2xl flex flex-col">
                 <DialogHeader className="border-b border-gray-200 dark:border-gray-700 pb-6 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/50 dark:to-indigo-950/50 -m-6 mb-0 p-6 rounded-t-lg">
                     <DialogTitle className="flex items-center gap-3 text-2xl font-bold text-gray-900 dark:text-gray-100">
                         <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg">
@@ -208,7 +206,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                     </DialogTitle>
                 </DialogHeader>
 
-                <div className="overflow-y-auto max-h-[calc(95vh-120px)] px-1">
+                <div className="flex-1 overflow-y-auto px-1">
                     <Tabs defaultValue="tr" className="w-full mt-6">
                         <TabsList className="grid w-full grid-cols-2 bg-gradient-to-r from-gray-100 to-slate-100 dark:from-gray-800 dark:to-slate-800 p-1 rounded-xl shadow-inner">
                             <TabsTrigger
@@ -216,7 +214,8 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                 className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-200 font-semibold"
                             >
                                 <div className="flex items-center gap-2">
-                                    🇹🇷 <span>Türkçe</span>
+                                    <TR className="w-5 h-3 rounded-sm object-cover shadow-sm" />
+                                    <span>Türkçe</span>
                                 </div>
                             </TabsTrigger>
                             <TabsTrigger
@@ -224,7 +223,8 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                 className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-200 font-semibold"
                             >
                                 <div className="flex items-center gap-2">
-                                    🇺🇸 <span>English</span>
+                                    <US className="w-5 h-3 rounded-sm object-cover shadow-sm" />
+                                    <span>English</span>
                                 </div>
                             </TabsTrigger>
                         </TabsList>
@@ -239,8 +239,9 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                                 <Globe className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                                             </div>
                                             Türkçe İçerik
-                                            <Badge variant="outline" className="bg-blue-50 dark:bg-blue-950/50 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300">
-                                                🇹🇷 TR
+                                            <Badge variant="outline" className="bg-blue-50 dark:bg-blue-950/50 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 flex items-center gap-1">
+                                                <TR className="w-4 h-2.5 rounded-sm object-cover" />
+                                                TR
                                             </Badge>
                                         </CardTitle>
                                     </CardHeader>
@@ -315,7 +316,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                             <div className="p-2 bg-emerald-100 dark:bg-emerald-900/50 rounded-lg">
                                                 <Link className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
                                             </div>
-                                            Buton Ayarları (Türkçe)
+                                            Buton Ayarları
                                         </CardTitle>
                                     </CardHeader>
                                     <CardContent className="space-y-6">
@@ -396,8 +397,9 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                                 <Globe className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                                             </div>
                                             English Content
-                                            <Badge variant="outline" className="bg-indigo-50 dark:bg-indigo-950/50 border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300">
-                                                🇺🇸 EN
+                                            <Badge variant="outline" className="bg-indigo-50 dark:bg-indigo-950/50 border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 flex items-center gap-1">
+                                                <US className="w-4 h-2.5 rounded-sm object-cover" />
+                                                EN
                                             </Badge>
                                         </CardTitle>
                                     </CardHeader>
@@ -734,7 +736,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                 </div>
 
                 {/* Footer Buttons */}
-                <div className="flex items-center justify-between gap-4 pt-6 border-t border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50/80 to-slate-50/80 dark:from-gray-800/80 dark:to-slate-800/80 -m-6 mt-0 p-6 rounded-b-lg">
+                <div className="flex-shrink-0 flex items-center justify-between gap-4 pt-6 border-t border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50/80 to-slate-50/80 dark:from-gray-800/80 dark:to-slate-800/80 -m-6 mt-0 p-6 rounded-b-lg">
                     <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                         <Info className="h-4 w-4" />
                         <span>Zorunlu alanları doldurmayı unutmayın</span>

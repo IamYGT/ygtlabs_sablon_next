@@ -36,6 +36,7 @@ import {
     Info,
     Edit
 } from "lucide-react";
+import { TR, US } from 'country-flag-icons/react/3x2';
 
 interface HeroSlider {
     id: string;
@@ -281,7 +282,7 @@ export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: Edit
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-6xl max-h-[95vh] overflow-hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-0 shadow-2xl">
+            <DialogContent className="max-w-6xl max-h-[95vh] bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-0 shadow-2xl flex flex-col">
                 <DialogHeader className="border-b border-gray-200 dark:border-gray-700 pb-6 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/50 dark:to-indigo-950/50 -m-6 mb-0 p-6 rounded-t-lg">
                     <DialogTitle className="flex items-center gap-3 text-2xl font-bold text-gray-900 dark:text-gray-100">
                         <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg">
@@ -298,7 +299,7 @@ export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: Edit
                     </DialogTitle>
                 </DialogHeader>
 
-                <div className="overflow-y-auto max-h-[calc(95vh-120px)] px-1">
+                <div className="flex-1 overflow-y-auto px-1">
 
                     <Tabs defaultValue="tr" className="w-full mt-6">
                         <TabsList className="grid w-full grid-cols-2 bg-gradient-to-r from-gray-100 to-slate-100 dark:from-gray-800 dark:to-slate-800 p-1 rounded-xl shadow-inner">
@@ -307,7 +308,8 @@ export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: Edit
                                 className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-200 font-semibold"
                             >
                                 <div className="flex items-center gap-2">
-                                    🇹🇷 <span>Türkçe</span>
+                                    <TR className="w-5 h-3 rounded-sm object-cover shadow-sm" />
+                                    <span>Türkçe</span>
                                 </div>
                             </TabsTrigger>
                             <TabsTrigger
@@ -315,7 +317,8 @@ export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: Edit
                                 className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-200 font-semibold"
                             >
                                 <div className="flex items-center gap-2">
-                                    🇺🇸 <span>English</span>
+                                    <US className="w-5 h-3 rounded-sm object-cover shadow-sm" />
+                                    <span>English</span>
                                 </div>
                             </TabsTrigger>
                         </TabsList>
@@ -632,7 +635,7 @@ export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: Edit
                 </div>
 
                 {/* Footer Buttons */}
-                <div className="flex items-center justify-between gap-4 pt-6 border-t border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50/80 to-slate-50/80 dark:from-gray-800/80 dark:to-slate-800/80 -m-6 mt-0 p-6 rounded-b-lg">
+                <div className="flex-shrink-0 flex items-center justify-between gap-4 pt-6 border-t border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50/80 to-slate-50/80 dark:from-gray-800/80 dark:to-slate-800/80 -m-6 mt-0 p-6 rounded-b-lg">
                     <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                         <Info className="h-4 w-4" />
                         <span>Değişiklikleri kaydetmeyi unutmayın</span>

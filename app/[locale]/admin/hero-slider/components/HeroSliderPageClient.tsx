@@ -38,21 +38,20 @@ import {
     GripVertical,
     Languages,
     BarChart3,
-    Clock,
     User,
     CheckCircle,
     XCircle,
     Calendar,
     ArrowUpDown,
     Sparkles,
-    Zap,
-    Star,
-    TrendingUp
+    Zap
 } from "lucide-react";
 import { CreateSliderDialog } from "./CreateSliderDialog";
 import { EditSliderDialog } from "./EditSliderDialog";
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import Image from "next/image";
+import { TR, US } from 'country-flag-icons/react/3x2';
 
 // JSON field tiplerini tanımla
 type LocalizedContent = {
@@ -208,10 +207,12 @@ function DraggableRow({
                 >
                     {slider.backgroundImage ? (
                         <>
-                            <img
+                            <Image
                                 src={slider.backgroundImage}
                                 alt="Slider"
-                                className="w-full h-full object-cover transition-transform duration-300 group-hover/image:scale-110"
+                                fill
+                                className="object-cover transition-transform duration-300 group-hover/image:scale-110"
+                                sizes="80px"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover/image:opacity-100 transition-all duration-300 flex items-center justify-center">
                                 <div className="bg-white/90 dark:bg-gray-900/90 rounded-full p-1.5 transform scale-75 group-hover/image:scale-100 transition-transform duration-200">
@@ -529,12 +530,14 @@ export function HeroSliderPageClient() {
                                 <SelectContent className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-blue-200 dark:border-blue-800">
                                     <SelectItem value="tr">
                                         <div className="flex items-center gap-2">
-                                            🇹🇷 Türkçe
+                                            <TR className="w-5 h-3 rounded-sm object-cover shadow-sm" />
+                                            Türkçe
                                         </div>
                                     </SelectItem>
                                     <SelectItem value="en">
                                         <div className="flex items-center gap-2">
-                                            🇺🇸 English
+                                            <US className="w-5 h-3 rounded-sm object-cover shadow-sm" />
+                                            English
                                         </div>
                                     </SelectItem>
                                 </SelectContent>
@@ -617,11 +620,17 @@ export function HeroSliderPageClient() {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="relative">
-                            <div className="text-2xl font-bold text-purple-800 dark:text-purple-200 flex items-center gap-2">
+                            <div className="text-2xl font-bold text-purple-800 dark:text-purple-200 flex items-center gap-3">
                                 {locale === 'tr' ? (
-                                    <>🇹🇷 <span>TR</span></>
+                                    <>
+                                        <TR className="w-8 h-5 rounded-md object-cover shadow-md" />
+                                        <span>TR</span>
+                                    </>
                                 ) : (
-                                    <>🇺🇸 <span>EN</span></>
+                                    <>
+                                        <US className="w-8 h-5 rounded-md object-cover shadow-md" />
+                                        <span>EN</span>
+                                    </>
                                 )}
                             </div>
                             <p className="text-xs text-purple-600 dark:text-purple-400 mt-1">Seçili dil</p>
@@ -641,8 +650,18 @@ export function HeroSliderPageClient() {
                                 <Badge variant="outline" className="ml-3 border-indigo-300 dark:border-indigo-600 text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/50">
                                     {sliders.length} slider
                                 </Badge>
-                                <Badge variant="outline" className="ml-2 border-purple-300 dark:border-purple-600 text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/50">
-                                    {locale === 'tr' ? 'Türkçe' : 'English'}
+                                <Badge variant="outline" className="ml-2 border-purple-300 dark:border-purple-600 text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/50 flex items-center gap-1.5">
+                                    {locale === 'tr' ? (
+                                        <>
+                                            <TR className="w-4 h-2.5 rounded-sm object-cover" />
+                                            Türkçe
+                                        </>
+                                    ) : (
+                                        <>
+                                            <US className="w-4 h-2.5 rounded-sm object-cover" />
+                                            English
+                                        </>
+                                    )}
                                 </Badge>
                             </div>
                         </CardTitle>
@@ -733,9 +752,11 @@ export function HeroSliderPageClient() {
                         <div className="p-6 pt-4">
                             {previewImageUrl && (
                                 <div className="relative w-full bg-gradient-to-br from-gray-50 to-slate-50 dark:from-gray-900 dark:to-slate-900 rounded-xl overflow-hidden shadow-inner">
-                                    <img
+                                    <Image
                                         src={previewImageUrl}
                                         alt="Slider Preview"
+                                        width={1200}
+                                        height={600}
                                         className="w-full h-auto max-h-[70vh] object-contain rounded-xl"
                                         onError={() => console.error('Slider görsel yüklenirken hata oluştu')}
                                     />
