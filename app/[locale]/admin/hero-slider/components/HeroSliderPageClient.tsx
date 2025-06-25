@@ -362,7 +362,7 @@ export function HeroSliderPageClient() {
     const [previewImageUrl, setPreviewImageUrl] = useState("");
     const [locale, setLocale] = useState<'tr' | 'en'>('tr');
 
-    const fetchSliders = async () => {
+    const fetchSliders = useCallback(async () => {
         try {
             setLoading(true);
             const response = await fetch("/api/admin/hero-slider?limit=100");
@@ -381,11 +381,11 @@ export function HeroSliderPageClient() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [t]);
 
     useEffect(() => {
         fetchSliders();
-    }, []);
+    }, [fetchSliders]);
 
     const handleDeleteSlider = async (sliderId: string) => {
         if (!confirm(t('messages.deleteConfirm'))) {
@@ -480,7 +480,7 @@ export function HeroSliderPageClient() {
             // Hata durumunda verileri yeniden yükle
             fetchSliders();
         }
-    }, [sliders]);
+    }, [sliders, fetchSliders, t]);
 
     if (loading) {
         return (

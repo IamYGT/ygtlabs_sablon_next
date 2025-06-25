@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -51,31 +52,31 @@ function parseJSONField(value: string | LocalizedValue | null | undefined, local
             return value;
         }
     }
-    
+
     if (typeof value === 'object' && value !== null) {
         return value[locale] || value.en || Object.values(value)[0] || '';
     }
-    
+
     return value || '';
 }
 
 function formatPermissionDisplayName(permission: PermissionItem, locale: string = 'tr'): string {
     const displayName = parseJSONField(permission.displayName, locale);
-    
+
     if (displayName && displayName !== permission.displayName) {
         return displayName;
     }
-    
+
     return `${permission.resourceType}:${permission.resourcePath}:${permission.action}`;
 }
 
 function formatPermissionDescription(permission: PermissionItem, locale: string = 'tr'): string {
     const description = parseJSONField(permission.description, locale);
-    
+
     if (description && description !== permission.description) {
         return description;
     }
-    
+
     return `${permission.resourceType} ${permission.action} yetkisi`;
 }
 import { CreatePermissionDialog } from "./CreatePermissionDialog";
@@ -118,6 +119,7 @@ interface PermissionsResponse {
 }
 
 export function PermissionsPageClient() {
+    const t = useTranslations("AdminPermissions");
     const [permissions, setPermissions] = useState<PermissionItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
@@ -136,25 +138,25 @@ export function PermissionsPageClient() {
             const response = await fetch(`/api/admin/permissions?${params}`);
 
             if (!response.ok) {
-                throw new Error("Yetkiler getirilemedi");
+                throw new Error(t("fetchError"));
             }
 
             const data: PermissionsResponse = await response.json();
             setPermissions(data.permissions || []);
         } catch (error) {
             console.error("Yetkiler getirme hatası:", error);
-            toast.error("Yetkiler getirilemedi");
+            toast.error(t("fetchError"));
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [t]);
 
     useEffect(() => {
         fetchPermissions();
     }, [fetchPermissions]);
 
     const handleDeletePermission = async (permissionId: string) => {
-        if (!confirm("Bu yetkiyi silmek istediğinizden emin misiniz?")) {
+        if (!confirm(t("deleteConfirm"))) {
             return;
         }
 
@@ -165,16 +167,16 @@ export function PermissionsPageClient() {
 
             if (!response.ok) {
                 const error = await response.json();
-                throw new Error(error.error || "Yetki silinemedi");
+                throw new Error(error.error || t("deleteError"));
             }
 
-            toast.success("Yetki başarıyla silindi");
+            toast.success(t("deleteSuccess"));
             fetchPermissions();
         } catch (error: unknown) {
             console.error("Yetki silme hatası:", error);
             const errorMessage = error && typeof error === "object" && "message" in error
                 ? String(error.message)
-                : "Yetki silinirken bir hata oluştu";
+                : t("deleteError");
             toast.error(errorMessage);
         }
     };
@@ -229,7 +231,7 @@ export function PermissionsPageClient() {
             <div className="flex items-center justify-center h-64">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-                    <p>Yetkiler yükleniyor...</p>
+                    <p>{t("permissionsLoading")}</p>
                 </div>
             </div>
         );
@@ -240,14 +242,14 @@ export function PermissionsPageClient() {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold">Yetki Yönetimi</h1>
+                    <h1 className="text-3xl font-bold">{t("title")}</h1>
                     <p className="text-muted-foreground">
-                        Sistem yetkilerini görüntüleyin ve yönetin
+                        {t("subtitle")}
                     </p>
                 </div>
                 <Button onClick={() => setCreateDialogOpen(true)}>
                     <Plus className="h-4 w-4 mr-2" />
-                    Yeni Yetki
+                    {t("newPermission")}
                 </Button>
             </div>
 
@@ -255,7 +257,7 @@ export function PermissionsPageClient() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <Card>
                     <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium">Toplam Yetki</CardTitle>
+                        <CardTitle className="text-sm font-medium">{t("totalPermissions")}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">{stats.total}</div>
@@ -263,7 +265,7 @@ export function PermissionsPageClient() {
                 </Card>
                 <Card>
                     <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium">Aktif Yetki</CardTitle>
+                        <CardTitle className="text-sm font-medium">{t("activePermissions")}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold text-green-600">{stats.active}</div>
@@ -295,7 +297,7 @@ export function PermissionsPageClient() {
                             <div className="relative">
                                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                                 <Input
-                                    placeholder="Yetki adı, açıklama, kaynak, eylem, kategori veya rol ara..."
+                                    placeholder={t("searchPermissions")}
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                     className="pl-10"
@@ -305,10 +307,10 @@ export function PermissionsPageClient() {
 
                         <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                             <SelectTrigger className="w-48">
-                                <SelectValue placeholder="Kategori seçin" />
+                                <SelectValue placeholder={t("filterByCategory")} />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="all">Tüm Kategoriler</SelectItem>
+                                <SelectItem value="all">{t("allCategories")}</SelectItem>
                                 {categories.map((category) => (
                                     <SelectItem key={category} value={category}>
                                         {category} ({stats.byCategory[category] || 0})
@@ -341,14 +343,14 @@ export function PermissionsPageClient() {
             {/* Tablo */}
             <Card>
                 <CardHeader>
-                    <CardTitle>Yetkiler ({filteredPermissions.length})</CardTitle>
+                    <CardTitle>{t("permissions")} ({filteredPermissions.length})</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Yetki Adı</TableHead>
-                                <TableHead>Kategori</TableHead>
+                                <TableHead>{t("permissionDetails")}</TableHead>
+                                <TableHead>{t("category")}</TableHead>
                                 <TableHead>Kaynak Yolu</TableHead>
                                 <TableHead>Eylem</TableHead>
                                 <TableHead>Tür</TableHead>
@@ -395,7 +397,7 @@ export function PermissionsPageClient() {
                                         <Badge
                                             variant={permission.isActive ? "default" : "secondary"}
                                         >
-                                            {permission.isActive ? "Aktif" : "Pasif"}
+                                            {permission.isActive ? t("active") : t("inactive")}
                                         </Badge>
                                     </TableCell>
                                     <TableCell>
@@ -408,7 +410,7 @@ export function PermissionsPageClient() {
                                             <DropdownMenuContent align="end">
                                                 <DropdownMenuItem onClick={() => handleEditPermission(permission)}>
                                                     <Edit className="h-4 w-4 mr-2" />
-                                                    Düzenle
+                                                    {t("edit")}
                                                 </DropdownMenuItem>
                                                 {!permission.isSystemPermission && (
                                                     <DropdownMenuItem
@@ -416,7 +418,7 @@ export function PermissionsPageClient() {
                                                         className="text-destructive"
                                                     >
                                                         <Trash2 className="h-4 w-4 mr-2" />
-                                                        Sil
+                                                        {t("delete")}
                                                     </DropdownMenuItem>
                                                 )}
                                             </DropdownMenuContent>
@@ -429,7 +431,7 @@ export function PermissionsPageClient() {
 
                     {filteredPermissions.length === 0 && (
                         <div className="text-center py-8">
-                            <p className="text-muted-foreground">Hiç yetki bulunamadı.</p>
+                            <p className="text-muted-foreground">{t("noPermissionsFound")}</p>
                         </div>
                     )}
                 </CardContent>

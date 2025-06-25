@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { useTranslations, useLocale } from 'next-intl';
 import {
     Users,
     Shield,
@@ -53,6 +54,9 @@ interface UserStatsCardsProps {
 }
 
 export default function UserStatsCards({ users, roles }: UserStatsCardsProps) {
+    const t = useTranslations('AdminUsers');
+    const locale = useLocale();
+
     // İstatistikleri hesapla
     const userStats = {
         total: users.length,
@@ -71,7 +75,7 @@ export default function UserStatsCards({ users, roles }: UserStatsCardsProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Kullanıcılar</CardTitle>
+                    <CardTitle className="text-sm font-medium">{t('users')}</CardTitle>
                     <Users className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
@@ -79,22 +83,22 @@ export default function UserStatsCards({ users, roles }: UserStatsCardsProps) {
                     <div className="flex items-center gap-2 mt-2">
                         <Badge variant="default" className="text-xs">
                             <CheckCircle className="h-3 w-3 mr-1" />
-                            {userStats.active} Aktif
+                            {userStats.active} {t('active')}
                         </Badge>
                         <Badge variant="secondary" className="text-xs">
                             <XCircle className="h-3 w-3 mr-1" />
-                            {userStats.inactive} Pasif
+                            {userStats.inactive} {t('inactive')}
                         </Badge>
                     </div>
                     <div className="text-xs text-muted-foreground mt-1">
-                        {userStats.withRoles} kullanıcıya rol atanmış
+                        {t('usersWithRoles', { count: userStats.withRoles })}
                     </div>
                 </CardContent>
             </Card>
 
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Roller</CardTitle>
+                    <CardTitle className="text-sm font-medium">{t('roles')}</CardTitle>
                     <Shield className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
@@ -102,15 +106,15 @@ export default function UserStatsCards({ users, roles }: UserStatsCardsProps) {
                     <div className="flex items-center gap-2 mt-2">
                         <Badge variant="default" className="text-xs">
                             <Activity className="h-3 w-3 mr-1" />
-                            {roleStats.active} Aktif
+                            {roleStats.active} {t('active')}
                         </Badge>
                         <Badge variant="secondary" className="text-xs">
                             <Settings className="h-3 w-3 mr-1" />
-                            {roleStats.system} Sistem
+                            {roleStats.system} {t('system')}
                         </Badge>
                     </div>
                     <div className="text-xs text-muted-foreground mt-1">
-                        Rol yönetimi için <Link href="/tr/admin/roles" className="text-blue-600 hover:underline">Roller</Link> sayfasını ziyaret edin
+                        {t('roleManagementLink.text')} <Link href={`/${locale}/admin/roles`} className="text-blue-600 hover:underline">{t('roleManagementLink.linkText')}</Link> {t('roleManagementLink.suffix')}
                     </div>
                 </CardContent>
             </Card>

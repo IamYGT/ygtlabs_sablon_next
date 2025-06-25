@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import React from 'react';
+import { getTranslations } from "next-intl/server";
 import { AdminSidebar } from '@/components/panel/AdminSidebar';
 import { AdminHeader } from '@/components/panel/AdminHeader';
 import { Toaster } from 'sonner';
@@ -9,14 +10,19 @@ import { AdminGuard } from '@/components/panel/AuthGuards';
 import './styles/admin.css';
 
 
-export const metadata: Metadata = {
-    title: "Admin Paneli - ECU Sistem",
-    description: "Admin yönetim paneli",
-    robots: {
-        index: false,
-        follow: false,
-    },
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+    const { locale } = await params;
+    const t = await getTranslations({ locale, namespace: "AdminDashboard" });
+
+    return {
+        title: t("title"),
+        description: t("description"),
+        robots: {
+            index: false,
+            follow: false,
+        },
+    };
+}
 
 export const dynamic = 'force-dynamic';
 
@@ -34,6 +40,7 @@ export default async function AdminLayout({ children, params }: AdminLayoutProps
 
     // Admin için özel mesajları yükle
     const adminMessages = (await import(`../../../messages/admin/admin_${validLocale}.json`)).default;
+    const t = await getTranslations({ locale: validLocale, namespace: "AdminDashboard" });
 
     return (
         <NextIntlClientProvider messages={adminMessages} locale={validLocale}>
@@ -52,8 +59,8 @@ export default async function AdminLayout({ children, params }: AdminLayoutProps
                             <div className="flex flex-1 flex-col overflow-hidden md:rounded-tl-[1.5rem] md:rounded-bl-[1.5rem] bg-blue-100 dark:bg-neutral-900 relative z-10">
                                 {/* Header - Responsive */}
                                 <AdminHeader
-                                    title="Kurumsal Yönetim Paneli"
-                                    subtitle="Finansal kontrol ve sistem yönetimi merkezi"
+                                    title={t("subtitle")}
+                                    subtitle={t("description")}
                                 />
 
                                 {/* Sayfa İçeriği - Corporate Professional Padding */}

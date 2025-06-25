@@ -38,6 +38,7 @@ import { format } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { toast } from 'react-hot-toast';
 import { Toaster } from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
 import QuickRoleAssignModal from './QuickRoleAssignModal';
 import CreateUserModal from './CreateUserModal';
 import DeleteUserModal from './DeleteUserModal';
@@ -93,6 +94,8 @@ interface UsersPageClientProps {
 
 export default function UsersPageClient({ users, roles }: UsersPageClientProps) {
     const router = useRouter();
+    const t = useTranslations('AdminUsers');
+    const tCommon = useTranslations('AdminCommon');
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
@@ -136,7 +139,7 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
     // Toplu işlemler
     const handleBulkAction = async (action: string) => {
         if (selectedUsers.length === 0) {
-            toast.error('Lütfen en az bir kullanıcı seçin');
+            toast.error(t('selectAtLeastOne'));
             return;
         }
 
@@ -152,7 +155,7 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                             })
                         )
                     );
-                    toast.success(`${selectedUsers.length} kullanıcı aktif edildi`);
+                    toast.success(`${selectedUsers.length} ${t('usersActivated')}`);
                     break;
                 }
                 case 'deactivate': {
@@ -165,7 +168,7 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                             })
                         )
                     );
-                    toast.success(`${selectedUsers.length} kullanıcı devre dışı bırakıldı`);
+                    toast.success(`${selectedUsers.length} ${t('usersDeactivated')}`);
                     break;
                 }
                 case 'export': {
@@ -183,7 +186,7 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
             setSelectedUsers([]);
             router.refresh();
         } catch (_error) {
-            toast.error('Bir hata oluştu');
+            toast.error(t('errorOccurred'));
         }
     };
 
@@ -205,7 +208,7 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
             } = await response.json();
 
             if (response.ok) {
-                toast.success(result.message || 'İşlem başarılı');
+                toast.success(result.message || t('operationSuccessful'));
                 if (result.warnings && result.warnings.length > 0) {
                     result.warnings.forEach((warning: string) => {
                         toast.error(warning);
@@ -215,7 +218,7 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                 setBulkDeleteModalOpen(false);
                 router.refresh();
             } else {
-                toast.error(result.error || 'Silme işlemi başarısız oldu');
+                toast.error(result.error || t('deleteOperationFailed'));
                 if (result.details && result.details.length > 0) {
                     result.details.forEach((detail: string) => {
                         toast.error(detail);
@@ -223,7 +226,7 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                 }
             }
         } catch (_error) {
-            toast.error('Bir hata oluştu');
+            toast.error(t('errorOccurred'));
         }
     };
 
@@ -231,12 +234,12 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
     const exportUsers = () => {
         const selectedUserData = users.filter(u => selectedUsers.includes(u.id));
         const csvContent = [
-            ['Ad', 'Email', 'Durum', 'Roller', 'Kayıt Tarihi'].join(','),
+            [t('name'), t('email'), t('status'), t('roles'), t('registrationDate')].join(','),
             ...selectedUserData.map(user => [
                 user.name || '',
                 user.email || '',
-                user.isActive ? 'Aktif' : 'Pasif',
-                user.currentRole ? user.currentRole.displayName : 'Rol Atanmamış',
+                user.isActive ? t('active') : t('inactive'),
+                user.currentRole ? user.currentRole.displayName : t('noRoleAssigned'),
                 format(new Date(user.createdAt), 'dd/MM/yyyy')
             ].join(','))
         ].join('\n');
@@ -247,7 +250,7 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
         link.download = `kullanicilar_${format(new Date(), 'yyyyMMdd')}.csv`;
         link.click();
 
-        toast.success('Kullanıcı verileri dışa aktarıldı');
+        toast.success(t('userDataExported'));
     };
 
     // Hızlı işlemler
@@ -288,13 +291,13 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
 
             if (response.ok) {
                 const newStatus = !currentStatus;
-                toast.success(`Kullanıcı ${newStatus ? 'aktif' : 'pasif'} edildi`);
+                toast.success(newStatus ? t('userActivated') : t('userDeactivated'));
                 router.refresh();
             } else {
-                toast.error('Durum güncellenemedi');
+                toast.error(t('statusNotUpdated'));
             }
         } catch (_error) {
-            toast.error('Bir hata oluştu');
+            toast.error(t('errorOccurred'));
         }
     };
 
@@ -305,9 +308,9 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Kullanıcı Yönetimi</h1>
+                    <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
                     <p className="text-muted-foreground">
-                        Kullanıcıları yönetin, roller atayın ve sistem erişimlerini kontrol edin
+                        {t('subtitle')}
                     </p>
                 </div>
                 <Button onClick={() => handleQuickAction('new-user')}>
@@ -347,12 +350,12 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                                         onCheckedChange={handleSelectAll}
                                     />
                                 </TableHead>
-                                <TableHead>Kullanıcı</TableHead>
-                                <TableHead>Email</TableHead>
-                                <TableHead>Rol</TableHead>
-                                <TableHead>Durum</TableHead>
-                                <TableHead>Kayıt Tarihi</TableHead>
-                                <TableHead className="text-right">İşlemler</TableHead>
+                                <TableHead>{t('name')}</TableHead>
+                                <TableHead>{t('email')}</TableHead>
+                                <TableHead>{t('roles')}</TableHead>
+                                <TableHead>{t('status')}</TableHead>
+                                <TableHead>{t('registrationDate')}</TableHead>
+                                <TableHead className="text-right">{t('actions')}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -370,7 +373,7 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                                                 {user.profileImage ? (
                                                     <Image
                                                         src={user.profileImage}
-                                                        alt={user.name || 'Kullanıcı'}
+                                                        alt={user.name || t('name')}
                                                         width={32}
                                                         height={32}
                                                         className="h-full w-full object-cover"
@@ -382,14 +385,14 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                                                 )}
                                             </div>
                                             <div>
-                                                <div className="font-medium">{user.name || 'İsimsiz Kullanıcı'}</div>
+                                                <div className="font-medium">{user.name || t('noName')}</div>
                                             </div>
                                         </div>
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex items-center gap-1">
                                             <Mail className="h-3 w-3 text-muted-foreground" />
-                                            {user.email || 'Email yok'}
+                                            {user.email || t('noEmail')}
                                         </div>
                                     </TableCell>
                                     <TableCell>
@@ -402,7 +405,7 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                                                 {user.currentRole.displayName}
                                             </Badge>
                                         ) : (
-                                            <Badge variant="outline">Rol Atanmamış</Badge>
+                                            <Badge variant="outline">{t('noRoleAssigned')}</Badge>
                                         )}
                                     </TableCell>
                                     <TableCell>
@@ -410,12 +413,12 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                                             {user.isActive ? (
                                                 <>
                                                     <CheckCircle className="h-4 w-4 text-green-500" />
-                                                    <span className="text-green-600">Aktif</span>
+                                                    <span className="text-green-600">{t('active')}</span>
                                                 </>
                                             ) : (
                                                 <>
                                                     <XCircle className="h-4 w-4 text-red-500" />
-                                                    <span className="text-red-600">Pasif</span>
+                                                    <span className="text-red-600">{t('inactive')}</span>
                                                 </>
                                             )}
                                         </div>
@@ -434,18 +437,18 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                                                 </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
-                                                <DropdownMenuLabel>İşlemler</DropdownMenuLabel>
+                                                <DropdownMenuLabel>{t('actions')}</DropdownMenuLabel>
                                                 <DropdownMenuItem
                                                     onClick={() => handleQuickAction('edit-user', user.id)}
                                                 >
                                                     <Edit className="mr-2 h-4 w-4" />
-                                                    Düzenle
+                                                    {tCommon('edit')}
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem
                                                     onClick={() => handleQuickAction('assign-role', user.id)}
                                                 >
                                                     <ShieldCheck className="mr-2 h-4 w-4" />
-                                                    Rol Ata
+                                                    {t('assignRole')}
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem
                                                     onClick={() => toggleUserStatus(user.id, user.isActive)}
@@ -453,12 +456,12 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                                                     {user.isActive ? (
                                                         <>
                                                             <XCircle className="mr-2 h-4 w-4" />
-                                                            Pasif Et
+                                                            {t('deactivateUser')}
                                                         </>
                                                     ) : (
                                                         <>
                                                             <CheckCircle className="mr-2 h-4 w-4" />
-                                                            Aktif Et
+                                                            {t('activateUser')}
                                                         </>
                                                     )}
                                                 </DropdownMenuItem>
@@ -468,7 +471,7 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                                                     className="text-red-600 hover:text-red-700"
                                                 >
                                                     <Trash className="mr-2 h-4 w-4" />
-                                                    Sil
+                                                    {tCommon('delete')}
                                                 </DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>
@@ -481,9 +484,9 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                     {filteredUsers.length === 0 && (
                         <div className="text-center py-6">
                             <Users className="mx-auto h-12 w-12 text-muted-foreground" />
-                            <h3 className="mt-2 text-sm font-medium text-muted-foreground">Kullanıcı bulunamadı</h3>
+                            <h3 className="mt-2 text-sm font-medium text-muted-foreground">{t('userNotFound')}</h3>
                             <p className="mt-1 text-sm text-muted-foreground">
-                                Arama kriterlerinizi değiştirmeyi deneyin.
+                                {t('tryDifferentCriteria')}
                             </p>
                         </div>
                     )}
@@ -525,18 +528,18 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
             <Dialog open={bulkDeleteModalOpen} onOpenChange={setBulkDeleteModalOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Kullanıcıları Sil</DialogTitle>
+                        <DialogTitle>{t('deleteUsers')}</DialogTitle>
                         <DialogDescription>
-                            {selectedUsers.length} kullanıcıyı silmek istediğinize emin misiniz?
-                            Bu işlem geri alınamaz.
+                            {selectedUsers.length} {t('deleteUsersConfirm')}
+                            {t('actionCannotBeUndone')}
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
                         <Button variant="outline" onClick={() => setBulkDeleteModalOpen(false)}>
-                            İptal
+                            {tCommon('cancel')}
                         </Button>
                         <Button variant="destructive" onClick={handleBulkDelete}>
-                            Sil
+                            {tCommon('delete')}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

@@ -21,6 +21,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Toaster } from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
 
 import { useAuth } from '@/lib/hooks/useAuth';
 import CreateRoleDialog from './CreateRoleDialog';
@@ -77,6 +78,7 @@ export default function RolesPageClient({
     currentUserPermissions = []
 }: RolesPageClientProps) {
     const { user: currentUser } = useAuth();
+    const t = useTranslations('AdminRoles');
     const [roles, setRoles] = useState<Role[]>(initialRoles);
     const [permissions, setPermissions] = useState<Permission[]>(availablePermissions);
     const [userPermissions, setUserPermissions] = useState<string[]>(currentUserPermissions);
@@ -154,10 +156,10 @@ export default function RolesPageClient({
 
     // Rol tipi etiketi
     const getRoleTypeInfo = (role: Role) => {
-        if (role.name === 'super_admin') return { label: 'Super Admin', variant: 'destructive' as const, icon: Crown };
-        if (role.name === 'admin') return { label: 'Admin', variant: 'default' as const, icon: Shield };
-        if (role.name === 'user') return { label: 'User', variant: 'secondary' as const, icon: Users };
-        return { label: 'Custom', variant: 'outline' as const, icon: Settings };
+        if (role.name === 'super_admin') return { label: t('superAdmin'), variant: 'destructive' as const, icon: Crown };
+        if (role.name === 'admin') return { label: t('admin'), variant: 'default' as const, icon: Shield };
+        if (role.name === 'user') return { label: t('user'), variant: 'secondary' as const, icon: Users };
+        return { label: t('custom'), variant: 'outline' as const, icon: Settings };
     };
 
     // Kategori bazında yetkileri grupla
@@ -310,18 +312,18 @@ export default function RolesPageClient({
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
-                        <h1 className="text-3xl font-bold tracking-tight">Rol Yönetimi</h1>
+                        <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
                         <p className="text-muted-foreground">
-                            Sistem rollerini yönetin ve yetkileri kontrol edin
+                            {t('subtitle')}
                         </p>
                     </div>
                     <div className="flex gap-2">
                         <Button variant="outline" onClick={handleRefresh} disabled={loading}>
-                            {loading ? 'Yükleniyor...' : 'Yenile'}
+                            {loading ? t('loading') : t('refresh')}
                         </Button>
                         <Button onClick={() => setShowCreateDialog(true)}>
                             <Plus className="mr-2 h-4 w-4" />
-                            Yeni Rol
+                            {t('newRole')}
                         </Button>
                     </div>
                 </div>
@@ -333,7 +335,7 @@ export default function RolesPageClient({
                             <div className="flex items-center space-x-2">
                                 <Shield className="h-5 w-5 text-blue-500" />
                                 <div>
-                                    <p className="text-sm font-medium">Toplam Rol</p>
+                                    <p className="text-sm font-medium">{t('totalRoles')}</p>
                                     <p className="text-2xl font-bold">{totalRoles}</p>
                                 </div>
                             </div>
@@ -344,7 +346,7 @@ export default function RolesPageClient({
                             <div className="flex items-center space-x-2">
                                 <Users className="h-5 w-5 text-green-500" />
                                 <div>
-                                    <p className="text-sm font-medium">Kullanıcı</p>
+                                    <p className="text-sm font-medium">{t('users')}</p>
                                     <p className="text-2xl font-bold">{totalUsers}</p>
                                 </div>
                             </div>
@@ -355,7 +357,7 @@ export default function RolesPageClient({
                             <div className="flex items-center space-x-2">
                                 <Settings className="h-5 w-5 text-purple-500" />
                                 <div>
-                                    <p className="text-sm font-medium">Aktif Rol</p>
+                                    <p className="text-sm font-medium">{t('activeRoles')}</p>
                                     <p className="text-2xl font-bold">{activeRoles}</p>
                                 </div>
                             </div>
@@ -366,7 +368,7 @@ export default function RolesPageClient({
                             <div className="flex items-center space-x-2">
                                 <Filter className="h-5 w-5 text-orange-500" />
                                 <div>
-                                    <p className="text-sm font-medium">Yetki</p>
+                                    <p className="text-sm font-medium">{t('permissions')}</p>
                                     <p className="text-2xl font-bold">{totalPermissions}</p>
                                 </div>
                             </div>
@@ -382,7 +384,7 @@ export default function RolesPageClient({
                                 <div className="relative">
                                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                                     <Input
-                                        placeholder="Rol ara..."
+                                        placeholder={t('searchRoles')}
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                         className="pl-10"
@@ -394,14 +396,14 @@ export default function RolesPageClient({
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">Tümü</SelectItem>
-                                    <SelectItem value="active">Aktif</SelectItem>
-                                    <SelectItem value="inactive">Pasif</SelectItem>
+                                    <SelectItem value="all">{t('all')}</SelectItem>
+                                    <SelectItem value="active">{t('active')}</SelectItem>
+                                    <SelectItem value="inactive">{t('inactive')}</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
                         <p className="text-xs text-muted-foreground mt-2">
-                            {filteredRoles.length} rol gösteriliyor
+                            {filteredRoles.length} {t('rolesShowing')}
                         </p>
                     </CardContent>
                 </Card>
@@ -411,7 +413,7 @@ export default function RolesPageClient({
                     <Card>
                         <CardContent className="text-center py-12">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-                            <p className="text-muted-foreground">Roller yükleniyor...</p>
+                            <p className="text-muted-foreground">{t('rolesLoading')}</p>
                         </CardContent>
                     </Card>
                 ) : (
@@ -446,17 +448,17 @@ export default function RolesPageClient({
                                                 <DropdownMenuContent align="end">
                                                     <DropdownMenuItem onClick={() => handleRoleAction('details', role)}>
                                                         <Eye className="mr-2 h-4 w-4" />
-                                                        Detaylar
+                                                        {t('details')}
                                                     </DropdownMenuItem>
                                                     {!isProtected && (
                                                         <>
                                                             <DropdownMenuItem onClick={() => handleRoleAction('edit', role)}>
                                                                 <Edit2 className="mr-2 h-4 w-4" />
-                                                                Düzenle
+                                                                {t('edit')}
                                                             </DropdownMenuItem>
                                                             <DropdownMenuItem onClick={() => handleRoleAction('edit-permissions', role)}>
                                                                 <Settings className="mr-2 h-4 w-4" />
-                                                                Yetkileri Düzenle
+                                                                {t('editPermissions')}
                                                             </DropdownMenuItem>
                                                             <DropdownMenuSeparator />
                                                             <DropdownMenuItem
@@ -464,7 +466,7 @@ export default function RolesPageClient({
                                                                 onClick={() => handleRoleAction('delete', role)}
                                                             >
                                                                 <Trash2 className="mr-2 h-4 w-4" />
-                                                                Sil
+                                                                {t('delete')}
                                                             </DropdownMenuItem>
                                                         </>
                                                     )}
@@ -478,11 +480,11 @@ export default function RolesPageClient({
                                                 {roleTypeInfo.label}
                                             </Badge>
                                             <Badge variant={role.isActive ? "default" : "secondary"}>
-                                                {role.isActive ? 'Aktif' : 'Pasif'}
+                                                {role.isActive ? t('active') : t('inactive')}
                                             </Badge>
                                             {isProtected && (
                                                 <Badge variant="outline" className="text-red-600 border-red-200">
-                                                    Korumalı
+                                                    {t('protected')}
                                                 </Badge>
                                             )}
                                         </div>
@@ -496,11 +498,11 @@ export default function RolesPageClient({
                                         <div className="flex justify-between text-sm">
                                             <div className="flex items-center gap-1">
                                                 <Users className="h-3 w-3" />
-                                                <span>{role._count.users} kullanıcı</span>
+                                                <span>{role._count.users} {t('usersCount')}</span>
                                             </div>
                                             <div className="flex items-center gap-1">
                                                 <Shield className="h-3 w-3" />
-                                                <span>{role.permissions?.length || 0} yetki</span>
+                                                <span>{role.permissions?.length || 0} {t('permissionsCount')}</span>
                                             </div>
                                         </div>
 
@@ -512,7 +514,7 @@ export default function RolesPageClient({
                                                 onClick={() => handleRoleAction('details', role)}
                                             >
                                                 <Eye className="mr-1 h-3 w-3" />
-                                                Görüntüle
+                                                {t('view')}
                                             </Button>
                                             {!isProtected && (
                                                 <Button
@@ -522,7 +524,7 @@ export default function RolesPageClient({
                                                     onClick={() => handleRoleAction('edit', role)}
                                                 >
                                                     <Edit2 className="mr-1 h-3 w-3" />
-                                                    Düzenle
+                                                    {t('edit')}
                                                 </Button>
                                             )}
                                         </div>
@@ -537,9 +539,9 @@ export default function RolesPageClient({
                     <Card>
                         <CardContent className="text-center py-12">
                             <Shield className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                            <h3 className="text-lg font-semibold mb-2">Rol bulunamadı</h3>
+                            <h3 className="text-lg font-semibold mb-2">{t('noRolesFound')}</h3>
                             <p className="text-muted-foreground">
-                                Arama kriterlerinize uygun rol bulunamadı.
+                                {t('noRolesMatchCriteria')}
                             </p>
                         </CardContent>
                     </Card>

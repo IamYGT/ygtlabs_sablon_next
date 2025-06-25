@@ -66,52 +66,66 @@ export function StatsCards({ cards }: StatsCardsProps) {
     );
 }
 
-// Standart admin stats için hazır fonksiyon
+// Standart admin stats için hazır fonksiyon - translations parametresi alır
 export function createAdminStatsCards(
     stats: AdminStats,
+    translations: {
+        totalUsers: string;
+        totalUsersDesc: string;
+        systemRoles: string;
+        systemRolesDesc: string;
+        systemPermissions: string;
+        systemPermissionsDesc: string;
+        avgPermissions: string;
+        avgPermissionsDesc: string;
+        active: string;
+        inactive: string;
+        system: string;
+        category: string;
+    },
     onCardClick?: (cardType: string) => void
 ): StatCard[] {
     return [
         {
-            title: 'Toplam Kullanıcı',
+            title: translations.totalUsers,
             value: stats.users.total,
-            description: 'Sistemdeki kullanıcı sayısı',
+            description: translations.totalUsersDesc,
             icon: Users,
             iconColor: 'text-blue-600',
             badges: [
-                { label: 'Aktif', value: stats.users.active, variant: 'default' as const },
-                { label: 'Pasif', value: stats.users.inactive, variant: 'secondary' as const }
+                { label: translations.active, value: stats.users.active, variant: 'default' as const },
+                { label: translations.inactive, value: stats.users.inactive, variant: 'secondary' as const }
             ],
             onClick: onCardClick ? () => onCardClick('users') : undefined
         },
         {
-            title: 'Sistem Rolleri',
+            title: translations.systemRoles,
             value: stats.roles.total,
-            description: 'Tanımlanmış rol sayısı',
+            description: translations.systemRolesDesc,
             icon: Shield,
             iconColor: 'text-green-600',
             badges: [
-                { label: 'Aktif', value: stats.roles.active, variant: 'default' as const },
-                { label: 'Sistem', value: stats.roles.system, variant: 'outline' as const }
+                { label: translations.active, value: stats.roles.active, variant: 'default' as const },
+                { label: translations.system, value: stats.roles.system, variant: 'outline' as const }
             ],
             onClick: onCardClick ? () => onCardClick('roles') : undefined
         },
         ...(stats.permissions ? [{
-            title: 'Sistem Yetkileri',
+            title: translations.systemPermissions,
             value: stats.permissions.total,
-            description: 'Mevcut yetki sayısı',
+            description: translations.systemPermissionsDesc,
             icon: Key,
             iconColor: 'text-purple-600',
             badges: [
-                { label: 'Sistem', value: stats.permissions.system, variant: 'outline' as const },
-                { label: 'Kategori', value: stats.permissions.categories, variant: 'secondary' as const }
+                { label: translations.system, value: stats.permissions.system, variant: 'outline' as const },
+                { label: translations.category, value: stats.permissions.categories, variant: 'secondary' as const }
             ],
             onClick: onCardClick ? () => onCardClick('permissions') : undefined
         }] : []),
         {
-            title: 'Ortalama Yetki',
+            title: translations.avgPermissions,
             value: stats.roles.total > 0 ? Math.round((stats.permissions?.total || 0) / stats.roles.total) : 0,
-            description: 'Rol başına ortalama yetki',
+            description: translations.avgPermissionsDesc,
             icon: BarChart3,
             iconColor: 'text-orange-600',
             onClick: onCardClick ? () => onCardClick('analytics') : undefined
