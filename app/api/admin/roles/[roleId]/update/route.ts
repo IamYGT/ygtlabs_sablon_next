@@ -1,23 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib";
+import { getTranslations } from "next-intl/server";
 
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ roleId: string }> }
 ) {
+  const t = await getTranslations("ApiMessages");
   try {
     // Kimlik doğrulama ve yetki kontrolü
     const currentUser = await getCurrentUser(request);
 
     if (!currentUser) {
-      return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 });
+      return NextResponse.json(
+        { error: t("common.unauthorized") },
+        { status: 401 }
+      );
     }
 
     // Admin yetkisi kontrolü
     if (!currentUser.permissions.includes("function.roles.edit")) {
       return NextResponse.json(
-        { error: "Bu işlem için gerekli yetkiye sahip değilsiniz" },
+        { error: t("common.forbidden") },
         { status: 403 }
       );
     }
@@ -33,13 +38,16 @@ export async function PUT(
     });
 
     if (!existingRole) {
-      return NextResponse.json({ error: "Rol bulunamadı" }, { status: 404 });
+      return NextResponse.json(
+        { error: t("common.notFound", { entity: "Role" }) },
+        { status: 404 }
+      );
     }
 
     // Korumalı rolleri düzenlemeyi engelle
     if (existingRole.name === "super_admin" || existingRole.name === "user") {
       return NextResponse.json(
-        { error: "Korumalı sistem rolleri düzenlenemez" },
+        { error: t("roles.update.protected") },
         { status: 400 }
       );
     }
@@ -55,7 +63,7 @@ export async function PUT(
 
       if (nameConflict) {
         return NextResponse.json(
-          { error: "Bu rol adı zaten kullanılıyor" },
+          { error: t("roles.update.nameConflict") },
           { status: 400 }
         );
       }
@@ -77,13 +85,13 @@ export async function PUT(
     });
 
     return NextResponse.json({
-      message: "Rol başarıyla güncellendi",
+      message: t("roles.update.success"),
       role: updatedRole,
     });
   } catch (error) {
     console.error("Rol güncelleme hatası:", error);
     return NextResponse.json(
-      { error: "Rol güncellenirken bir hata oluştu" },
+      { error: t("roles.update.error") },
       { status: 500 }
     );
   }

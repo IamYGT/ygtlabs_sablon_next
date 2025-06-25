@@ -136,6 +136,13 @@
         "subtitle": "Kullanıcıları görüntüleyin, düzenleyin ve rolleri yönetin.",
         "users": "Kullanıcılar",
         "system": "Sistem",
+        "name": "Ad Soyad",
+        "email": "E-posta",
+        "roles": "Roller",
+        "status": "Durum",
+        "registrationDate": "Kayıt Tarihi",
+        "active": "Aktif",
+        "inactive": "Pasif",
         "search": {
             "placeholder": "Kullanıcı adı, email veya role göre ara..."
         },
@@ -179,30 +186,28 @@
         "editUser": "Kullanıcı Düzenle",
         "deleteUser": "Kullanıcı Sil",
         "userList": "Kullanıcı Listesi",
-        "active": "Aktif",
-        "inactive": "Pasif",
+        "userActive": "Aktif",
+        "userInactive": "Pasif",
         "exportUsers": "Kullanıcıları Dışa Aktar",
         "importUsers": "Kullanıcıları İçe Aktar",
         "selectAtLeastOne": "Lütfen en az bir kullanıcı seçin",
         "usersActivated": "kullanıcı aktif edildi",
         "usersDeactivated": "kullanıcı devre dışı bırakıldı",
-        "errorOccurred": "Bir hata oluştu",
         "operationSuccessful": "İşlem başarılı",
         "deleteOperationFailed": "Silme işlemi başarısız oldu",
         "userDataExported": "Kullanıcı verileri dışa aktarıldı",
         "userActivated": "Kullanıcı aktif edildi",
         "userDeactivated": "Kullanıcı pasif edildi",
         "statusNotUpdated": "Durum güncellenemedi",
-        "name": "İsim",
-        "email": "Email",
-        "status": "Durum",
-        "roles": "Roller",
-        "registrationDate": "Kayıt Tarihi",
+        "userName": "İsim",
+        "userEmail": "Email",
+        "userStatus": "Durum",
+        "userRoles": "Roller",
+        "userRegistrationDate": "Kayıt Tarihi",
         "noRoleAssigned": "Rol Atanmamış",
         "actions": "İşlemler",
         "assignRole": "Rol Ata",
         "toggleStatus": "Durumu Değiştir",
-        "viewDetails": "Detayları Görüntüle",
         "bulkDelete": "Toplu Sil",
         "activate": "Aktif Et",
         "deactivate": "Devre Dışı Bırak",
@@ -234,7 +239,6 @@
         },
         "deleteConfirmation": "Silme Onayı",
         "bulkDeleteConfirmation": "Toplu Silme Onayı",
-        "user": "Kullanıcı",
         "noName": "İsimsiz Kullanıcı",
         "noEmail": "Email yok",
         "activateUser": "Aktif Et",
@@ -290,7 +294,6 @@
             "noRolesFound": "Sistemde aktif rol bulunamadı.",
             "noMatchingRoles": "Aramanıza uygun rol bulunamadı.",
             "systemDefault": "Sistem Varsayılanı",
-            "cancelButton": "İptal",
             "createButton": "Kullanıcı Oluştur",
             "creatingButton": "Oluşturuluyor...",
             "successMessage": "Kullanıcı başarıyla oluşturuldu!",
@@ -302,8 +305,6 @@
             "roleSearchPlaceholder": "Rol ara...",
             "roleNotFound": "Aramanıza uygun rol bulunamadı.",
             "selectedRoleLabel": "Seçili Rol",
-            "cancel": "İptal",
-            "creating": "Oluşturuluyor...",
             "validation": {
                 "nameRequired": "Ad soyad zorunludur.",
                 "emailRequired": "Geçerli bir e-posta adresi zorunludur.",
@@ -311,7 +312,7 @@
                 "roleRequired": "Lütfen kullanıcı için bir rol seçin."
             }
         },
-        "editUser": {
+        "editUserDialog": {
             "title": "Kullanıcıyı Düzenle",
             "unnamedUser": "Kullanıcı",
             "description": "Kullanıcı bilgilerini, şifresini ve rollerini güncelleyin.",
@@ -342,10 +343,10 @@
                 "namePlaceholder": "Kullanıcının adını girin",
                 "emailLabel": "E-posta Adresi *",
                 "emailPlaceholder": "kullanici@ornek.com",
-                "statusLabel": "Hesap Durumu",
-                "statusDescription": "Kullanıcının sisteme erişim durumu",
-                "active": "Aktif",
-                "passive": "Pasif"
+                "accountStatusLabel": "Hesap Durumu",
+                "accountStatusDescription": "Kullanıcının sisteme erişim durumu",
+                "accountActive": "Aktif",
+                "accountPassive": "Pasif"
             },
             "password": {
                 "title": "Şifre Değiştir",
@@ -399,16 +400,17 @@
                 "nameRequired": "İsim alanı zorunludur.",
                 "emailRequired": "E-posta alanı zorunludur.",
                 "updateSuccess": "Kullanıcı başarıyla güncellendi.",
-                "updateError": "Kullanıcı güncellenemedi."
+                "updateError": "Kullanıcı güncellenemedi.",
+                "guncellemeBasarisiz": "Kullanıcı güncellenemedi."
             }
         },
-        "deleteUser": {
+        "deleteUserDialog": {
             "title": "Kullanıcıyı Sil",
             "description": "Bu işlem, kullanıcıyı ve ilişkili tüm verileri kalıcı olarak silecektir.",
             "userAvatarAlt": "Kullanıcı Avatarı",
             "unnamed": "İsimsiz Kullanıcı",
             "registeredAt": "Kayıt tarihi",
-            "status": {
+            "accountStatus": {
                 "active": "Aktif",
                 "passive": "Pasif"
             },
@@ -538,8 +540,150 @@
             "hasPermission": "VAR ✓",
             "noPermission": "YOK ✗",
             "fixPermissions": "Yetkileri Düzelt",
-            "fixDescription": "Bu buton size admin rolü ve roles:edit yetkisi verecek",
+            "fixDescription": "Bu buton size admin rolü ve roller:düzenleme yetkisi verecektir",
             "allPermissions": "Tüm Yetkiler ({count})"
+        },
+        "createDialog": {
+            "title": "Yeni Rol Oluştur",
+            "description": "Özelliklerini ve yetkilerini tanımlayarak yeni bir rol oluşturun.",
+            "roleName": "Rol Adı",
+            "roleNamePlaceholder": "Örn: İçerik Yöneticisi",
+            "roleNameDescription": "Rol için kullanıcı dostu bir isim.",
+            "roleCode": "Rol Kodu (Tanımlayıcı)",
+            "roleCodePlaceholder": "Örn: icerik_yoneticisi",
+            "roleCodeDescription": "Benzersiz tanımlayıcı, otomatik olarak oluşturulur.",
+            "descriptionLabel": "Açıklama",
+            "descriptionPlaceholder": "Bu rolün ne için olduğunu kısaca açıklayın.",
+            "color": "Renk",
+            "layout": "Panel Arayüzü",
+            "status": "Durum",
+            "active": "Aktif",
+            "inactive": "Pasif",
+            "permissions": "Yetkiler",
+            "permissionsDescription": "Bu role verilecek yetkileri seçin.",
+            "cancel": "İptal",
+            "create": "Rol Oluştur",
+            "creating": "Oluşturuluyor...",
+            "success": "Rol başarıyla oluşturuldu.",
+            "error": "Rol oluşturulamadı.",
+            "templates": {
+                "systemAdmin": "Sistem Yöneticisi",
+                "systemAdminDesc": "Tüm sistem özelliklerine ve ayarlarına tam erişim.",
+                "moderator": "Moderatör",
+                "moderatorDesc": "İçeriği ve kullanıcıları yönetebilir, ancak sınırlı sistem erişimi vardır.",
+                "member": "Üye",
+                "memberDesc": "Temel izinlere sahip standart kullanıcı.",
+                "vipMember": "VIP Üye",
+                "vipMemberDesc": "Özel ayrıcalıklara ve özel içeriğe erişimi vardır."
+            },
+            "templateSelect": "Şablon Seç",
+            "roleDetails": "Rol Detayları",
+            "roleDetailsDescription": "Rolün temel ayrıntılarını tanımlayın.",
+            "permissionsStep": "Yetkiler",
+            "permissionManagementDescription": "Bu rol için yetki ekleyin veya kaldırın.",
+            "reviewStep": "Gözden Geçir",
+            "reviewDescription": "Kaydetmeden önce değişikliklerinizi kontrol edin.",
+            "selectTemplate": "Başlamak için bir şablon seçin",
+            "templateDescription": "Şablonlar, yaygın roller için önceden yapılandırılmış bir dizi izin sağlar.",
+            "adminAccess": "Yönetici Erişimi",
+            "userAccess": "Kullanıcı Erişimi",
+            "continueWithoutTemplate": "Veya bir şablon olmadan devam et"
+        },
+        "editDialog": {
+            "roleInfo": "Rol Bilgileri",
+            "roleInfoDescription": "Rolün temel ayrıntılarını düzenleyin.",
+            "permissionManagement": "Yetki Yönetimi",
+            "permissionManagementDescription": "Bu rol için yetki ekleyin veya kaldırın.",
+            "reviewChanges": "Değişiklikleri Gözden Geçir",
+            "reviewDescription": "Kaydetmeden önce değişikliklerinizi kontrol edin."
+        },
+        "deleteDialog": {
+            "title": "Rolü Sil",
+            "description": "\"{roleName}\" rolünü silmek istediğinizden emin misiniz?",
+            "permanentAction": "Bu işlem kalıcıdır ve geri alınamaz.",
+            "assignedUsers": "Bu rol şu anda {userCount} kullanıcıya atanmış durumda.",
+            "usersWillBeAffected": "Bu kullanıcılar erişim haklarını kaybedebilir.",
+            "confirm": "Anladım, rolü sil",
+            "cancel": "İptal",
+            "deleting": "Siliniyor...",
+            "success": "Rol başarıyla silindi.",
+            "error": "Rol silinemedi."
+        },
+        "detailsDialog": {
+            "title": "Rol Detayları",
+            "headerDescription": "rolünün genel bilgileri",
+            "overview": "Genel Bakış",
+            "overviewDescription": "Rol bilgileri ve özeti",
+            "permissionsTab": "Yetkiler",
+            "permissionsDescription": "Rol yetkileri detayları",
+            "usersTab": "Kullanıcılar",
+            "usersDescription": "Bu rolü kullanan kullanıcılar",
+            "activityTab": "Aktivite",
+            "activityHeaderDescription": "Rol kullanım bilgileri",
+            "systemCode": "Sistem kodu",
+            "generalInfo": "Genel Bilgiler",
+            "creationDate": "Oluşturma Tarihi",
+            "accessType": "Erişim Tipi",
+            "systemRole": "Sistem Rolü",
+            "status": "Durum",
+            "usageStats": "Kullanım İstatistikleri",
+            "activeUser": "Aktif Kullanıcı",
+            "totalPermissions": "Toplam Yetki",
+            "rolePermissions": "Rol Yetkileri",
+            "rolePermissionsDescription": "Bu rolün sahip olduğu yetkiler ({count} adet)",
+            "permissionsLoading": "Yetkiler yükleniyor...",
+            "noPermissions": "Bu rolün henüz yetkisi bulunmuyor",
+            "roleUsers": "Rol Kullanıcıları",
+            "roleUsersDescription": "Bu rolü kullanan kullanıcılar ({count} kişi)",
+            "noUsers": "Bu rolü kullanan kullanıcı bulunmuyor",
+            "roleActivity": "Rol Aktivitesi",
+            "roleActivityHeaderDescription": "Rol kullanım istatistikleri ve bilgileri",
+            "yes": "Evet",
+            "no": "Hayır",
+            "close": "Kapat",
+            "categories": {
+                "layout": "Layout",
+                "view": "Görüntüleme",
+                "function": "İşlevler"
+            }
+        },
+        "permissionsDisplay": {
+            "title": "Yetkileri",
+            "permissionsLoading": "Yetkiler yükleniyor...",
+            "loadError": "Yetki verisi alınamadı",
+            "unknownError": "Bilinmeyen hata",
+            "noPermissions": "Yetki bulunamadı",
+            "noPermissionsDescription": "rolü için henüz yetki tanımlanmamış.",
+            "permissionCount": "yetki",
+            "categories": {
+                "layout": "Layout",
+                "view": "Görüntüleme",
+                "function": "İşlevler"
+            }
+        },
+        "common": {
+            "save": "Kaydet",
+            "cancel": "İptal",
+            "delete": "Sil",
+            "edit": "Düzenle",
+            "close": "Kapat",
+            "back": "Geri",
+            "next": "İleri",
+            "continue": "Devam Et",
+            "finish": "Bitir",
+            "loading": "Yükleniyor...",
+            "error": "Hata",
+            "success": "Başarılı",
+            "warning": "Uyarı",
+            "info": "Bilgi",
+            "required": "Zorunlu",
+            "optional": "Opsiyonel",
+            "none": "Yok",
+            "all": "Tümü",
+            "selected": "seçili",
+            "available": "mevcut",
+            "category": "Kategori",
+            "action": "İşlem"
         }
     },
     "AdminPermissions": {
@@ -760,6 +904,7 @@
             }
         },
         "actions": {
+            "edit": "Düzenle",
             "save": "Kaydet",
             "cancel": "İptal",
             "create": "Slider Oluştur",
@@ -853,5 +998,51 @@
             "success": "Şifre başarıyla değiştirildi (demo mod)",
             "error": "Şifre değiştirilirken bir hata oluştu"
         }
+    },
+    "ApiMessages": {
+        "common": {
+            "unauthorized": "Yetkisiz erişim.",
+            "forbidden": "Bu işlem için gerekli yetkiye sahip değilsiniz.",
+            "notFound": "{entity} bulunamadı.",
+            "genericError": "İsteğiniz işlenirken bir hata oluştu."
+        },
+        "roles": {
+            "create": {
+                "nameRequired": "Rol adı ve görünen ad zorunludur.",
+                "nameMinLength": "Görünen ad en az 2 karakter olmalıdır.",
+                "invalidLayout": "Geçerli bir arayüz tipi gereklidir (admin veya user).",
+                "nameConflict": "Bu rol adı veya görünen ad zaten kullanılıyor.",
+                "success": "Rol başarıyla oluşturuldu.",
+                "error": "Rol oluşturulurken bir hata oluştu."
+            },
+            "get": {
+                "error": "Roller getirilirken bir hata oluştu."
+            },
+            "delete": {
+                "protected": "{roleName} korumalı bir sistem rolü olduğu için silinemez.",
+                "defaultUserRoleNotFound": "Varsayılan kullanıcı rolü bulunamadı.",
+                "targetRoleNotFound": "Hedef rol bulunamadı: {roleId}",
+                "success": "{roleName} rolü başarıyla silindi.",
+                "successWithTransfer": "{roleName} rolü başarıyla silindi ve {count} kullanıcı {targetRole} rolüne aktarıldı.",
+                "successWithMultiTransfer": "{roleName} rolü başarıyla silindi ve {count} kullanıcı çeşitli rollere aktarıldı.",
+                "error": "Rol silinirken bir hata oluştu."
+            },
+            "permissions": {
+                "getError": "Rol yetkileri getirilirken bir hata oluştu.",
+                "updateProtected": "Korumalı sistem rollerinin yetkileri değiştirilemez.",
+                "updateSuccess": "{roleName} rolünün yetkileri başarıyla güncellendi.",
+                "updateError": "Rol yetkileri güncellenirken bir hata oluştu."
+            },
+            "update": {
+                "protected": "Korumalı sistem rolleri düzenlenemez.",
+                "nameConflict": "Bu rol adı zaten kullanılıyor.",
+                "success": "Rol başarıyla güncellendi.",
+                "error": "Rol güncellenirken bir hata oluştu."
+            }
+        }
+    },
+    "AuthLayout": {
+        "pageTitle": "ECU Sistem",
+        "pageSubtitle": "Yönetim Paneli"
     }
 }

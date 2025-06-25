@@ -100,7 +100,7 @@ export default function ChangePasswordModal({ children }: ChangePasswordModalPro
         setOpen(false);
     };
 
-    const requirements = t.raw('requirements' as any);
+    const requirements = t.raw('requirements') as string[];
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -244,4 +244,4 @@ export default function ChangePasswordModal({ children }: ChangePasswordModalPro
             </DialogContent>
         </Dialog>
     );
-} 
+}

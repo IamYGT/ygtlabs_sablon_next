@@ -12,7 +12,7 @@ export function absoluteUrl(path: string) {
 }
 
 // JSON field parse etme fonksiyonu
-export function parseJSONField(value: any, locale: string): string {
+export function parseJSONField(value: string | { [key: string]: string } | null | undefined, locale: string): string {
   if (typeof value === "string") {
     try {
       const parsed = JSON.parse(value);
@@ -30,5 +30,5 @@ export function parseJSONField(value: any, locale: string): string {
     return value[locale] || value.en || Object.values(value)[0] || "";
   }
 
-  return value?.toString() || "";
+  return value ? String(value) : "";
 }

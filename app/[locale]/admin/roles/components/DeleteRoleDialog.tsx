@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import {
     AlertDialog,
     AlertDialogContent,
@@ -59,6 +60,7 @@ export default function DeleteRoleDialog({
     availableRoles,
     onRoleDeleted
 }: DeleteRoleDialogProps) {
+    const t = useTranslations('AdminRoles.deleteDialog');
     const [targetRoleId, setTargetRoleId] = useState<string>('');
     const [transferUsers, setTransferUsers] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -114,15 +116,15 @@ export default function DeleteRoleDialog({
             const result = await response.json();
 
             if (response.ok) {
-                toast.success(result.message || 'Rol başarıyla silindi');
+                toast.success(result.message || t('notifications.deleteSuccess'));
                 onOpenChange(false);
                 onRoleDeleted();
             } else {
-                toast.error(result.error || 'Rol silinirken hata oluştu');
+                toast.error(result.error || t('notifications.deleteError'));
             }
         } catch (error) {
             console.error('Role deletion error:', error);
-            toast.error('Bir hata oluştu');
+            toast.error(t('notifications.deleteErrorGeneric'));
         } finally {
             setLoading(false);
         }
@@ -136,12 +138,12 @@ export default function DeleteRoleDialog({
                 <AlertDialogHeader>
                     <AlertDialogTitle className="flex items-center gap-2">
                         <Trash2 className="h-5 w-5 text-red-600" />
-                        Rol Silme Onayı
+                        {t('title')}
                     </AlertDialogTitle>
                     <AlertDialogDescription asChild>
                         <div className="space-y-4">
                             <div>
-                                <strong>{role.displayName}</strong> rolünü silmek istediğinizden emin misiniz?
+                                <strong>{role.displayName}</strong> {t('confirmMessage')}
                             </div>
 
                             {/* Rol bilgileri */}
@@ -175,9 +177,9 @@ export default function DeleteRoleDialog({
                             <Alert variant="destructive">
                                 <AlertTriangle className="h-4 w-4" />
                                 <AlertDescription>
-                                    <div className="font-medium">Bu işlem geri alınamaz!</div>
+                                    <div className="font-medium">{t('warning.title')}</div>
                                     <div className="text-sm mt-1">
-                                        Rol kalıcı olarak silinecek ve tüm yetki atamaları kaldırılacaktır.
+                                        {t('warning.description')}
                                     </div>
                                 </AlertDescription>
                             </Alert>
@@ -192,19 +194,19 @@ export default function DeleteRoleDialog({
                                             onCheckedChange={(checked) => setTransferUsers(!!checked)}
                                         />
                                         <Label htmlFor="transfer-users" className="text-sm font-medium">
-                                            Kullanıcıları başka bir role aktar ({role._count.users} kullanıcı)
+                                            {t('transferUsers.label')} ({role._count.users} kullanıcı)
                                         </Label>
                                     </div>
 
                                     {transferUsers ? (
                                         <Card>
                                             <CardHeader className="pb-3">
-                                                <CardTitle className="text-sm">Hedef Rol Seçimi</CardTitle>
+                                                <CardTitle className="text-sm">{t('transferUsers.selectTitle')}</CardTitle>
                                             </CardHeader>
                                             <CardContent className="space-y-3">
                                                 <Select value={targetRoleId} onValueChange={setTargetRoleId}>
                                                     <SelectTrigger>
-                                                        <SelectValue placeholder="Kullanıcıları aktarılacak rolü seçin..." />
+                                                        <SelectValue placeholder={t('transferUsers.selectPlaceholder')} />
                                                     </SelectTrigger>
                                                     <SelectContent>
                                                         {targetRoles.map(targetRole => (
@@ -237,7 +239,7 @@ export default function DeleteRoleDialog({
                                                             </span>
                                                         </div>
                                                         <div className="text-xs text-green-600 mt-1">
-                                                            Kullanıcılar güvenli şekilde aktarılacak
+                                                            {t('transferUsers.successDescription')}
                                                         </div>
                                                     </div>
                                                 )}
@@ -247,9 +249,9 @@ export default function DeleteRoleDialog({
                                         <Alert variant="destructive">
                                             <UserX className="h-4 w-4" />
                                             <AlertDescription>
-                                                <div className="font-medium">Kullanıcılar rolsüz kalacak!</div>
+                                                <div className="font-medium">{t('transferUsers.noTransferDescription')}</div>
                                                 <div className="text-sm mt-1">
-                                                    Bu kullanıcılara sistem varsayılan &quot;user&quot; rolü atanacak.
+                                                    {t('transferUsers.noTransferWarning')}
                                                 </div>
                                             </AlertDescription>
                                         </Alert>
@@ -265,7 +267,7 @@ export default function DeleteRoleDialog({
                         onClick={() => onOpenChange(false)}
                         disabled={loading}
                     >
-                        İptal
+                        {t('cancel')}
                     </Button>
                     <Button
                         variant="destructive"
@@ -278,7 +280,7 @@ export default function DeleteRoleDialog({
                         ) : (
                             <>
                                 <Trash2 className="h-4 w-4" />
-                                Rolü Sil
+                                {t('delete')}
                             </>
                         )}
                     </Button>

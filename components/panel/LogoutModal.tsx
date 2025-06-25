@@ -41,8 +41,8 @@ export default function LogoutModal({ isOpen, onClose, logoutType }: LogoutModal
     if (!mounted || !isOpen) return null;
 
     const listItems = logoutType === 'all'
-        ? t.raw('listAll' as any)
-        : t.raw('listCurrent' as any);
+        ? t.raw('listAll') as string[]
+        : t.raw('listCurrent') as string[];
 
     const modalContent = (
         <div
@@ -118,4 +118,4 @@ export default function LogoutModal({ isOpen, onClose, logoutType }: LogoutModal
     );
 
     return createPortal(modalContent, document.body);
-} 
+}

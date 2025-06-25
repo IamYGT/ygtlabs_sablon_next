@@ -1,20 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib";
+import { getTranslations } from "next-intl/server";
 
 // Tüm rolleri getir
 export async function GET(request: NextRequest) {
+  const t = await getTranslations("ApiMessages");
   try {
     const currentUser = await getCurrentUser(request);
 
     if (!currentUser) {
-      return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 });
+      return NextResponse.json(
+        { error: t("common.unauthorized") },
+        { status: 401 }
+      );
     }
 
     // Yetki kontrolü - function.roles.view yetkisi gerekli
     if (!currentUser.permissions.includes("function.roles.view")) {
       return NextResponse.json(
-        { error: "Bu işlem için gerekli yetkiye sahip değilsiniz" },
+        { error: t("common.forbidden") },
         { status: 403 }
       );
     }
@@ -46,7 +51,7 @@ export async function GET(request: NextRequest) {
     });
 
     // Format roles for frontend compatibility
-    const formattedRoles = roles.map(role => ({
+    const formattedRoles = roles.map((role) => ({
       id: role.id,
       name: role.name,
       displayName: role.displayName,
@@ -56,7 +61,7 @@ export async function GET(request: NextRequest) {
       isSystemDefault: role.isSystemDefault,
       createdAt: role.createdAt,
       updatedAt: role.updatedAt,
-      permissions: role.rolePermissions.map(rp => ({
+      permissions: role.rolePermissions.map((rp) => ({
         permission: {
           id: rp.permission.id,
           name: rp.permission.name,
@@ -77,9 +82,6 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error("Roller getirme hatası:", error);
-    return NextResponse.json(
-      { error: "Roller getirilirken bir hata oluştu" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: t("roles.get.error") }, { status: 500 });
   }
 }

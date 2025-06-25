@@ -1,20 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib";
+import { getTranslations } from "next-intl/server";
 
 export async function POST(request: NextRequest) {
+  const t = await getTranslations("ApiMessages");
+
   try {
     // Kimlik doğrulama ve yetki kontrolü
     const currentUser = await getCurrentUser(request);
 
     if (!currentUser) {
-      return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 });
+      return NextResponse.json(
+        { error: t("common.unauthorized") },
+        { status: 401 }
+      );
     }
 
     // Yetki kontrolü - function.roles.create yetkisi gerekli
     if (!currentUser.permissions.includes("function.roles.create")) {
       return NextResponse.json(
-        { error: "Bu işlem için gerekli yetkiye sahip değilsiniz" },
+        { error: t("common.forbidden") },
         { status: 403 }
       );
     }
@@ -31,21 +37,21 @@ export async function POST(request: NextRequest) {
     // Validasyonlar
     if (!name || !displayName) {
       return NextResponse.json(
-        { error: "Rol adı ve görünen ad zorunludur" },
+        { error: t("roles.create.nameRequired") },
         { status: 400 }
       );
     }
 
     if (displayName.length < 2) {
       return NextResponse.json(
-        { error: "Rol adı en az 2 karakter olmalıdır" },
+        { error: t("roles.create.nameMinLength") },
         { status: 400 }
       );
     }
 
     if (!["admin", "user"].includes(layoutType)) {
       return NextResponse.json(
-        { error: "Geçerli layout tipi gereklidir (admin veya user)" },
+        { error: t("roles.create.invalidLayout") },
         { status: 400 }
       );
     }
@@ -59,7 +65,7 @@ export async function POST(request: NextRequest) {
 
     if (existingRole) {
       return NextResponse.json(
-        { error: "Bu rol adı veya görünen ad zaten kullanılıyor" },
+        { error: t("roles.create.nameConflict") },
         { status: 400 }
       );
     }
@@ -86,14 +92,14 @@ export async function POST(request: NextRequest) {
       const permissionRecords = await prisma.permission.findMany({
         where: {
           id: {
-            in: permissions
-          }
+            in: permissions,
+          },
         },
         select: {
           category: true,
           resourcePath: true,
-          action: true
-        }
+          action: true,
+        },
       });
 
       // Permission name'lerini oluştur
@@ -131,13 +137,13 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({
-      message: "Rol başarıyla oluşturuldu",
+      message: t("roles.create.success"),
       role: newRole,
     });
   } catch (error) {
     console.error("Rol oluşturma hatası:", error);
     return NextResponse.json(
-      { error: "Rol oluşturulurken bir hata oluştu" },
+      { error: t("roles.create.error") },
       { status: 500 }
     );
   }

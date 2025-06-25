@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useTranslations } from 'next-intl';
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -185,19 +186,21 @@ const generateRoleCode = (displayName: string): string => {
         .replace(/^_|_$/g, '');
 };
 
-// Wizard adımları
-const WIZARD_STEPS = [
-    { id: 'details', title: 'Rol Bilgileri', description: 'Temel rol bilgilerini düzenleyin' },
-    { id: 'permissions', title: 'Yetkiler', description: 'Rol yetkilerini yönetin' },
-    { id: 'review', title: 'Önizleme', description: 'Değişiklikleri gözden geçirin' }
-];
-
 export default function EditRoleDialog({
     open,
     onOpenChange,
     role,
     onRoleUpdated
 }: EditRoleDialogProps) {
+    const t = useTranslations('AdminRoles.editDialog');
+
+    // Wizard adımları
+    const WIZARD_STEPS = [
+        { id: 'details', title: t('roleInfo'), description: t('roleInfoDescription') },
+        { id: 'permissions', title: t('permissionManagement'), description: t('permissionManagementDescription') },
+        { id: 'review', title: t('reviewChanges'), description: t('reviewDescription') }
+    ];
+
     const [currentStep, setCurrentStep] = useState(0);
     const [loading, setLoading] = useState(false);
     const [loadingPermissions, setLoadingPermissions] = useState(false);
@@ -274,12 +277,12 @@ export default function EditRoleDialog({
 
         } catch (error) {
             console.error('Data loading error:', error);
-            toast.error('Veriler yüklenirken hata oluştu');
+            toast.error(t('notifications.updateErrorGeneric'));
         } finally {
             setLoadingPermissions(false);
             loadingRef.current = false;
         }
-    }, [role.id]);
+    }, [role.id, t]);
 
     // Form validation
     const validateForm = (): boolean => {
@@ -389,7 +392,7 @@ export default function EditRoleDialog({
         if (!validateForm()) return;
 
         if (isProtectedRole) {
-            toast.error(role.name === 'super_admin' ? 'Super Admin rolü düzenlenemez' : 'Korumalı rol düzenlenemez');
+            toast.error(role.name === 'super_admin' ? t('notifications.protectedError') : t('notifications.protectedErrorGeneric'));
             return;
         }
 
@@ -449,7 +452,7 @@ export default function EditRoleDialog({
                 throw new Error(error.error || 'Yetkiler güncellenemedi');
             }
 
-            toast.success('Rol başarıyla güncellendi');
+            toast.success(t('notifications.updateSuccess'));
             onRoleUpdated();
             onOpenChange(false);
 
@@ -604,6 +607,7 @@ export default function EditRoleDialog({
                                 onChange={(e) => setFormData(prev => ({ ...prev, color: e.target.value }))}
                                 className="w-8 h-8 rounded border cursor-pointer"
                                 disabled={isProtectedRole}
+                                title="Rol rengi seçin"
                             />
                             <span className="text-sm text-muted-foreground">{formData.color}</span>
                         </div>
@@ -1048,4 +1052,3 @@ export default function EditRoleDialog({
         </Dialog>
     );
 }
-

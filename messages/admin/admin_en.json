@@ -137,7 +137,6 @@
         "users": "Users",
         "system": "System",
         "addUser": "Add User",
-        "editUser": "Edit User",
         "deleteUser": "Delete User",
         "userList": "User List",
         "active": "Active",
@@ -402,7 +401,7 @@
                 "updateError": "Could not update user."
             }
         },
-        "deleteUser": {
+        "deleteUserDialog": {
             "title": "Delete User",
             "description": "This will permanently delete the user and all associated data.",
             "userAvatarAlt": "User Avatar",
@@ -540,6 +539,72 @@
             "fixPermissions": "Fix Permissions",
             "fixDescription": "This button will give you admin role and roles:edit permission",
             "allPermissions": "All Permissions ({count})"
+        },
+        "createDialog": {
+            "title": "Create New Role",
+            "description": "Create a new role by defining its properties and permissions.",
+            "roleName": "Role Name",
+            "roleNamePlaceholder": "e.g., Content Manager",
+            "roleNameDescription": "User-friendly name for the role.",
+            "roleCode": "Role Code (Identifier)",
+            "roleCodePlaceholder": "e.g., content_manager",
+            "roleCodeDescription": "Unique identifier, automatically generated.",
+            "descriptionLabel": "Description",
+            "descriptionPlaceholder": "Briefly describe what this role is for.",
+            "color": "Color",
+            "layout": "Panel Layout",
+            "status": "Status",
+            "active": "Active",
+            "inactive": "Inactive",
+            "permissions": "Permissions",
+            "permissionsDescription": "Select permissions to grant to this role.",
+            "cancel": "Cancel",
+            "create": "Create Role",
+            "creating": "Creating...",
+            "success": "Role created successfully.",
+            "error": "Could not create role.",
+            "templates": {
+                "systemAdmin": "System Administrator",
+                "systemAdminDesc": "Full access to all system features and settings.",
+                "moderator": "Moderator",
+                "moderatorDesc": "Can manage content and users, but with limited system access.",
+                "member": "Member",
+                "memberDesc": "Standard user with basic permissions.",
+                "vipMember": "VIP Member",
+                "vipMemberDesc": "Has special privileges and access to exclusive content."
+            },
+            "templateSelect": "Select a Template",
+            "roleDetails": "Role Details",
+            "roleDetailsDescription": "Define the core details of the role.",
+            "permissionsStep": "Permissions",
+            "permissionManagementDescription": "Add or remove permissions for this role.",
+            "reviewStep": "Review",
+            "reviewDescription": "Check your changes before saving.",
+            "selectTemplate": "Select a template to start with",
+            "templateDescription": "Templates provide a pre-configured set of permissions for common roles.",
+            "adminAccess": "Admin Access",
+            "userAccess": "User Access",
+            "continueWithoutTemplate": "Or continue without a template"
+        },
+        "editDialog": {
+            "roleInfo": "Role Information",
+            "roleInfoDescription": "Edit the basic details of the role.",
+            "permissionManagement": "Permission Management",
+            "permissionManagementDescription": "Add or remove permissions for this role.",
+            "reviewChanges": "Review Changes",
+            "reviewDescription": "Check your changes before saving."
+        },
+        "deleteDialog": {
+            "title": "Delete Role",
+            "description": "Are you sure you want to delete the role \"{roleName}\"?",
+            "permanentAction": "This action is permanent and cannot be undone.",
+            "assignedUsers": "This role is currently assigned to {userCount} users.",
+            "usersWillBeAffected": "These users may lose their access rights.",
+            "confirm": "I understand, delete the role",
+            "cancel": "Cancel",
+            "deleting": "Deleting...",
+            "success": "Role deleted successfully.",
+            "error": "Could not delete role."
         }
     },
     "AdminPermissions": {
@@ -593,10 +658,14 @@
         "users": "Users",
         "roles": "Roles",
         "permissions": "Permissions",
+        "profile": "Profile",
         "settings": "Settings",
+        "securitySettings": "Security Settings",
+        "emailSettings": "Email Settings",
+        "backupSettings": "Backup Settings",
+        "maintenanceMode": "Maintenance Mode",
         "reports": "Reports",
         "logs": "System Logs",
-        "profile": "Profile",
         "logout": "Logout"
     },
     "AdminCommon": {
@@ -760,6 +829,8 @@
             }
         },
         "actions": {
+            "edit": "Edit",
+            "deactivate": "Deactivate",
             "save": "Save",
             "cancel": "Cancel",
             "create": "Create Slider",
@@ -801,6 +872,59 @@
         "languages": {
             "tr": "Türkçe",
             "en": "English"
+        }
+    },
+    "AdminHeader": {
+        "searchPlaceholder": "Search users, logs or settings...",
+        "notifications": "Notifications",
+        "noNotifications": "No new notifications",
+        "markAllAsRead": "Mark all as read",
+        "viewAllNotifications": "View all notifications",
+        "adminPanel": "Admin Panel",
+        "profile": "Profile",
+        "settings": "Settings",
+        "logout": "Logout"
+    },
+    "ApiMessages": {
+        "common": {
+            "unauthorized": "Unauthorized access.",
+            "forbidden": "You do not have the required permission for this action.",
+            "notFound": "{entity} not found.",
+            "genericError": "An error occurred while processing your request."
+        },
+        "roles": {
+            "create": {
+                "nameRequired": "Role name and display name are required.",
+                "nameMinLength": "Display name must be at least 2 characters.",
+                "invalidLayout": "A valid layout type is required (admin or user).",
+                "nameConflict": "This role name or display name is already in use.",
+                "success": "Role created successfully.",
+                "error": "An error occurred while creating the role."
+            },
+            "get": {
+                "error": "An error occurred while fetching roles."
+            },
+            "delete": {
+                "protected": "The {roleName} role is protected and cannot be deleted.",
+                "defaultUserRoleNotFound": "Default user role not found.",
+                "targetRoleNotFound": "Target role not found: {roleId}",
+                "success": "Role {roleName} deleted successfully.",
+                "successWithTransfer": "Role {roleName} deleted successfully and {count} users were transferred to the {targetRole} role.",
+                "successWithMultiTransfer": "Role {roleName} deleted successfully and {count} users were transferred to various roles.",
+                "error": "An error occurred while deleting the role."
+            },
+            "permissions": {
+                "getError": "An error occurred while fetching role permissions.",
+                "updateProtected": "Permissions of protected system roles cannot be changed.",
+                "updateSuccess": "Permissions for role {roleName} updated successfully.",
+                "updateError": "An error occurred while updating role permissions."
+            },
+            "update": {
+                "protected": "Protected system roles cannot be edited.",
+                "nameConflict": "This role name is already in use.",
+                "success": "Role updated successfully.",
+                "error": "An error occurred while updating the role."
+            }
         }
     },
     "LogoutModal": {

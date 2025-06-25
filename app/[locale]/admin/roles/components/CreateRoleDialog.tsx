@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { useTranslations } from 'next-intl';
 import {
     Dialog,
     DialogContent,
@@ -151,43 +152,6 @@ interface CreateRoleDialogProps {
     onRoleCreated: () => void;
 }
 
-// Önceden tanımlı rol şablonları
-const ROLE_TEMPLATES = {
-    admin: {
-        name: 'Sistem Yöneticisi',
-        description: 'Tüm sistem yetkilerine sahip ana yönetici',
-        accessType: 'admin' as const,
-        color: '#ef4444',
-        icon: Crown,
-        permissions: ['function.users.edit', 'function.roles.edit', 'function.permissions.view']
-    },
-    moderator: {
-        name: 'Moderatör',
-        description: 'Sınırlı admin yetkilerine sahip içerik yöneticisi',
-        accessType: 'admin' as const,
-        color: '#f59e0b',
-        icon: Shield,
-        permissions: ['function.users.view', 'view.users.list']
-    },
-
-    member: {
-        name: 'Üye',
-        description: 'Temel kullanıcı yetkilerine sahip standart üye',
-        accessType: 'user' as const,
-        color: '#06b6d4',
-        icon: Users,
-        permissions: []
-    },
-    vip: {
-        name: 'VIP Üye',
-        description: 'Gelişmiş özelliklere erişimi olan premium üye',
-        accessType: 'user' as const,
-        color: '#10b981',
-        icon: Sparkles,
-        permissions: ['view.premium.access', 'function.premium.features']
-    }
-};
-
 // Popüler renk paleti
 const COLOR_PALETTE = [
     '#ef4444', '#f59e0b', '#eab308', '#22c55e', '#10b981',
@@ -195,34 +159,72 @@ const COLOR_PALETTE = [
     '#d946ef', '#ec4899', '#f43f5e', '#64748b', '#374151'
 ];
 
-// Wizard adımları
-const WIZARD_STEPS = [
-    { id: 'template', title: 'Şablon Seç', description: 'Hızlı başlangıç için şablon seçin' },
-    { id: 'details', title: 'Rol Detayları', description: 'Rol bilgilerini girin' },
-    { id: 'permissions', title: 'Yetkiler', description: 'Rol yetkilerini belirleyin' },
-    { id: 'review', title: 'Önizleme', description: 'Ayarları gözden geçirin' }
-];
-
-// Rol adından kod oluşturma fonksiyonu
-const generateRoleCode = (displayName: string): string => {
-    return displayName
-        .toLowerCase()
-        .replace(/ç/g, 'c')
-        .replace(/ğ/g, 'g')
-        .replace(/ı/g, 'i')
-        .replace(/ö/g, 'o')
-        .replace(/ş/g, 's')
-        .replace(/ü/g, 'u')
-        .replace(/[^a-z0-9]/g, '_')
-        .replace(/_+/g, '_')
-        .replace(/^_|_$/g, '');
-};
-
 export default function CreateRoleDialog({
     open,
     onOpenChange,
     onRoleCreated,
 }: CreateRoleDialogProps) {
+    const t = useTranslations('AdminRoles.createDialog');
+
+    // Önceden tanımlı rol şablonları
+    const ROLE_TEMPLATES = {
+        admin: {
+            name: t('templates.systemAdmin'),
+            description: t('templates.systemAdminDesc'),
+            accessType: 'admin' as const,
+            color: '#ef4444',
+            icon: Crown,
+            permissions: ['function.users.edit', 'function.roles.edit', 'function.permissions.view']
+        },
+        moderator: {
+            name: t('templates.moderator'),
+            description: t('templates.moderatorDesc'),
+            accessType: 'admin' as const,
+            color: '#f59e0b',
+            icon: Shield,
+            permissions: ['function.users.view', 'view.users.list']
+        },
+        member: {
+            name: t('templates.member'),
+            description: t('templates.memberDesc'),
+            accessType: 'user' as const,
+            color: '#06b6d4',
+            icon: Users,
+            permissions: []
+        },
+        vip: {
+            name: t('templates.vipMember'),
+            description: t('templates.vipMemberDesc'),
+            accessType: 'user' as const,
+            color: '#10b981',
+            icon: Sparkles,
+            permissions: ['view.premium.access', 'function.premium.features']
+        }
+    };
+
+    // Wizard adımları
+    const WIZARD_STEPS = [
+        { id: 'template', title: t('templateSelect'), description: t('description') },
+        { id: 'details', title: t('roleDetails'), description: t('roleDetailsDescription') },
+        { id: 'permissions', title: t('permissionsStep'), description: t('permissionManagementDescription') },
+        { id: 'review', title: t('reviewStep'), description: t('reviewDescription') }
+    ];
+
+    // Rol adından kod oluşturma fonksiyonu
+    const generateRoleCode = (displayName: string): string => {
+        return displayName
+            .toLowerCase()
+            .replace(/ç/g, 'c')
+            .replace(/ğ/g, 'g')
+            .replace(/ı/g, 'i')
+            .replace(/ö/g, 'o')
+            .replace(/ş/g, 's')
+            .replace(/ü/g, 'u')
+            .replace(/[^a-z0-9]/g, '_')
+            .replace(/_+/g, '_')
+            .replace(/^_|_$/g, '');
+    };
+
     const [currentStep, setCurrentStep] = useState(0);
     const [loading, setLoading] = useState(false);
     const [loadingPermissions, setLoadingPermissions] = useState(false);
@@ -256,15 +258,15 @@ export default function CreateRoleDialog({
                 setAvailablePermissions(formattedPermissions);
             } else {
                 console.error('❌ Failed to load permissions:', response.status);
-                toast.error('Yetkiler yüklenirken hata oluştu');
+                toast.error(t('notifications.loadError'));
             }
         } catch (error) {
             console.error('❌ Permission loading error:', error);
-            toast.error('Yetkiler yüklenirken bir hata oluştu');
+            toast.error(t('notifications.loadErrorGeneric'));
         } finally {
             setLoadingPermissions(false);
         }
-    }, [loadingPermissions, availablePermissions.length]);
+    }, [loadingPermissions, availablePermissions.length, t]);
 
     // Dialog açıldığında sıfırla
     useEffect(() => {
@@ -343,10 +345,10 @@ export default function CreateRoleDialog({
 
         if (step === 1) { // Details step
             if (!formData.displayName.trim()) {
-                newErrors.displayName = 'Rol adı gereklidir';
+                newErrors.displayName = t('roleNameRequired');
             }
             if (formData.displayName.length > 50) {
-                newErrors.displayName = 'Rol adı 50 karakterden fazla olamaz';
+                newErrors.displayName = t('roleNameTooLong');
             }
         }
 
@@ -421,16 +423,16 @@ export default function CreateRoleDialog({
             });
 
             if (response.ok) {
-                toast.success('Rol başarıyla oluşturuldu');
+                toast.success(t('notifications.createSuccess'));
                 onRoleCreated();
                 onOpenChange(false);
             } else {
                 const error = await response.json();
-                toast.error(error.error || 'Rol oluşturulamadı');
+                toast.error(error.error || t('notifications.createError'));
             }
         } catch (error) {
             console.error('Role creation error:', error);
-            toast.error('Rol oluşturulurken bir hata oluştu');
+            toast.error(t('notifications.createErrorGeneric'));
         } finally {
             setLoading(false);
         }
@@ -439,9 +441,9 @@ export default function CreateRoleDialog({
     const renderTemplateStep = () => (
         <div className="space-y-6">
             <div className="text-center">
-                <h3 className="text-lg font-semibold mb-2">Rol Şablonu Seçin</h3>
+                <h3 className="text-lg font-semibold mb-2">{t('selectTemplate')}</h3>
                 <p className="text-muted-foreground text-sm">
-                    Hızlı başlangıç için önceden tanımlı şablonlardan birini seçin veya boş başlayın
+                    {t('templateDescription')}
                 </p>
             </div>
 
@@ -471,7 +473,7 @@ export default function CreateRoleDialog({
                                             variant="outline"
                                             className="mt-1"
                                         >
-                                            {template.accessType === 'admin' ? 'Admin' : 'User'}
+                                            {template.accessType === 'admin' ? t('adminAccess') : t('userAccess')}
                                         </Badge>
                                     </div>
                                     {isSelected && (
@@ -507,7 +509,7 @@ export default function CreateRoleDialog({
                     className="gap-2"
                 >
                     <Plus className="w-4 h-4" />
-                    Şablon kullanmadan devam et
+                    {t('continueWithoutTemplate')}
                 </Button>
             </div>
         </div>
@@ -516,20 +518,20 @@ export default function CreateRoleDialog({
     const renderDetailsStep = () => (
         <div className="space-y-6">
             <div className="text-center">
-                <h3 className="text-lg font-semibold mb-2">Rol Detayları</h3>
+                <h3 className="text-lg font-semibold mb-2">{t('roleDetails')}</h3>
                 <p className="text-muted-foreground text-sm">
-                    Rolün temel bilgilerini girin
+                    {t('roleDetailsDescription')}
                 </p>
             </div>
 
             <div className="space-y-4">
                 <div className="space-y-2">
-                    <Label htmlFor="displayName">Rol Adı *</Label>
+                    <Label htmlFor="displayName">{t('roleName')} *</Label>
                     <Input
                         id="displayName"
                         value={formData.displayName}
                         onChange={(e) => setFormData(prev => ({ ...prev, displayName: e.target.value }))}
-                        placeholder="Rol adını girin"
+                        placeholder={t('roleNamePlaceholder')}
                         className={errors.displayName ? 'border-red-500' : ''}
                     />
                     {errors.displayName && (
@@ -539,24 +541,24 @@ export default function CreateRoleDialog({
                         </p>
                     )}
                     <p className="text-xs text-muted-foreground">
-                        Sistem kodu: {generateRoleCode(formData.displayName || 'ornek_rol')}
+                        {t('systemCode')}: {generateRoleCode(formData.displayName || 'ornek_rol')}
                     </p>
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="description">Açıklama</Label>
+                    <Label htmlFor="description">{t('description')}</Label>
                     <Textarea
                         id="description"
                         value={formData.description}
                         onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                        placeholder="Rol açıklaması"
+                        placeholder={t('descriptionPlaceholder')}
                         rows={3}
                     />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                        <Label>Erişim Tipi</Label>
+                        <Label>{t('accessType')}</Label>
                         <div className="flex gap-2">
                             <Button
                                 type="button"
@@ -1096,4 +1098,4 @@ export default function CreateRoleDialog({
             </DialogContent>
         </Dialog>
     );
-} 
+}

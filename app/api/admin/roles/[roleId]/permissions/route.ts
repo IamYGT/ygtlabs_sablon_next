@@ -1,17 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib";
+import { getTranslations } from "next-intl/server";
 
 // Rolün yetkilerini getir
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ roleId: string }> }
 ) {
+  const t = await getTranslations("ApiMessages");
   try {
     const currentUser = await getCurrentUser(request);
 
     if (!currentUser) {
-      return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 });
+      return NextResponse.json(
+        { error: t("common.unauthorized") },
+        { status: 401 }
+      );
     }
 
     // Yetki kontrolü - yeni permission sistemi
@@ -21,7 +26,7 @@ export async function GET(
 
     if (!hasPermission) {
       return NextResponse.json(
-        { error: "Bu işlem için gerekli yetkiye sahip değilsiniz" },
+        { error: t("common.forbidden") },
         { status: 403 }
       );
     }
@@ -45,7 +50,10 @@ export async function GET(
     });
 
     if (!role) {
-      return NextResponse.json({ error: "Rol bulunamadı" }, { status: 404 });
+      return NextResponse.json(
+        { error: t("common.notFound", { entity: "Role" }) },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json({
@@ -54,7 +62,7 @@ export async function GET(
         name: role.name,
         displayName: role.displayName,
       },
-      permissions: role.rolePermissions.map(rp => ({
+      permissions: role.rolePermissions.map((rp) => ({
         id: rp.permission.id,
         name: rp.permission.name,
         category: rp.permission.category,
@@ -68,7 +76,7 @@ export async function GET(
   } catch (error) {
     console.error("Rol yetkileri getirme hatası:", error);
     return NextResponse.json(
-      { error: "Rol yetkileri getirilirken bir hata oluştu" },
+      { error: t("roles.permissions.getError") },
       { status: 500 }
     );
   }
@@ -79,11 +87,15 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ roleId: string }> }
 ) {
+  const t = await getTranslations("ApiMessages");
   try {
     const currentUser = await getCurrentUser(request);
 
     if (!currentUser) {
-      return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 });
+      return NextResponse.json(
+        { error: t("common.unauthorized") },
+        { status: 401 }
+      );
     }
 
     // Yetki kontrolü - yeni permission sistemi
@@ -93,7 +105,7 @@ export async function PUT(
 
     if (!hasPermission) {
       return NextResponse.json(
-        { error: "Bu işlem için gerekli yetkiye sahip değilsiniz" },
+        { error: t("common.forbidden") },
         { status: 403 }
       );
     }
@@ -101,9 +113,9 @@ export async function PUT(
     const { roleId } = await params;
     const body = await request.json();
     const { permissions } = body;
-    
-    console.log('🔄 Updating permissions for role:', roleId);
-    console.log('📋 Received permissions:', permissions);
+
+    console.log("🔄 Updating permissions for role:", roleId);
+    console.log("📋 Received permissions:", permissions);
 
     // Rolü bul
     const role = await prisma.authRole.findUnique({
@@ -111,13 +123,16 @@ export async function PUT(
     });
 
     if (!role) {
-      return NextResponse.json({ error: "Rol bulunamadı" }, { status: 404 });
+      return NextResponse.json(
+        { error: t("common.notFound", { entity: "Role" }) },
+        { status: 404 }
+      );
     }
 
     // Korumalı rollerin yetkilerini değiştirmeyi engelle
     if (role.name === "super_admin" || role.name === "user") {
       return NextResponse.json(
-        { error: "Korumalı sistem rollerinin yetkileri değiştirilemez" },
+        { error: t("roles.permissions.updateProtected") },
         { status: 400 }
       );
     }
@@ -148,13 +163,15 @@ export async function PUT(
     });
 
     return NextResponse.json({
-      message: `${role.displayName} rolünün yetkileri başarıyla güncellendi`,
+      message: t("roles.permissions.updateSuccess", {
+        roleName: role.displayName,
+      }),
       updatedPermissions: permissions.length,
     });
   } catch (error) {
     console.error("Rol yetkileri güncelleme hatası:", error);
     return NextResponse.json(
-      { error: "Rol yetkileri güncellenirken bir hata oluştu" },
+      { error: t("roles.permissions.updateError") },
       { status: 500 }
     );
   }

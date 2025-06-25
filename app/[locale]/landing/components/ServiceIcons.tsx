@@ -47,19 +47,6 @@ export default function ServiceIcons() {
                     <div className="grid grid-cols-7 gap-3 px-8">
                         {services.map((service, index) => {
                             const IconComponent = service.icon;
-                            const center = 3; // Ortadaki index
-                            const distanceFromCenter = Math.abs(index - center);
-
-                            // Ortaya doğru büyüme hesaplama
-                            const getSize = (distance: number) => {
-                                if (distance === 0) return { container: 'w-12 h-12', icon: 'w-6 h-6', text: 'text-sm', spacing: 'space-y-3', padding: 'py-3', yOffset: -6 };
-                                if (distance === 1) return { container: 'w-10 h-10', icon: 'w-5 h-5', text: 'text-xs', spacing: 'space-y-2', padding: 'py-2', yOffset: -3 };
-                                if (distance === 2) return { container: 'w-9 h-9', icon: 'w-4 h-4', text: 'text-xs', spacing: 'space-y-2', padding: 'py-2', yOffset: -1 };
-                                return { container: 'w-8 h-8', icon: 'w-4 h-4', text: 'text-xs', spacing: 'space-y-2', padding: 'py-2', yOffset: 0 };
-                            };
-
-                            const size = getSize(distanceFromCenter);
-
                             return (
                                 <ServiceIcon key={index} icon={IconComponent} title={service.title} />
                             );
@@ -69,4 +56,4 @@ export default function ServiceIcons() {
             </div>
         </div>
     );
-} 
+}

@@ -20,6 +20,7 @@ import { ThemeToggle } from "@/components/panel/ThemeToggle";
 import { AdminStatusWidget } from "@/components/panel/AdminStatusWidget";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { useTranslations } from "next-intl";
 
 interface AdminHeaderProps {
     title?: string;
@@ -39,6 +40,7 @@ interface Notification {
 export function AdminHeader({ title = "Dashboard", subtitle, setOpen }: AdminHeaderProps) {
     const admin = useAdminAuth();
     const { setOpen: setSidebarOpen } = useSidebar();
+    const t = useTranslations('AdminHeader');
 
     // setOpen prop'u varsa onu kullan, yoksa sidebar hook'undan al
     const handleMenuToggle = setOpen || setSidebarOpen;
@@ -164,7 +166,7 @@ export function AdminHeader({ title = "Dashboard", subtitle, setOpen }: AdminHea
                             <form onSubmit={handleSearch} className="relative w-full group">
                                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground/60 transition-all duration-300 group-focus-within:text-blue-500" />
                                 <Input
-                                    placeholder="Kullanıcı, log veya ayar ara..."
+                                    placeholder={t('searchPlaceholder')}
                                     className="pl-12 pr-4 h-10 bg-background/50 border-border/60 rounded-xl transition-all duration-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -195,7 +197,7 @@ export function AdminHeader({ title = "Dashboard", subtitle, setOpen }: AdminHea
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-72 sm:w-80 lg:w-96 max-h-96 overflow-y-auto border-border/60 shadow-xl">
                             <DropdownMenuLabel className="flex items-center justify-between">
-                                <span>Bildirimler</span>
+                                <span>{t('notifications')}</span>
                                 {unreadCount > 0 && (
                                     <Badge variant="secondary" className="text-xs">
                                         {unreadCount} yeni
@@ -206,12 +208,12 @@ export function AdminHeader({ title = "Dashboard", subtitle, setOpen }: AdminHea
                             {loading ? (
                                 <div className="p-4 text-center">
                                     <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto"></div>
-                                    <p className="text-xs text-muted-foreground mt-2">Yükleniyor...</p>
+                                    <p className="text-xs text-muted-foreground mt-2">{t('loading')}</p>
                                 </div>
                             ) : notifications.length === 0 ? (
                                 <div className="p-4 text-center">
                                     <Bell className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                                    <p className="text-sm text-muted-foreground">Henüz bildirim yok</p>
+                                    <p className="text-sm text-muted-foreground">{t('noNotifications')}</p>
                                 </div>
                             ) : (
                                 notifications.slice(0, 10).map((notification) => (
@@ -224,9 +226,9 @@ export function AdminHeader({ title = "Dashboard", subtitle, setOpen }: AdminHea
                                                         <div className="h-2 w-2 bg-blue-600 rounded-full flex-shrink-0 mt-1 animate-pulse"></div>
                                                     )}
                                                 </div>
-                                                <p className="text-xs text-muted-foreground leading-relaxed">
-                                                    {notification.message}
-                                                </p>
+                                                <Button variant="ghost" size="sm" className="text-xs text-muted-foreground hover:text-foreground h-6 px-2">
+                                                    {t('viewAllNotifications')}
+                                                </Button>
                                                 <p className="text-xs text-muted-foreground">
                                                     {notification.time}
                                                 </p>
@@ -239,7 +241,15 @@ export function AdminHeader({ title = "Dashboard", subtitle, setOpen }: AdminHea
                                 <>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem className="text-center text-sm text-blue-600 hover:text-blue-700 transition-colors duration-200">
-                                        Tüm bildirimleri görüntüle
+                                        <Button variant="ghost" size="sm" className="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 h-6 px-2">
+                                            {t('viewAllNotifications')}
+                                        </Button>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem className="text-center text-sm text-blue-600 hover:text-blue-700 transition-colors duration-200">
+                                        <Button variant="ghost" size="sm" className="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 h-6 px-2">
+                                            {t('markAllAsRead')}
+                                        </Button>
                                     </DropdownMenuItem>
                                 </>
                             )}
@@ -303,7 +313,7 @@ export function AdminHeader({ title = "Dashboard", subtitle, setOpen }: AdminHea
                                 }}
                             >
                                 <User className="mr-2 h-4 w-4" />
-                                <span>Profil</span>
+                                <span>{t('profile')}</span>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <div className="p-1">

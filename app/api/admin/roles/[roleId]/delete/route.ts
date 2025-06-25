@@ -1,23 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib";
+import { getTranslations } from "next-intl/server";
 
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ roleId: string }> }
 ) {
+  const t = await getTranslations("ApiMessages");
+
   try {
     // Kimlik doğrulama ve yetki kontrolü - yeni permission sistemi
     const currentUser = await getCurrentUser(request);
 
     if (!currentUser) {
-      return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 });
+      return NextResponse.json(
+        { error: t("common.unauthorized") },
+        { status: 401 }
+      );
     }
 
     // Yetki kontrolü - function.roles.delete yetkisi gerekli
     if (!currentUser.permissions.includes("function.roles.delete")) {
       return NextResponse.json(
-        { error: "Bu işlem için gerekli yetkiye sahip değilsiniz" },
+        { error: t("common.forbidden") },
         { status: 403 }
       );
     }
@@ -39,14 +45,17 @@ export async function DELETE(
     });
 
     if (!role) {
-      return NextResponse.json({ error: "Rol bulunamadı" }, { status: 404 });
+      return NextResponse.json(
+        { error: t("common.notFound", { entity: "Role" }) },
+        { status: 404 }
+      );
     }
 
     // Korumalı rolleri silmeyi engelle (super_admin ve user)
     if (role.name === "super_admin" || role.name === "user") {
       return NextResponse.json(
         {
-          error: `${role.displayName} rolü korumalı sistem rolü olduğu için silinemez`,
+          error: t("roles.delete.protected", { roleName: role.displayName }),
         },
         { status: 400 }
       );
@@ -68,7 +77,7 @@ export async function DELETE(
 
       if (!defaultUserRole) {
         return NextResponse.json(
-          { error: "Varsayılan user rolü bulunamadı" },
+          { error: t("roles.delete.defaultUserRoleNotFound") },
           { status: 500 }
         );
       }
@@ -89,7 +98,11 @@ export async function DELETE(
 
         if (!targetRole) {
           return NextResponse.json(
-            { error: `Hedef rol bulunamadı: ${targetRoleId}` },
+            {
+              error: t("roles.delete.targetRoleNotFound", {
+                roleId: targetRoleId,
+              }),
+            },
             { status: 400 }
           );
         }
@@ -157,14 +170,23 @@ export async function DELETE(
         ...new Set(transferResults.map((t) => t.targetRoleName)),
       ];
       if (uniqueTargetRoles.length === 1) {
-        transferMessage = ` ve ${transferResults.length} kullanıcı ${uniqueTargetRoles[0]} rolüne aktarıldı`;
+        transferMessage = t("roles.delete.successWithTransfer", {
+          count: transferResults.length,
+          targetRole: uniqueTargetRoles[0],
+        });
       } else {
-        transferMessage = ` ve ${transferResults.length} kullanıcı çeşitli rollere aktarıldı`;
+        transferMessage = t("roles.delete.successWithMultiTransfer", {
+          count: transferResults.length,
+        });
       }
+    } else {
+      transferMessage = t("roles.delete.success", {
+        roleName: role.displayName,
+      });
     }
 
     return NextResponse.json({
-      message: `${role.displayName} rolü başarıyla silindi${transferMessage}`,
+      message: transferMessage,
       deletedRole: {
         id: role.id,
         name: role.name,
@@ -176,7 +198,7 @@ export async function DELETE(
   } catch (error) {
     console.error("Rol silme hatası:", error);
     return NextResponse.json(
-      { error: "Rol silinirken bir hata oluştu" },
+      { error: t("roles.delete.error") },
       { status: 500 }
     );
   }
