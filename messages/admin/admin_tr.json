@@ -114,6 +114,21 @@
             "securityScan": "Günlük güvenlik kontrolü tamamlandı",
             "maintenance": "Planlı bakım başarıyla gerçekleştirildi",
             "compliance": "Aylık uygunluk raporu hazırlandı"
+        },
+        "debug": {
+            "title": "Debug: Kullanıcı Yetkileri",
+            "user": "Kullanıcı",
+            "roles": "Roller",
+            "allPermissions": "Tüm Yetkiler ({count})",
+            "hasPermission": "{permission} yetkisi",
+            "permissionYes": "VAR ✓",
+            "permissionNo": "YOK ✗",
+            "setupSuccess": "✅ Sayfa yetkileri başarıyla kuruldu!",
+            "setupError": "❌ Hata",
+            "connectionError": "❌ Bağlantı hatası",
+            "grantAdminSuccess": "✅ Admin yetkisi başarıyla verildi!",
+            "addPermissionSuccess": "✅ {permissionName} yetkisi {roleName} rolüne eklendi!",
+            "pageRefresh": "Değişikliklerin uygulanması için sayfa yeniden yüklenecek."
         }
     },
     "AdminUsers": {
@@ -234,6 +249,22 @@
             "text": "Rol yönetimi için",
             "linkText": "Roller",
             "suffix": "sayfasını ziyaret edin"
+        },
+        "messages": {
+            "deleteSuccess": "Kullanıcı başarıyla silindi.",
+            "deleteError": "Kullanıcı silinemedi.",
+            "deleteConfirmTitle": "Kullanıcıyı Sil?",
+            "deleteConfirmText": "Bu kullanıcıyı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+            "bulkDeleteSuccess": "{count} kullanıcı başarıyla silindi.",
+            "bulkDeleteError": "Seçili kullanıcılar silinemedi.",
+            "bulkDeleteConfirmTitle": "Kullanıcıları Sil?",
+            "bulkDeleteConfirmText": "Seçili {count} kullanıcıyı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+            "statusUpdateSuccess": "Kullanıcı durumu başarıyla güncellendi.",
+            "statusUpdateError": "Kullanıcı durumu güncellenemedi.",
+            "roleUpdateSuccess": "Kullanıcı rolü başarıyla güncellendi.",
+            "roleUpdateError": "Kullanıcı rolü güncellenemedi.",
+            "exportSuccess": "Kullanıcı verileri başarıyla CSV olarak dışa aktarıldı.",
+            "genericError": "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin."
         }
     },
     "AdminRoles": {

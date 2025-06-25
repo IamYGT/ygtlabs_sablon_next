@@ -114,6 +114,21 @@
             "securityScan": "Daily security check completed",
             "maintenance": "Scheduled maintenance completed successfully",
             "compliance": "Monthly compliance report prepared"
+        },
+        "debug": {
+            "title": "Debug: User Permissions",
+            "user": "User",
+            "roles": "Roles",
+            "allPermissions": "All Permissions ({count})",
+            "hasPermission": "{permission} permission",
+            "permissionYes": "YES ✓",
+            "permissionNo": "NO ✗",
+            "setupSuccess": "✅ Page permissions set up successfully!",
+            "setupError": "❌ Error",
+            "connectionError": "❌ Connection error",
+            "grantAdminSuccess": "✅ Admin access granted successfully!",
+            "addPermissionSuccess": "✅ Permission {permissionName} added to role {roleName}!",
+            "pageRefresh": "Page will reload to apply changes."
         }
     },
     "AdminUsers": {
@@ -234,6 +249,22 @@
         },
         "search": {
             "placeholder": "Search by user name, email, or role..."
+        },
+        "messages": {
+            "deleteSuccess": "User deleted successfully.",
+            "deleteError": "Could not delete user.",
+            "deleteConfirmTitle": "Delete User?",
+            "deleteConfirmText": "Are you sure you want to delete this user? This action cannot be undone.",
+            "bulkDeleteSuccess": "{count} users deleted successfully.",
+            "bulkDeleteError": "Could not delete selected users.",
+            "bulkDeleteConfirmTitle": "Delete Users?",
+            "bulkDeleteConfirmText": "Are you sure you want to delete {count} selected users? This action cannot be undone.",
+            "statusUpdateSuccess": "User status updated successfully.",
+            "statusUpdateError": "Could not update user status.",
+            "roleUpdateSuccess": "User role updated successfully.",
+            "roleUpdateError": "Could not update user role.",
+            "exportSuccess": "User data successfully exported to CSV.",
+            "genericError": "An unexpected error occurred. Please try again."
         },
         "createUser": {
             "title": "Create New User",

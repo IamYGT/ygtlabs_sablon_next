@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Activity, Users, FileText, Shield, Clock, ArrowRight, BarChart3, PieChart, Calendar } from "lucide-react";
 import { useAdminAuth } from "@/lib/hooks/useAuth";
 import { type SimpleUser as AuthUser } from "@/lib";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import LanguageSwitcher from '@/components/panel/LanguageSwitcher';
 import { Link } from '@/src/i18n/navigation';
 import { Badge } from "@/components/ui/badge";
@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { StatsChart } from './components/StatsChart';
 import { DashboardSkeleton } from './components/DashboardSkeleton';
 
-type TFunction = (key: string) => string;
+type TFunction = ReturnType<typeof useTranslations<"AdminDashboard">>;
 
 // Corporate Professional dashboard cards - Banking/Finance style
 function getDashboardCards(t: TFunction): DashboardCardProps[] {
@@ -318,11 +318,13 @@ function ActivityItem({ title, description, time, type, priority }: ActivityItem
 
 // Corporate Professional welcome section component - Banking/Finance style
 function WelcomeSection({ admin, t }: { admin: AuthUser; t: TFunction }) {
-    const currentTime = new Date().toLocaleTimeString('tr-TR', {
+    const locale = useLocale();
+
+    const currentTime = new Date().toLocaleTimeString(locale, {
         hour: '2-digit',
         minute: '2-digit'
     });
-    const currentDate = new Date().toLocaleDateString('tr-TR', {
+    const currentDate = new Date().toLocaleDateString(locale, {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
@@ -405,12 +407,12 @@ function UserPermissionsDebug({ user, t }: { user: AuthUser; t: TFunction }) {
             const result = await response.json();
 
             if (response.ok) {
-                alert('✅ Page permission\'lar başarıyla setup edildi!\n\n' + result.message);
+                alert(t('debug.setupSuccess') + '\n\n' + result.message);
             } else {
-                alert('❌ Hata: ' + (result.error || 'Bilinmeyen hata'));
+                alert(t('debug.setupError') + ': ' + (result.error || 'Bilinmeyen hata'));
             }
         } catch (error) {
-            alert('❌ Bağlantı hatası: ' + error);
+            alert(t('debug.connectionError') + ': ' + error);
         } finally {
             _setIsSettingUp(false);
         }
@@ -429,12 +431,12 @@ function UserPermissionsDebug({ user, t }: { user: AuthUser; t: TFunction }) {
             const result = await response.json();
 
             if (response.ok) {
-                alert('✅ Admin erişimi başarıyla verildi!\n\n' + result.message);
+                alert(t('debug.grantAdminSuccess') + '\n\n' + result.message);
             } else {
-                alert('❌ Hata: ' + (result.error || 'Bilinmeyen hata'));
+                alert(t('debug.setupError') + ': ' + (result.error || 'Bilinmeyen hata'));
             }
         } catch (error) {
-            alert('❌ Bağlantı hatası: ' + error);
+            alert(t('debug.connectionError') + ': ' + error);
         } finally {
             _setIsSettingUp(false);
         }
@@ -455,14 +457,14 @@ function UserPermissionsDebug({ user, t }: { user: AuthUser; t: TFunction }) {
             const result = await response.json();
 
             if (response.ok) {
-                alert('✅ Seyirciadi rolüne layout.admin.access yetkisi eklendi!\n\n' + result.message);
+                alert(t('debug.addPermissionSuccess', { permissionName: 'layout.admin.access', roleName: 'seyirciadi' }) + '\n\n' + result.message);
                 // Sayfayı yenile ki yetkiler güncellensin
                 window.location.reload();
             } else {
-                alert('❌ Hata: ' + (result.error || 'Bilinmeyen hata'));
+                alert(t('debug.setupError') + ': ' + (result.error || 'Bilinmeyen hata'));
             }
         } catch (error) {
-            alert('❌ Bağlantı hatası: ' + error);
+            alert(t('debug.connectionError') + ': ' + error);
         } finally {
             _setIsSettingUp(false);
         }
@@ -483,14 +485,14 @@ function UserPermissionsDebug({ user, t }: { user: AuthUser; t: TFunction }) {
             const result = await response.json();
 
             if (response.ok) {
-                alert('✅ Seyirciadi rolüne users.manage yetkisi eklendi!\n\n' + result.message);
+                alert(t('debug.addPermissionSuccess', { permissionName: 'users.manage', roleName: 'seyirciadi' }) + '\n\n' + result.message);
                 // Sayfayı yenile ki yetkiler güncellensin
                 window.location.reload();
             } else {
-                alert('❌ Hata: ' + (result.error || 'Bilinmeyen hata'));
+                alert(t('debug.setupError') + ': ' + (result.error || 'Bilinmeyen hata'));
             }
         } catch (error) {
-            alert('❌ Bağlantı hatası: ' + error);
+            alert(t('debug.connectionError') + ': ' + error);
         } finally {
             _setIsSettingUp(false);
         }
@@ -498,16 +500,16 @@ function UserPermissionsDebug({ user, t }: { user: AuthUser; t: TFunction }) {
 
     return (
         <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
-            <h3 className="font-bold text-sm mb-2">{t('debugUserPermissions')}</h3>
+            <h3 className="font-bold text-sm mb-2">{t('debug.title')}</h3>
             <p className="text-xs text-gray-600 dark:text-gray-400">
-                Kullanıcı: {user.email}
+                {t('debug.user')}: {user.email}
             </p>
             <p className="text-xs text-yellow-700 dark:text-yellow-300">
-                Roller: {user.userRoles.join(", ")}
+                {t('debug.roles')}: {user.userRoles.join(", ")}
             </p>
             <details className="mt-2">
                 <summary className="text-xs cursor-pointer text-blue-600 dark:text-blue-400">
-                    Tüm Yetkiler ({user.permissions.length})
+                    {t('debug.allPermissions', { count: user.permissions.length })}
                 </summary>
                 <div className="mt-1 text-xs space-y-1">
                     {user.permissions.map((perm) => (
@@ -518,7 +520,7 @@ function UserPermissionsDebug({ user, t }: { user: AuthUser; t: TFunction }) {
                 </div>
             </details>
             <p className="text-xs mt-2 text-red-600 dark:text-red-400">
-                roles.edit yetkisi: {user.permissions.includes("roles.edit") ? "VAR ✓" : "YOK ✗"}
+                {t('debug.hasPermission', { permission: 'roles.edit' })}: {user.permissions.includes("roles.edit") ? t('debug.permissionYes') : t('debug.permissionNo')}
             </p>
         </div>
     );

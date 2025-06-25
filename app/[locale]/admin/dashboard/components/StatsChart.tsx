@@ -2,23 +2,33 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 
 // Corporate Professional chart component - Banking/Finance style
 export function StatsChart() {
     const t = useTranslations('AdminDashboard');
+    const locale = useLocale();
 
     const chartData = [
-        { month: t('chart.months.jan'), revenue: 2.1, transactions: 1.8 },
-        { month: t('chart.months.feb'), revenue: 2.4, transactions: 2.1 },
-        { month: t('chart.months.mar'), revenue: 2.8, transactions: 2.5 },
-        { month: t('chart.months.apr'), revenue: 2.6, transactions: 2.3 },
-        { month: t('chart.months.may'), revenue: 3.2, transactions: 2.9 },
-        { month: t('chart.months.jun'), revenue: 3.8, transactions: 3.4 },
+        { month: t('chart.months.jan'), revenue: 2100000, transactions: 1800000 },
+        { month: t('chart.months.feb'), revenue: 2400000, transactions: 2100000 },
+        { month: t('chart.months.mar'), revenue: 2800000, transactions: 2500000 },
+        { month: t('chart.months.apr'), revenue: 2600000, transactions: 2300000 },
+        { month: t('chart.months.may'), revenue: 3200000, transactions: 2900000 },
+        { month: t('chart.months.jun'), revenue: 3800000, transactions: 3400000 },
     ];
 
     const maxRevenue = Math.max(...chartData.map(d => d.revenue));
     const maxTransactions = Math.max(...chartData.map(d => d.transactions));
+
+    const formatCurrency = (value: number) => {
+        return new Intl.NumberFormat(locale, {
+            style: 'currency',
+            currency: 'TRY', // Bu değer dinamik bir kaynaktan gelebilir
+            notation: 'compact',
+            maximumFractionDigits: 1
+        }).format(value);
+    };
 
     return (
         <Card className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-2xl">
@@ -61,8 +71,8 @@ export function StatsChart() {
                                         {data.month}
                                     </span>
                                     <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-slate-400">
-                                        <span>₺{data.revenue}M {t('chart.revenueLabel')}</span>
-                                        <span>₺{data.transactions}M {t('chart.transactionLabel')}</span>
+                                        <span>{formatCurrency(data.revenue)} {t('chart.revenueLabel')}</span>
+                                        <span>{formatCurrency(data.transactions)} {t('chart.transactionLabel')}</span>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
@@ -95,7 +105,7 @@ export function StatsChart() {
                     <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200 dark:border-slate-700/60">
                         <div className="text-center">
                             <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                                ₺{chartData[chartData.length - 1].revenue}M
+                                {formatCurrency(chartData[chartData.length - 1].revenue)}
                             </div>
                             <div className="text-xs text-gray-500 dark:text-slate-400">
                                 {t('chart.thisMonthRevenue')}
@@ -103,7 +113,7 @@ export function StatsChart() {
                         </div>
                         <div className="text-center">
                             <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                                ₺{chartData[chartData.length - 1].transactions}M
+                                {formatCurrency(chartData[chartData.length - 1].transactions)}
                             </div>
                             <div className="text-xs text-gray-500 dark:text-slate-400">
                                 {t('chart.thisMonthTransactions')}
