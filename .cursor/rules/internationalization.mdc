@@ -1,0 +1,297 @@
+---
+description: internationalization
+globs: 
+alwaysApply: false
+---
+# Internationalization (i18n) System
+
+Bu proje next-intl kullanarak çok dilli destek sağlar. İngilizce ve Türkçe dil desteği ile locale-aware routing ve pathname translations içerir.
+
+## i18n Configuration
+
+### Routing Configuration ([src/i18n/routing.ts](mdc:src/i18n/routing.ts))
+- Desteklenen diller: `["en", "tr"]`
+- Varsayılan dil: `"en"` (/ dizini English)
+- Locale prefix: "as-needed" mode
+- Pathname translations for Turkish URLs
+
+```typescript
+export const routing = defineRouting({
+  locales: ["en", "tr"],
+  defaultLocale: "en",
+  localePrefix: {
+    mode: "as-needed",
+    prefixes: {
+      tr: "/tr",
+    },
+  },
+  pathnames: {
+    "/landing/contact": {
+      en: "/contact",
+      tr: "/iletisim",
+    },
+    // ...
+  },
+});
+```
+
+### Request Configuration
+
+#### Main App ([src/i18n/request.ts](mdc:src/i18n/request.ts))
+- Genel uygulama için message loading
+- [messages/en.json](mdc:messages/en.json) ve [messages/tr.json](mdc:messages/tr.json)
+
+#### Admin Panel ([src/i18n/admin-request.ts](mdc:src/i18n/admin-request.ts))
+- Admin panel için özel message loading
+- [messages/admin/admin_en.json](mdc:messages/admin/admin_en.json) ve [messages/admin/admin_tr.json](mdc:messages/admin/admin_tr.json)
+
+### Navigation Integration ([src/i18n/navigation.ts](mdc:src/i18n/navigation.ts))
+```typescript
+export const { Link, redirect, usePathname, useRouter, getPathname } =
+  createNavigation(routing);
+```
+
+## Message Organization
+
+### Directory Structure
+```
+messages/
+├── en.json                 # Ana uygulama - İngilizce
+├── tr.json                 # Ana uygulama - Türkçe
+└── admin/
+    ├── admin_en.json       # Admin panel - İngilizce
+    └── admin_tr.json       # Admin panel - Türkçe
+```
+
+### Message Structure
+```json
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  }
+}
+```
+
+## Middleware Integration ([middleware.ts](mdc:middleware.ts))
+
+### Locale Detection
+```typescript
+const handleI18nRouting = createMiddleware(routing);
+
+export async function middleware(request: NextRequest) {
+  // Skip static files and API routes
+  if (pathname.startsWith("/_next") || pathname.startsWith("/api")) {
+    return NextResponse.next();
+  }
+
+  // Handle i18n routing
+  const i18nResponse = handleI18nRouting(request);
+  if (i18nResponse.status === 307 || i18nResponse.status === 302) {
+    return i18nResponse;
+  }
+
+  // Extract locale and path
+  const segments = pathname.split("/").filter(Boolean);
+  const hasLocale = segments.length > 0 && routing.locales.includes(segments[0]);
+  const locale = hasLocale ? segments[0] : "en";
+  const path = hasLocale ? "/" + segments.slice(1).join("/") || "/" : pathname;
+
+  // Continue with auth checks...
+}
+```
+
+## Usage Patterns
+
+### 1. Server Components
+```typescript
+import { getTranslations } from 'next-intl/server';
+
+export default async function Page() {
+  const t = await getTranslations('HomePage');
+  
+  return (
+    <div>
+      <h1>{t('title')}</h1>
+      <p>{t('description')}</p>
+    </div>
+  );
+}
+```
+
+### 2. Client Components
+```typescript
+import { useTranslations } from 'next-intl';
+
+export default function ClientComponent() {
+  const t = useTranslations('Navigation');
+  
+  return (
+    <nav>
+      <Link href="/">{t('home')}</Link>
+      <Link href="/about">{t('about')}</Link>
+    </nav>
+  );
+}
+```
+
+### 3. Navigation with Locales
+```typescript
+import { Link, useRouter } from '@/src/i18n/navigation';
+
+function Navigation() {
+  const router = useRouter();
+  
+  const handleNavigation = () => {
+    router.push('/contact'); // Automatically uses current locale
+  };
+  
+  return (
+    <div>
+      <Link href="/contact">Contact</Link> {/* /contact or /tr/iletisim */}
+      <button onClick={handleNavigation}>Go to Contact</button>
+    </div>
+  );
+}
+```
+
+## Pathname Translations
+
+### Configured Translations ([src/i18n/routing.ts](mdc:src/i18n/routing.ts))
+```typescript
+pathnames: {
+  // Landing pages
+  "/landing/corporate": {
+    en: "/corporate",
+    tr: "/kurumsal",
+  },
+  "/landing/services": {
+    en: "/services",
+    tr: "/hizmetler",
+  },
+  "/landing/contact": {
+    en: "/contact",
+    tr: "/iletisim",
+  },
+  
+  // Auth pages
+  "/auth/login": {
+    en: "/login",
+    tr: "/giris",
+  },
+  "/auth/register": {
+    en: "/register",
+    tr: "/kayit-ol",
+  },
+  
+  // Admin pages
+  "/admin/users": {
+    en: "/admin/users",
+    tr: "/admin/kullanicilar",
+  },
+  "/admin/roles": {
+    en: "/admin/roles",
+    tr: "/admin/roller",
+  }
+}
+```
+
+## Best Practices
+
+### 1. Message Keys
+- Use nested structure for organization
+- Use descriptive key names
+- Group related messages together
+- Keep keys consistent across languages
+
+### 2. Component Translation
+```typescript
+// Good: Specific translation namespace
+const t = useTranslations('UserManagement');
+
+// Bad: Generic namespace
+const t = useTranslations();
+```
+
+### 3. Dynamic Content
+```typescript
+// With variables
+const t = useTranslations('Messages');
+const message = t('welcome', { name: user.name });
+
+// With pluralization
+const count = 5;
+const message = t('itemCount', { count });
+```
+
+### 4. Fallback Handling
+```typescript
+// With fallback
+const t = useTranslations('OptionalSection');
+const title = t('title', { fallback: 'Default Title' });
+```
+
+### 5. Type Safety
+```typescript
+// Define message keys for type safety
+type MessageKeys = 'nav.home' | 'nav.about' | 'auth.login';
+
+const t = useTranslations() as (key: MessageKeys) => string;
+```
+
+## URL Structure Examples
+
+### English (Default)
+- `/` - Home page
+- `/contact` - Contact page
+- `/admin/users` - Admin users page
+- `/login` - Login page
+
+### Turkish
+- `/tr` - Home page
+- `/tr/iletisim` - Contact page
+- `/tr/admin/kullanicilar` - Admin users page
+- `/tr/giris` - Login page
+
+## Configuration Files
+
+### Next.js Config
+```typescript
+// next.config.ts
+import createNextIntlPlugin from 'next-intl/plugin';
+
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
+
+export default withNextIntl({
+  // Next.js config
+});
+```
+
+### TypeScript Support
+```typescript
+// types for translations
+declare global {
+  interface IntlMessages {
+    Navigation: {
+      home: string;
+      about: string;
+      contact: string;
+    };
+    // ...
+  }
+}
+```
+
+Bu sistem, SEO-friendly URL'ler, otomatik locale detection ve type-safe translations sağlar.
+
