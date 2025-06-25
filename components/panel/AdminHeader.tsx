@@ -20,7 +20,7 @@ import { ThemeToggle } from "@/components/panel/ThemeToggle";
 import { AdminStatusWidget } from "@/components/panel/AdminStatusWidget";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 interface AdminHeaderProps {
     title?: string;
@@ -41,6 +41,7 @@ export function AdminHeader({ title = "Dashboard", subtitle, setOpen }: AdminHea
     const admin = useAdminAuth();
     const { setOpen: setSidebarOpen } = useSidebar();
     const t = useTranslations('AdminHeader');
+    const locale = useLocale();
 
     // setOpen prop'u varsa onu kullan, yoksa sidebar hook'undan al
     const handleMenuToggle = setOpen || setSidebarOpen;
@@ -54,29 +55,29 @@ export function AdminHeader({ title = "Dashboard", subtitle, setOpen }: AdminHea
         setNotifications([
             {
                 id: '1',
-                title: 'Sistem hazır',
-                message: 'Proje başarıyla çalışıyor',
-                time: new Date().toLocaleString('tr-TR'),
+                title: t('demoNotification.title'),
+                message: t('demoNotification.message'),
+                time: new Date().toLocaleString(locale),
                 type: 'success',
                 read: false
             }
         ]);
         setLoading(false);
-    }, [admin]);
+    }, [admin, t, locale]);
 
     // Okunmamış bildirim sayısı
     const unreadCount = notifications.filter(n => !n.read).length;
 
     // Kullanıcının yetkilerine göre rol açıklaması
     const getUserRoleDescription = (user: { permissions?: string[] } | null) => {
-        if (!user?.permissions) return "Kullanıcı";
+        if (!user?.permissions) return t('userRoles.user');
 
         if (user.permissions.includes("layout.admin.access")) {
-            return "Admin";
+            return t('userRoles.admin');
         } else if (user.permissions.includes("dashboard.view")) {
-            return "Kullanıcı";
+            return t('userRoles.user');
         } else {
-            return "Misafir";
+            return t('userRoles.guest');
         }
     };
 
@@ -141,7 +142,7 @@ export function AdminHeader({ title = "Dashboard", subtitle, setOpen }: AdminHea
                     <form onSubmit={handleSearch} className="relative w-full group">
                         <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground/60 transition-all duration-300 group-focus-within:text-blue-500" />
                         <Input
-                            placeholder="Kullanıcı, log veya ayar ara..."
+                            placeholder={t('searchPlaceholder')}
                             className="pl-12 pr-4 h-10 bg-background/50 border-border/60 rounded-xl transition-all duration-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 focus:bg-background hover:bg-background/80 placeholder:text-muted-foreground/60"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
@@ -200,7 +201,7 @@ export function AdminHeader({ title = "Dashboard", subtitle, setOpen }: AdminHea
                                 <span>{t('notifications')}</span>
                                 {unreadCount > 0 && (
                                     <Badge variant="secondary" className="text-xs">
-                                        {unreadCount} yeni
+                                        {t('unreadBadge', { count: unreadCount })}
                                     </Badge>
                                 )}
                             </DropdownMenuLabel>
@@ -227,7 +228,7 @@ export function AdminHeader({ title = "Dashboard", subtitle, setOpen }: AdminHea
                                                     )}
                                                 </div>
                                                 <Button variant="ghost" size="sm" className="text-xs text-muted-foreground hover:text-foreground h-6 px-2">
-                                                    {t('viewAllNotifications')}
+                                                    {t('viewNotification')}
                                                 </Button>
                                                 <p className="text-xs text-muted-foreground">
                                                     {notification.time}
@@ -237,17 +238,17 @@ export function AdminHeader({ title = "Dashboard", subtitle, setOpen }: AdminHea
                                     </DropdownMenuItem>
                                 ))
                             )}
-                            {notifications.length > 10 && (
+                            {notifications.length > 0 && (
                                 <>
                                     <DropdownMenuSeparator />
-                                    <DropdownMenuItem className="text-center text-sm text-blue-600 hover:text-blue-700 transition-colors duration-200">
-                                        <Button variant="ghost" size="sm" className="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 h-6 px-2">
+                                    <DropdownMenuItem className="text-center justify-center">
+                                        <Button variant="link" size="sm" className="w-full text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 h-6 px-2">
                                             {t('viewAllNotifications')}
                                         </Button>
                                     </DropdownMenuItem>
                                     <DropdownMenuSeparator />
-                                    <DropdownMenuItem className="text-center text-sm text-blue-600 hover:text-blue-700 transition-colors duration-200">
-                                        <Button variant="ghost" size="sm" className="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 h-6 px-2">
+                                    <DropdownMenuItem className="text-center justify-center">
+                                        <Button variant="link" size="sm" className="w-full text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 h-6 px-2">
                                             {t('markAllAsRead')}
                                         </Button>
                                     </DropdownMenuItem>
@@ -294,7 +295,7 @@ export function AdminHeader({ title = "Dashboard", subtitle, setOpen }: AdminHea
                             <DropdownMenuLabel className="font-normal">
                                 <div className="flex flex-col space-y-1">
                                     <p className="text-sm font-medium leading-none">
-                                        {admin?.name || "Admin"}
+                                        {admin?.name || t('defaultUserName')}
                                     </p>
                                     <p className="text-xs leading-none text-muted-foreground">
                                         {admin?.email || "admin@example.com"}
@@ -308,8 +309,8 @@ export function AdminHeader({ title = "Dashboard", subtitle, setOpen }: AdminHea
                             <DropdownMenuItem
                                 className="transition-colors duration-200 cursor-pointer"
                                 onClick={() => {
-                                    const locale = window.location.pathname.split('/')[1];
-                                    window.location.href = `/${locale}/admin/profile`;
+                                    const currentLocale = window.location.pathname.split('/')[1];
+                                    window.location.href = `/${currentLocale}/admin/profile`;
                                 }}
                             >
                                 <User className="mr-2 h-4 w-4" />

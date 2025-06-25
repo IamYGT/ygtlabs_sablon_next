@@ -876,6 +876,7 @@
     },
     "AdminHeader": {
         "searchPlaceholder": "Search users, logs or settings...",
+        "loading": "Loading...",
         "notifications": "Notifications",
         "noNotifications": "No new notifications",
         "markAllAsRead": "Mark all as read",
@@ -883,7 +884,19 @@
         "adminPanel": "Admin Panel",
         "profile": "Profile",
         "settings": "Settings",
-        "logout": "Logout"
+        "logout": "Logout",
+        "userRoles": {
+            "admin": "Administrator",
+            "user": "User",
+            "guest": "Guest"
+        },
+        "demoNotification": {
+            "title": "System Ready",
+            "message": "The project is running successfully."
+        },
+        "unreadBadge": "{count} new",
+        "defaultUserName": "Admin",
+        "viewNotification": "View Notification"
     },
     "ApiMessages": {
         "common": {
