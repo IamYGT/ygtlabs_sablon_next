@@ -20,6 +20,7 @@ import {
     FormLabel,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useTranslations } from 'next-intl';
 
 import { Checkbox } from '@/components/ui/checkbox';
 import { useForm } from 'react-hook-form';
@@ -47,6 +48,7 @@ interface UserFormData {
 }
 
 export default function AddUserDialog({ availableRoles, onUserAdded }: AddUserDialogProps) {
+    const t = useTranslations('AdminUsers.addUserDialog');
     const [open, setOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -63,19 +65,19 @@ export default function AddUserDialog({ availableRoles, onUserAdded }: AddUserDi
     const onSubmit = async (data: UserFormData) => {
         // Manual validation
         if (!data.name || data.name.length < 2) {
-            toast.error('Ad en az 2 karakter olmalıdır');
+            toast.error(t('validation.nameMinLength'));
             return;
         }
         if (!data.email || !data.email.includes('@')) {
-            toast.error('Geçerli bir e-posta adresi giriniz');
+            toast.error(t('validation.emailInvalid'));
             return;
         }
         if (!data.password || data.password.length < 6) {
-            toast.error('Şifre en az 6 karakter olmalıdır');
+            toast.error(t('validation.passwordMinLength'));
             return;
         }
         if (!data.roleIds || data.roleIds.length === 0) {
-            toast.error('En az bir rol seçmelisiniz');
+            toast.error(t('validation.roleRequired'));
             return;
         }
 
@@ -88,16 +90,16 @@ export default function AddUserDialog({ availableRoles, onUserAdded }: AddUserDi
             });
 
             if (response.ok) {
-                toast.success('Kullanıcı başarıyla oluşturuldu');
+                toast.success(t('notifications.createSuccess'));
                 form.reset();
                 setOpen(false);
                 onUserAdded();
             } else {
                 const error = await response.json();
-                toast.error(error.message || 'Kullanıcı oluşturulurken hata oluştu');
+                toast.error(error.message || t('notifications.createError'));
             }
         } catch (_error) {
-            toast.error('Bir hata oluştu');
+            toast.error(t('notifications.unexpectedError'));
         } finally {
             setIsLoading(false);
         }
@@ -117,14 +119,14 @@ export default function AddUserDialog({ availableRoles, onUserAdded }: AddUserDi
             <DialogTrigger asChild>
                 <Button>
                     <UserPlus className="mr-2 h-4 w-4" />
-                    Yeni Kullanıcı Ekle
+                    {t('title')}
                 </Button>
             </DialogTrigger>
             <DialogContent className="max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Yeni Kullanıcı Ekle</DialogTitle>
+                    <DialogTitle>{t('title')}</DialogTitle>
                     <DialogDescription>
-                        Sisteme yeni bir kullanıcı ekleyin ve rollerini atayın.
+                        {t('description')}
                     </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
@@ -134,9 +136,9 @@ export default function AddUserDialog({ availableRoles, onUserAdded }: AddUserDi
                             name="name"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Ad Soyad</FormLabel>
+                                    <FormLabel>{t('form.nameLabel')}</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Kullanıcının adını giriniz" {...field} />
+                                        <Input placeholder={t('form.namePlaceholder')} {...field} />
                                     </FormControl>
                                 </FormItem>
                             )}
@@ -147,11 +149,11 @@ export default function AddUserDialog({ availableRoles, onUserAdded }: AddUserDi
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>E-posta</FormLabel>
+                                    <FormLabel>{t('form.emailLabel')}</FormLabel>
                                     <FormControl>
                                         <Input
                                             type="email"
-                                            placeholder="kullanici@example.com"
+                                            placeholder={t('form.emailPlaceholder')}
                                             {...field}
                                         />
                                     </FormControl>
@@ -164,11 +166,11 @@ export default function AddUserDialog({ availableRoles, onUserAdded }: AddUserDi
                             name="password"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Şifre</FormLabel>
+                                    <FormLabel>{t('form.passwordLabel')}</FormLabel>
                                     <FormControl>
                                         <Input
                                             type="password"
-                                            placeholder="En az 6 karakter"
+                                            placeholder={t('form.passwordPlaceholder')}
                                             {...field}
                                         />
                                     </FormControl>
@@ -181,7 +183,7 @@ export default function AddUserDialog({ availableRoles, onUserAdded }: AddUserDi
                             name="roleIds"
                             render={() => (
                                 <FormItem>
-                                    <FormLabel>Roller</FormLabel>
+                                    <FormLabel>{t('form.rolesLabel')}</FormLabel>
                                     <div className="space-y-3 max-h-40 overflow-y-auto">
                                         {availableRoles.map((role) => (
                                             <div key={role.id} className="flex items-center space-x-2">
@@ -215,9 +217,9 @@ export default function AddUserDialog({ availableRoles, onUserAdded }: AddUserDi
                             render={({ field }) => (
                                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3">
                                     <div className="space-y-0.5">
-                                        <FormLabel>Aktif Kullanıcı</FormLabel>
+                                        <FormLabel>{t('form.activeUserLabel')}</FormLabel>
                                         <div className="text-sm text-muted-foreground">
-                                            Kullanıcının sisteme giriş yapabilmesi
+                                            {t('form.activeUserDescription')}
                                         </div>
                                     </div>
                                     <FormControl>
@@ -237,10 +239,10 @@ export default function AddUserDialog({ availableRoles, onUserAdded }: AddUserDi
                                 onClick={() => setOpen(false)}
                                 disabled={isLoading}
                             >
-                                İptal
+                                {t('buttons.cancel')}
                             </Button>
                             <Button type="submit" disabled={isLoading}>
-                                {isLoading ? 'Oluşturuluyor...' : 'Kullanıcı Oluştur'}
+                                {isLoading ? t('buttons.creating') : t('buttons.create')}
                             </Button>
                         </DialogFooter>
                     </form>

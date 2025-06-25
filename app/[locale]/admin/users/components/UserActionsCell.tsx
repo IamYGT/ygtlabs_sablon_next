@@ -33,6 +33,9 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { toast } from 'react-hot-toast';
+import { useTranslations, useLocale } from 'next-intl';
+import { format } from 'date-fns';
+import { tr, enUS } from 'date-fns/locale';
 
 interface UserWithRoles {
     id: string;
@@ -70,6 +73,10 @@ interface UserActionsCellProps {
 }
 
 export default function UserActionsCell({ user, availableRoles, onUserUpdate }: UserActionsCellProps) {
+    const t = useTranslations('AdminUsers.actionsCell');
+    const locale = useLocale();
+    const dateLocale = locale === 'tr' ? tr : enUS;
+
     const [showDetails, setShowDetails] = useState(false);
     const [showRoleManagement, setShowRoleManagement] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -90,15 +97,15 @@ export default function UserActionsCell({ user, availableRoles, onUserUpdate }: 
             });
 
             if (response.ok) {
-                toast.success('Rol başarıyla atandı');
+                toast.success(t('roleAssignSuccess'));
                 setSelectedRole('');
                 setShowRoleManagement(false);
                 onUserUpdate();
             } else {
-                toast.error('Rol atanırken hata oluştu');
+                toast.error(t('roleAssignError'));
             }
         } catch (_error) {
-            toast.error('Bir hata oluştu');
+            toast.error(t('errorOccurred'));
         } finally {
             setIsLoading(false);
         }
@@ -114,13 +121,13 @@ export default function UserActionsCell({ user, availableRoles, onUserUpdate }: 
             });
 
             if (response.ok) {
-                toast.success('Rol başarıyla kaldırıldı');
+                toast.success(t('roleRemoveSuccess'));
                 onUserUpdate();
             } else {
-                toast.error('Rol kaldırılırken hata oluştu');
+                toast.error(t('roleRemoveError'));
             }
         } catch (_error) {
-            toast.error('Bir hata oluştu');
+            toast.error(t('errorOccurred'));
         } finally {
             setIsLoading(false);
         }
@@ -139,19 +146,18 @@ export default function UserActionsCell({ user, availableRoles, onUserUpdate }: 
             });
 
             if (response.ok) {
-                toast.success(user.isActive ? 'Kullanıcı pasifleştirildi' : 'Kullanıcı aktifleştirildi');
+                toast.success(user.isActive ? t('userDeactivated') : t('userActivated'));
                 onUserUpdate();
             } else {
-                toast.error('Kullanıcı durumu güncellenirken hata oluştu');
+                toast.error(t('statusUpdateError'));
             }
         } catch (_error) {
-            toast.error('Bir hata oluştu');
+            toast.error(t('errorOccurred'));
         } finally {
             setIsLoading(false);
         }
     };
 
-    // Kullanıcının sahip olmadığı rolleri filtrele
     const assignedRoleIds = user.roleAssignments.map(ra => ra.role.id);
     const unassignedRoles = availableRoles.filter(role => !assignedRoleIds.includes(role.id));
 
@@ -166,71 +172,68 @@ export default function UserActionsCell({ user, availableRoles, onUserUpdate }: 
                 <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={() => setShowDetails(true)}>
                         <Eye className="mr-2 h-4 w-4" />
-                        Detayları Görüntüle
+                        {t('viewDetails')}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setShowRoleManagement(true)}>
                         <Shield className="mr-2 h-4 w-4" />
-                        Rol Yönetimi
+                        {t('roleManagement')}
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleToggleUserStatus}>
                         {user.isActive ? (
                             <>
                                 <UserMinus className="mr-2 h-4 w-4" />
-                                Kullanıcıyı Pasifleştir
+                                {t('deactivateUser')}
                             </>
                         ) : (
                             <>
                                 <UserPlus className="mr-2 h-4 w-4" />
-                                Kullanıcıyı Aktifleştir
+                                {t('activateUser')}
                             </>
                         )}
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Kullanıcı Detayları Dialog */}
             <Dialog open={showDetails} onOpenChange={setShowDetails}>
                 <DialogContent className="max-w-2xl">
                     <DialogHeader>
-                        <DialogTitle>Kullanıcı Detayları</DialogTitle>
+                        <DialogTitle>{t('userDetailsTitle')}</DialogTitle>
                         <DialogDescription>
-                            {user.name || 'İsimsiz Kullanıcı'} ({user.email})
+                            {user.name || t('unnamedUser')} ({user.email})
                         </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-6">
-                        {/* Temel Bilgiler */}
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="text-sm font-medium">Ad</label>
+                                <label className="text-sm font-medium">{t('name')}</label>
                                 <p className="text-sm text-muted-foreground">
-                                    {user.name || 'Belirtilmemiş'}
+                                    {user.name || t('notSpecified')}
                                 </p>
                             </div>
                             <div>
-                                <label className="text-sm font-medium">E-posta</label>
+                                <label className="text-sm font-medium">{t('email')}</label>
                                 <p className="text-sm text-muted-foreground">{user.email}</p>
                             </div>
                             <div>
-                                <label className="text-sm font-medium">Kayıt Tarihi</label>
+                                <label className="text-sm font-medium">{t('registrationDate')}</label>
                                 <p className="text-sm text-muted-foreground">
-                                    {new Date(user.createdAt).toLocaleDateString('tr-TR')}
+                                    {format(new Date(user.createdAt), 'PPP', { locale: dateLocale })}
                                 </p>
                             </div>
                             <div>
-                                <label className="text-sm font-medium">Son Giriş</label>
+                                <label className="text-sm font-medium">{t('lastLogin')}</label>
                                 <p className="text-sm text-muted-foreground">
                                     {user.lastLoginAt
-                                        ? new Date(user.lastLoginAt).toLocaleDateString('tr-TR')
-                                        : 'Hiç giriş yapmamış'
+                                        ? format(new Date(user.lastLoginAt), 'PPP p', { locale: dateLocale })
+                                        : t('neverLoggedIn')
                                     }
                                 </p>
                             </div>
                         </div>
 
-                        {/* Roller */}
                         <div>
-                            <label className="text-sm font-medium">Atanmış Roller</label>
+                            <label className="text-sm font-medium">{t('assignedRoles')}</label>
                             <div className="flex flex-wrap gap-2 mt-2">
                                 {user.roleAssignments.length > 0 ? (
                                     user.roleAssignments.map((assignment) => (
@@ -245,91 +248,61 @@ export default function UserActionsCell({ user, availableRoles, onUserUpdate }: 
                                         </Badge>
                                     ))
                                 ) : (
-                                    <p className="text-sm text-muted-foreground">Hiç rol atanmamış</p>
+                                    <p className="text-sm text-muted-foreground">{t('noRolesAssigned')}</p>
                                 )}
-                            </div>
-                        </div>
-
-                        {/* Durum */}
-                        <div>
-                            <label className="text-sm font-medium">Hesap Durumu</label>
-                            <div className="mt-2">
-                                <Badge variant={user.isActive ? "default" : "destructive"}>
-                                    {user.isActive ? 'Aktif' : 'Pasif'}
-                                </Badge>
                             </div>
                         </div>
                     </div>
                 </DialogContent>
             </Dialog>
 
-            {/* Rol Yönetimi Dialog */}
             <Dialog open={showRoleManagement} onOpenChange={setShowRoleManagement}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Rol Yönetimi</DialogTitle>
-                        <DialogDescription>
-                            {user.name || user.email} için rol atama/kaldırma işlemleri
-                        </DialogDescription>
+                        <DialogTitle>{t('roleManagementTitle')}</DialogTitle>
+                        <DialogDescription>{t('roleManagementDesc', { userName: user.name || t('unnamedUser') })}</DialogDescription>
                     </DialogHeader>
-                    <div className="space-y-6">
-                        {/* Mevcut Roller */}
+                    <div className="space-y-4">
                         <div>
-                            <label className="text-sm font-medium">Mevcut Roller</label>
-                            <div className="space-y-2 mt-2">
-                                {user.roleAssignments.length > 0 ? (
-                                    user.roleAssignments.map((assignment) => (
-                                        <div key={assignment.id} className="flex items-center justify-between p-2 border rounded-lg">
-                                            <Badge
-                                                style={{
-                                                    backgroundColor: assignment.role.color || '#6366f1',
-                                                    color: 'white',
-                                                }}
-                                            >
-                                                {assignment.role.displayName}
-                                            </Badge>
-                                            <Button
-                                                variant="ghost"
-                                                size="sm"
-                                                onClick={() => handleRemoveRole(assignment.id)}
-                                                disabled={isLoading}
-                                            >
-                                                <Trash2 className="h-4 w-4" />
-                                            </Button>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <p className="text-sm text-muted-foreground">Hiç rol atanmamış</p>
-                                )}
+                            <h4 className="font-semibold">{t('assignedRoles')}</h4>
+                            {user.roleAssignments.length > 0 ? (
+                                user.roleAssignments.map((assignment) => (
+                                    <div key={assignment.id} className="flex items-center justify-between p-2 my-1 bg-gray-100 dark:bg-gray-800 rounded">
+                                        <span>{assignment.role.displayName}</span>
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={() => handleRemoveRole(assignment.id)}
+                                            disabled={isLoading}
+                                        >
+                                            <Trash2 className="h-4 w-4 text-red-500" />
+                                        </Button>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="text-sm text-muted-foreground">{t('noRolesAssigned')}</p>
+                            )}
+                        </div>
+                        <div>
+                            <h4 className="font-semibold">{t('assignNewRole')}</h4>
+                            <div className="flex gap-2 mt-2">
+                                <Select onValueChange={setSelectedRole} value={selectedRole}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder={t('selectRolePlaceholder')} />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {unassignedRoles.map((role) => (
+                                            <SelectItem key={role.id} value={role.id}>
+                                                {role.displayName}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                <Button onClick={handleAssignRole} disabled={isLoading || !selectedRole}>
+                                    {t('assign')}
+                                </Button>
                             </div>
                         </div>
-
-                        {/* Yeni Rol Atama */}
-                        {unassignedRoles.length > 0 && (
-                            <div>
-                                <label className="text-sm font-medium">Yeni Rol Ata</label>
-                                <div className="flex gap-2 mt-2">
-                                    <Select value={selectedRole} onValueChange={setSelectedRole}>
-                                        <SelectTrigger className="flex-1">
-                                            <SelectValue placeholder="Rol seçin" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {unassignedRoles.map((role) => (
-                                                <SelectItem key={role.id} value={role.id}>
-                                                    {role.displayName}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                    <Button
-                                        onClick={handleAssignRole}
-                                        disabled={!selectedRole || isLoading}
-                                    >
-                                        Ata
-                                    </Button>
-                                </div>
-                            </div>
-                        )}
                     </div>
                 </DialogContent>
             </Dialog>

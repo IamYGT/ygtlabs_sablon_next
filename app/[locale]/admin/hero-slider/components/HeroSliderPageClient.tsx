@@ -142,6 +142,7 @@ function DraggableRow({
     onImagePreview,
     locale
 }: DraggableRowProps) {
+    const t = useTranslations('HeroSlider');
     const [{ isDragging }, drag, preview] = useDrag({
         type: ItemTypes.SLIDER,
         item: { index, id: slider.id },
@@ -282,10 +283,10 @@ function DraggableRow({
                         {slider.isActive ? (
                             <span className="flex items-center gap-1">
                                 <Zap className="h-3 w-3" />
-                                Aktif
+                                {t('status.active')}
                             </span>
                         ) : (
-                            "Pasif"
+                            t('status.inactive')
                         )}
                     </Badge>
                 </div>
@@ -297,7 +298,7 @@ function DraggableRow({
                         <div className="bg-blue-100 dark:bg-blue-900/30 rounded-full p-1">
                             <User className="h-2.5 w-2.5 text-blue-600 dark:text-blue-400" />
                         </div>
-                        <span className="font-medium">{slider.createdBy?.name || "Sistem"}</span>
+                        <span className="font-medium">{slider.createdBy?.name || t('system')}</span>
                     </div>
                     <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-500">
                         <div className="bg-gray-100 dark:bg-gray-800 rounded-full p-1">
@@ -318,7 +319,7 @@ function DraggableRow({
                     <DropdownMenuContent align="end" className="w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border border-gray-200 dark:border-gray-700 shadow-xl">
                         <DropdownMenuItem onClick={() => onEdit(slider)} className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 dark:hover:from-blue-950/30 dark:hover:to-indigo-950/30">
                             <Edit className="h-4 w-4 mr-2 text-blue-600" />
-                            <span className="font-medium">Düzenle</span>
+                            <span className="font-medium">{t('actions.edit')}</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             onClick={() => onToggleActive(slider.id, slider.isActive)}
@@ -327,12 +328,12 @@ function DraggableRow({
                             {slider.isActive ? (
                                 <>
                                     <EyeOff className="h-4 w-4 mr-2 text-amber-600" />
-                                    <span className="font-medium">Devre Dışı Bırak</span>
+                                    <span className="font-medium">{t('actions.deactivate')}</span>
                                 </>
                             ) : (
                                 <>
                                     <Eye className="h-4 w-4 mr-2 text-green-600" />
-                                    <span className="font-medium">Aktif Et</span>
+                                    <span className="font-medium">{t('actions.activate')}</span>
                                 </>
                             )}
                         </DropdownMenuItem>
@@ -341,7 +342,7 @@ function DraggableRow({
                             className="text-red-600 focus:text-red-600 dark:text-red-400 hover:bg-gradient-to-r hover:from-red-50 hover:to-rose-50 dark:hover:from-red-950/30 dark:hover:to-rose-950/30"
                         >
                             <Trash2 className="h-4 w-4 mr-2" />
-                            <span className="font-medium">Sil</span>
+                            <span className="font-medium">{t('actions.delete')}</span>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
@@ -399,7 +400,7 @@ export function HeroSliderPageClient() {
 
             if (!response.ok) {
                 const error = await response.json();
-                throw new Error(error.error || "Slider silinemedi");
+                throw new Error(error.error || t('messages.deleteError'));
             }
 
             toast.success(t('messages.deleteSuccess'));
@@ -421,7 +422,7 @@ export function HeroSliderPageClient() {
 
             if (!response.ok) {
                 const error = await response.json();
-                throw new Error(error.error || "Durum güncellenemedi");
+                throw new Error(error.error || t('messages.updateError'));
             }
 
             toast.success(!currentStatus ? t('messages.activateSuccess') : t('messages.deactivateSuccess'));
@@ -534,13 +535,13 @@ export function HeroSliderPageClient() {
                                     <SelectItem value="tr">
                                         <div className="flex items-center gap-2">
                                             <FlagWrapper locale="tr" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
-                                            Türkçe
+                                            {t('languages.tr')}
                                         </div>
                                     </SelectItem>
                                     <SelectItem value="en">
                                         <div className="flex items-center gap-2">
                                             <FlagWrapper locale="en" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
-                                            English
+                                            {t('languages.en')}
                                         </div>
                                     </SelectItem>
                                 </SelectContent>
@@ -646,7 +647,7 @@ export function HeroSliderPageClient() {
                                 </Badge>
                                 <Badge variant="outline" className="ml-2 border-purple-300 dark:border-purple-600 text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/50 flex items-center gap-1.5">
                                     <FlagWrapper locale={locale} className="w-4 h-2.5 rounded-sm object-cover" />
-                                    {locale === 'tr' ? 'Türkçe' : 'English'}
+                                    {locale === 'tr' ? t('languages.tr') : t('languages.en')}
                                 </Badge>
                             </div>
                         </CardTitle>

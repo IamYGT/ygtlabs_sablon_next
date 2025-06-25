@@ -8,7 +8,7 @@ import { useAdminAuth } from "@/lib/hooks/useAuth";
 import { type SimpleUser as AuthUser } from "@/lib";
 import { useTranslations } from 'next-intl';
 import LanguageSwitcher from '@/components/panel/LanguageSwitcher';
-import Link from 'next/link';
+import { Link } from '@/src/i18n/navigation';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { StatsChart } from './components/StatsChart';
@@ -243,8 +243,11 @@ function QuickAction({ title, description, href, icon: Icon, color }: QuickActio
         }
     }[color];
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const linkHref = href as any;
+
     return (
-        <Link href={href}>
+        <Link href={linkHref}>
             <div className={`group p-6 ${colorStyles.bg} ${colorStyles.border} border rounded-lg ${colorStyles.hover} shadow-lg hover:shadow-xl transition-all duration-300`}>
                 <div className="flex items-start space-x-4">
                     <div className={`p-3 rounded-lg ${colorStyles.icon} shadow-md group-hover:scale-105 transition-transform duration-200`}>

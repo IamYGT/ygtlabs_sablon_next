@@ -35,10 +35,10 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
-import { tr } from 'date-fns/locale';
+import { tr, enUS } from 'date-fns/locale';
 import { toast } from 'react-hot-toast';
 import { Toaster } from 'react-hot-toast';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import QuickRoleAssignModal from './QuickRoleAssignModal';
 import CreateUserModal from './CreateUserModal';
 import DeleteUserModal from './DeleteUserModal';
@@ -96,8 +96,11 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
     const router = useRouter();
     const t = useTranslations('AdminUsers');
     const tCommon = useTranslations('AdminCommon');
+    const locale = useLocale();
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+
+    const dateLocale = locale === 'tr' ? tr : enUS;
 
     // Modal states
     const [roleAssignModalOpen, setRoleAssignModalOpen] = useState(false);
@@ -240,7 +243,7 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                 user.email || '',
                 user.isActive ? t('active') : t('inactive'),
                 user.currentRole ? user.currentRole.displayName : t('noRoleAssigned'),
-                format(new Date(user.createdAt), 'dd/MM/yyyy')
+                format(new Date(user.createdAt), 'dd/MM/yyyy', { locale: dateLocale })
             ].join(','))
         ].join('\n');
 
@@ -315,7 +318,7 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                 </div>
                 <Button onClick={() => handleQuickAction('new-user')}>
                     <Users className="h-4 w-4 mr-2" />
-                    Yeni Kullanıcı
+                    {t('newUser')}
                 </Button>
             </div>
 
@@ -334,9 +337,9 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
             <Card>
                 <CardHeader>
                     <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-medium">Kullanıcılar</h3>
+                        <h3 className="text-lg font-medium">{t('userList')}</h3>
                         <div className="text-sm text-muted-foreground">
-                            {filteredUsers.length} kullanıcı bulundu
+                            {t('usersFound', { count: filteredUsers.length })}
                         </div>
                     </div>
                 </CardHeader>
@@ -380,7 +383,7 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                                                     />
                                                 ) : (
                                                     <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 text-xs font-medium text-white">
-                                                        {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                                                        {(user.name ? user.name.charAt(0).toUpperCase() : t('userChar'))}
                                                     </div>
                                                 )}
                                             </div>
@@ -424,9 +427,9 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                                         </div>
                                     </TableCell>
                                     <TableCell>
-                                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                                            <Calendar className="h-3 w-3" />
-                                            {format(new Date(user.createdAt), 'dd MMM yyyy', { locale: tr })}
+                                        <div className="flex items-center gap-2">
+                                            <Calendar className="h-4 w-4 text-gray-400" />
+                                            <span>{format(new Date(user.createdAt), 'PPP', { locale: dateLocale })}</span>
                                         </div>
                                     </TableCell>
                                     <TableCell className="text-right">

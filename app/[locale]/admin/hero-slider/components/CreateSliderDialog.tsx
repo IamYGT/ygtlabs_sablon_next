@@ -17,23 +17,16 @@ import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ImageUpload } from "@/components/ui/image-upload";
 import {
     Plus,
     Trash2,
     Sparkles,
     Globe,
-    Image as ImageIcon,
-    Type,
-    FileText,
-    Tag,
     Link,
     BarChart3,
     Settings,
     Save,
     X,
-    CheckCircle,
-    AlertCircle,
     Info
 } from "lucide-react";
 import { FlagWrapper } from '@/components/ui/flag-wrapper';
@@ -217,7 +210,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                             >
                                 <div className="flex items-center gap-2">
                                     <FlagWrapper locale="tr" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
-                                    <span>Türkçe</span>
+                                    <span>{t('form.turkishContent')}</span>
                                 </div>
                             </TabsTrigger>
                             <TabsTrigger
@@ -226,7 +219,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                             >
                                 <div className="flex items-center gap-2">
                                     <FlagWrapper locale="en" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
-                                    <span>English</span>
+                                    <span>{t('form.englishContent')}</span>
                                 </div>
                             </TabsTrigger>
                         </TabsList>
@@ -240,7 +233,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                             <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
                                                 <Globe className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                                             </div>
-                                            Türkçe İçerik
+                                            {t('form.turkishContent')}
                                             <Badge variant="outline" className="bg-blue-50 dark:bg-blue-950/50 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 flex items-center gap-1">
                                                 <FlagWrapper locale="tr" className="w-4 h-2.5 rounded-sm object-cover" />
                                                 TR
@@ -250,63 +243,21 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                     <CardContent className="space-y-6">
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             <div className="space-y-2">
-                                                <Label htmlFor="title-tr" className="flex items-center gap-2 font-semibold text-gray-700 dark:text-gray-300">
-                                                    <Type className="h-4 w-4 text-blue-600" />
-                                                    Başlık
-                                                    <Badge variant="destructive" className="h-4 text-xs">Zorunlu</Badge>
-                                                </Label>
-                                                <Input
-                                                    id="title-tr"
-                                                    value={title.tr}
-                                                    onChange={(e) => setTitle({ ...title, tr: e.target.value })}
-                                                    placeholder="Araç Performansının Zirvesi"
-                                                    className="border-blue-200 dark:border-blue-800 focus:ring-blue-500 focus:border-blue-500 bg-white/80 dark:bg-gray-900/80"
-                                                />
+                                                <Label htmlFor="title-tr">{t('form.title')} <span className="text-red-500">*</span></Label>
+                                                <Input id="title-tr" value={title.tr} onChange={(e) => setTitle({ ...title, tr: e.target.value })} placeholder={t('form.placeholders.titleTr')} />
                                             </div>
-
                                             <div className="space-y-2">
-                                                <Label htmlFor="subtitle-tr" className="flex items-center gap-2 font-semibold text-gray-700 dark:text-gray-300">
-                                                    <FileText className="h-4 w-4 text-indigo-600" />
-                                                    Alt Başlık
-                                                </Label>
-                                                <Input
-                                                    id="subtitle-tr"
-                                                    value={subtitle.tr}
-                                                    onChange={(e) => setSubtitle({ ...subtitle, tr: e.target.value })}
-                                                    placeholder="Profesyonel ECU Tuning"
-                                                    className="border-indigo-200 dark:border-indigo-800 focus:ring-indigo-500 focus:border-indigo-500 bg-white/80 dark:bg-gray-900/80"
-                                                />
+                                                <Label htmlFor="subtitle-tr">{t('form.subtitle')}</Label>
+                                                <Input id="subtitle-tr" value={subtitle.tr} onChange={(e) => setSubtitle({ ...subtitle, tr: e.target.value })} placeholder={t('form.placeholders.subtitleTr')} />
                                             </div>
                                         </div>
-
                                         <div className="space-y-2">
-                                            <Label htmlFor="description-tr" className="flex items-center gap-2 font-semibold text-gray-700 dark:text-gray-300">
-                                                <FileText className="h-4 w-4 text-purple-600" />
-                                                Açıklama
-                                                <Badge variant="destructive" className="h-4 text-xs">Zorunlu</Badge>
-                                            </Label>
-                                            <Textarea
-                                                id="description-tr"
-                                                value={description.tr}
-                                                onChange={(e) => setDescription({ ...description, tr: e.target.value })}
-                                                placeholder="Aracınızın gerçek potansiyelini keşfedin. Uzman ekibimiz ile güvenli ve profesyonel ECU tuning hizmeti."
-                                                rows={4}
-                                                className="border-purple-200 dark:border-purple-800 focus:ring-purple-500 focus:border-purple-500 bg-white/80 dark:bg-gray-900/80 resize-none"
-                                            />
+                                            <Label htmlFor="description-tr">{t('form.description')} <span className="text-red-500">*</span></Label>
+                                            <Textarea id="description-tr" value={description.tr} onChange={(e) => setDescription({ ...description, tr: e.target.value })} placeholder={t('form.placeholders.descriptionTr')} rows={3} />
                                         </div>
-
                                         <div className="space-y-2">
-                                            <Label htmlFor="badge-tr" className="flex items-center gap-2 font-semibold text-gray-700 dark:text-gray-300">
-                                                <Tag className="h-4 w-4 text-green-600" />
-                                                Rozet Metni
-                                            </Label>
-                                            <Input
-                                                id="badge-tr"
-                                                value={badge.tr}
-                                                onChange={(e) => setBadge({ ...badge, tr: e.target.value })}
-                                                placeholder="✨ Yeni"
-                                                className="border-green-200 dark:border-green-800 focus:ring-green-500 focus:border-green-500 bg-white/80 dark:bg-gray-900/80"
-                                            />
+                                            <Label htmlFor="badge-tr">{t('form.badge')}</Label>
+                                            <Input id="badge-tr" value={badge.tr} onChange={(e) => setBadge({ ...badge, tr: e.target.value })} placeholder={t('form.placeholders.badgeTr')} />
                                         </div>
                                     </CardContent>
                                 </Card>
@@ -391,15 +342,16 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                 </Card>
                             </TabsContent>
 
+                            {/* English Content Tab */}
                             <TabsContent value="en" className="space-y-6 mt-0">
-                                <Card className="border-0 shadow-lg bg-gradient-to-br from-indigo-50/50 to-purple-50/50 dark:from-indigo-950/20 dark:to-purple-950/20">
+                                <Card className="border-0 shadow-lg bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-950/20 dark:to-emerald-950/20">
                                     <CardHeader className="pb-4">
-                                        <CardTitle className="flex items-center gap-3 text-indigo-800 dark:text-indigo-300">
-                                            <div className="p-2 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg">
-                                                <Globe className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+                                        <CardTitle className="flex items-center gap-3 text-green-800 dark:text-green-300">
+                                            <div className="p-2 bg-green-100 dark:bg-green-900/50 rounded-lg">
+                                                <Globe className="h-5 w-5 text-green-600 dark:text-green-400" />
                                             </div>
-                                            English Content
-                                            <Badge variant="outline" className="bg-indigo-50 dark:bg-indigo-950/50 border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 flex items-center gap-1">
+                                            {t('form.englishContent')}
+                                            <Badge variant="outline" className="bg-green-50 dark:bg-green-950/50 border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 flex items-center gap-1">
                                                 <FlagWrapper locale="en" className="w-4 h-2.5 rounded-sm object-cover" />
                                                 EN
                                             </Badge>
@@ -408,326 +360,154 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                     <CardContent className="space-y-6">
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             <div className="space-y-2">
-                                                <Label htmlFor="title-en" className="flex items-center gap-2 font-semibold text-gray-700 dark:text-gray-300">
-                                                    <Type className="h-4 w-4 text-blue-600" />
-                                                    Title
-                                                    <Badge variant="destructive" className="h-4 text-xs">Required</Badge>
-                                                </Label>
-                                                <Input
-                                                    id="title-en"
-                                                    value={title.en}
-                                                    onChange={(e) => setTitle({ ...title, en: e.target.value })}
-                                                    placeholder="Peak of Vehicle Performance"
-                                                    className="border-blue-200 dark:border-blue-800 focus:ring-blue-500 focus:border-blue-500 bg-white/80 dark:bg-gray-900/80"
-                                                />
+                                                <Label htmlFor="title-en">{t('form.titleEn')} <span className="text-red-500">*</span></Label>
+                                                <Input id="title-en" value={title.en} onChange={(e) => setTitle({ ...title, en: e.target.value })} placeholder={t('form.placeholders.titleEn')} />
                                             </div>
-
                                             <div className="space-y-2">
-                                                <Label htmlFor="subtitle-en" className="flex items-center gap-2 font-semibold text-gray-700 dark:text-gray-300">
-                                                    <FileText className="h-4 w-4 text-indigo-600" />
-                                                    Subtitle
-                                                </Label>
-                                                <Input
-                                                    id="subtitle-en"
-                                                    value={subtitle.en}
-                                                    onChange={(e) => setSubtitle({ ...subtitle, en: e.target.value })}
-                                                    placeholder="Professional ECU Tuning"
-                                                    className="border-indigo-200 dark:border-indigo-800 focus:ring-indigo-500 focus:border-indigo-500 bg-white/80 dark:bg-gray-900/80"
-                                                />
+                                                <Label htmlFor="subtitle-en">{t('form.subtitleEn')}</Label>
+                                                <Input id="subtitle-en" value={subtitle.en} onChange={(e) => setSubtitle({ ...subtitle, en: e.target.value })} placeholder={t('form.placeholders.subtitleEn')} />
                                             </div>
                                         </div>
-
                                         <div className="space-y-2">
-                                            <Label htmlFor="description-en" className="flex items-center gap-2 font-semibold text-gray-700 dark:text-gray-300">
-                                                <FileText className="h-4 w-4 text-purple-600" />
-                                                Description
-                                                <Badge variant="destructive" className="h-4 text-xs">Required</Badge>
-                                            </Label>
-                                            <Textarea
-                                                id="description-en"
-                                                value={description.en}
-                                                onChange={(e) => setDescription({ ...description, en: e.target.value })}
-                                                placeholder="Discover your vehicle's true potential. Safe and professional ECU tuning service with our expert team."
-                                                rows={4}
-                                                className="border-purple-200 dark:border-purple-800 focus:ring-purple-500 focus:border-purple-500 bg-white/80 dark:bg-gray-900/80 resize-none"
-                                            />
+                                            <Label htmlFor="description-en">{t('form.descriptionEn')} <span className="text-red-500">*</span></Label>
+                                            <Textarea id="description-en" value={description.en} onChange={(e) => setDescription({ ...description, en: e.target.value })} placeholder={t('form.placeholders.descriptionEn')} rows={3} />
                                         </div>
-
                                         <div className="space-y-2">
-                                            <Label htmlFor="badge-en" className="flex items-center gap-2 font-semibold text-gray-700 dark:text-gray-300">
-                                                <Tag className="h-4 w-4 text-green-600" />
-                                                Badge Text
-                                            </Label>
-                                            <Input
-                                                id="badge-en"
-                                                value={badge.en}
-                                                onChange={(e) => setBadge({ ...badge, en: e.target.value })}
-                                                placeholder="✨ New"
-                                                className="border-green-200 dark:border-green-800 focus:ring-green-500 focus:border-green-500 bg-white/80 dark:bg-gray-900/80"
-                                            />
-                                        </div>
-                                    </CardContent>
-                                </Card>
-
-                                {/* Butonlar EN */}
-                                <Card className="border-0 shadow-lg bg-gradient-to-br from-teal-50/50 to-cyan-50/50 dark:from-teal-950/20 dark:to-cyan-950/20">
-                                    <CardHeader className="pb-4">
-                                        <CardTitle className="flex items-center gap-3 text-teal-800 dark:text-teal-300">
-                                            <div className="p-2 bg-teal-100 dark:bg-teal-900/50 rounded-lg">
-                                                <Link className="h-5 w-5 text-teal-600 dark:text-teal-400" />
-                                            </div>
-                                            Button Settings (English)
-                                        </CardTitle>
-                                    </CardHeader>
-                                    <CardContent className="space-y-6">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <div className="space-y-4 p-4 bg-white/60 dark:bg-gray-900/60 rounded-lg border border-teal-200 dark:border-teal-800">
-                                                <div className="flex items-center gap-2 mb-3">
-                                                    <div className="w-3 h-3 bg-teal-500 rounded-full"></div>
-                                                    <h4 className="font-semibold text-teal-800 dark:text-teal-300">Primary Button</h4>
-                                                    <Badge variant="destructive" className="h-4 text-xs">Required</Badge>
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <Label className="text-sm font-medium">Button Text</Label>
-                                                    <Input
-                                                        value={primaryButton.en.text}
-                                                        onChange={(e) => setPrimaryButton({
-                                                            ...primaryButton,
-                                                            en: { ...primaryButton.en, text: e.target.value }
-                                                        })}
-                                                        placeholder="Get Started"
-                                                        className="border-teal-200 dark:border-teal-800"
-                                                    />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <Label className="text-sm font-medium">URL</Label>
-                                                    <Input
-                                                        value={primaryButton.en.url}
-                                                        onChange={(e) => setPrimaryButton({
-                                                            ...primaryButton,
-                                                            en: { ...primaryButton.en, url: e.target.value }
-                                                        })}
-                                                        placeholder="/services"
-                                                        className="border-teal-200 dark:border-teal-800"
-                                                    />
-                                                </div>
-                                            </div>
-
-                                            <div className="space-y-4 p-4 bg-white/60 dark:bg-gray-900/60 rounded-lg border border-gray-200 dark:border-gray-700">
-                                                <div className="flex items-center gap-2 mb-3">
-                                                    <div className="w-3 h-3 bg-gray-400 rounded-full"></div>
-                                                    <h4 className="font-semibold text-gray-700 dark:text-gray-300">Secondary Button</h4>
-                                                    <Badge variant="secondary" className="h-4 text-xs">Optional</Badge>
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <Label className="text-sm font-medium">Button Text</Label>
-                                                    <Input
-                                                        value={secondaryButton.en.text}
-                                                        onChange={(e) => setSecondaryButton({
-                                                            ...secondaryButton,
-                                                            en: { ...secondaryButton.en, text: e.target.value }
-                                                        })}
-                                                        placeholder="Learn More"
-                                                        className="border-gray-200 dark:border-gray-700"
-                                                    />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <Label className="text-sm font-medium">URL</Label>
-                                                    <Input
-                                                        value={secondaryButton.en.url}
-                                                        onChange={(e) => setSecondaryButton({
-                                                            ...secondaryButton,
-                                                            en: { ...secondaryButton.en, url: e.target.value }
-                                                        })}
-                                                        placeholder="/about"
-                                                        className="border-gray-200 dark:border-gray-700"
-                                                    />
-                                                </div>
-                                            </div>
+                                            <Label htmlFor="badge-en">{t('form.badgeEn')}</Label>
+                                            <Input id="badge-en" value={badge.en} onChange={(e) => setBadge({ ...badge, en: e.target.value })} placeholder={t('form.placeholders.badgeEn')} />
                                         </div>
                                     </CardContent>
                                 </Card>
                             </TabsContent>
 
-                            {/* Ortak Alanlar */}
-                            <div className="space-y-6">
-                                {/* Görsel Upload */}
-                                <Card className="border-0 shadow-lg bg-gradient-to-br from-rose-50/50 to-pink-50/50 dark:from-rose-950/20 dark:to-pink-950/20">
-                                    <CardHeader className="pb-4">
-                                        <CardTitle className="flex items-center gap-3 text-rose-800 dark:text-rose-300">
-                                            <div className="p-2 bg-rose-100 dark:bg-rose-900/50 rounded-lg">
-                                                <ImageIcon className="h-5 w-5 text-rose-600 dark:text-rose-400" />
-                                            </div>
-                                            Arka Plan Görseli
-                                            <Badge variant="destructive" className="h-4 text-xs">Zorunlu</Badge>
-                                        </CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="space-y-4">
-                                            <div className="p-6 border-2 border-dashed border-rose-200 dark:border-rose-800 rounded-xl bg-rose-50/50 dark:bg-rose-950/20">
-                                                <ImageUpload
-                                                    value={backgroundImage}
-                                                    onChange={setBackgroundImage}
-                                                />
-                                            </div>
-                                            {backgroundImage && (
-                                                <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-950/30 p-3 rounded-lg">
-                                                    <CheckCircle className="h-4 w-4" />
-                                                    Görsel başarıyla yüklendi
-                                                </div>
-                                            )}
+                            {/* Buton Ayarları */}
+                            <Card className="border-0 shadow-lg bg-gradient-to-br from-purple-50/50 to-violet-50/50 dark:from-purple-950/20 dark:to-violet-950/20">
+                                <CardHeader className="pb-4">
+                                    <CardTitle className="flex items-center gap-3 text-purple-800 dark:text-purple-300">
+                                        <div className="p-2 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
+                                            <Link className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                                         </div>
-                                    </CardContent>
-                                </Card>
-
-                                {/* İstatistikler */}
-                                <Card className="border-0 shadow-lg bg-gradient-to-br from-amber-50/50 to-orange-50/50 dark:from-amber-950/20 dark:to-orange-950/20">
-                                    <CardHeader className="pb-4">
-                                        <CardTitle className="flex items-center gap-3 text-amber-800 dark:text-amber-300">
-                                            <div className="p-2 bg-amber-100 dark:bg-amber-900/50 rounded-lg">
-                                                <BarChart3 className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+                                        {t('form.buttonSettings')}
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-6">
+                                    <Tabs defaultValue="primary-tr" className="w-full">
+                                        <TabsList className="grid w-full grid-cols-4">
+                                            <TabsTrigger value="primary-tr">{t('form.primaryButton')} (TR)</TabsTrigger>
+                                            <TabsTrigger value="primary-en">{t('form.primaryButton')} (EN)</TabsTrigger>
+                                            <TabsTrigger value="secondary-tr">{t('form.secondaryButton')} (TR)</TabsTrigger>
+                                            <TabsTrigger value="secondary-en">{t('form.secondaryButton')} (EN)</TabsTrigger>
+                                        </TabsList>
+                                        <TabsContent value="primary-tr" className="pt-4 space-y-4">
+                                            <div className="space-y-2">
+                                                <Label htmlFor="primary-button-text-tr">{t('form.buttonText')} <span className="text-red-500">*</span></Label>
+                                                <Input id="primary-button-text-tr" value={primaryButton.tr.text} onChange={(e) => setPrimaryButton({ ...primaryButton, tr: { ...primaryButton.tr, text: e.target.value } })} placeholder={t('form.placeholders.primaryButtonTr')} />
                                             </div>
-                                            İstatistikler
-                                            <Badge variant="secondary" className="h-4 text-xs">Opsiyonel</Badge>
+                                            <div className="space-y-2">
+                                                <Label htmlFor="primary-button-url-tr">{t('form.buttonUrl')}</Label>
+                                                <Input id="primary-button-url-tr" value={primaryButton.tr.url} onChange={(e) => setPrimaryButton({ ...primaryButton, tr: { ...primaryButton.tr, url: e.target.value } })} placeholder={t('form.placeholders.primaryButtonUrlTr')} />
+                                            </div>
+                                        </TabsContent>
+                                        <TabsContent value="primary-en" className="pt-4 space-y-4">
+                                            <div className="space-y-2">
+                                                <Label htmlFor="primary-button-text-en">{t('form.buttonTextEn')} <span className="text-red-500">*</span></Label>
+                                                <Input id="primary-button-text-en" value={primaryButton.en.text} onChange={(e) => setPrimaryButton({ ...primaryButton, en: { ...primaryButton.en, text: e.target.value } })} placeholder={t('form.placeholders.primaryButtonEn')} />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <Label htmlFor="primary-button-url-en">{t('form.buttonUrl')}</Label>
+                                                <Input id="primary-button-url-en" value={primaryButton.en.url} onChange={(e) => setPrimaryButton({ ...primaryButton, en: { ...primaryButton.en, url: e.target.value } })} placeholder={t('form.placeholders.primaryButtonUrlEn')} />
+                                            </div>
+                                        </TabsContent>
+                                        <TabsContent value="secondary-tr" className="pt-4 space-y-4">
+                                            <div className="space-y-2">
+                                                <Label htmlFor="secondary-button-text-tr">{t('form.buttonText')}</Label>
+                                                <Input id="secondary-button-text-tr" value={secondaryButton.tr.text} onChange={(e) => setSecondaryButton({ ...secondaryButton, tr: { ...secondaryButton.tr, text: e.target.value } })} placeholder={t('form.placeholders.secondaryButtonTr')} />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <Label htmlFor="secondary-button-url-tr">{t('form.buttonUrl')}</Label>
+                                                <Input id="secondary-button-url-tr" value={secondaryButton.tr.url} onChange={(e) => setSecondaryButton({ ...secondaryButton, tr: { ...secondaryButton.tr, url: e.target.value } })} placeholder={t('form.placeholders.secondaryButtonUrlTr')} />
+                                            </div>
+                                        </TabsContent>
+                                        <TabsContent value="secondary-en" className="pt-4 space-y-4">
+                                            <div className="space-y-2">
+                                                <Label htmlFor="secondary-button-text-en">{t('form.buttonTextEn')}</Label>
+                                                <Input id="secondary-button-text-en" value={secondaryButton.en.text} onChange={(e) => setSecondaryButton({ ...secondaryButton, en: { ...secondaryButton.en, text: e.target.value } })} placeholder={t('form.placeholders.secondaryButtonEn')} />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <Label htmlFor="secondary-button-url-en">{t('form.buttonUrl')}</Label>
+                                                <Input id="secondary-button-url-en" value={secondaryButton.en.url} onChange={(e) => setSecondaryButton({ ...secondaryButton, en: { ...secondaryButton.en, url: e.target.value } })} placeholder={t('form.placeholders.secondaryButtonUrlEn')} />
+                                            </div>
+                                        </TabsContent>
+                                    </Tabs>
+                                </CardContent>
+                            </Card>
+
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <Card className="border-0 shadow-lg bg-gradient-to-br from-yellow-50/50 to-amber-50/50 dark:from-yellow-950/20 dark:to-amber-950/20">
+                                    <CardHeader className="pb-4">
+                                        <CardTitle className="flex items-center gap-3 text-yellow-800 dark:text-yellow-300">
+                                            <div className="p-2 bg-yellow-100 dark:bg-yellow-900/50 rounded-lg">
+                                                <BarChart3 className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
+                                            </div>
+                                            {t('form.statistics')}
+                                            <Badge variant="outline">{t('form.statisticsOptional')}</Badge>
                                         </CardTitle>
                                     </CardHeader>
                                     <CardContent className="space-y-4">
                                         {statistics.map((stat, index) => (
-                                            <div key={index} className="p-4 bg-white/60 dark:bg-gray-900/60 rounded-lg border border-amber-200 dark:border-amber-800">
-                                                <div className="flex items-center justify-between mb-4">
-                                                    <h4 className="font-semibold text-amber-800 dark:text-amber-300 flex items-center gap-2">
-                                                        <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
-                                                        İstatistik #{index + 1}
-                                                    </h4>
-                                                    {statistics.length > 1 && (
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            onClick={() => removeStatistic(index)}
-                                                            className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30"
-                                                        >
-                                                            <Trash2 className="h-4 w-4" />
-                                                        </Button>
-                                                    )}
+                                            <div key={index} className="flex items-end gap-2 p-3 bg-white/60 dark:bg-gray-900/60 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                                                <div className="flex-1 space-y-2">
+                                                    <Label htmlFor={`stat-value-${index}`}>{t('form.statisticsNumber', { number: index + 1 })} - {t('form.statisticsValue')}</Label>
+                                                    <Input id={`stat-value-${index}`} value={stat.value} onChange={(e) => updateStatistic(index, 'value', e.target.value)} placeholder={t('form.placeholders.statisticsValue')} />
                                                 </div>
-                                                <div className="grid grid-cols-2 gap-4">
-                                                    <div className="space-y-2">
-                                                        <Label className="text-sm font-medium text-amber-700 dark:text-amber-300">
-                                                            Değer
-                                                        </Label>
-                                                        <Input
-                                                            placeholder="1000+"
-                                                            value={stat.value}
-                                                            onChange={(e) => updateStatistic(index, 'value', e.target.value)}
-                                                            className="border-amber-200 dark:border-amber-800"
-                                                        />
-                                                    </div>
-                                                    <div className="space-y-2">
-                                                        <Label className="text-sm font-medium text-amber-700 dark:text-amber-300">
-                                                            Etiket
-                                                        </Label>
-                                                        <Input
-                                                            placeholder="Mutlu Müşteri"
-                                                            value={stat.label}
-                                                            onChange={(e) => updateStatistic(index, 'label', e.target.value)}
-                                                            className="border-amber-200 dark:border-amber-800"
-                                                        />
-                                                    </div>
+                                                <div className="flex-1 space-y-2">
+                                                    <Label htmlFor={`stat-label-${index}`}>{t('form.statisticsLabel')}</Label>
+                                                    <Input id={`stat-label-${index}`} value={stat.label} onChange={(e) => updateStatistic(index, 'label', e.target.value)} placeholder={t('form.placeholders.statisticsLabel')} />
                                                 </div>
+                                                <Button type="button" variant="ghost" size="icon" onClick={() => removeStatistic(index)} disabled={statistics.length === 1}>
+                                                    <Trash2 className="h-4 w-4 text-gray-500 hover:text-red-500" />
+                                                </Button>
                                             </div>
                                         ))}
                                         {statistics.length < 4 && (
-                                            <Button
-                                                type="button"
-                                                variant="outline"
-                                                onClick={addStatistic}
-                                                className="w-full border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/30"
-                                            >
+                                            <Button type="button" variant="outline" onClick={addStatistic} className="w-full border-dashed">
                                                 <Plus className="h-4 w-4 mr-2" />
-                                                Yeni İstatistik Ekle ({statistics.length}/4)
+                                                {t('form.addStatistic')}
                                             </Button>
                                         )}
                                         {statistics.length === 4 && (
-                                            <div className="flex items-center justify-center gap-2 text-sm text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30 p-3 rounded-lg border border-amber-200 dark:border-amber-700">
-                                                <AlertCircle className="h-4 w-4" />
-                                                <span>Maksimum 4 istatistik ekleyebilirsiniz</span>
-                                            </div>
+                                            <p className="text-xs text-center text-gray-500">{t('form.maxStatistics')}</p>
                                         )}
                                     </CardContent>
                                 </Card>
 
-                                {/* Ayarlar */}
-                                <Card className="border-0 shadow-lg bg-gradient-to-br from-slate-50/50 to-gray-50/50 dark:from-slate-950/20 dark:to-gray-950/20">
+                                <Card className="border-0 shadow-lg bg-gradient-to-br from-red-50/50 to-rose-50/50 dark:from-red-950/20 dark:to-rose-950/20">
                                     <CardHeader className="pb-4">
-                                        <CardTitle className="flex items-center gap-3 text-slate-800 dark:text-slate-300">
-                                            <div className="p-2 bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                                <Settings className="h-5 w-5 text-slate-600 dark:text-slate-400" />
+                                        <CardTitle className="flex items-center gap-3 text-red-800 dark:text-red-300">
+                                            <div className="p-2 bg-red-100 dark:bg-red-900/50 rounded-lg">
+                                                <Settings className="h-5 w-5 text-red-600 dark:text-red-400" />
                                             </div>
-                                            Slider Ayarları
+                                            {t('form.generalSettings')}
                                         </CardTitle>
                                     </CardHeader>
-                                    <CardContent className="space-y-4">
-                                        {/* Yayın Durumu - Yatay */}
-                                        <div className="p-4 bg-white/70 dark:bg-gray-900/70 rounded-xl border border-slate-200 dark:border-slate-700">
+                                    <CardContent className="space-y-6">
+                                        <div className="p-4 bg-white/60 dark:bg-gray-900/60 rounded-lg border border-red-200 dark:border-red-800">
                                             <div className="flex items-center justify-between">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="p-1.5 bg-green-100 dark:bg-green-900/50 rounded-lg">
-                                                        <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
-                                                    </div>
-                                                    <div>
-                                                        <Label className="text-base font-semibold text-slate-700 dark:text-slate-300">
-                                                            Yayın Durumu
-                                                        </Label>
-                                                        <p className="text-sm text-slate-600 dark:text-slate-400">
-                                                            Slider ana sayfada görüntülensin mi?
-                                                        </p>
-                                                    </div>
+                                                <div>
+                                                    <Label htmlFor="is-active" className="font-medium">{t('form.publishStatus')}</Label>
+                                                    <p className="text-sm text-gray-500">{t('form.publishStatusDescription')}</p>
                                                 </div>
-                                                <div className="flex items-center gap-3">
-                                                    <Switch
-                                                        checked={isActive}
-                                                        onCheckedChange={setIsActive}
-                                                        className="data-[state=checked]:bg-green-500 scale-110"
-                                                    />
-                                                    <Badge
-                                                        variant={isActive ? "default" : "secondary"}
-                                                        className={`px-3 py-1 font-medium ${isActive
-                                                            ? "bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-700"
-                                                            : "bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600"
-                                                            }`}
-                                                    >
-                                                        {isActive ? "✓ Aktif" : "✗ Pasif"}
-                                                    </Badge>
-                                                </div>
+                                                <Switch id="is-active" checked={isActive} onCheckedChange={setIsActive} />
                                             </div>
                                         </div>
-
-                                        {/* Sıralama - Yatay */}
-                                        <div className="p-4 bg-white/70 dark:bg-gray-900/70 rounded-xl border border-slate-200 dark:border-slate-700">
-                                            <div className="flex items-center gap-4">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="p-1.5 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
-                                                        <BarChart3 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                                                    </div>
-                                                    <div>
-                                                        <Label htmlFor="order" className="text-base font-semibold text-slate-700 dark:text-slate-300">
-                                                            Sıralama
-                                                        </Label>
-                                                        <p className="text-sm text-slate-600 dark:text-slate-400">
-                                                            Düşük sayılar önce gösterilir
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div className="flex-1 max-w-xs">
-                                                    <Input
-                                                        id="order"
-                                                        type="number"
-                                                        value={order}
-                                                        onChange={(e) => setOrder(parseInt(e.target.value) || 0)}
-                                                        placeholder="0"
-                                                        className="border-blue-200 dark:border-blue-800 focus:ring-blue-500 focus:border-blue-500 bg-white/80 dark:bg-gray-900/80"
-                                                    />
-                                                </div>
+                                        <div className="p-4 bg-white/60 dark:bg-gray-900/60 rounded-lg border border-red-200 dark:border-red-800">
+                                            <div className="space-y-2">
+                                                <Label htmlFor="order">{t('form.sorting')}</Label>
+                                                <Input id="order" type="number" value={order} onChange={(e) => setOrder(Number(e.target.value))} />
+                                                <p className="text-xs text-gray-500 flex items-center gap-1.5">
+                                                    <Info className="h-3 w-3" />
+                                                    {t('form.sortingDescription')}
+                                                </p>
                                             </div>
                                         </div>
                                     </CardContent>
@@ -737,35 +517,31 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                     </Tabs>
                 </div>
 
-                {/* Footer Buttons */}
-                <div className="flex-shrink-0 flex items-center justify-between gap-4 pt-6 border-t border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50/80 to-slate-50/80 dark:from-gray-800/80 dark:to-slate-800/80 -m-6 mt-0 p-6 rounded-b-lg">
+                <div className="flex justify-between items-center p-6 bg-gray-100/80 dark:bg-gray-800/80 border-t border-gray-200 dark:border-gray-700 mt-auto rounded-b-lg">
                     <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                         <Info className="h-4 w-4" />
-                        <span>Zorunlu alanları doldurmayı unutmayın</span>
+                        <span>{t('validation.rememberSave')}</span>
                     </div>
-                    <div className="flex gap-3">
-                        <Button
-                            variant="outline"
-                            onClick={() => onOpenChange(false)}
-                            className="border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800"
-                        >
+                    <div className="flex gap-4">
+                        <Button variant="outline" className="bg-white dark:bg-gray-700" onClick={() => onOpenChange(false)} disabled={loading}>
                             <X className="h-4 w-4 mr-2" />
-                            İptal
+                            {t('actions.cancel')}
                         </Button>
                         <Button
+                            type="submit"
                             onClick={handleSubmit}
                             disabled={loading}
-                            className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 font-semibold px-8"
+                            className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg hover:from-blue-700 hover:to-indigo-800 transform hover:scale-105 transition-all duration-200"
                         >
                             {loading ? (
                                 <>
                                     <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
-                                    Oluşturuluyor...
+                                    {t('actions.creating')}
                                 </>
                             ) : (
                                 <>
                                     <Save className="h-4 w-4 mr-2" />
-                                    Slider Oluştur
+                                    {t('actions.create')}
                                 </>
                             )}
                         </Button>

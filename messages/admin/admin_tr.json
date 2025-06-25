@@ -118,14 +118,52 @@
     },
     "AdminUsers": {
         "title": "Kullanıcı Yönetimi",
-        "subtitle": "Kullanıcıları yönetin, roller atayın ve sistem erişimlerini kontrol edin",
+        "subtitle": "Kullanıcıları görüntüleyin, düzenleyin ve rolleri yönetin.",
+        "search": {
+            "placeholder": "Kullanıcı adı, email veya role göre ara..."
+        },
+        "bulkActions": {
+            "selected": "{count} seçili",
+            "title": "Toplu İşlemler",
+            "userActions": "Kullanıcı İşlemleri",
+            "activateAll": "Hepsini Aktif Et",
+            "deactivateAll": "Hepsini Devre Dışı Bırak",
+            "exportCsv": "CSV Olarak Dışa Aktar",
+            "deleteSelected": "Seçilenleri Sil"
+        },
+        "actionsCell": {
+            "viewDetails": "Detayları Görüntüle",
+            "roleManagement": "Rol Yönetimi",
+            "deactivateUser": "Kullanıcıyı Pasifleştir",
+            "activateUser": "Kullanıcıyı Aktifleştir",
+            "userDetailsTitle": "Kullanıcı Detayları",
+            "unnamedUser": "İsimsiz Kullanıcı",
+            "name": "Ad",
+            "email": "E-posta",
+            "notSpecified": "Belirtilmemiş",
+            "registrationDate": "Kayıt Tarihi",
+            "lastLogin": "Son Giriş",
+            "neverLoggedIn": "Hiç giriş yapmamış",
+            "assignedRoles": "Atanmış Roller",
+            "noRolesAssigned": "Hiç rol atanmamış",
+            "roleManagementTitle": "Rol Yönetimi",
+            "roleManagementDesc": "\"{userName}\" için rol atama/kaldırma işlemleri",
+            "assignNewRole": "Yeni Rol Ata",
+            "selectRolePlaceholder": "Rol seçin...",
+            "assign": "Ata",
+            "roleAssignSuccess": "Rol başarıyla atandı",
+            "roleAssignError": "Rol atanırken bir hata oluştu",
+            "roleRemoveSuccess": "Rol başarıyla kaldırıldı",
+            "roleRemoveError": "Rol kaldırılırken hata oluştu",
+            "statusUpdateError": "Kullanıcı durumu güncellenirken hata oluştu",
+            "errorOccurred": "Bir hata oluştu"
+        },
         "addUser": "Kullanıcı Ekle",
         "editUser": "Kullanıcı Düzenle",
         "deleteUser": "Kullanıcı Sil",
         "userList": "Kullanıcı Listesi",
         "active": "Aktif",
         "inactive": "Pasif",
-        "bulkActions": "Toplu İşlemler",
         "exportUsers": "Kullanıcıları Dışa Aktar",
         "importUsers": "Kullanıcıları İçe Aktar",
         "selectAtLeastOne": "Lütfen en az bir kullanıcı seçin",
@@ -138,8 +176,8 @@
         "userActivated": "Kullanıcı aktif edildi",
         "userDeactivated": "Kullanıcı pasif edildi",
         "statusNotUpdated": "Durum güncellenemedi",
-        "name": "Ad",
-        "email": "E-posta",
+        "name": "İsim",
+        "email": "Email",
         "status": "Durum",
         "roles": "Roller",
         "registrationDate": "Kayıt Tarihi",
@@ -156,7 +194,27 @@
         "selected": "seçili",
         "newUser": "Yeni Kullanıcı",
         "editUserDetails": "Kullanıcı Detaylarını Düzenle",
-        "quickRoleAssign": "Hızlı Rol Atama",
+        "quickRoleAssign": {
+            "title": "Hızlı Rol Atama",
+            "description": "\"{userName}\" için rol atayın veya kaldırın.",
+            "unnamed": "İsimsiz",
+            "searchPlaceholder": "Rol ara...",
+            "currentRole": "Mevcut Rol",
+            "roles": "Roller ({count})",
+            "noRoleAssigned": {
+                "title": "Rol Atanmamış",
+                "description": "Kullanıcının rolü kaldırılır."
+            },
+            "summary": {
+                "title": "Değişiklik Özeti",
+                "noRole": "Rol Yok"
+            },
+            "cancel": "İptal",
+            "save": "Kaydet",
+            "saving": "Kaydediliyor...",
+            "updateSuccess": "Rol başarıyla güncellendi.",
+            "updateFailed": "Rol güncelleme başarısız oldu."
+        },
         "deleteConfirmation": "Silme Onayı",
         "bulkDeleteConfirmation": "Toplu Silme Onayı",
         "user": "Kullanıcı",
@@ -165,6 +223,8 @@
         "activateUser": "Aktif Et",
         "deactivateUser": "Pasif Et",
         "userNotFound": "Kullanıcı bulunamadı",
+        "usersFound": "{count} kullanıcı bulundu",
+        "userChar": "K",
         "tryDifferentCriteria": "Arama kriterlerinizi değiştirmeyi deneyin",
         "deleteUsers": "Kullanıcıları Sil",
         "deleteUsersConfirm": "kullanıcıyı silmek istediğinize emin misiniz?",
@@ -305,8 +365,8 @@
         "currentLanguage": "Mevcut Dil"
     },
     "AdminProfile": {
-        "title": "Profil Yönetimi",
-        "description": "Kişisel bilgilerinizi görüntüleyin ve düzenleyin",
+        "title": "Yönetici Profili",
+        "description": "Profil bilgilerinizi yönetin ve güncelleyin.",
         "edit": "Düzenle",
         "save": "Kaydet",
         "cancel": "İptal",
@@ -428,6 +488,10 @@
                 "primaryButtonEn": "Get Started",
                 "secondaryButtonTr": "Daha Fazla Bilgi",
                 "secondaryButtonEn": "Learn More",
+                "primaryButtonUrlTr": "/hizmetler",
+                "primaryButtonUrlEn": "/services",
+                "secondaryButtonUrlTr": "/hakkimizda",
+                "secondaryButtonUrlEn": "/about-us",
                 "statisticsValue": "1000+",
                 "statisticsLabel": "Mutlu Müşteri",
                 "statisticsLabelEn": "Happy Customers"
@@ -456,16 +520,25 @@
             "updateSuccess": "Slider başarıyla güncellendi",
             "deleteSuccess": "Slider başarıyla silindi",
             "activateSuccess": "Slider aktif edildi",
-            "deactivateSuccess": "Slider devre dışı bırakıldı",
+            "deactivateSuccess": "Slider başarıyla devre dışı bırakıldı",
             "sortingSuccess": "Sıralama güncellendi",
             "createError": "Slider oluşturulurken hata oluştu",
-            "updateError": "Slider güncellenirken hata oluştu",
+            "updateError": "Durum güncellenemedi",
             "deleteError": "Slider silinirken bir hata oluştu",
             "sortingError": "Sıralama güncellenirken hata oluştu",
             "fetchError": "Slider'lar getirilemedi",
             "deleteConfirm": "Bu slider'ı silmek istediğinizden emin misiniz?",
             "imageLoadError": "Slider görsel yüklenirken hata oluştu",
             "imageUploaded": "Görsel başarıyla yüklendi"
+        },
+        "status": {
+            "active": "Aktif",
+            "inactive": "Pasif"
+        },
+        "system": "Sistem",
+        "languages": {
+            "tr": "Türkçe",
+            "en": "English"
         }
     }
 }

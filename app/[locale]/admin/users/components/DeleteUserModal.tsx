@@ -22,7 +22,8 @@ import {
     Shield
 } from 'lucide-react';
 import { format } from 'date-fns';
-import { tr } from 'date-fns/locale';
+import { useLocale, useTranslations } from 'next-intl';
+import * as locales from 'date-fns/locale';
 
 interface User {
     id: string;
@@ -53,7 +54,11 @@ export default function DeleteUserModal({
     user,
     onUserDeleted
 }: DeleteUserModalProps) {
+    const t = useTranslations('AdminUsers.deleteUser');
+    const locale = useLocale();
     const [loading, setLoading] = useState(false);
+
+    const dateLocale = locales[locale as keyof typeof locales] || locales.enUS;
 
     const handleDelete = async () => {
         if (!user) return;
@@ -69,15 +74,15 @@ export default function DeleteUserModal({
             const result = await response.json();
 
             if (response.ok) {
-                toast.success('Kullanıcı başarıyla silindi');
+                toast.success(t('notifications.deleteSuccess'));
                 onOpenChange(false);
                 onUserDeleted();
             } else {
-                toast.error(result.error || 'Kullanıcı silinemedi');
+                toast.error(result.error || t('notifications.deleteError'));
             }
         } catch (error) {
             console.error('User deletion error:', error);
-            toast.error('Bir hata oluştu');
+            toast.error(t('notifications.unexpectedError'));
         } finally {
             setLoading(false);
         }
@@ -97,10 +102,10 @@ export default function DeleteUserModal({
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2 text-red-600">
                         <Trash2 className="h-5 w-5" />
-                        Kullanıcıyı Sil
+                        {t('title')}
                     </DialogTitle>
                     <DialogDescription>
-                        Bu işlem geri alınamaz. Kullanıcı kalıcı olarak sistemden kaldırılacak.
+                        {t('description')}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -110,25 +115,25 @@ export default function DeleteUserModal({
                         <div className="relative h-12 w-12">
                             <Image
                                 src={user.profileImage || `https://ui-avatars.com/api/?name=${user.name || user.email}&background=random`}
-                                alt={user.name || 'User Avatar'}
+                                alt={user.name || t('userAvatarAlt')}
                                 fill
                                 sizes="48px"
                                 className="rounded-full object-cover"
                             />
                         </div>
                         <div className="flex-1">
-                            <div className="font-medium text-lg">{user.name || 'İsimsiz'}</div>
+                            <div className="font-medium text-lg">{user.name || t('unnamed')}</div>
                             <div className="text-sm text-muted-foreground flex items-center gap-1">
                                 <Mail className="h-3 w-3" />
                                 {user.email}
                             </div>
                             <div className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
                                 <Calendar className="h-3 w-3" />
-                                Kayıt: {format(new Date(user.createdAt), 'dd MMM yyyy', { locale: tr })}
+                                {t('registeredAt')}: {format(new Date(user.createdAt), 'dd MMM yyyy', { locale: dateLocale })}
                             </div>
                         </div>
                         <Badge variant={user.isActive ? "default" : "secondary"}>
-                            {user.isActive ? 'Aktif' : 'Pasif'}
+                            {user.isActive ? t('status.active') : t('status.passive')}
                         </Badge>
                     </div>
 
@@ -137,7 +142,7 @@ export default function DeleteUserModal({
                         <div className="space-y-2">
                             <div className="flex items-center gap-2 text-sm font-medium">
                                 <Shield className="h-4 w-4" />
-                                Kullanıcının Rolü
+                                {t('userRole')}
                             </div>
                             <div className="flex flex-wrap gap-1">
                                 <Badge
@@ -158,13 +163,13 @@ export default function DeleteUserModal({
                         <AlertTriangle className="h-4 w-4" />
                         <AlertDescription>
                             <div className="space-y-2">
-                                <div className="font-medium">Dikkat!</div>
+                                <div className="font-medium">{t('warning.title')}</div>
                                 <ul className="text-sm space-y-1">
-                                    <li>• Kullanıcı kalıcı olarak silinecek</li>
-                                    <li>• Rol ataması kaldırılacak</li>
-                                    <li>• Kullanıcı hesabı kurtarılamayacak</li>
+                                    <li>• {t('warning.permanentDeletion')}</li>
+                                    <li>• {t('warning.roleRemoval')}</li>
+                                    <li>• {t('warning.unrecoverable')}</li>
                                     {hasRole && (
-                                        <li>• Rol ataması kaybolacak</li>
+                                        <li>• {t('warning.roleAssignmentLost')}</li>
                                     )}
                                 </ul>
                             </div>
@@ -177,7 +182,7 @@ export default function DeleteUserModal({
                             <AlertTriangle className="h-4 w-4" />
                             <AlertDescription>
                                 <div className="font-medium text-red-700">
-                                    Bu kullanıcı Super Admin rolüne sahip ve silinemez!
+                                    {t('warning.superAdmin')}
                                 </div>
                             </AlertDescription>
                         </Alert>
@@ -191,7 +196,7 @@ export default function DeleteUserModal({
                         onClick={() => onOpenChange(false)}
                         disabled={loading}
                     >
-                        İptal
+                        {t('buttons.cancel')}
                     </Button>
                     <Button
                         type="button"
@@ -200,11 +205,11 @@ export default function DeleteUserModal({
                         disabled={loading || isSuperAdmin}
                     >
                         {loading ? (
-                            'Siliniyor...'
+                            t('buttons.deleting')
                         ) : (
                             <>
                                 <Trash2 className="h-4 w-4 mr-2" />
-                                Kullanıcıyı Sil
+                                {t('buttons.delete')}
                             </>
                         )}
                     </Button>

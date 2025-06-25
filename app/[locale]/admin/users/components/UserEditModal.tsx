@@ -42,6 +42,7 @@ import {
     X
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
 
 
 
@@ -128,6 +129,7 @@ export default function UserEditModal({
     roles,
     onUserUpdated,
 }: UserEditModalProps) {
+    const t = useTranslations('AdminUsers.editUser');
     const { user: currentUser } = useAuth();
     const [loading, setLoading] = useState(false);
     const [name, setName] = useState('');
@@ -245,16 +247,15 @@ export default function UserEditModal({
     const handleFileUpload = (file: File) => {
         // Dosya boyutu kontrolü (5MB)
         if (file.size > 5 * 1024 * 1024) {
-            toast.error('Dosya boyutu 5MB\'dan küçük olmalıdır');
+            toast.error(t('notifications.fileTooLarge'));
             return;
         }
-
         // Dosya türü kontrolü
-        if (!file.type.startsWith('image/')) {
-            toast.error('Lütfen geçerli bir resim dosyası seçin');
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+        if (!allowedTypes.includes(file.type)) {
+            toast.error(t('notifications.invalidFileType'));
             return;
         }
-
         const reader = new FileReader();
         reader.onload = (e) => {
             setProfileImage(e.target?.result as string);
@@ -803,8 +804,7 @@ export default function UserEditModal({
                                         return (
                                             <div
                                                 key={role.id}
-                                                className={`flex items-center space-x-3 p-3 rounded-lg border ${canModifyRole ? 'hover:bg-muted/50' : 'opacity-60'
-                                                    }`}
+                                                className={`flex items-center space-x-3 p-3 rounded-lg border ${canModifyRole ? 'hover:bg-muted/50' : 'opacity-60'}`}
                                             >
                                                 <Checkbox
                                                     id={`role-${role.id}`}

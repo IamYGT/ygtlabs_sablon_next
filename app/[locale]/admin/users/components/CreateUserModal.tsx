@@ -26,6 +26,7 @@ import {
     Search,
     User
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface Role {
     id: string;
@@ -49,6 +50,7 @@ export default function CreateUserModal({
     roles,
     onUserCreated
 }: CreateUserModalProps) {
+    const t = useTranslations('AdminUsers.createUser');
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -103,22 +105,22 @@ export default function CreateUserModal({
 
         // Validasyon
         if (!formData.name.trim()) {
-            toast.error('İsim gereklidir');
+            toast.error(t('validation.nameRequired'));
             return;
         }
 
         if (!formData.email.trim()) {
-            toast.error('E-posta gereklidir');
+            toast.error(t('validation.emailRequired'));
             return;
         }
 
         if (!formData.password || formData.password.length < 6) {
-            toast.error('Şifre en az 6 karakter olmalıdır');
+            toast.error(t('validation.passwordMinLength'));
             return;
         }
 
         if (!selectedRole) {
-            toast.error('Bir rol seçmelisiniz');
+            toast.error(t('validation.roleRequired'));
             return;
         }
 
@@ -139,16 +141,16 @@ export default function CreateUserModal({
             const result = await response.json();
 
             if (response.ok) {
-                toast.success('Kullanıcı başarıyla oluşturuldu');
+                toast.success(t('successMessage'));
                 resetForm();
                 onOpenChange(false);
                 onUserCreated();
             } else {
-                toast.error(result.error || 'Kullanıcı oluşturulamadı');
+                toast.error(result.error || t('errorMessage'));
             }
         } catch (error) {
             console.error('User creation error:', error);
-            toast.error('Bir hata oluştu');
+            toast.error(t('genericError'));
         } finally {
             setLoading(false);
         }
@@ -167,10 +169,10 @@ export default function CreateUserModal({
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
                         <UserPlus className="h-5 w-5" />
-                        Yeni Kullanıcı Ekle
+                        {t('title')}
                     </DialogTitle>
                     <DialogDescription>
-                        Sisteme yeni bir kullanıcı ekleyin ve bir rol atayın
+                        {t('description')}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -179,26 +181,26 @@ export default function CreateUserModal({
                     <div className="space-y-4">
                         <div className="flex items-center gap-2 text-sm font-medium">
                             <User className="h-4 w-4" />
-                            Temel Bilgiler
+                            {t('basicInfo')}
                         </div>
 
                         <div className="grid grid-cols-1 gap-4">
                             <div>
-                                <Label htmlFor="name">Ad Soyad *</Label>
+                                <Label htmlFor="name">{t('fullNameLabel')} *</Label>
                                 <Input
                                     id="name"
                                     name="name"
                                     type="text"
                                     value={formData.name}
                                     onChange={handleInputChange}
-                                    placeholder="Kullanıcının tam adı"
+                                    placeholder={t('fullNamePlaceholder')}
                                     disabled={loading}
                                     required
                                 />
                             </div>
 
                             <div>
-                                <Label htmlFor="email">E-posta *</Label>
+                                <Label htmlFor="email">{t('emailLabel')} *</Label>
                                 <div className="relative">
                                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                                     <Input
@@ -207,7 +209,7 @@ export default function CreateUserModal({
                                         type="email"
                                         value={formData.email}
                                         onChange={handleInputChange}
-                                        placeholder="kullanici@example.com"
+                                        placeholder={t('emailPlaceholder')}
                                         className="pl-9"
                                         disabled={loading}
                                         required
@@ -216,7 +218,7 @@ export default function CreateUserModal({
                             </div>
 
                             <div>
-                                <Label htmlFor="password">Şifre *</Label>
+                                <Label htmlFor="password">{t('passwordLabel')} *</Label>
                                 <div className="relative">
                                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                                     <Input
@@ -225,7 +227,7 @@ export default function CreateUserModal({
                                         type={showPassword ? "text" : "password"}
                                         value={formData.password}
                                         onChange={handleInputChange}
-                                        placeholder="En az 6 karakter"
+                                        placeholder={t('passwordPlaceholder')}
                                         className="pl-9 pr-9"
                                         disabled={loading}
                                         required
@@ -243,7 +245,7 @@ export default function CreateUserModal({
                                     </button>
                                 </div>
                                 <p className="text-xs text-muted-foreground mt-1">
-                                    Şifre en az 6 karakter olmalıdır
+                                    {t('passwordHint')}
                                 </p>
                             </div>
                         </div>
@@ -254,9 +256,9 @@ export default function CreateUserModal({
                     {/* Durum */}
                     <div className="flex items-center justify-between">
                         <div>
-                            <Label htmlFor="isActive">Kullanıcı Durumu</Label>
+                            <Label htmlFor="isActive">{t('accountStatusLabel')}</Label>
                             <p className="text-xs text-muted-foreground">
-                                Kullanıcının sisteme giriş yapabilmesi için aktif olmalıdır
+                                {t('accountStatusDescription')}
                             </p>
                         </div>
                         <Switch
@@ -273,14 +275,14 @@ export default function CreateUserModal({
                     <div className="space-y-4">
                         <div className="flex items-center gap-2 text-sm font-medium">
                             <Shield className="h-4 w-4" />
-                            Rol Seçimi {selectedRole && '(1 seçili)'}
+                            {t('roleAndStatus')}
                         </div>
 
                         {/* Arama */}
                         <div className="relative">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                             <Input
-                                placeholder="Rol ara..."
+                                placeholder={t('roleSearchPlaceholder')}
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className="pl-9"
@@ -325,7 +327,7 @@ export default function CreateUserModal({
                                 ))
                             ) : (
                                 <div className="text-center py-4 text-muted-foreground">
-                                    Rol bulunamadı
+                                    {t('roleNotFound')}
                                 </div>
                             )}
                         </div>
@@ -362,14 +364,14 @@ export default function CreateUserModal({
                         onClick={handleClose}
                         disabled={loading}
                     >
-                        İptal
+                        {t('cancel')}
                     </Button>
                     <Button
                         type="button"
                         onClick={handleSubmit}
                         disabled={loading || !formData.name || !formData.email || !formData.password || !selectedRole}
                     >
-                        {loading ? 'Oluşturuluyor...' : 'Kullanıcı Oluştur'}
+                        {loading ? t('creating') : t('createButton')}
                     </Button>
                 </DialogFooter>
             </DialogContent>

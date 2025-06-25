@@ -19,6 +19,7 @@ import {
     Download,
     Trash,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface BulkActionsDropdownProps {
     selectedCount: number;
@@ -29,39 +30,40 @@ export default function BulkActionsDropdown({
     selectedCount,
     onBulkAction,
 }: BulkActionsDropdownProps) {
+    const t = useTranslations('AdminUsers.bulkActions');
     if (selectedCount === 0) return null;
 
     return (
         <div className="flex items-center gap-2">
             <Separator orientation="vertical" className="h-6" />
             <Badge variant="secondary">
-                {selectedCount} seçili
+                {t('selected', { count: selectedCount })}
             </Badge>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="sm">
                         <Settings className="h-4 w-4 mr-1" />
-                        Toplu İşlemler
+                        {t('title')}
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                    <DropdownMenuLabel>Kullanıcı İşlemleri</DropdownMenuLabel>
+                    <DropdownMenuLabel>{t('userActions')}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => onBulkAction('activate')}>
                         <UserCheck className="h-4 w-4 mr-2" />
-                        Hepsini Aktif Et
+                        {t('activateAll')}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => onBulkAction('deactivate')}>
                         <UserX className="h-4 w-4 mr-2" />
-                        Hepsini Devre Dışı Bırak
+                        {t('deactivateAll')}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => onBulkAction('export')}>
                         <Download className="h-4 w-4 mr-2" />
-                        CSV Olarak Dışa Aktar
+                        {t('exportCsv')}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => onBulkAction('delete')}>
                         <Trash className="h-4 w-4 mr-2" />
-                        Seçilenleri Sil
+                        {t('deleteSelected')}
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>

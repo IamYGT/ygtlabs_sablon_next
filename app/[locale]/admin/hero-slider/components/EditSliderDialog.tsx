@@ -22,7 +22,6 @@ import {
     Trash2,
     Save,
     X,
-    Info,
     Edit
 } from "lucide-react";
 import { FlagWrapper } from '@/components/ui/flag-wrapper';
@@ -228,7 +227,7 @@ export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: Edit
         }
 
         if (!slider?.id) {
-            toast.error("Slider bilgisi bulunamadı");
+            toast.error("Slider güncellenemedi, ID bulunamadı");
             return;
         }
 
@@ -248,23 +247,24 @@ export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: Edit
                 order
             };
 
-            const response = await fetch(`/api/admin/hero-slider/${slider.id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
+            const response = await fetch(`/api/admin/hero-slider/update?id=${slider.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(sliderData),
             });
 
-            if (!response.ok) {
+            if (response.ok) {
+                toast.success('Slider başarıyla güncellendi');
+                onSuccess();
+                onOpenChange(false);
+            } else {
                 const error = await response.json();
-                throw new Error(error.error || "Slider güncellenemedi");
+                toast.error(error.message || 'Slider güncellenirken bir hata oluştu');
             }
 
-            toast.success("Slider başarıyla güncellendi");
-            onSuccess();
-            onOpenChange(false);
         } catch (error) {
-            console.error("Update slider error:", error);
-            toast.error(error instanceof Error ? error.message : "Slider güncellenirken hata oluştu");
+            toast.error('Bir hata oluştu');
+            console.error(error);
         } finally {
             setLoading(false);
         }
@@ -272,387 +272,303 @@ export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: Edit
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-6xl max-h-[95vh] bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-0 shadow-2xl flex flex-col">
-                <DialogHeader className="border-b border-gray-200 dark:border-gray-700 pb-6 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/50 dark:to-indigo-950/50 -m-6 mb-0 p-6 rounded-t-lg">
-                    <DialogTitle className="flex items-center gap-3 text-2xl font-bold text-gray-900 dark:text-gray-100">
-                        <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg">
-                            <Edit className="h-6 w-6 text-white" />
-                        </div>
-                        <div>
-                            <span className="bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-700 bg-clip-text text-transparent">
-                                {t('editSlider')}
-                            </span>
-                            <p className="text-sm font-normal text-gray-600 dark:text-gray-400 mt-1">
-                                {t('editSliderDescription')}
-                            </p>
-                        </div>
+            <DialogContent className="max-w-4xl max-h-[95vh] flex flex-col">
+                <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2">
+                        <Edit className="h-5 w-5" />
+                        {t('editSlider')}
                     </DialogTitle>
                 </DialogHeader>
 
-                <div className="flex-1 overflow-y-auto px-1">
+                <div className="flex-grow overflow-y-auto pr-4 -mr-4">
+                    <form className="space-y-6">
+                        {/* İçerik ve Butonlar */}
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>{t('form.buttonSettings')}</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <Tabs defaultValue="tr" className="w-full">
+                                    <TabsList className="grid w-full grid-cols-2">
+                                        <TabsTrigger value="tr">
+                                            <FlagWrapper locale="tr" className="mr-2" /> {t('form.turkishContent')}
+                                        </TabsTrigger>
+                                        <TabsTrigger value="en">
+                                            <FlagWrapper locale="en" className="mr-2" /> {t('form.englishContent')}
+                                        </TabsTrigger>
+                                    </TabsList>
 
-                    <Tabs defaultValue="tr" className="w-full mt-6">
-                        <TabsList className="grid w-full grid-cols-2 bg-gradient-to-r from-gray-100 to-slate-100 dark:from-gray-800 dark:to-slate-800 p-1 rounded-xl shadow-inner">
-                            <TabsTrigger
-                                value="tr"
-                                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-200 font-semibold"
-                            >
-                                <div className="flex items-center gap-2">
-                                    <FlagWrapper locale="tr" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
-                                    <span>Türkçe</span>
-                                </div>
-                            </TabsTrigger>
-                            <TabsTrigger
-                                value="en"
-                                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-200 font-semibold"
-                            >
-                                <div className="flex items-center gap-2">
-                                    <FlagWrapper locale="en" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
-                                    <span>English</span>
-                                </div>
-                            </TabsTrigger>
-                        </TabsList>
+                                    {/* Türkçe İçerik */}
+                                    <TabsContent value="tr" className="space-y-4 pt-4">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="title-tr">{t('form.title')} <span className="text-red-500">*</span></Label>
+                                            <Input
+                                                id="title-tr"
+                                                value={title.tr}
+                                                onChange={(e) => setTitle({ ...title, tr: e.target.value })}
+                                                placeholder={t('form.placeholders.titleTr')}
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="subtitle-tr">{t('form.subtitle')}</Label>
+                                            <Input
+                                                id="subtitle-tr"
+                                                value={subtitle.tr}
+                                                onChange={(e) => setSubtitle({ ...subtitle, tr: e.target.value })}
+                                                placeholder={t('form.placeholders.subtitleTr')}
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="description-tr">{t('form.description')}</Label>
+                                            <Textarea
+                                                id="description-tr"
+                                                value={description.tr}
+                                                onChange={(e) => setDescription({ ...description, tr: e.target.value })}
+                                                placeholder={t('form.placeholders.descriptionTr')}
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="badge-tr">{t('form.badge')}</Label>
+                                            <Input
+                                                id="badge-tr"
+                                                value={badge.tr}
+                                                onChange={(e) => setBadge({ ...badge, tr: e.target.value })}
+                                                placeholder={t('form.placeholders.badgeTr')}
+                                            />
+                                        </div>
+                                        {/* Butonlar */}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+                                            <div className="space-y-2">
+                                                <Label>{t('form.primaryButton')} <span className="text-red-500">*</span></Label>
+                                                <Input
+                                                    value={primaryButton.tr.text}
+                                                    onChange={(e) => setPrimaryButton({ ...primaryButton, tr: { ...primaryButton.tr, text: e.target.value } })}
+                                                    placeholder={t('form.placeholders.primaryButtonTr')}
+                                                />
+                                                <Input
+                                                    value={primaryButton.tr.url}
+                                                    onChange={(e) => setPrimaryButton({ ...primaryButton, tr: { ...primaryButton.tr, url: e.target.value } })}
+                                                    placeholder={t('form.placeholders.primaryButtonUrlTr')}
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <Label>{t('form.secondaryButton')} <span className="text-muted-foreground">({t('form.secondaryButtonOptional')})</span></Label>
+                                                <Input
+                                                    value={secondaryButton.tr.text}
+                                                    onChange={(e) => setSecondaryButton({ ...secondaryButton, tr: { ...secondaryButton.tr, text: e.target.value } })}
+                                                    placeholder={t('form.placeholders.secondaryButtonTr')}
+                                                />
+                                                <Input
+                                                    value={secondaryButton.tr.url}
+                                                    onChange={(e) => setSecondaryButton({ ...secondaryButton, tr: { ...secondaryButton.tr, url: e.target.value } })}
+                                                    placeholder={t('form.placeholders.secondaryButtonUrlTr')}
+                                                />
+                                            </div>
+                                        </div>
+                                    </TabsContent>
 
-                        <TabsContent value="tr" className="space-y-4">
+                                    {/* English Content */}
+                                    <TabsContent value="en" className="space-y-4 pt-4">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="title-en">{t('form.titleEn')} <span className="text-red-500">*</span></Label>
+                                            <Input
+                                                id="title-en"
+                                                value={title.en}
+                                                onChange={(e) => setTitle({ ...title, en: e.target.value })}
+                                                placeholder={t('form.placeholders.titleEn')}
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="subtitle-en">{t('form.subtitleEn')}</Label>
+                                            <Input
+                                                id="subtitle-en"
+                                                value={subtitle.en}
+                                                onChange={(e) => setSubtitle({ ...subtitle, en: e.target.value })}
+                                                placeholder={t('form.placeholders.subtitleEn')}
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="description-en">{t('form.descriptionEn')}</Label>
+                                            <Textarea
+                                                id="description-en"
+                                                value={description.en}
+                                                onChange={(e) => setDescription({ ...description, en: e.target.value })}
+                                                placeholder={t('form.placeholders.descriptionEn')}
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="badge-en">{t('form.badgeEn')}</Label>
+                                            <Input
+                                                id="badge-en"
+                                                value={badge.en}
+                                                onChange={(e) => setBadge({ ...badge, en: e.target.value })}
+                                                placeholder={t('form.placeholders.badgeEn')}
+                                            />
+                                        </div>
+                                        {/* Buttons */}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+                                            <div className="space-y-2">
+                                                <Label>{t('form.primaryButton')} <span className="text-red-500">*</span></Label>
+                                                <Input
+                                                    value={primaryButton.en.text}
+                                                    onChange={(e) => setPrimaryButton({ ...primaryButton, en: { ...primaryButton.en, text: e.target.value } })}
+                                                    placeholder={t('form.placeholders.primaryButtonEn')}
+                                                />
+                                                <Input
+                                                    value={primaryButton.en.url}
+                                                    onChange={(e) => setPrimaryButton({ ...primaryButton, en: { ...primaryButton.en, url: e.target.value } })}
+                                                    placeholder={t('form.placeholders.primaryButtonUrlEn')}
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <Label>{t('form.secondaryButton')} <span className="text-muted-foreground">({t('form.secondaryButtonOptional')})</span></Label>
+                                                <Input
+                                                    value={secondaryButton.en.text}
+                                                    onChange={(e) => setSecondaryButton({ ...secondaryButton, en: { ...secondaryButton.en, text: e.target.value } })}
+                                                    placeholder={t('form.placeholders.secondaryButtonEn')}
+                                                />
+                                                <Input
+                                                    value={secondaryButton.en.url}
+                                                    onChange={(e) => setSecondaryButton({ ...secondaryButton, en: { ...secondaryButton.en, url: e.target.value } })}
+                                                    placeholder={t('form.placeholders.secondaryButtonUrlEn')}
+                                                />
+                                            </div>
+                                        </div>
+                                    </TabsContent>
+                                </Tabs>
+                            </CardContent>
+                        </Card>
+
+                        {/* Görsel ve Ayarlar */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             <Card>
                                 <CardHeader>
-                                    <CardTitle>Türkçe İçerik</CardTitle>
+                                    <CardTitle>{t('form.backgroundImage')}</CardTitle>
                                 </CardHeader>
-                                <CardContent className="space-y-4">
-                                    <div>
-                                        <Label htmlFor="title-tr">Başlık *</Label>
-                                        <Input
-                                            id="title-tr"
-                                            value={title.tr}
-                                            onChange={(e) => setTitle({ ...title, tr: e.target.value })}
-                                            placeholder="Araç Performansının Zirvesi"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <Label htmlFor="subtitle-tr">Alt Başlık</Label>
-                                        <Input
-                                            id="subtitle-tr"
-                                            value={subtitle.tr}
-                                            onChange={(e) => setSubtitle({ ...subtitle, tr: e.target.value })}
-                                            placeholder="Profesyonel ECU Tuning"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <Label htmlFor="description-tr">Açıklama *</Label>
-                                        <Textarea
-                                            id="description-tr"
-                                            value={description.tr}
-                                            onChange={(e) => setDescription({ ...description, tr: e.target.value })}
-                                            placeholder="Aracınızın gizli potansiyelini ortaya çıkarın..."
-                                            rows={3}
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <Label htmlFor="badge-tr">Badge</Label>
-                                        <Input
-                                            id="badge-tr"
-                                            value={badge.tr}
-                                            onChange={(e) => setBadge({ ...badge, tr: e.target.value })}
-                                            placeholder="Yeni"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <Label htmlFor="primary-button-text-tr">Ana Buton Metni *</Label>
-                                        <Input
-                                            id="primary-button-text-tr"
-                                            value={primaryButton.tr.text}
-                                            onChange={(e) => setPrimaryButton({
-                                                ...primaryButton,
-                                                tr: { ...primaryButton.tr, text: e.target.value }
-                                            })}
-                                            placeholder="Hemen Başla"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <Label htmlFor="primary-button-url-tr">Ana Buton URL</Label>
-                                        <Input
-                                            id="primary-button-url-tr"
-                                            value={primaryButton.tr.url}
-                                            onChange={(e) => setPrimaryButton({
-                                                ...primaryButton,
-                                                tr: { ...primaryButton.tr, url: e.target.value }
-                                            })}
-                                            placeholder="/contact"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <Label htmlFor="secondary-button-text-tr">İkinci Buton Metni</Label>
-                                        <Input
-                                            id="secondary-button-text-tr"
-                                            value={secondaryButton.tr.text}
-                                            onChange={(e) => setSecondaryButton({
-                                                ...secondaryButton,
-                                                tr: { ...secondaryButton.tr, text: e.target.value }
-                                            })}
-                                            placeholder="Daha Fazla Bilgi"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <Label htmlFor="secondary-button-url-tr">İkinci Buton URL</Label>
-                                        <Input
-                                            id="secondary-button-url-tr"
-                                            value={secondaryButton.tr.url}
-                                            onChange={(e) => setSecondaryButton({
-                                                ...secondaryButton,
-                                                tr: { ...secondaryButton.tr, url: e.target.value }
-                                            })}
-                                            placeholder="/about"
-                                        />
-                                    </div>
+                                <CardContent>
+                                    <ImageUpload
+                                        value={backgroundImage}
+                                        onChange={setBackgroundImage}
+                                        uploadEndpoint="heroSliderImage"
+                                    />
                                 </CardContent>
                             </Card>
 
-                            {/* İstatistikler */}
                             <Card>
                                 <CardHeader>
-                                    <CardTitle className="flex items-center justify-between">
-                                        İstatistikler (Türkçe)
-                                        <Button onClick={addStatistic} size="sm">
-                                            <Plus className="h-4 w-4" />
+                                    <CardTitle>{t('form.sliderSettings')}</CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-4">
+                                    <div className="flex items-center justify-between rounded-lg border p-3">
+                                        <div className="space-y-0.5">
+                                            <Label>{t('form.publishStatus')}</Label>
+                                            <p className="text-sm text-muted-foreground">
+                                                {t('form.publishStatusDescription')}
+                                            </p>
+                                        </div>
+                                        <Switch
+                                            checked={isActive}
+                                            onCheckedChange={setIsActive}
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="order">{t('form.order')}</Label>
+                                        <Input
+                                            id="order"
+                                            type="number"
+                                            value={order}
+                                            onChange={(e) => setOrder(Number(e.target.value))}
+                                        />
+                                        <p className="text-xs text-muted-foreground">
+                                            {t('form.sortingDescription')}
+                                        </p>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </div>
+
+                        {/* İstatistikler */}
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>{t('form.statistics')} <span className="text-muted-foreground text-sm">({t('form.statisticsOptional')})</span></CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="space-y-4">
+                                    {statistics.map((stat, index) => (
+                                        <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border rounded-lg relative">
+                                            <button
+                                                onClick={() => removeStatistic(index)}
+                                                className="absolute top-2 right-2 text-muted-foreground hover:text-destructive"
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                            </button>
+                                            <Tabs defaultValue="tr_stat" className="w-full">
+                                                <TabsList className="grid w-full grid-cols-2">
+                                                    <TabsTrigger value="tr_stat">
+                                                        <FlagWrapper locale="tr" className="mr-2" /> {t('languages.tr')}
+                                                    </TabsTrigger>
+                                                    <TabsTrigger value="en_stat">
+                                                        <FlagWrapper locale="en" className="mr-2" /> {t('languages.en')}
+                                                    </TabsTrigger>
+                                                </TabsList>
+                                                <TabsContent value="tr_stat" className="space-y-2 pt-2">
+                                                    <Input
+                                                        value={stat.tr.value}
+                                                        onChange={(e) => updateStatistic(index, 'tr', 'value', e.target.value)}
+                                                        placeholder={t('form.placeholders.statisticsValue')}
+                                                    />
+                                                    <Input
+                                                        value={stat.tr.label}
+                                                        onChange={(e) => updateStatistic(index, 'tr', 'label', e.target.value)}
+                                                        placeholder={t('form.placeholders.statisticsLabel')}
+                                                    />
+                                                </TabsContent>
+                                                <TabsContent value="en_stat" className="space-y-2 pt-2">
+                                                    <Input
+                                                        value={stat.en.value}
+                                                        onChange={(e) => updateStatistic(index, 'en', 'value', e.target.value)}
+                                                        placeholder={t('form.placeholders.statisticsValue')}
+                                                    />
+                                                    <Input
+                                                        value={stat.en.label}
+                                                        onChange={(e) => updateStatistic(index, 'en', 'label', e.target.value)}
+                                                        placeholder={t('form.placeholders.statisticsLabelEn')}
+                                                    />
+                                                </TabsContent>
+                                            </Tabs>
+                                        </div>
+                                    ))}
+                                    {statistics.length < 4 && (
+                                        <Button variant="outline" onClick={addStatistic}>
+                                            <Plus className="mr-2 h-4 w-4" /> {t('form.addStatistic')}
                                         </Button>
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="space-y-4">
-                                    {statistics.map((stat, index) => (
-                                        <div key={index} className="flex items-center space-x-2 p-3 border rounded">
-                                            <div className="flex-1">
-                                                <Input
-                                                    placeholder="Değer (5K+)"
-                                                    value={stat.tr.value}
-                                                    onChange={(e) => updateStatistic(index, 'tr', 'value', e.target.value)}
-                                                />
-                                            </div>
-                                            <div className="flex-1">
-                                                <Input
-                                                    placeholder="Etiket (Müşteri)"
-                                                    value={stat.tr.label}
-                                                    onChange={(e) => updateStatistic(index, 'tr', 'label', e.target.value)}
-                                                />
-                                            </div>
-                                            {statistics.length > 1 && (
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => removeStatistic(index)}
-                                                >
-                                                    <Trash2 className="h-4 w-4" />
-                                                </Button>
-                                            )}
-                                        </div>
-                                    ))}
-                                </CardContent>
-                            </Card>
-                        </TabsContent>
-
-                        <TabsContent value="en" className="space-y-4">
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle>English Content</CardTitle>
-                                </CardHeader>
-                                <CardContent className="space-y-4">
-                                    <div>
-                                        <Label htmlFor="title-en">Title *</Label>
-                                        <Input
-                                            id="title-en"
-                                            value={title.en}
-                                            onChange={(e) => setTitle({ ...title, en: e.target.value })}
-                                            placeholder="Peak of Vehicle Performance"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <Label htmlFor="subtitle-en">Subtitle</Label>
-                                        <Input
-                                            id="subtitle-en"
-                                            value={subtitle.en}
-                                            onChange={(e) => setSubtitle({ ...subtitle, en: e.target.value })}
-                                            placeholder="Professional ECU Tuning"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <Label htmlFor="description-en">Description *</Label>
-                                        <Textarea
-                                            id="description-en"
-                                            value={description.en}
-                                            onChange={(e) => setDescription({ ...description, en: e.target.value })}
-                                            placeholder="Unlock your vehicle's hidden potential..."
-                                            rows={3}
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <Label htmlFor="badge-en">Badge</Label>
-                                        <Input
-                                            id="badge-en"
-                                            value={badge.en}
-                                            onChange={(e) => setBadge({ ...badge, en: e.target.value })}
-                                            placeholder="New"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <Label htmlFor="primary-button-text-en">Primary Button Text *</Label>
-                                        <Input
-                                            id="primary-button-text-en"
-                                            value={primaryButton.en.text}
-                                            onChange={(e) => setPrimaryButton({
-                                                ...primaryButton,
-                                                en: { ...primaryButton.en, text: e.target.value }
-                                            })}
-                                            placeholder="Get Started"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <Label htmlFor="primary-button-url-en">Primary Button URL</Label>
-                                        <Input
-                                            id="primary-button-url-en"
-                                            value={primaryButton.en.url}
-                                            onChange={(e) => setPrimaryButton({
-                                                ...primaryButton,
-                                                en: { ...primaryButton.en, url: e.target.value }
-                                            })}
-                                            placeholder="/contact"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <Label htmlFor="secondary-button-text-en">Secondary Button Text</Label>
-                                        <Input
-                                            id="secondary-button-text-en"
-                                            value={secondaryButton.en.text}
-                                            onChange={(e) => setSecondaryButton({
-                                                ...secondaryButton,
-                                                en: { ...secondaryButton.en, text: e.target.value }
-                                            })}
-                                            placeholder="Learn More"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <Label htmlFor="secondary-button-url-en">Secondary Button URL</Label>
-                                        <Input
-                                            id="secondary-button-url-en"
-                                            value={secondaryButton.en.url}
-                                            onChange={(e) => setSecondaryButton({
-                                                ...secondaryButton,
-                                                en: { ...secondaryButton.en, url: e.target.value }
-                                            })}
-                                            placeholder="/about"
-                                        />
-                                    </div>
-                                </CardContent>
-                            </Card>
-
-                            {/* İstatistikler */}
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle>Statistics (English)</CardTitle>
-                                </CardHeader>
-                                <CardContent className="space-y-4">
-                                    {statistics.map((stat, index) => (
-                                        <div key={index} className="flex items-center space-x-2 p-3 border rounded">
-                                            <div className="flex-1">
-                                                <Input
-                                                    placeholder="Value (5K+)"
-                                                    value={stat.en.value}
-                                                    onChange={(e) => updateStatistic(index, 'en', 'value', e.target.value)}
-                                                />
-                                            </div>
-                                            <div className="flex-1">
-                                                <Input
-                                                    placeholder="Label (Customers)"
-                                                    value={stat.en.label}
-                                                    onChange={(e) => updateStatistic(index, 'en', 'label', e.target.value)}
-                                                />
-                                            </div>
-                                        </div>
-                                    ))}
-                                </CardContent>
-                            </Card>
-                        </TabsContent>
-                    </Tabs>
-
-                    {/* Genel Ayarlar */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Genel Ayarlar</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <ImageUpload
-                                value={backgroundImage}
-                                onChange={setBackgroundImage}
-                                label="Arka Plan Görseli *"
-                                description="Hero slider için arka plan görseli yükleyin (1920x1080 önerilir)"
-                                maxSize={10}
-                            />
-
-                            <div>
-                                <Label htmlFor="order">Sıra</Label>
-                                <Input
-                                    id="order"
-                                    type="number"
-                                    value={order}
-                                    onChange={(e) => setOrder(parseInt(e.target.value) || 0)}
-                                    placeholder="0"
-                                />
-                            </div>
-
-                            <div className="flex items-center space-x-2">
-                                <Switch
-                                    id="is-active"
-                                    checked={isActive}
-                                    onCheckedChange={setIsActive}
-                                />
-                                <Label htmlFor="is-active">Aktif</Label>
-                            </div>
-                        </CardContent>
-                    </Card>
-
+                                    )}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </form>
                 </div>
 
-                {/* Footer Buttons */}
-                <div className="flex-shrink-0 flex items-center justify-between gap-4 pt-6 border-t border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50/80 to-slate-50/80 dark:from-gray-800/80 dark:to-slate-800/80 -m-6 mt-0 p-6 rounded-b-lg">
-                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                        <Info className="h-4 w-4" />
-                        <span>Değişiklikleri kaydetmeyi unutmayın</span>
-                    </div>
-                    <div className="flex gap-3">
+                <div className="flex-shrink-0 p-6 pt-0 mt-4 border-t">
+                    <div className="flex justify-end gap-2">
                         <Button
                             variant="outline"
                             onClick={() => onOpenChange(false)}
-                            className="border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800"
-                        >
-                            <X className="h-4 w-4 mr-2" />
-                            İptal
-                        </Button>
-                        <Button
-                            onClick={handleSubmit}
                             disabled={loading}
-                            className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 font-semibold px-8"
                         >
+                            <X className="mr-2 h-4 w-4" />
+                            {t('actions.cancel')}
+                        </Button>
+                        <Button onClick={handleSubmit} disabled={loading}>
                             {loading ? (
                                 <>
-                                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
-                                    Güncelleniyor...
+                                    <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2" />
+                                    {t('actions.updating')}
                                 </>
                             ) : (
                                 <>
-                                    <Save className="h-4 w-4 mr-2" />
-                                    Değişiklikleri Kaydet
+                                    <Save className="mr-2 h-4 w-4" />
+                                    {t('actions.update')}
                                 </>
                             )}
                         </Button>

@@ -16,8 +16,9 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { toast } from 'react-hot-toast';
-import { Users, Shield, Search } from 'lucide-react';
+import { Users, Shield, Search, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 interface User {
     id: string;
@@ -56,6 +57,7 @@ export default function QuickRoleAssignModal({
     roles,
     onRoleAssigned
 }: QuickRoleAssignModalProps) {
+    const t = useTranslations('AdminUsers.quickRoleAssign');
     const [loading, setLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedRole, setSelectedRole] = useState<string>('');
@@ -100,14 +102,14 @@ export default function QuickRoleAssignModal({
                     errorData
                 });
 
-                const errorMessage = errorData.error || 'Rol güncelleme başarısız oldu';
+                const errorMessage = errorData.error || t('updateFailed');
                 throw new Error(errorMessage);
             }
 
             const responseData = await response.json();
             console.log('Success response:', responseData);
 
-            toast.success(responseData.message || 'Rol başarıyla güncellendi');
+            toast.success(responseData.message || t('updateSuccess'));
             onOpenChange(false);
             onRoleAssigned();
         } catch (error) {
@@ -117,7 +119,7 @@ export default function QuickRoleAssignModal({
             if (error instanceof Error) {
                 toast.error(error.message);
             } else {
-                toast.error('Rol güncelleme başarısız oldu');
+                toast.error(t('updateFailed'));
             }
         } finally {
             setLoading(false);
@@ -128,6 +130,8 @@ export default function QuickRoleAssignModal({
 
     const currentRoleId = user.currentRole?.id || '';
     const hasChanges = selectedRole !== currentRoleId;
+    const newRole = selectedRole ? roles.find(r => r.id === selectedRole) : null;
+    const oldRole = currentRoleId ? roles.find(r => r.id === currentRoleId) : null;
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -135,10 +139,10 @@ export default function QuickRoleAssignModal({
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
                         <Shield className="h-5 w-5" />
-                        Hızlı Rol Atama
+                        {t('title')}
                     </DialogTitle>
                     <DialogDescription>
-                        {user.name || user.email} için rol atayın veya kaldırın
+                        {t('description', { userName: user.name || user.email || '' })}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -159,7 +163,7 @@ export default function QuickRoleAssignModal({
                             )}
                         </div>
                         <div>
-                            <div className="font-medium">{user.name || 'İsimsiz'}</div>
+                            <div className="font-medium">{user.name || t('unnamed')}</div>
                             <div className="text-sm text-muted-foreground">{user.email}</div>
                         </div>
                     </div>
@@ -168,7 +172,7 @@ export default function QuickRoleAssignModal({
                     <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
-                            placeholder="Rol ara..."
+                            placeholder={t('searchPlaceholder')}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="pl-9"
@@ -178,7 +182,7 @@ export default function QuickRoleAssignModal({
                     {/* Mevcut Rol */}
                     {user.currentRole && (
                         <div>
-                            <Label className="text-sm font-medium">Mevcut Rol</Label>
+                            <Label className="text-sm font-medium">{t('currentRole')}</Label>
                             <div className="flex flex-wrap gap-1 mt-2">
                                 <Badge
                                     variant="secondary"
@@ -196,7 +200,7 @@ export default function QuickRoleAssignModal({
 
                     {/* Rol Listesi */}
                     <div>
-                        <Label className="text-sm font-medium">Roller ({filteredRoles.length})</Label>
+                        <Label className="text-sm font-medium">{t('roles', { count: filteredRoles.length })}</Label>
                         <div className="max-h-60 overflow-y-auto mt-2 space-y-2">
                             {/* Rol Yok Seçeneği */}
                             <div
@@ -211,8 +215,8 @@ export default function QuickRoleAssignModal({
                                     className="h-4 w-4 text-primary"
                                 />
                                 <div className="flex-1">
-                                    <div className="text-sm font-medium text-muted-foreground">Rol Atanmamış</div>
-                                    <div className="text-xs text-muted-foreground">Kullanıcının rolü kaldırılır</div>
+                                    <div className="text-sm font-medium text-muted-foreground">{t('noRoleAssigned.title')}</div>
+                                    <div className="text-xs text-muted-foreground">{t('noRoleAssigned.description')}</div>
                                 </div>
                             </div>
 
@@ -248,34 +252,32 @@ export default function QuickRoleAssignModal({
 
                     {/* Özet */}
                     {hasChanges && (
-                        <div className="p-3 bg-blue-50 dark:bg-blue-950 rounded-lg">
-                            <div className="text-sm">
-                                <div className="text-blue-800 dark:text-blue-200 font-medium mb-1">
-                                    Değişiklik Özeti:
-                                </div>
-                                <div className="text-blue-700 dark:text-blue-300 text-xs">
-                                    {selectedRole ? `"${filteredRoles.find(r => r.id === selectedRole)?.displayName}" rolü atanacak` : 'Rol kaldırılacak'}
-                                </div>
+                        <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                            <Label className="text-sm font-medium text-blue-700 dark:text-blue-300">{t('summary.title')}</Label>
+                            <div className="flex items-center justify-center gap-2 text-sm mt-2">
+                                <Badge variant="destructive">{oldRole ? oldRole.displayName : t('summary.noRole')}</Badge>
+                                <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                                <Badge variant="default">{newRole ? newRole.displayName : t('summary.noRole')}</Badge>
                             </div>
                         </div>
                     )}
                 </div>
 
-                <DialogFooter>
+                <DialogFooter className="mt-4">
                     <Button
                         type="button"
                         variant="outline"
                         onClick={() => onOpenChange(false)}
                         disabled={loading}
                     >
-                        İptal
+                        {t('cancel')}
                     </Button>
                     <Button
                         type="button"
                         onClick={handleSave}
                         disabled={loading || !hasChanges}
                     >
-                        {loading ? 'Kaydediliyor...' : 'Kaydet'}
+                        {loading ? t('saving') : t('save')}
                     </Button>
                 </DialogFooter>
             </DialogContent>
