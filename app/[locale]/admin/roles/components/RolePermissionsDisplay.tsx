@@ -175,6 +175,7 @@ export default function RolePermissionsDisplay({
     roleId
 }: RolePermissionsDisplayProps) {
     const t = useTranslations('AdminCommon');
+    const tRoles = useTranslations('AdminRoles.permissionsDisplay');
     const [permissions, setPermissions] = useState<RolePermission[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -188,7 +189,7 @@ export default function RolePermissionsDisplay({
                 const response = await fetch(`/api/admin/roles/${roleId}/permissions`);
 
                 if (!response.ok) {
-                    throw new Error(`Yetki verisi alınamadı: ${response.status}`);
+                    throw new Error(`${tRoles('loadError')}: ${response.status}`);
                 }
 
                 const data = await response.json();
@@ -208,7 +209,7 @@ export default function RolePermissionsDisplay({
         if (roleId) {
             fetchPermissions();
         }
-    }, [roleId, t]);
+    }, [roleId, t, tRoles]);
 
     if (loading) {
         return (
@@ -217,7 +218,7 @@ export default function RolePermissionsDisplay({
                     <div className="flex items-center justify-center">
                         <div className="text-center">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-                            <p className="text-sm text-muted-foreground">Yetkiler yükleniyor...</p>
+                            <p className="text-sm text-muted-foreground">{tRoles('permissionsLoading')}</p>
                         </div>
                     </div>
                 </CardContent>
@@ -245,9 +246,9 @@ export default function RolePermissionsDisplay({
             <Card>
                 <CardContent className="p-6 text-center">
                     <Shield className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <h3 className="text-lg font-semibold mb-2">Yetki bulunamadı</h3>
+                    <h3 className="text-lg font-semibold mb-2">{tRoles('noPermissions')}</h3>
                     <p className="text-muted-foreground">
-                        {roleDisplayName} rolü için henüz yetki tanımlanmamış.
+                        {roleDisplayName} {tRoles('noPermissionsDescription')}
                     </p>
                 </CardContent>
             </Card>
@@ -271,10 +272,10 @@ export default function RolePermissionsDisplay({
             <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
                     <Shield className="h-5 w-5" />
-                    {roleDisplayName} Yetkileri
+                    {roleDisplayName} {tRoles('title')}
                 </h3>
                 <Badge variant="secondary">
-                    {permissions.length} yetki
+                    {permissions.length} {tRoles('permissionCount')}
                 </Badge>
             </div>
 
@@ -287,9 +288,9 @@ export default function RolePermissionsDisplay({
                             <CardTitle className="flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                     {getCategoryIcon(category)}
-                                    <span>{getCategoryDisplayName(category)}</span>
+                                    <span>{tRoles(`categories.${category}`) || getCategoryDisplayName(category)}</span>
                                     <Badge className={getCategoryColor(category)}>
-                                        {categoryPermissions.length} yetki
+                                        {categoryPermissions.length} {tRoles('permissionCount')}
                                     </Badge>
                                 </div>
                             </CardTitle>

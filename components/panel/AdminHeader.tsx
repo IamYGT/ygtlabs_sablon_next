@@ -310,7 +310,7 @@ export function AdminHeader({ title = "Dashboard", subtitle, setOpen }: AdminHea
                                 className="transition-colors duration-200 cursor-pointer"
                                 onClick={() => {
                                     const currentLocale = window.location.pathname.split('/')[1];
-                                    window.location.href = `/${currentLocale}/admin/profile`;
+                                    window.location.href = `/${currentLocale}/profile`;
                                 }}
                             >
                                 <User className="mr-2 h-4 w-4" />

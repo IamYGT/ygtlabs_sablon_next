@@ -304,5 +304,14 @@
                 "date": "July 22, 2024"
             }
         ]
+    },
+    "ServiceIcons": {
+        "ecuTuning": "ECU Software",
+        "performanceUpgrades": "Performance Upgrades",
+        "startStop": "Start-Stop Disable",
+        "adblueDpf": "Adblue & DPF Solutions",
+        "powerDyno": "Power & Dyno Test",
+        "ecuRemap": "ECU Remap",
+        "turboBoost": "Turbo Boost"
     }
 }

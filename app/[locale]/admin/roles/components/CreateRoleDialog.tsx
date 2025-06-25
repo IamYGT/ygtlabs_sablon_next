@@ -165,6 +165,7 @@ export default function CreateRoleDialog({
     onRoleCreated,
 }: CreateRoleDialogProps) {
     const t = useTranslations('AdminRoles.createDialog');
+    const tCommon = useTranslations('AdminCommon');
 
     // Önceden tanımlı rol şablonları
     const ROLE_TEMPLATES = {
@@ -546,7 +547,7 @@ export default function CreateRoleDialog({
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="description">{t('description')}</Label>
+                    <Label htmlFor="description">{t('descriptionLabel')}</Label>
                     <Textarea
                         id="description"
                         value={formData.description}
@@ -558,7 +559,7 @@ export default function CreateRoleDialog({
 
                 <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                        <Label>{t('accessType')}</Label>
+                        <Label>{t('layout')}</Label>
                         <div className="flex gap-2">
                             <Button
                                 type="button"
@@ -662,7 +663,7 @@ export default function CreateRoleDialog({
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="color">Renk</Label>
+                        <Label htmlFor="color">{t('color')}</Label>
                         <div className="space-y-2">
                             <div className="flex items-center gap-2">
                                 <input
@@ -671,7 +672,7 @@ export default function CreateRoleDialog({
                                     value={formData.color}
                                     onChange={(e) => setFormData(prev => ({ ...prev, color: e.target.value }))}
                                     className="w-8 h-8 rounded border"
-                                    title="Rol rengi seçin"
+                                    title={t('color')}
                                 />
                                 <span className="text-sm text-muted-foreground">{formData.color}</span>
                             </div>
@@ -720,9 +721,9 @@ export default function CreateRoleDialog({
         return (
             <div className="space-y-4">
                 <div className="text-center">
-                    <h3 className="text-base font-semibold mb-2">Yetki Yönetimi</h3>
+                    <h3 className="text-base font-semibold mb-2">{t('permissionManagement')}</h3>
                     <p className="text-muted-foreground text-sm mb-3">
-                        Rolün yetkilerini belirleyin ve erişim tipini seçin
+                        {t('permissionManagementDesc')}
                     </p>
                 </div>
 
@@ -730,7 +731,7 @@ export default function CreateRoleDialog({
                     <div className="flex items-center justify-center py-8">
                         <div className="text-center">
                             <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto mb-2"></div>
-                            <p className="text-sm text-muted-foreground">Yetkiler yükleniyor...</p>
+                            <p className="text-sm text-muted-foreground">{t('permissionsLoading')}</p>
                         </div>
                     </div>
                 ) : (
@@ -747,10 +748,10 @@ export default function CreateRoleDialog({
                                 </div>
                                 <div>
                                     <h3 className="font-semibold text-lg">
-                                        {formData.accessType === 'admin' ? 'Admin Rolü' : 'User Rolü'}
+                                        {formData.accessType === 'admin' ? t('adminAccess') : t('userAccess')}
                                     </h3>
                                     <p className="text-sm text-muted-foreground">
-                                        {currentPermissions.length} yetki seçili
+                                        {currentPermissions.length} {t('permissionCount')}
                                     </p>
                                 </div>
                             </div>
@@ -863,7 +864,7 @@ export default function CreateRoleDialog({
                                 <div>
                                     <div className="flex items-center gap-2 mb-3">
                                         <Shield className="w-5 h-5 text-green-600" />
-                                        <h4 className="font-semibold text-base">Seçili Yetkiler</h4>
+                                        <h4 className="font-semibold text-base">{t('selectedPermissions')}</h4>
                                         <Badge variant="default">{currentPermissions.length}</Badge>
                                     </div>
                                     <div className="space-y-2">
@@ -897,7 +898,7 @@ export default function CreateRoleDialog({
                                 <div>
                                     <div className="flex items-center gap-2 mb-3">
                                         <Plus className="w-5 h-5 text-blue-600" />
-                                        <h4 className="font-semibold text-base">Eklenebilir Yetkiler</h4>
+                                        <h4 className="font-semibold text-base">{t('availablePermissions')}</h4>
                                         <Badge variant="outline">{availablePermissionsFiltered.length}</Badge>
                                     </div>
                                     <div className="space-y-2 max-h-60 overflow-y-auto">
@@ -930,8 +931,8 @@ export default function CreateRoleDialog({
                             {currentPermissions.length === 0 && availablePermissionsFiltered.length === 0 && (
                                 <div className="text-center py-12">
                                     <Shield className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
-                                    <p className="text-lg text-muted-foreground mb-2">Tüm yetkiler yüklendi</p>
-                                    <p className="text-sm text-muted-foreground">Yukarıdan yetki seçebilirsiniz</p>
+                                    <p className="text-lg text-muted-foreground mb-2">{t('noPermissionsLoaded')}</p>
+                                    <p className="text-sm text-muted-foreground">{t('noPermissionsDesc')}</p>
                                 </div>
                             )}
                         </div>
@@ -944,9 +945,9 @@ export default function CreateRoleDialog({
     const renderReviewStep = () => (
         <div className="space-y-6">
             <div className="text-center">
-                <h3 className="text-lg font-semibold mb-2">Ayarları Gözden Geçirin</h3>
+                <h3 className="text-lg font-semibold mb-2">{t('reviewSettings')}</h3>
                 <p className="text-muted-foreground text-sm">
-                    Rol oluşturulmadan önce tüm ayarları kontrol edin
+                    {t('reviewSettingsDesc')}
                 </p>
             </div>
 
@@ -954,7 +955,7 @@ export default function CreateRoleDialog({
                 {/* Rol Bilgileri */}
                 <Card>
                     <CardHeader>
-                        <CardTitle className="text-base">Rol Bilgileri</CardTitle>
+                        <CardTitle className="text-base">{t('roleInfo')}</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
                         <div className="flex items-center gap-3">
@@ -965,11 +966,11 @@ export default function CreateRoleDialog({
                             <div>
                                 <h4 className="font-semibold">{formData.displayName}</h4>
                                 <p className="text-sm text-muted-foreground">
-                                    Sistem kodu: {generateRoleCode(formData.displayName)}
+                                    {t('systemCode')}: {generateRoleCode(formData.displayName)}
                                 </p>
                             </div>
                             <Badge variant="outline" className="ml-auto">
-                                {formData.accessType === 'admin' ? 'Admin Erişimi' : 'User Erişimi'}
+                                {formData.accessType === 'admin' ? t('adminAccess') : t('userAccess')}
                             </Badge>
                         </div>
                         {formData.description && (
@@ -985,7 +986,7 @@ export default function CreateRoleDialog({
                     <CardHeader>
                         <CardTitle className="text-base flex items-center gap-2">
                             <Shield className="w-4 h-4" />
-                            Seçilen Yetkiler ({selectedPermissions.size})
+                            {t('permissionsSummary', { count: selectedPermissions.size })}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -1014,7 +1015,7 @@ export default function CreateRoleDialog({
                             <div className="flex items-center gap-2 text-sm">
                                 <Sparkles className="w-4 h-4 text-primary" />
                                 <span className="text-primary font-medium">
-                                    {ROLE_TEMPLATES[selectedTemplate as keyof typeof ROLE_TEMPLATES].name} şablonu kullanıldı
+                                    {t('templateUsed', { template: ROLE_TEMPLATES[selectedTemplate as keyof typeof ROLE_TEMPLATES].name })}
                                 </span>
                             </div>
                         </CardContent>
@@ -1030,7 +1031,7 @@ export default function CreateRoleDialog({
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2 text-base">
                         <Plus className="w-4 h-4" />
-                        Yeni Rol Oluştur
+                        {t('title')}
                     </DialogTitle>
                     <DialogDescription className="text-xs">
                         {WIZARD_STEPS[currentStep].description}
@@ -1071,7 +1072,7 @@ export default function CreateRoleDialog({
                         ) : (
                             <>
                                 <ChevronLeft className="w-4 h-4 mr-1" />
-                                Geri
+                                {tCommon('back')}
                             </>
                         )}
                     </Button>
@@ -1082,7 +1083,7 @@ export default function CreateRoleDialog({
                                 onClick={nextStep}
                                 disabled={loading}
                             >
-                                Devam Et
+                                {tCommon('continue')}
                                 <ChevronRight className="w-4 h-4 ml-1" />
                             </Button>
                         ) : (
@@ -1090,7 +1091,7 @@ export default function CreateRoleDialog({
                                 onClick={handleSubmit}
                                 disabled={loading || !formData.displayName.trim()}
                             >
-                                {loading ? 'Oluşturuluyor...' : 'Rol Oluştur'}
+                                {loading ? t('creating') : t('create')}
                             </Button>
                         )}
                     </div>

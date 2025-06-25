@@ -193,7 +193,7 @@ export default function EditRoleDialog({
     onRoleUpdated
 }: EditRoleDialogProps) {
     const t = useTranslations('AdminRoles.editDialog');
-    const common = useTranslations('AdminCommon');
+    const tCommon = useTranslations('AdminCommon');
 
     // Wizard adımları
     const WIZARD_STEPS = [
@@ -290,10 +290,10 @@ export default function EditRoleDialog({
         const newErrors: Record<string, string> = {};
 
         if (!formData.displayName.trim()) {
-            newErrors.displayName = 'Rol adı gereklidir';
+            newErrors.displayName = t('roleNameRequired');
         }
         if (formData.displayName.length > 50) {
-            newErrors.displayName = 'Rol adı 50 karakterden fazla olamaz';
+            newErrors.displayName = t('roleNameTooLong');
         }
 
         setErrors(newErrors);
@@ -470,9 +470,9 @@ export default function EditRoleDialog({
     const renderDetailsStep = () => (
         <div className="space-y-6">
             <div className="text-center">
-                <h3 className="text-lg font-semibold mb-2">Rol Bilgileri</h3>
+                <h3 className="text-lg font-semibold mb-2">{t('roleInfo')}</h3>
                 <p className="text-muted-foreground text-sm">
-                    Rolün temel bilgilerini düzenleyin
+                    {t('roleInfoDescription')}
                 </p>
             </div>
 
@@ -481,11 +481,11 @@ export default function EditRoleDialog({
                 <div className="flex items-start gap-3 p-4 bg-orange-50 border border-orange-200 rounded-lg">
                     <AlertTriangle className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
                     <div>
-                        <h4 className="font-semibold text-orange-800 mb-1">Korumalı Rol</h4>
+                        <h4 className="font-semibold text-orange-800 mb-1">{t('protectedRole')}</h4>
                         <p className="text-sm text-orange-700">
                             {role.name === 'super_admin'
-                                ? 'Super Admin rolü sistem güvenliği için korunmaktadır ve düzenlenemez.'
-                                : 'Bu rol sistem tarafından korunmaktadır ve düzenlenemez.'
+                                ? t('superAdminProtectedDesc')
+                                : t('protectedRoleDesc')
                             }
                         </p>
                     </div>
@@ -494,12 +494,12 @@ export default function EditRoleDialog({
 
             <div className="space-y-4">
                 <div className="space-y-2">
-                    <Label htmlFor="displayName">Rol Adı *</Label>
+                    <Label htmlFor="displayName">{t('roleName')} *</Label>
                     <Input
                         id="displayName"
                         value={formData.displayName}
                         onChange={(e) => setFormData(prev => ({ ...prev, displayName: e.target.value }))}
-                        placeholder="Rol adını girin"
+                        placeholder={t('roleNamePlaceholder')}
                         disabled={isProtectedRole}
                         className={errors.displayName ? 'border-red-500' : ''}
                     />
@@ -510,19 +510,19 @@ export default function EditRoleDialog({
                         </p>
                     )}
                     <p className="text-xs text-muted-foreground">
-                        Sistem kodu: <code className="bg-muted px-1 rounded">
+                        {t('systemCode')}: <code className="bg-muted px-1 rounded">
                             {generateRoleCode(formData.displayName) || 'rol_adi'}
                         </code>
                     </p>
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="description">Açıklama</Label>
+                    <Label htmlFor="description">{t('description')}</Label>
                     <Textarea
                         id="description"
                         value={formData.description}
                         onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                        placeholder="Rol açıklaması"
+                        placeholder={t('descriptionPlaceholder')}
                         disabled={isProtectedRole}
                         rows={3}
                     />
@@ -530,7 +530,7 @@ export default function EditRoleDialog({
 
                 <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                        <Label>Erişim Tipi</Label>
+                        <Label>{t('accessType')}</Label>
                         <Select
                             value={formData.layoutType}
                             onValueChange={(value) => {
@@ -583,24 +583,24 @@ export default function EditRoleDialog({
                                 <SelectItem value="admin">
                                     <div className="flex items-center gap-2">
                                         <Crown className="w-4 h-4" />
-                                        Admin Erişimi
+                                        {t('adminAccess')}
                                     </div>
                                 </SelectItem>
                                 <SelectItem value="user">
                                     <div className="flex items-center gap-2">
                                         <Users className="w-4 h-4" />
-                                        User Erişimi
+                                        {t('userAccess')}
                                     </div>
                                 </SelectItem>
                             </SelectContent>
                         </Select>
                         <p className="text-xs text-muted-foreground">
-                            Admin erişimi yönetici paneline, User erişimi ise kullanıcı arayüzüne izin verir
+                            {t('accessTypeDesc')}
                         </p>
                     </div>
 
                     <div className="space-y-2">
-                        <Label>Renk</Label>
+                        <Label>{t('color')}</Label>
                         <div className="flex items-center gap-2">
                             <input
                                 type="color"
@@ -608,7 +608,7 @@ export default function EditRoleDialog({
                                 onChange={(e) => setFormData(prev => ({ ...prev, color: e.target.value }))}
                                 className="w-8 h-8 rounded border cursor-pointer"
                                 disabled={isProtectedRole}
-                                title="Rol rengi seçin"
+                                title={t('color')}
                             />
                             <span className="text-sm text-muted-foreground">{formData.color}</span>
                         </div>
@@ -630,9 +630,9 @@ export default function EditRoleDialog({
 
                 <div className="flex items-center justify-between pt-4">
                     <div>
-                        <p className="font-medium">Rol Aktif</p>
+                        <p className="font-medium">{t('roleActive')}</p>
                         <p className="text-sm text-muted-foreground">
-                            Pasif roller kullanıcılara atanamaz
+                            {t('roleActiveDesc')}
                         </p>
                     </div>
                     <Switch
@@ -673,17 +673,15 @@ export default function EditRoleDialog({
             setSelectedPermissions(newSelected);
         };
 
-
-
         return (
             <div className="space-y-3">
                 <div className="text-center">
-                    <h3 className="text-base font-semibold mb-1">Yetki Yönetimi</h3>
+                    <h3 className="text-base font-semibold mb-1">{t('permissionManagementTitle')}</h3>
                     <p className="text-muted-foreground text-xs mb-2">
-                        Yetki ekleyin/çıkarın ve erişim tipini belirleyin
+                        {t('permissionManagementDesc2')}
                     </p>
                     <Badge variant="outline" className="text-xs">
-                        <strong>{formData.layoutType === 'admin' ? common('admin') : common('user')}</strong> erişimi
+                        <strong>{formData.layoutType === 'admin' ? tCommon('admin') : tCommon('user')}</strong> {t('accessType')}
                     </Badge>
                 </div>
 
@@ -691,7 +689,7 @@ export default function EditRoleDialog({
                     <div className="flex items-center justify-center py-6">
                         <div className="text-center">
                             <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary mx-auto mb-1"></div>
-                            <p className="text-xs text-muted-foreground">Yükleniyor...</p>
+                            <p className="text-xs text-muted-foreground">{tCommon('loading')}</p>
                         </div>
                     </div>
                 ) : (
@@ -708,10 +706,10 @@ export default function EditRoleDialog({
                                 </div>
                                 <div>
                                     <h3 className="font-semibold text-lg">
-                                        {formData.layoutType === 'admin' ? 'Admin Rolü' : 'User Rolü'}
+                                        {formData.layoutType === 'admin' ? t('adminAccess') : t('userAccess')}
                                     </h3>
                                     <p className="text-sm text-muted-foreground">
-                                        {currentPermissions.length} yetki seçili
+                                        {currentPermissions.length} {t('selectedPermissions')}
                                     </p>
                                 </div>
                             </div>
@@ -787,7 +785,7 @@ export default function EditRoleDialog({
                         <div className="relative">
                             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                             <Input
-                                placeholder="Yetki ara..."
+                                placeholder={t('searchPermissions')}
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className="pl-10 h-11 text-base"
@@ -801,7 +799,7 @@ export default function EditRoleDialog({
                                 <div>
                                     <div className="flex items-center gap-2 mb-3">
                                         <Shield className="w-5 h-5 text-green-600" />
-                                        <h4 className="font-semibold text-base">Seçili Yetkiler</h4>
+                                        <h4 className="font-semibold text-base">{t('selectedPermissions')}</h4>
                                         <Badge variant="default">{currentPermissions.length}</Badge>
                                     </div>
                                     <div className="space-y-2">
@@ -835,7 +833,7 @@ export default function EditRoleDialog({
                                 <div>
                                     <div className="flex items-center gap-2 mb-3">
                                         <Plus className="w-5 h-5 text-blue-600" />
-                                        <h4 className="font-semibold text-base">Eklenebilir Yetkiler</h4>
+                                        <h4 className="font-semibold text-base">{t('availablePermissions')}</h4>
                                         <Badge variant="outline">{availablePermissions.length}</Badge>
                                     </div>
                                     <div className="space-y-2 max-h-60 overflow-y-auto">
@@ -868,8 +866,8 @@ export default function EditRoleDialog({
                             {currentPermissions.length === 0 && availablePermissions.length === 0 && (
                                 <div className="text-center py-12">
                                     <Shield className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
-                                    <p className="text-lg text-muted-foreground mb-2">Tüm yetkiler yüklendi</p>
-                                    <p className="text-sm text-muted-foreground">Yukarıdan yetki seçebilirsiniz</p>
+                                    <p className="text-lg text-muted-foreground mb-2">{t('noPermissionsSelected')}</p>
+                                    <p className="text-sm text-muted-foreground">{t('noPermissionsDesc')}</p>
                                 </div>
                             )}
                         </div>
@@ -882,9 +880,9 @@ export default function EditRoleDialog({
     const renderReviewStep = () => (
         <div className="space-y-6">
             <div className="text-center">
-                <h3 className="text-lg font-semibold mb-2">Değişiklikleri Gözden Geçirin</h3>
+                <h3 className="text-lg font-semibold mb-2">{t('reviewChangesTitle')}</h3>
                 <p className="text-muted-foreground text-sm">
-                    Rol güncellemeden önce tüm değişiklikleri kontrol edin
+                    {t('reviewChangesDesc')}
                 </p>
             </div>
 
@@ -892,7 +890,7 @@ export default function EditRoleDialog({
                 {/* Rol Bilgileri */}
                 <Card>
                     <CardHeader>
-                        <CardTitle className="text-base">Rol Bilgileri</CardTitle>
+                        <CardTitle className="text-base">{t('roleInformation')}</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
                         <div className="flex items-center gap-3">
@@ -903,15 +901,15 @@ export default function EditRoleDialog({
                             <div>
                                 <h4 className="font-semibold">{formData.displayName}</h4>
                                 <p className="text-sm text-muted-foreground">
-                                    Sistem kodu: {generateRoleCode(formData.displayName)}
+                                    {t('systemCode')}: {generateRoleCode(formData.displayName)}
                                 </p>
                             </div>
                             <div className="flex gap-2 ml-auto">
                                 <Badge variant={formData.isActive ? "default" : "secondary"}>
-                                    {formData.isActive ? common('active') : common('inactive')}
+                                    {formData.isActive ? tCommon('active') : tCommon('inactive')}
                                 </Badge>
                                 <Badge variant="outline">
-                                    {formData.layoutType === 'admin' ? 'Admin Erişimi' : 'User Erişimi'}
+                                    {formData.layoutType === 'admin' ? t('adminAccess') : t('userAccess')}
                                 </Badge>
                             </div>
                         </div>
@@ -928,7 +926,7 @@ export default function EditRoleDialog({
                     <CardHeader>
                         <CardTitle className="text-base flex items-center gap-2">
                             <Shield className="w-4 h-4" />
-                            Seçilen Yetkiler ({selectedPermissions.size})
+                            {t('permissionsSummary', { count: selectedPermissions.size })}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -964,11 +962,11 @@ export default function EditRoleDialog({
                         >
                             <Edit className="w-3 h-3 text-white" />
                         </div>
-                        {role.displayName} Düzenle
+                        {role.displayName} {t('title')}
                         {isProtectedRole && (
                             <Badge variant="outline" className="text-orange-600 border-orange-600 text-xs">
                                 <ShieldCheck className="w-2 h-2 mr-1" />
-                                {role.name === 'super_admin' ? 'Super' : 'Korumalı'}
+                                {role.name === 'super_admin' ? 'Super' : t('protectedRole')}
                             </Badge>
                         )}
                     </DialogTitle>
@@ -1011,11 +1009,11 @@ export default function EditRoleDialog({
                         disabled={loading}
                     >
                         {currentStep === 0 ? (
-                            common('cancel')
+                            tCommon('cancel')
                         ) : (
                             <>
                                 <ChevronLeft className="w-4 h-4 mr-1" />
-                                Geri
+                                {t('back')}
                             </>
                         )}
                     </Button>
@@ -1026,7 +1024,7 @@ export default function EditRoleDialog({
                                 onClick={nextStep}
                                 disabled={loading || isProtectedRole}
                             >
-                                Devam Et
+                                {t('continue')}
                                 <ChevronRight className="w-4 h-4 ml-1" />
                             </Button>
                         ) : (
@@ -1037,12 +1035,12 @@ export default function EditRoleDialog({
                                 {loading ? (
                                     <>
                                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                                        Güncelleniyor...
+                                        {t('updating')}
                                     </>
                                 ) : (
                                     <>
                                         <Save className="w-4 h-4 mr-2" />
-                                        Rol Güncelle
+                                        {t('updateRole')}
                                     </>
                                 )}
                             </Button>

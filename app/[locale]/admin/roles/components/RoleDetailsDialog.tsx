@@ -190,23 +190,24 @@ interface RoleDetailsDialogProps {
     onOpenChange: (open: boolean) => void;
 }
 
-// Dialog adımları
-const DIALOG_STEPS = [
-    { id: 'overview', title: 'Genel Bakış', description: 'Rol bilgileri ve özeti' },
-    { id: 'permissions', title: 'Yetkiler', description: 'Rol yetkileri detayları' },
-    { id: 'users', title: 'Kullanıcılar', description: 'Bu rolü kullanan kullanıcılar' },
-    { id: 'activity', title: 'Aktivite', description: 'Rol kullanım bilgileri' }
-];
-
 export default function RoleDetailsDialog({
     role,
     open,
     onOpenChange,
 }: RoleDetailsDialogProps) {
-    const t = useTranslations('AdminCommon');
+    const t = useTranslations('AdminRoles.detailsDialog');
+    const tCommon = useTranslations('AdminCommon');
     const [permissions, setPermissions] = useState<Permission[]>([]);
     const [loading, setLoading] = useState(false);
     const [currentStep, setCurrentStep] = useState(0);
+
+    // Dialog adımları
+    const DIALOG_STEPS = [
+        { id: 'overview', title: t('steps.overview'), description: t('overviewDescription') },
+        { id: 'permissions', title: t('steps.permissions'), description: t('permissionsDescription') },
+        { id: 'users', title: t('steps.users'), description: t('usersDescription') },
+        { id: 'activity', title: t('steps.activity'), description: t('activityHeaderDescription') }
+    ];
 
     // Progress hesaplama
     const progress = ((currentStep + 1) / DIALOG_STEPS.length) * 100;
@@ -298,9 +299,9 @@ export default function RoleDetailsDialog({
     const renderOverviewStep = () => (
         <div className="space-y-6">
             <div className="text-center">
-                <h3 className="text-lg font-semibold mb-2">Rol Detayları</h3>
+                <h3 className="text-lg font-semibold mb-2">{t('title')}</h3>
                 <p className="text-muted-foreground text-sm">
-                    {role.displayName} rolünün genel bilgileri
+                    {role.displayName} {t('headerDescription')}
                 </p>
             </div>
 
@@ -320,7 +321,7 @@ export default function RoleDetailsDialog({
                         <div>
                             <h4 className="text-lg font-semibold">{role.displayName}</h4>
                             <p className="text-sm text-muted-foreground">
-                                Sistem kodu: <code className="bg-muted px-1 rounded text-xs">{role.name}</code>
+                                {t('systemCode')}: <code className="bg-muted px-1 rounded text-xs">{role.name}</code>
                             </p>
                         </div>
                         <div className="flex gap-2 ml-auto">
@@ -328,28 +329,28 @@ export default function RoleDetailsDialog({
                                 {role.isActive ? (
                                     <>
                                         <CheckCircle className="w-3 h-3 mr-1" />
-                                        Aktif
+                                        {tCommon('active')}
                                     </>
                                 ) : (
                                     <>
                                         <XCircle className="w-3 h-3 mr-1" />
-                                        Pasif
+                                        {tCommon('inactive')}
                                     </>
                                 )}
                             </Badge>
-                            <Badge variant="outline">
-                                {role.layoutType === 'admin' ? 'Admin Erişimi' : 'User Erişimi'}
-                            </Badge>
-                            {role.isSystemDefault && (
-                                <Badge variant="secondary">Sistem Rolü</Badge>
-                            )}
+                                                                <Badge variant="outline">
+                                        {role.layoutType === 'admin' ? t('adminAccess') : t('userAccess')}
+                                    </Badge>
+                                    {role.isSystemDefault && (
+                                        <Badge variant="secondary">{t('systemRole')}</Badge>
+                                    )}
                         </div>
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     {role.description && (
                         <div>
-                            <p className="text-sm font-medium mb-1">Açıklama</p>
+                            <p className="text-sm font-medium mb-1">{t('description')}</p>
                             <p className="text-sm text-muted-foreground">{role.description}</p>
                         </div>
                     )}
@@ -358,24 +359,24 @@ export default function RoleDetailsDialog({
                         <div className="text-center p-3 bg-muted/50 rounded-lg">
                             <UserCheck className="w-6 h-6 mx-auto mb-2 text-blue-500" />
                             <p className="text-2xl font-bold">{role._count.users}</p>
-                            <p className="text-xs text-muted-foreground">Kullanıcı</p>
+                            <p className="text-xs text-muted-foreground">{tCommon('users')}</p>
                         </div>
                         <div className="text-center p-3 bg-muted/50 rounded-lg">
                             <Shield className="w-6 h-6 mx-auto mb-2 text-green-500" />
                             <p className="text-2xl font-bold">{permissions.length}</p>
-                            <p className="text-xs text-muted-foreground">Yetki</p>
+                            <p className="text-xs text-muted-foreground">{t('permissions')}</p>
                         </div>
                         <div className="text-center p-3 bg-muted/50 rounded-lg">
                             <Calendar className="w-6 h-6 mx-auto mb-2 text-purple-500" />
                             <p className="text-sm font-bold">
                                 {new Date(role.createdAt).toLocaleDateString('tr-TR')}
                             </p>
-                            <p className="text-xs text-muted-foreground">Oluşturma</p>
+                            <p className="text-xs text-muted-foreground">{t('creationDate')}</p>
                         </div>
                         <div className="text-center p-3 bg-muted/50 rounded-lg">
                             <Settings className="w-6 h-6 mx-auto mb-2 text-orange-500" />
                             <p className="text-sm font-bold">{categories.length}</p>
-                            <p className="text-xs text-muted-foreground">Kategori</p>
+                            <p className="text-xs text-muted-foreground">{tCommon('category')}</p>
                         </div>
                     </div>
                 </CardContent>
@@ -387,21 +388,21 @@ export default function RoleDetailsDialog({
     const renderPermissionsStep = () => (
         <div className="space-y-6">
             <div className="text-center">
-                <h3 className="text-lg font-semibold mb-2">Rol Yetkileri</h3>
+                <h3 className="text-lg font-semibold mb-2">{t('rolePermissions')}</h3>
                 <p className="text-muted-foreground text-sm">
-                    Bu rolün sahip olduğu yetkiler ({permissions.length} adet)
+                    {t('rolePermissionsDescription', { count: permissions.length })}
                 </p>
             </div>
 
             {loading ? (
                 <div className="text-center py-8">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-                    <p className="text-muted-foreground mt-2">Yetkiler yükleniyor...</p>
+                    <p className="text-muted-foreground mt-2">{t('permissionsLoading')}</p>
                 </div>
             ) : permissions.length === 0 ? (
                 <div className="text-center py-8">
                     <Shield className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">Bu rolün henüz yetkisi bulunmuyor</p>
+                    <p className="text-muted-foreground">{t('noPermissions')}</p>
                 </div>
             ) : (
                 <ScrollArea className="h-96">
@@ -411,7 +412,7 @@ export default function RoleDetailsDialog({
                                 <CardHeader className="pb-3">
                                     <CardTitle className="flex items-center gap-2 text-base">
                                         {getCategoryIcon(category)}
-                                        {formatCategoryDisplayName(category)}
+                                        {t(`categories.${category}`) || formatCategoryDisplayName(category)}
                                         <Badge variant="secondary" className="ml-auto">
                                             {categorizedPermissions[category].length}
                                         </Badge>
@@ -457,16 +458,16 @@ export default function RoleDetailsDialog({
     const renderUsersStep = () => (
         <div className="space-y-6">
             <div className="text-center">
-                <h3 className="text-lg font-semibold mb-2">Rol Kullanıcıları</h3>
+                <h3 className="text-lg font-semibold mb-2">{t('roleUsers')}</h3>
                 <p className="text-muted-foreground text-sm">
-                    Bu rolü kullanan kullanıcılar ({role._count.users} kişi)
+                    {t('roleUsersDescription', { count: role._count.users })}
                 </p>
             </div>
 
             {role.users.length === 0 ? (
                 <div className="text-center py-8">
                     <Users className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">Bu rolü kullanan kullanıcı bulunmuyor</p>
+                    <p className="text-muted-foreground">{t('noUsers')}</p>
                 </div>
             ) : (
                 <ScrollArea className="h-96">
@@ -478,10 +479,10 @@ export default function RoleDetailsDialog({
                                         <User className="w-5 h-5 text-primary" />
                                     </div>
                                     <div className="flex-1">
-                                        <p className="font-medium">{user.name || 'İsimsiz Kullanıcı'}</p>
+                                        <p className="font-medium">{user.name || t('unnamed')}</p>
                                         <p className="text-sm text-muted-foreground">{user.email}</p>
                                     </div>
-                                    <Badge variant="outline">Aktif</Badge>
+                                    <Badge variant="outline">{tCommon('active')}</Badge>
                                 </CardContent>
                             </Card>
                         ))}
@@ -495,9 +496,9 @@ export default function RoleDetailsDialog({
     const renderActivityStep = () => (
         <div className="space-y-6">
             <div className="text-center">
-                <h3 className="text-lg font-semibold mb-2">Rol Aktivitesi</h3>
+                <h3 className="text-lg font-semibold mb-2">{t('roleActivity')}</h3>
                 <p className="text-muted-foreground text-sm">
-                    Rol kullanım istatistikleri ve bilgileri
+                    {t('roleActivityHeaderDescription')}
                 </p>
             </div>
 
@@ -506,32 +507,32 @@ export default function RoleDetailsDialog({
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2 text-base">
                             <Info className="w-4 h-4" />
-                            Genel Bilgiler
+                            {t('generalInfo')}
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
                         <div className="flex justify-between">
-                            <span className="text-sm text-muted-foreground">Oluşturma Tarihi:</span>
+                            <span className="text-sm text-muted-foreground">{t('creationDate')}:</span>
                             <span className="text-sm font-medium">
                                 {new Date(role.createdAt).toLocaleString('tr-TR')}
                             </span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-sm text-muted-foreground">Erişim Tipi:</span>
+                            <span className="text-sm text-muted-foreground">{t('accessType')}:</span>
                             <span className="text-sm font-medium">
-                                {role.layoutType === 'admin' ? 'Admin Erişimi' : 'User Erişimi'}
+                                {role.layoutType === 'admin' ? t('adminAccess') : t('userAccess')}
                             </span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-sm text-muted-foreground">Sistem Rolü:</span>
+                            <span className="text-sm text-muted-foreground">{t('systemRole')}:</span>
                             <span className="text-sm font-medium">
-                                {role.isSystemDefault ? 'Evet' : 'Hayır'}
+                                {role.isSystemDefault ? t('yes') : t('no')}
                             </span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-sm text-muted-foreground">Durum:</span>
+                            <span className="text-sm text-muted-foreground">{t('status')}:</span>
                             <Badge variant={role.isActive ? "default" : "secondary"}>
-                                {role.isActive ? t('active') : t('inactive')}
+                                {role.isActive ? tCommon('active') : tCommon('inactive')}
                             </Badge>
                         </div>
                     </CardContent>
@@ -541,7 +542,7 @@ export default function RoleDetailsDialog({
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2 text-base">
                             <Activity className="w-4 h-4" />
-                            Kullanım İstatistikleri
+                            {t('usageStats')}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -549,12 +550,12 @@ export default function RoleDetailsDialog({
                             <div className="text-center p-3 bg-blue-50 rounded-lg">
                                 <Users className="w-6 h-6 mx-auto mb-2 text-blue-500" />
                                 <p className="text-2xl font-bold text-blue-600">{role._count.users}</p>
-                                <p className="text-xs text-blue-500">Aktif Kullanıcı</p>
+                                <p className="text-xs text-blue-500">{t('activeUser')}</p>
                             </div>
                             <div className="text-center p-3 bg-green-50 rounded-lg">
                                 <Shield className="w-6 h-6 mx-auto mb-2 text-green-500" />
                                 <p className="text-2xl font-bold text-green-600">{permissions.length}</p>
-                                <p className="text-xs text-green-500">Toplam Yetki</p>
+                                <p className="text-xs text-green-500">{t('totalPermissions')}</p>
                             </div>
                         </div>
                     </CardContent>
@@ -569,7 +570,7 @@ export default function RoleDetailsDialog({
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
                         <Eye className="w-5 h-5" />
-                        {role.displayName} - Rol Detayları
+                        {role.displayName} - {t('title')}
                     </DialogTitle>
                     <DialogDescription>
                         {DIALOG_STEPS[currentStep].description}
@@ -610,11 +611,11 @@ export default function RoleDetailsDialog({
                         onClick={() => currentStep === 0 ? onOpenChange(false) : prevStep()}
                     >
                         {currentStep === 0 ? (
-                            'Kapat'
+                            t('close')
                         ) : (
                             <>
                                 <ChevronLeft className="w-4 h-4 mr-1" />
-                                Geri
+                                {t('back')}
                             </>
                         )}
                     </Button>
@@ -622,12 +623,12 @@ export default function RoleDetailsDialog({
                     <div className="flex items-center gap-2">
                         {currentStep < DIALOG_STEPS.length - 1 ? (
                             <Button onClick={nextStep}>
-                                Devam Et
+                                {t('continue')}
                                 <ChevronRight className="w-4 h-4 ml-1" />
                             </Button>
                         ) : (
                             <Button onClick={() => onOpenChange(false)}>
-                                Tamamla
+                                {t('finish')}
                             </Button>
                         )}
                     </div>

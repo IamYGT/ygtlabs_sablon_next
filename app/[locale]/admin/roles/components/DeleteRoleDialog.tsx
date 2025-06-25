@@ -61,6 +61,7 @@ export default function DeleteRoleDialog({
     onRoleDeleted
 }: DeleteRoleDialogProps) {
     const t = useTranslations('AdminRoles.deleteDialog');
+    const tCommon = useTranslations('AdminCommon');
     const [targetRoleId, setTargetRoleId] = useState<string>('');
     const [transferUsers, setTransferUsers] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -161,7 +162,7 @@ export default function DeleteRoleDialog({
                                         <div className="ml-auto flex items-center gap-2">
                                             <Badge variant="outline" className="text-xs">
                                                 <Users className="h-3 w-3 mr-1" />
-                                                {role._count.users} kullanıcı
+                                                {role._count.users} {tCommon('users')}
                                             </Badge>
                                         </div>
                                     </div>
@@ -194,7 +195,7 @@ export default function DeleteRoleDialog({
                                             onCheckedChange={(checked) => setTransferUsers(!!checked)}
                                         />
                                         <Label htmlFor="transfer-users" className="text-sm font-medium">
-                                            {t('transferUsers.label')} ({role._count.users} kullanıcı)
+                                            {t('transferUsers.label')} ({role._count.users} {tCommon('users')})
                                         </Label>
                                     </div>
 
@@ -231,7 +232,7 @@ export default function DeleteRoleDialog({
                                                         <div className="flex items-center gap-2 text-sm">
                                                             <Users className="h-4 w-4 text-green-600" />
                                                             <span className="font-medium">
-                                                                {role._count.users} kullanıcı
+                                                                {role._count.users} {tCommon('users')}
                                                             </span>
                                                             <ArrowRight className="h-3 w-3 text-green-600" />
                                                             <span className="font-medium">
@@ -276,7 +277,7 @@ export default function DeleteRoleDialog({
                         className="gap-2"
                     >
                         {loading ? (
-                            <>Siliniyor...</>
+                            <>{t('deleting')}</>
                         ) : (
                             <>
                                 <Trash2 className="h-4 w-4" />

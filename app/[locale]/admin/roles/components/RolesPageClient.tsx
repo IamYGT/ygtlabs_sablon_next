@@ -263,25 +263,25 @@ export default function RolesPageClient({
                                         <Button
                                             size="sm"
                                             variant="default"
-                                            onClick={async () => {
-                                                try {
-                                                    const response = await fetch('/api/admin/users/fix-permissions', {
-                                                        method: 'POST',
-                                                        headers: {
-                                                            'Content-Type': 'application/json',
-                                                        }
-                                                    });
-                                                    const data = await response.json();
-                                                    if (response.ok) {
-                                                        alert('Permissions updated! Please refresh the page.');
-                                                        window.location.reload();
-                                                    } else {
-                                                        alert('Error: ' + (data.error || 'Unknown error'));
+                                                                                    onClick={async () => {
+                                            try {
+                                                const response = await fetch('/api/admin/users/fix-permissions', {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Content-Type': 'application/json',
                                                     }
-                                                } catch (error) {
-                                                    alert('Error: ' + error);
+                                                });
+                                                const data = await response.json();
+                                                if (response.ok) {
+                                                    alert(t('debug.grantAdminSuccess'));
+                                                    window.location.reload();
+                                                } else {
+                                                    alert(t('debug.setupError') + ': ' + (data.error || t('debug.unknownError')));
                                                 }
-                                            }}
+                                            } catch (error) {
+                                                alert(t('debug.connectionError') + ': ' + error);
+                                            }
+                                        }}
                                         >
                                             {t('debug.fixPermissions')}
                                         </Button>

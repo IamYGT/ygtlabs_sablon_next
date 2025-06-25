@@ -196,9 +196,12 @@
     },
     "ServiceIcons": {
         "ecuTuning": "ECU Yazılım",
-        "powerDyno": "Güç & Dyno Testi",
+        "performanceUpgrades": "Performans Yükseltme",
+        "startStop": "Start-Stop Devre Dışı",
         "adblueDpf": "Adblue & DPF Çözümleri",
-        "performanceUpgrades": "Performans Yükseltme"
+        "powerDyno": "Güç & Dyno Testi",
+        "ecuRemap": "ECU Remap",
+        "turboBoost": "Turbo Boost"
     },
     "ServiceCards": {
         "title": "Hizmetlerimiz",
