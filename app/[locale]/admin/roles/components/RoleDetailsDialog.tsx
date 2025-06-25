@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
+import { useTranslations } from 'next-intl';
 import {
     Dialog,
     DialogContent,
@@ -202,6 +203,7 @@ export default function RoleDetailsDialog({
     open,
     onOpenChange,
 }: RoleDetailsDialogProps) {
+    const t = useTranslations('AdminCommon');
     const [permissions, setPermissions] = useState<Permission[]>([]);
     const [loading, setLoading] = useState(false);
     const [currentStep, setCurrentStep] = useState(0);
@@ -529,7 +531,7 @@ export default function RoleDetailsDialog({
                         <div className="flex justify-between">
                             <span className="text-sm text-muted-foreground">Durum:</span>
                             <Badge variant={role.isActive ? "default" : "secondary"}>
-                                {role.isActive ? 'Aktif' : 'Pasif'}
+                                {role.isActive ? t('active') : t('inactive')}
                             </Badge>
                         </div>
                     </CardContent>

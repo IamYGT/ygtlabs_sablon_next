@@ -390,7 +390,7 @@ export function PermissionsPageClient() {
                                         <Badge
                                             variant={permission.permissionType === 'admin' ? 'destructive' : 'default'}
                                         >
-                                            {permission.permissionType === 'admin' ? 'Admin' : 'User'}
+                                            {permission.permissionType === 'admin' ? t('admin') : t('user')}
                                         </Badge>
                                     </TableCell>
                                     <TableCell>

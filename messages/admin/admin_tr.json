@@ -128,8 +128,10 @@
             "connectionError": "❌ Bağlantı hatası",
             "grantAdminSuccess": "✅ Admin yetkisi başarıyla verildi!",
             "addPermissionSuccess": "✅ {permissionName} yetkisi {roleName} rolüne eklendi!",
-            "pageRefresh": "Değişikliklerin uygulanması için sayfa yeniden yüklenecek."
-        }
+            "pageRefresh": "Değişikliklerin uygulanması için sayfa yeniden yüklenecek.",
+            "unknownError": "Bilinmeyen hata"
+        },
+        "admin": "Admin"
     },
     "AdminUsers": {
         "title": "Kullanıcı Yönetimi",
@@ -721,7 +723,73 @@
         "deleteSuccess": "Yetki başarıyla silindi",
         "deleteError": "Yetki silinirken bir hata oluştu",
         "active": "Aktif",
-        "inactive": "Pasif"
+        "inactive": "Pasif",
+        "admin": "Admin", 
+        "user": "Kullanıcı",
+        "createDialog": {
+            "title": "Yeni Yetki Oluştur",
+            "description": "Sistem için yeni bir yetki tanımı oluşturun.",
+            "permissionName": "Yetki Adı",
+            "permissionNamePlaceholder": "Örn: users.create",
+            "permissionNameDescription": "Sistem içinde kullanılacak benzersiz yetki adı.",
+            "displayName": "Görünen Ad",
+            "displayNamePlaceholder": "Örn: Kullanıcı Oluşturma",
+            "displayNameDescription": "Kullanıcı dostu görünen ad.",
+            "descriptionLabel": "Açıklama",
+            "descriptionPlaceholder": "Bu yetkinin ne için kullanıldığını açıklayın.",
+            "category": "Kategori",
+            "categoryPlaceholder": "Örn: Kullanıcı Yönetimi",
+            "actions": {
+                "access": "Erişim",
+                "view": "Görüntüleme",
+                "create": "Oluşturma",
+                "edit": "Düzenleme",
+                "delete": "Silme"
+            },
+            "permissionTypes": {
+                "admin": "Admin Yetkisi",
+                "user": "Kullanıcı Yetkisi"
+            },
+            "status": "Durum",
+            "active": "Aktif",
+            "inactive": "Pasif",
+            "cancel": "İptal",
+            "create": "Oluştur",
+            "creating": "Oluşturuluyor...",
+            "success": "Yetki başarıyla oluşturuldu.",
+            "error": "Yetki oluşturulamadı.",
+            "validation": {
+                "fieldsRequired": "Kategori, kaynak yolu ve eylem alanları zorunludur"
+            }
+        },
+        "editDialog": {
+            "title": "Yetki Düzenle",
+            "steps": {
+                "overview": {
+                    "title": "Genel Bakış",
+                    "description": "Yetki bilgileri ve özeti"
+                },
+                "details": {
+                    "title": "Düzenleme",
+                    "description": "Yetki detaylarını güncelleyin"
+                },
+                "settings": {
+                    "title": "Ayarlar",
+                    "description": "Kategori ve durum ayarları"
+                }
+            },
+            "permissionInfo": "Yetki Bilgileri",
+            "permissionInfoDescription": "Yetkinin temel ayrıntılarını düzenleyin.",
+            "save": "Kaydet",
+            "cancel": "İptal",
+            "saving": "Kaydediliyor...",
+            "success": "Yetki başarıyla güncellendi.",
+            "error": "Yetki güncellenemedi.",
+            "admin": "Admin",
+            "user": "Kullanıcı",
+            "active": "Aktif",
+            "inactive": "Pasif"
+        }
     },
     "AdminSettings": {
         "title": "Sistem Ayarları",
@@ -760,7 +828,8 @@
         "actions": "İşlemler",
         "status": "Durum",
         "createdAt": "Oluşturulma Tarihi",
-        "updatedAt": "Güncellenme Tarihi"
+        "updatedAt": "Güncellenme Tarihi",
+        "unknownError": "Bilinmeyen hata"
     },
     "Language": {
         "turkish": "Türkçe",
@@ -920,7 +989,8 @@
             "imageRequired": "Arka plan görseli zorunludur",
             "primaryButtonRequired": "Ana buton metni zorunludur",
             "rememberRequired": "Zorunlu alanları doldurmayı unutmayın",
-            "rememberSave": "Değişiklikleri kaydetmeyi unutmayın"
+            "rememberSave": "Değişiklikleri kaydetmeyi unutmayın",
+            "idNotFound": "Slider güncellenemedi, ID bulunamadı"
         },
         "messages": {
             "createSuccess": "Slider başarıyla oluşturuldu",
@@ -934,6 +1004,7 @@
             "deleteError": "Slider silinirken bir hata oluştu",
             "sortingError": "Sıralama güncellenirken hata oluştu",
             "fetchError": "Slider'lar getirilemedi",
+            "genericError": "Bir hata oluştu",
             "deleteConfirm": "Bu slider'ı silmek istediğinizden emin misiniz?",
             "imageLoadError": "Slider görsel yüklenirken hata oluştu",
             "imageUploaded": "Görsel başarıyla yüklendi"

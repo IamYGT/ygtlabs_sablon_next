@@ -360,7 +360,7 @@ function WelcomeSection({ admin, t }: { admin: AuthUser; t: TFunction }) {
                     <div className="flex flex-wrap items-center gap-3">
                         <Badge className="bg-blue-600 text-white border-blue-500 px-3 py-1 text-sm font-medium">
                             <Shield className="h-4 w-4 mr-2" />
-                            {admin.primaryRole || 'Admin'} {t('authority')}
+                            {admin.primaryRole || t('admin')} {t('authority')}
                         </Badge>
                         {admin.userRoles && admin.userRoles.length > 0 && (
                             admin.userRoles.map((roleName, index) => (
@@ -409,7 +409,7 @@ function UserPermissionsDebug({ user, t }: { user: AuthUser; t: TFunction }) {
             if (response.ok) {
                 alert(t('debug.setupSuccess') + '\n\n' + result.message);
             } else {
-                alert(t('debug.setupError') + ': ' + (result.error || 'Bilinmeyen hata'));
+                alert(t('debug.setupError') + ': ' + (result.error || t('debug.unknownError')));
             }
         } catch (error) {
             alert(t('debug.connectionError') + ': ' + error);
@@ -433,7 +433,7 @@ function UserPermissionsDebug({ user, t }: { user: AuthUser; t: TFunction }) {
             if (response.ok) {
                 alert(t('debug.grantAdminSuccess') + '\n\n' + result.message);
             } else {
-                alert(t('debug.setupError') + ': ' + (result.error || 'Bilinmeyen hata'));
+                alert(t('debug.setupError') + ': ' + (result.error || t('debug.unknownError')));
             }
         } catch (error) {
             alert(t('debug.connectionError') + ': ' + error);
@@ -461,7 +461,7 @@ function UserPermissionsDebug({ user, t }: { user: AuthUser; t: TFunction }) {
                 // Sayfayı yenile ki yetkiler güncellensin
                 window.location.reload();
             } else {
-                alert(t('debug.setupError') + ': ' + (result.error || 'Bilinmeyen hata'));
+                alert(t('debug.setupError') + ': ' + (result.error || t('debug.unknownError')));
             }
         } catch (error) {
             alert(t('debug.connectionError') + ': ' + error);
@@ -489,7 +489,7 @@ function UserPermissionsDebug({ user, t }: { user: AuthUser; t: TFunction }) {
                 // Sayfayı yenile ki yetkiler güncellensin
                 window.location.reload();
             } else {
-                alert(t('debug.setupError') + ': ' + (result.error || 'Bilinmeyen hata'));
+                alert(t('debug.setupError') + ': ' + (result.error || t('debug.unknownError')));
             }
         } catch (error) {
             alert(t('debug.connectionError') + ': ' + error);

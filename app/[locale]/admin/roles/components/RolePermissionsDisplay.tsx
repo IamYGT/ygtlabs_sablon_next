@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -173,6 +174,7 @@ export default function RolePermissionsDisplay({
     roleDisplayName,
     roleId
 }: RolePermissionsDisplayProps) {
+    const t = useTranslations('AdminCommon');
     const [permissions, setPermissions] = useState<RolePermission[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -197,7 +199,7 @@ export default function RolePermissionsDisplay({
                 setPermissions(formattedPermissions);
             } catch (err) {
                 console.error("Yetkiler yüklenirken hata:", err);
-                setError(err instanceof Error ? err.message : "Bilinmeyen hata");
+                setError(err instanceof Error ? err.message : t('unknownError'));
             } finally {
                 setLoading(false);
             }
@@ -206,7 +208,7 @@ export default function RolePermissionsDisplay({
         if (roleId) {
             fetchPermissions();
         }
-    }, [roleId]);
+    }, [roleId, t]);
 
     if (loading) {
         return (

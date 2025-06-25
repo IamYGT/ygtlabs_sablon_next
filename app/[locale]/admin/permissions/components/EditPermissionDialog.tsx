@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -124,32 +125,32 @@ interface EditPermissionDialogProps {
     onSuccess: () => void;
 }
 
-// Wizard adımları
-const WIZARD_STEPS = [
-    { id: 'overview', title: 'Genel Bakış', description: 'Yetki bilgileri ve özeti' },
-    { id: 'details', title: 'Düzenleme', description: 'Yetki detaylarını güncelleyin' },
-    { id: 'settings', title: 'Ayarlar', description: 'Kategori ve durum ayarları' },
-    { id: 'review', title: 'Önizleme', description: 'Değişiklikleri gözden geçirin' }
-];
-
-const categoryOptions = [
-    { value: "layout", label: "Layout", icon: Layout, color: "bg-blue-100 text-blue-800" },
-    { value: "view", label: "Görüntüleme", icon: Eye, color: "bg-green-100 text-green-800" },
-    { value: "function", label: "İşlevler", icon: Zap, color: "bg-purple-100 text-purple-800" },
-];
-
-const permissionTypeOptions = [
-    { value: "admin", label: "Admin Yetkisi", color: "bg-red-100 text-red-800" },
-    { value: "user", label: "Kullanıcı Yetkisi", color: "bg-blue-100 text-blue-800" },
-];
-
 export function EditPermissionDialog({
     open,
     onOpenChange,
     permission,
     onSuccess,
 }: EditPermissionDialogProps) {
+    const t = useTranslations('AdminPermissions.editDialog');
     const [loading, setLoading] = useState(false);
+    
+    // Wizard adımları
+    const WIZARD_STEPS = [
+        { id: 'overview', title: t('steps.overview.title'), description: t('steps.overview.description') },
+        { id: 'details', title: t('steps.details.title'), description: t('steps.details.description') },
+        { id: 'settings', title: t('steps.settings.title'), description: t('steps.settings.description') },
+    ];
+
+    const categoryOptions = [
+        { value: "layout", label: "Layout", icon: Layout, color: "bg-blue-100 text-blue-800" },
+        { value: "view", label: "Görüntüleme", icon: Eye, color: "bg-green-100 text-green-800" },
+        { value: "function", label: "İşlevler", icon: Zap, color: "bg-purple-100 text-purple-800" },
+    ];
+
+    const permissionTypeOptions = [
+        { value: "admin", label: "Admin Yetkisi", color: "bg-red-100 text-red-800" },
+        { value: "user", label: "Kullanıcı Yetkisi", color: "bg-blue-100 text-blue-800" },
+    ];
     const [currentStep, setCurrentStep] = useState(0);
     const [formData, setFormData] = useState({
         displayName: "",
@@ -198,11 +199,11 @@ export function EditPermissionDialog({
 
             if (!response.ok) {
                 const error = await response.json();
-                throw new Error(error.error || "Yetki güncellenemedi");
+                throw new Error(error.error || t('error'));
             }
 
             const result = await response.json();
-            toast.success(result.message || "Yetki başarıyla güncellendi");
+            toast.success(result.message || t('success'));
 
             onSuccess();
             onOpenChange(false);
@@ -210,7 +211,7 @@ export function EditPermissionDialog({
             console.error("Yetki güncelleme hatası:", error);
             const errorMessage = error && typeof error === "object" && "message" in error
                 ? String(error.message)
-                : "Yetki güncellenirken bir hata oluştu";
+                : t('error');
             toast.error(errorMessage);
         } finally {
             setLoading(false);
@@ -275,17 +276,17 @@ export function EditPermissionDialog({
                                 {permission.isActive ? (
                                     <>
                                         <Check className="w-3 h-3 mr-1" />
-                                        Aktif
+                                        {t('active')}
                                     </>
                                 ) : (
                                     <>
                                         <AlertTriangle className="w-3 h-3 mr-1" />
-                                        Pasif
+                                        {t('inactive')}
                                     </>
                                 )}
                             </Badge>
                             <Badge variant="outline">
-                                {permission.permissionType === 'admin' ? 'Admin' : 'User'}
+                                {permission.permissionType === 'admin' ? t('admin') : t('user')}
                             </Badge>
                         </div>
                     </CardTitle>

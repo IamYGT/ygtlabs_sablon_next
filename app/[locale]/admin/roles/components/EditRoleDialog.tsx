@@ -193,6 +193,7 @@ export default function EditRoleDialog({
     onRoleUpdated
 }: EditRoleDialogProps) {
     const t = useTranslations('AdminRoles.editDialog');
+    const common = useTranslations('AdminCommon');
 
     // Wizard adımları
     const WIZARD_STEPS = [
@@ -682,7 +683,7 @@ export default function EditRoleDialog({
                         Yetki ekleyin/çıkarın ve erişim tipini belirleyin
                     </p>
                     <Badge variant="outline" className="text-xs">
-                        <strong>{formData.layoutType === 'admin' ? 'Admin' : 'User'}</strong> erişimi
+                        <strong>{formData.layoutType === 'admin' ? common('admin') : common('user')}</strong> erişimi
                     </Badge>
                 </div>
 
@@ -907,7 +908,7 @@ export default function EditRoleDialog({
                             </div>
                             <div className="flex gap-2 ml-auto">
                                 <Badge variant={formData.isActive ? "default" : "secondary"}>
-                                    {formData.isActive ? 'Aktif' : 'Pasif'}
+                                    {formData.isActive ? common('active') : common('inactive')}
                                 </Badge>
                                 <Badge variant="outline">
                                     {formData.layoutType === 'admin' ? 'Admin Erişimi' : 'User Erişimi'}
@@ -1010,7 +1011,7 @@ export default function EditRoleDialog({
                         disabled={loading}
                     >
                         {currentStep === 0 ? (
-                            'İptal'
+                            common('cancel')
                         ) : (
                             <>
                                 <ChevronLeft className="w-4 h-4 mr-1" />

@@ -207,27 +207,27 @@ export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: Edit
     const handleSubmit = async () => {
         // Validasyon
         if (!title.tr || !title.en) {
-            toast.error("Başlık alanları zorunludur");
+            toast.error(t('validation.titleRequired'));
             return;
         }
 
         if (!description.tr || !description.en) {
-            toast.error("Açıklama alanları zorunludur");
+            toast.error(t('validation.descriptionRequired'));
             return;
         }
 
         if (!backgroundImage) {
-            toast.error("Arka plan görseli zorunludur");
+            toast.error(t('validation.imageRequired'));
             return;
         }
 
         if (!primaryButton.tr.text || !primaryButton.en.text) {
-            toast.error("Ana buton metni zorunludur");
+            toast.error(t('validation.primaryButtonRequired'));
             return;
         }
 
         if (!slider?.id) {
-            toast.error("Slider güncellenemedi, ID bulunamadı");
+            toast.error(t('validation.idNotFound'));
             return;
         }
 
@@ -254,16 +254,16 @@ export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: Edit
             });
 
             if (response.ok) {
-                toast.success('Slider başarıyla güncellendi');
+                toast.success(t('messages.updateSuccess'));
                 onSuccess();
                 onOpenChange(false);
             } else {
                 const error = await response.json();
-                toast.error(error.message || 'Slider güncellenirken bir hata oluştu');
+                toast.error(error.message || t('messages.updateError'));
             }
 
         } catch (error) {
-            toast.error('Bir hata oluştu');
+            toast.error(t('messages.genericError'));
             console.error(error);
         } finally {
             setLoading(false);

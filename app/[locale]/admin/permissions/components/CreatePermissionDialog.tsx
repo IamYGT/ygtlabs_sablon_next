@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -37,25 +38,26 @@ const resourceTypeOptions = [
     { value: "function", label: "Function" },
 ];
 
-const actionOptions = [
-    { value: "access", label: "Erişim" },
-    { value: "view", label: "Görüntüleme" },
-    { value: "create", label: "Oluşturma" },
-    { value: "edit", label: "Düzenleme" },
-    { value: "delete", label: "Silme" },
-];
-
-const permissionTypeOptions = [
-    { value: "admin", label: "Admin Yetkisi" },
-    { value: "user", label: "Kullanıcı Yetkisi" },
-];
-
 export function CreatePermissionDialog({
     open,
     onOpenChange,
     onSuccess,
 }: CreatePermissionDialogProps) {
+    const t = useTranslations('AdminPermissions.createDialog');
     const [loading, setLoading] = useState(false);
+    
+    const actionOptions = [
+        { value: "access", label: t('actions.access') },
+        { value: "view", label: t('actions.view') },
+        { value: "create", label: t('actions.create') },
+        { value: "edit", label: t('actions.edit') },
+        { value: "delete", label: t('actions.delete') },
+    ];
+
+    const permissionTypeOptions = [
+        { value: "admin", label: t('permissionTypes.admin') },
+        { value: "user", label: t('permissionTypes.user') },
+    ];
     const [formData, setFormData] = useState({
         category: "layout",
         resourcePath: "",
@@ -70,7 +72,7 @@ export function CreatePermissionDialog({
         e.preventDefault();
 
         if (!formData.category || !formData.resourcePath || !formData.action) {
-            toast.error("Kategori, kaynak yolu ve eylem alanları zorunludur");
+            toast.error(t('validation.fieldsRequired'));
             return;
         }
 
@@ -87,11 +89,11 @@ export function CreatePermissionDialog({
 
             if (!response.ok) {
                 const error = await response.json();
-                throw new Error(error.error || "Yetki oluşturulamadı");
+                throw new Error(error.error || t('error'));
             }
 
             const result = await response.json();
-            toast.success(result.message || "Yetki başarıyla oluşturuldu");
+            toast.success(result.message || t('success'));
 
             // Form'u temizle
             setFormData({
@@ -110,7 +112,7 @@ export function CreatePermissionDialog({
             console.error("Yetki oluşturma hatası:", error);
             const errorMessage = error && typeof error === "object" && "message" in error
                 ? String(error.message)
-                : "Yetki oluşturulurken bir hata oluştu";
+                : t('error');
             toast.error(errorMessage);
         } finally {
             setLoading(false);
@@ -128,22 +130,22 @@ export function CreatePermissionDialog({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[600px]">
                 <DialogHeader>
-                    <DialogTitle>Yeni Yetki Oluştur</DialogTitle>
+                    <DialogTitle>{t('title')}</DialogTitle>
                     <DialogDescription>
-                        Yeni bir sistem yetkisi oluşturun. Bu yetki otomatik olarak super_admin rolüne atanacaktır.
+                        {t('description')}
                     </DialogDescription>
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="category">Kategori *</Label>
+                            <Label htmlFor="category">{t('category')} *</Label>
                             <Select
                                 value={formData.category}
                                 onValueChange={(value) => handleInputChange("category", value)}
                             >
                                 <SelectTrigger>
-                                    <SelectValue placeholder="Kategori seçin" />
+                                    <SelectValue placeholder={t('categoryPlaceholder')} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {resourceTypeOptions.map((option) => (
@@ -176,32 +178,34 @@ export function CreatePermissionDialog({
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="resourcePath">Kaynak Yolu *</Label>
+                        <Label htmlFor="resourcePath">{t('permissionName')} *</Label>
                         <Input
                             id="resourcePath"
                             value={formData.resourcePath}
                             onChange={(e) => handleInputChange("resourcePath", e.target.value)}
-                            placeholder="Örn: /admin/users, admin, users"
+                            placeholder={t('permissionNamePlaceholder')}
                         />
+                        <p className="text-sm text-muted-foreground">{t('permissionNameDescription')}</p>
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="displayName">Görünen Ad</Label>
+                        <Label htmlFor="displayName">{t('displayName')}</Label>
                         <Input
                             id="displayName"
                             value={formData.displayName}
                             onChange={(e) => handleInputChange("displayName", e.target.value)}
-                            placeholder="Yetkinin görünen adı"
+                            placeholder={t('displayNamePlaceholder')}
                         />
+                        <p className="text-sm text-muted-foreground">{t('displayNameDescription')}</p>
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="description">Açıklama</Label>
+                        <Label htmlFor="description">{t('descriptionLabel')}</Label>
                         <Textarea
                             id="description"
                             value={formData.description}
                             onChange={(e) => handleInputChange("description", e.target.value)}
-                            placeholder="Yetkinin açıklaması"
+                            placeholder={t('descriptionPlaceholder')}
                             rows={3}
                         />
                     </div>
@@ -233,7 +237,7 @@ export function CreatePermissionDialog({
                             checked={formData.isActive}
                             onCheckedChange={(checked) => handleInputChange("isActive", checked)}
                         />
-                        <Label htmlFor="isActive">Aktif</Label>
+                        <Label htmlFor="isActive">{t('active')}</Label>
                     </div>
 
                     <DialogFooter>
@@ -243,10 +247,10 @@ export function CreatePermissionDialog({
                             onClick={() => onOpenChange(false)}
                             disabled={loading}
                         >
-                            İptal
+                            {t('cancel')}
                         </Button>
                         <Button type="submit" disabled={loading}>
-                            {loading ? "Oluşturuluyor..." : "Oluştur"}
+                            {loading ? t('creating') : t('create')}
                         </Button>
                     </DialogFooter>
                 </form>

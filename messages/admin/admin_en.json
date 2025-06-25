@@ -128,8 +128,10 @@
             "connectionError": "❌ Connection error",
             "grantAdminSuccess": "✅ Admin access granted successfully!",
             "addPermissionSuccess": "✅ Permission {permissionName} added to role {roleName}!",
-            "pageRefresh": "Page will reload to apply changes."
-        }
+            "pageRefresh": "Page will reload to apply changes.",
+            "unknownError": "Unknown error"
+        },
+        "admin": "Admin"
     },
     "AdminUsers": {
         "title": "User Management",
@@ -642,7 +644,73 @@
         "deleteSuccess": "Permission deleted successfully",
         "deleteError": "An error occurred while deleting permission",
         "active": "Active",
-        "inactive": "Inactive"
+        "inactive": "Inactive",
+        "admin": "Admin",
+        "user": "User",
+        "createDialog": {
+            "title": "Create New Permission",
+            "description": "Create a new permission definition for the system.",
+            "permissionName": "Permission Name",
+            "permissionNamePlaceholder": "e.g., users.create",
+            "permissionNameDescription": "Unique permission name to be used in the system.",
+            "displayName": "Display Name",
+            "displayNamePlaceholder": "e.g., Create User",
+            "displayNameDescription": "User-friendly display name.",
+            "descriptionLabel": "Description",
+            "descriptionPlaceholder": "Explain what this permission is used for.",
+            "category": "Category",
+            "categoryPlaceholder": "e.g., User Management",
+            "actions": {
+                "access": "Access",
+                "view": "View",
+                "create": "Create",
+                "edit": "Edit",
+                "delete": "Delete"
+            },
+            "permissionTypes": {
+                "admin": "Admin Permission",
+                "user": "User Permission"
+            },
+            "status": "Status",
+            "active": "Active",
+            "inactive": "Inactive",
+            "cancel": "Cancel",
+            "create": "Create",
+            "creating": "Creating...",
+            "success": "Permission created successfully.",
+            "error": "Could not create permission.",
+            "validation": {
+                "fieldsRequired": "Category, resource path and action fields are required"
+            }
+        },
+        "editDialog": {
+            "title": "Edit Permission",
+            "steps": {
+                "overview": {
+                    "title": "Overview",
+                    "description": "Permission information and summary"
+                },
+                "details": {
+                    "title": "Edit",
+                    "description": "Update permission details"
+                },
+                "settings": {
+                    "title": "Settings",
+                    "description": "Category and status settings"
+                }
+            },
+            "permissionInfo": "Permission Information",
+            "permissionInfoDescription": "Edit the basic details of the permission.",
+            "save": "Save",
+            "cancel": "Cancel",
+            "saving": "Saving...",
+            "success": "Permission updated successfully.",
+            "error": "Could not update permission.",
+            "admin": "Admin",
+            "user": "User",
+            "active": "Active",
+            "inactive": "Inactive"
+        }
     },
     "AdminSettings": {
         "title": "System Settings",
@@ -685,7 +753,8 @@
         "actions": "Actions",
         "status": "Status",
         "createdAt": "Created At",
-        "updatedAt": "Updated At"
+        "updatedAt": "Updated At",
+        "unknownError": "Unknown error"
     },
     "Language": {
         "turkish": "Türkçe",
@@ -846,7 +915,8 @@
             "imageRequired": "Background image is required",
             "primaryButtonRequired": "Primary button text is required",
             "rememberRequired": "Don't forget to fill required fields",
-            "rememberSave": "Don't forget to save changes"
+            "rememberSave": "Don't forget to save changes",
+            "idNotFound": "Could not update slider, ID not found"
         },
         "messages": {
             "createSuccess": "Slider created successfully",
@@ -860,6 +930,7 @@
             "deleteError": "An error occurred while deleting the slider",
             "sortingError": "An error occurred while updating the order",
             "fetchError": "Could not fetch sliders",
+            "genericError": "An error occurred",
             "deleteConfirm": "Are you sure you want to delete this slider?",
             "imageLoadError": "Error loading slider image",
             "imageUploaded": "Image uploaded successfully"

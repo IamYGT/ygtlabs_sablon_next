@@ -1067,7 +1067,7 @@ export default function CreateRoleDialog({
                         disabled={loading}
                     >
                         {currentStep === 0 ? (
-                            'İptal'
+                            t('cancel')
                         ) : (
                             <>
                                 <ChevronLeft className="w-4 h-4 mr-1" />
