@@ -3,16 +3,32 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Settings, Wrench, Power, Gauge, Zap } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+
+const ServiceIcon = ({ icon: Icon, title }: { icon: React.ElementType, title: string }) => (
+    <motion.div
+        whileHover={{ y: -8, scale: 1.05 }}
+        transition={{ type: 'spring', stiffness: 300 }}
+        className="flex flex-col items-center space-y-3 text-center"
+    >
+        <div className="bg-primary/10 p-4 rounded-full border-2 border-primary/20">
+            <Icon className="h-8 w-8 text-primary" />
+        </div>
+        <p className="text-sm font-semibold text-gray-700">{title}</p>
+    </motion.div>
+);
 
 export default function ServiceIcons() {
+    const t = useTranslations('ServiceIcons');
+
     const services = [
-        { name: 'Vmox OFF', icon: Settings },
-        { name: 'DTC OFF', icon: Wrench },
-        { name: 'Start & Stop OFF', icon: Power },
-        { name: 'Sport Display', icon: Gauge },
-        { name: 'Hard Rev Out', icon: Zap },
-        { name: 'ECU Remap', icon: Settings },
-        { name: 'Turbo Boost', icon: Zap }
+        { icon: Settings, title: t('ecuTuning') },
+        { icon: Wrench, title: t('performanceUpgrades') },
+        { icon: Power, title: t('startStop') },
+        { icon: Gauge, title: t('adblueDpf') },
+        { icon: Zap, title: t('powerDyno') },
+        { icon: Settings, title: t('ecuRemap') },
+        { icon: Zap, title: t('turboBoost') }
     ];
 
     return (
@@ -45,28 +61,7 @@ export default function ServiceIcons() {
                             const size = getSize(distanceFromCenter);
 
                             return (
-                                <motion.div
-                                    key={index}
-                                    initial={{ opacity: 0, y: 10 + distanceFromCenter * 2 }}
-                                    animate={{ opacity: 1, y: size.yOffset }}
-                                    transition={{
-                                        delay: 0.6 + index * 0.05,
-                                        duration: 0.4
-                                    }}
-                                    className={`flex flex-col items-center text-center group cursor-pointer hover:bg-white/5 rounded-lg transition-all duration-200 ${size.spacing} ${size.padding}`}
-                                >
-                                    <div
-                                        className={`rounded-lg bg-white/15 backdrop-blur-md flex items-center justify-center group-hover:bg-primary/60 transition-all duration-200 shadow-xl ${size.container}`}
-                                        style={{
-                                            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-                                        }}
-                                    >
-                                        <IconComponent className={`text-white drop-shadow-lg transition-all duration-200 ${size.icon}`} />
-                                    </div>
-                                    <span className={`text-white font-medium drop-shadow-xl group-hover:text-primary transition-colors duration-200 ${size.text}`}>
-                                        {service.name}
-                                    </span>
-                                </motion.div>
+                                <ServiceIcon key={index} icon={IconComponent} title={service.title} />
                             );
                         })}
                     </div>

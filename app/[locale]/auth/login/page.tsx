@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { Loader2, Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from '@/src/i18n/navigation';
+import { useTranslations } from 'next-intl';
 
 // Optimized loading component
 const LoadingSpinner = memo(({ className, ...props }: React.SVGProps<SVGSVGElement>) => (
@@ -20,6 +21,7 @@ LoadingSpinner.displayName = "LoadingSpinner";
 
 // Optimized login form with memoization
 const UnifiedAuthLoginForm = memo(() => {
+    const t = useTranslations('Auth');
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({ email: "", password: "" });
     const [showPassword, setShowPassword] = useState(false);
@@ -54,7 +56,7 @@ const UnifiedAuthLoginForm = memo(() => {
 
         setLoading(true);
         const toastId = "login-toast";
-        toast.loading("Giriş yapılıyor...", { id: toastId });
+        toast.loading(t('loggingIn'), { id: toastId });
 
         try {
             const response = await fetch(`/api/auth/login`, {
@@ -70,7 +72,7 @@ const UnifiedAuthLoginForm = memo(() => {
             const result = await response.json();
 
             if (result.success) {
-                toast.success("Giriş başarılı! Yönlendiriliyorsunuz...", { id: toastId });
+                toast.success(t('loginSuccessRedirect'), { id: toastId });
 
                 // Form state'ini temizle
                 setFormData({ email: "", password: "" });
@@ -87,15 +89,15 @@ const UnifiedAuthLoginForm = memo(() => {
                 // Hard redirect ile tam geçiş
                 window.location.replace(dashboardUrl);
             } else {
-                toast.error(result.error || "Giriş başarısız", { id: toastId });
+                toast.error(result.error || t('loginFailed'), { id: toastId });
                 setLoading(false);
             }
         } catch (error) {
             console.error("Login error:", error);
-            toast.error("Beklenmeyen bir hata oluştu.", { id: toastId });
+            toast.error(t('unexpectedError'), { id: toastId });
             setLoading(false);
         }
-    }, [formData.email, formData.password, loading, locale]);
+    }, [formData.email, formData.password, loading, locale, t]);
 
     return (
         <div className="p-6 sm:p-8">
@@ -106,10 +108,10 @@ const UnifiedAuthLoginForm = memo(() => {
                     transition={{ duration: 0.5 }}
                 >
                     <CardTitle className="text-2xl font-bold text-foreground">
-                        Hoş Geldiniz
+                        {t('welcome')}
                     </CardTitle>
                     <CardDescription className="mt-2 text-muted-foreground">
-                        Hesabınıza giriş yaparak devam edin
+                        {t('continue')}
                     </CardDescription>
                 </motion.div>
             </CardHeader>
@@ -123,7 +125,7 @@ const UnifiedAuthLoginForm = memo(() => {
                         transition={{ duration: 0.5, delay: 0.1 }}
                     >
                         <Label htmlFor="email" className="text-sm font-medium text-foreground">
-                            E-posta Adresi
+                            {t('emailLabel')}
                         </Label>
                         <div className="relative">
                             <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -133,7 +135,7 @@ const UnifiedAuthLoginForm = memo(() => {
                                 type="email"
                                 autoComplete="email"
                                 required
-                                placeholder="ornek@adres.com"
+                                placeholder={t('emailPlaceholder')}
                                 disabled={loading}
                                 value={formData.email}
                                 onChange={handleChange}
@@ -150,13 +152,13 @@ const UnifiedAuthLoginForm = memo(() => {
                     >
                         <div className="flex items-center justify-between">
                             <Label htmlFor="password" className="text-sm font-medium text-foreground">
-                                Şifre
+                                {t('passwordLabel')}
                             </Label>
                             <Link
                                 href="/auth/forgot-password"
                                 className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
                             >
-                                Şifremi Unuttum
+                                {t('forgotPassword')}
                             </Link>
                         </div>
                         <div className="relative">
@@ -202,11 +204,11 @@ const UnifiedAuthLoginForm = memo(() => {
                             {loading ? (
                                 <span className="flex items-center justify-center">
                                     <LoadingSpinner className="mr-2 h-5 w-5" />
-                                    Giriş Yapılıyor...
+                                    {t('loggingIn')}
                                 </span>
                             ) : (
                                 <span className="flex items-center justify-center">
-                                    Giriş Yap
+                                    {t('login')}
                                     <ArrowRight className="ml-2 h-4 w-4" />
                                 </span>
                             )}
@@ -220,12 +222,12 @@ const UnifiedAuthLoginForm = memo(() => {
                         transition={{ duration: 0.5, delay: 0.4 }}
                     >
                         <p className="text-sm text-muted-foreground">
-                            Henüz hesabınız yok mu?{" "}
+                            {t('noAccount')}{" "}
                             <Link
                                 href="/auth/register"
                                 className="font-medium text-primary hover:text-primary/80 transition-colors"
                             >
-                                Kayıt Olun
+                                {t('register')}
                             </Link>
                         </p>
                     </motion.div>

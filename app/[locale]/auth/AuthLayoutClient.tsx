@@ -7,12 +7,14 @@ import LanguageSwitcher from '@/components/panel/LanguageSwitcher';
 import Logo from '@/components/panel/Logo';
 import { Card } from '@/components/ui/card';
 import { Toaster } from 'sonner';
+import { useTranslations } from 'next-intl';
 
 interface AuthLayoutClientProps {
     children: React.ReactNode;
 }
 
 export function AuthLayoutClient({ children }: AuthLayoutClientProps) {
+    const t = useTranslations('AuthLayout');
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-slate-50 to-blue-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 relative overflow-hidden">
             {/* Background Decorations */}
@@ -62,8 +64,8 @@ export function AuthLayoutClient({ children }: AuthLayoutClientProps) {
                 >
                     <Logo />
                     <div className="hidden sm:block">
-                        <h1 className="text-xl font-bold text-foreground">ECU Sistem</h1>
-                        <p className="text-sm text-muted-foreground">Yönetim Paneli</p>
+                        <h1 className="text-xl font-bold text-foreground">{t('pageTitle')}</h1>
+                        <p className="text-sm text-muted-foreground">{t('pageSubtitle')}</p>
                     </div>
                 </motion.div>
 
@@ -99,7 +101,7 @@ export function AuthLayoutClient({ children }: AuthLayoutClientProps) {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.5, delay: 0.8 }}
                 >
-                    © 2024 ECU Sistem. Tüm hakları saklıdır.
+                    {t('copyright')}
                 </motion.p>
             </footer>
 

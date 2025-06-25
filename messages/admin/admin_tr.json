@@ -577,7 +577,7 @@
         "deleteSuccess": "Yetki başarıyla silindi",
         "deleteError": "Yetki silinirken bir hata oluştu",
         "active": "Aktif",
-        "inactive"
+        "inactive": "Pasif"
     },
     "AdminSettings": {
         "title": "Sistem Ayarları",

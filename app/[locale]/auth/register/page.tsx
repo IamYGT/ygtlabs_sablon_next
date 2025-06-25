@@ -11,6 +11,7 @@ import { Loader2, Mail, Lock, User, ArrowRight, Check, X, Eye, EyeOff } from "lu
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { Link, useRouter as useLocalizedRouter } from '@/src/i18n/navigation';
+import { useTranslations } from 'next-intl';
 
 // Optimized loading component
 const LoadingSpinner = memo(({ className, ...props }: React.SVGProps<SVGSVGElement>) => (
@@ -20,6 +21,7 @@ LoadingSpinner.displayName = "LoadingSpinner";
 
 // Password strength indicator
 const PasswordStrength = memo(({ password }: { password: string }) => {
+    const t = useTranslations('Auth.passwordStrength');
     const getStrength = (pwd: string) => {
         let score = 0;
         if (pwd.length >= 8) score++;
@@ -38,9 +40,9 @@ const PasswordStrength = memo(({ password }: { password: string }) => {
     };
 
     const getLabel = () => {
-        if (strength < 2) return "Zayıf";
-        if (strength < 4) return "Orta";
-        return "Güçlü";
+        if (strength < 2) return t('weak');
+        if (strength < 4) return t('medium');
+        return t('strong');
     };
 
     if (!password) return null;
@@ -67,6 +69,7 @@ const PasswordStrength = memo(({ password }: { password: string }) => {
 PasswordStrength.displayName = "PasswordStrength";
 
 const RegisterForm = memo(() => {
+    const t = useTranslations('Auth');
     const router = useLocalizedRouter();
     const [formData, setFormData] = useState({
         name: "",
@@ -100,11 +103,11 @@ const RegisterForm = memo(() => {
         setLoading(true);
 
         const toastId = "register-toast";
-        toast.loading("Kayıt işlemi yapılıyor...", { id: toastId });
+        toast.loading(t('registering'), { id: toastId });
 
         // Şifre kontrolü
         if (formData.password !== formData.confirmPassword) {
-            toast.error("Şifreler eşleşmiyor", { id: toastId });
+            toast.error(t('passwordsDontMatch'), { id: toastId });
             setLoading(false);
             return;
         }
@@ -121,9 +124,9 @@ const RegisterForm = memo(() => {
             const data = await response.json();
 
             if (!response.ok) {
-                toast.error(data.error || "Kayıt sırasında bir hata oluştu", { id: toastId });
+                toast.error(data.error || t('registerError'), { id: toastId });
             } else {
-                toast.success("Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz.", { id: toastId });
+                toast.success(t('registerSuccess'), { id: toastId });
                 setTimeout(() => {
                     // Use localized routing for redirect
                     router.push('/auth/login');
@@ -131,11 +134,11 @@ const RegisterForm = memo(() => {
             }
         } catch (error) {
             console.error("Kayıt hatası:", error);
-            toast.error("Kayıt sırasında bir hata oluştu. Lütfen tekrar deneyin.", { id: toastId });
+            toast.error(t('registerErrorTryAgain'), { id: toastId });
         } finally {
             setLoading(false);
         }
-    }, [formData, router]);
+    }, [formData, router, t]);
 
     const passwordsMatch = formData.password && formData.confirmPassword && formData.password === formData.confirmPassword;
     const passwordsDontMatch = formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword;
@@ -149,10 +152,10 @@ const RegisterForm = memo(() => {
                     transition={{ duration: 0.5 }}
                 >
                     <CardTitle className="text-2xl font-bold text-foreground">
-                        Hesap Oluşturun
+                        {t('createAccountTitle')}
                     </CardTitle>
                     <CardDescription className="mt-2 text-muted-foreground">
-                        Yeni hesabınızı oluşturmak için bilgilerinizi girin
+                        {t('createAccountDescription')}
                     </CardDescription>
                 </motion.div>
             </CardHeader>
@@ -166,7 +169,7 @@ const RegisterForm = memo(() => {
                         transition={{ duration: 0.5, delay: 0.1 }}
                     >
                         <Label htmlFor="name" className="text-sm font-medium text-foreground">
-                            Ad Soyad
+                            {t('fullNameLabel')}
                         </Label>
                         <div className="relative">
                             <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -178,7 +181,7 @@ const RegisterForm = memo(() => {
                                 required
                                 value={formData.name}
                                 onChange={handleChange}
-                                placeholder="Adınız ve soyadınız"
+                                placeholder={t('fullNamePlaceholder')}
                                 disabled={loading}
                                 className="pl-10 h-12 bg-background border-border focus:border-primary focus:ring-primary/20 transition-all duration-200"
                             />
@@ -192,7 +195,7 @@ const RegisterForm = memo(() => {
                         transition={{ duration: 0.5, delay: 0.2 }}
                     >
                         <Label htmlFor="email" className="text-sm font-medium text-foreground">
-                            E-posta Adresi
+                            {t('emailLabel')}
                         </Label>
                         <div className="relative">
                             <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -204,7 +207,7 @@ const RegisterForm = memo(() => {
                                 required
                                 value={formData.email}
                                 onChange={handleChange}
-                                placeholder="ornek@domain.com"
+                                placeholder={t('emailPlaceholder')}
                                 disabled={loading}
                                 className="pl-10 h-12 bg-background border-border focus:border-primary focus:ring-primary/20 transition-all duration-200"
                             />
@@ -218,7 +221,7 @@ const RegisterForm = memo(() => {
                         transition={{ duration: 0.5, delay: 0.3 }}
                     >
                         <Label htmlFor="password" className="text-sm font-medium text-foreground">
-                            Şifre
+                            {t('passwordLabel')}
                         </Label>
                         <div className="relative">
                             <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -258,7 +261,7 @@ const RegisterForm = memo(() => {
                         transition={{ duration: 0.5, delay: 0.4 }}
                     >
                         <Label htmlFor="confirmPassword" className="text-sm font-medium text-foreground">
-                            Şifre Tekrar
+                            {t('confirmPasswordLabel')}
                         </Label>
                         <div className="relative">
                             <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -309,7 +312,7 @@ const RegisterForm = memo(() => {
                                 animate={{ opacity: 1, y: 0 }}
                                 className="text-sm text-destructive"
                             >
-                                Şifreler eşleşmiyor
+                                {t('passwordsDontMatch')}
                             </motion.p>
                         )}
                     </motion.div>
@@ -327,11 +330,11 @@ const RegisterForm = memo(() => {
                             {loading ? (
                                 <span className="flex items-center justify-center">
                                     <LoadingSpinner className="mr-2 h-5 w-5" />
-                                    Kayıt Olunuyor...
+                                    {t('registering')}
                                 </span>
                             ) : (
                                 <span className="flex items-center justify-center">
-                                    Kayıt Ol
+                                    {t('register')}
                                     <ArrowRight className="ml-2 h-4 w-4" />
                                 </span>
                             )}
@@ -345,12 +348,12 @@ const RegisterForm = memo(() => {
                         transition={{ duration: 0.5, delay: 0.6 }}
                     >
                         <p className="text-sm text-muted-foreground">
-                            Zaten bir hesabınız var mı?{" "}
+                            {t('alreadyHaveAccount')}{" "}
                             <Link
                                 href="/auth/login"
                                 className="font-medium text-primary hover:text-primary/80 transition-colors"
                             >
-                                Giriş Yap
+                                {t('login')}
                             </Link>
                         </p>
                     </motion.div>

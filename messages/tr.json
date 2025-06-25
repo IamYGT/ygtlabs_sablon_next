@@ -8,7 +8,66 @@
         "forgotPassword": "Şifremi unuttum",
         "loginSuccess": "Başarıyla giriş yapıldı",
         "loginError": "Giriş başarısız",
-        "invalidCredentials": "Geçersiz kullanıcı adı veya şifre"
+        "invalidCredentials": "Geçersiz kullanıcı adı veya şifre",
+        "welcome": "Hoş Geldiniz",
+        "continue": "Hesabınıza giriş yaparak devam edin",
+        "emailLabel": "E-posta Adresi",
+        "emailPlaceholder": "ornek@adres.com",
+        "passwordLabel": "Şifre",
+        "loggingIn": "Giriş yapılıyor...",
+        "loginSuccessRedirect": "Giriş başarılı! Yönlendiriliyorsunuz...",
+        "loginFailed": "Giriş başarısız",
+        "unexpectedError": "Beklenmeyen bir hata oluştu.",
+        "noAccount": "Henüz hesabınız yok mu?",
+        "register": "Kayıt Olun",
+        "createAccountTitle": "Hesap Oluşturun",
+        "createAccountDescription": "Yeni hesabınızı oluşturmak için bilgilerinizi girin",
+        "fullNameLabel": "Ad Soyad",
+        "fullNamePlaceholder": "Adınız ve soyadınız",
+        "confirmPasswordLabel": "Şifre Tekrar",
+        "passwordsDontMatch": "Şifreler eşleşmiyor",
+        "registering": "Kayıt olunuyor...",
+        "registerSuccess": "Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz.",
+        "registerError": "Kayıt sırasında bir hata oluştu",
+        "registerErrorTryAgain": "Kayıt sırasında bir hata oluştu. Lütfen tekrar deneyin.",
+        "alreadyHaveAccount": "Zaten bir hesabınız var mı?",
+        "passwordStrength": {
+            "weak": "Zayıf",
+            "medium": "Orta",
+            "strong": "Güçlü"
+        },
+        "forgotPasswordTitle": "Şifremi Unuttum",
+        "forgotPasswordDescription": "E-posta adresinizi girin, şifre sıfırlama bağlantısını size gönderelim",
+        "emailHelpText": "Kayıtlı e-posta adresinizi girin. Size şifre sıfırlama bağlantısı göndereceğiz.",
+        "sendResetEmail": "Şifre Sıfırlama E-postası Gönder",
+        "sendingEmail": "E-posta Gönderiliyor...",
+        "backToLogin": "Giriş Sayfasına Dön",
+        "emailSentTitle": "E-posta Gönderildi",
+        "emailSentDescription": "Şifre sıfırlama bağlantısı <email>{email}</email> adresine gönderildi.",
+        "nextSteps": {
+            "title": "Sonraki Adımlar:",
+            "steps": [
+                "E-posta kutunuzu kontrol edin",
+                "Spam klasörünü de kontrol etmeyi unutmayın",
+                "Bağlantıya tıklayarak şifrenizi sıfırlayın",
+                "Bağlantı 15 dakika boyunca geçerlidir"
+            ]
+        },
+        "sendAgain": "Tekrar Gönder",
+        "securityNotice": {
+            "title": "Güvenlik Bildirimi:",
+            "description": "Şifre sıfırlama bağlantısı güvenlik nedeniyle 15 dakika sonra geçersiz olacaktır. E-posta almadıysanız spam klasörünüzü kontrol edin."
+        },
+        "notifications": {
+            "sending": "E-posta gönderiliyor...",
+            "sendSuccess": "Şifre sıfırlama e-postası başarıyla gönderildi!",
+            "sendError": "E-posta gönderilirken bir hata oluştu"
+        }
+    },
+    "AuthLayout": {
+        "pageTitle": "ECU Sistem",
+        "pageSubtitle": "Yönetim Paneli",
+        "copyright": "© 2024 ECU Sistem. Tüm hakları saklıdır."
     },
     "Navigation": {
         "dashboard": "Ana Panel",
@@ -134,5 +193,122 @@
             "faq": "Sık Sorulan Sorular"
         },
         "experience": "Yıllık Deneyim"
+    },
+    "ServiceIcons": {
+        "ecuTuning": "ECU Yazılım",
+        "powerDyno": "Güç & Dyno Testi",
+        "adblueDpf": "Adblue & DPF Çözümleri",
+        "performanceUpgrades": "Performans Yükseltme"
+    },
+    "ServiceCards": {
+        "title": "Hizmetlerimiz",
+        "description": "Aracınızın ihtiyaçlarına yönelik geniş bir hizmet yelpazesi sunuyoruz.",
+        "services": [
+            {
+                "title": "ECU Yazılım",
+                "description": "Aracınızın beyni olan ECU'yu, maksimum performans ve verimlilik için optimize ediyoruz.",
+                "link": "/hizmetler/ecu-yazilim"
+            },
+            {
+                "title": "Yerinde Hizmet",
+                "description": "Aracınız nerede olursa olsun, profesyonel chiptuning hizmetini ayağınıza getiriyoruz.",
+                "link": "/hizmetler/yerinde-hizmet"
+            },
+            {
+                "title": "Güç Ölçümü",
+                "description": "Son teknoloji Dyno makinemiz ile aracınızın gücünü ve torkunu ölçüyoruz.",
+                "link": "/hizmetler/dyno"
+            }
+        ]
+    },
+    "CorporateSection": {
+        "badge": "Kurumsal",
+        "title": "Filonuza Profesyonel Çözümler",
+        "description": "Şirket araçlarınız için özel ECU yazılım ve filo yönetim çözümleri sunuyoruz. Verimliliğinizi artırın, maliyetlerinizi düşürün.",
+        "button": "Teklif Alın",
+        "features": [
+            "Filoya özel yazılım",
+            "Yakıt tasarrufu",
+            "Performans artışı",
+            "Detaylı raporlama"
+        ]
+    },
+    "Statistics": {
+        "title": "Rakamlarla Biz",
+        "stats": [
+            {
+                "value": "10.000+",
+                "label": "Mutlu Müşteri"
+            },
+            {
+                "value": "15+",
+                "label": "Yıllık Deneyim"
+            },
+            {
+                "value": "98%",
+                "label": "Başarı Oranı"
+            },
+            {
+                "value": "50+",
+                "label": "Dünya Çapında Bayi"
+            }
+        ]
+    },
+    "ServiceInfo": {
+        "badge": "Neden Biz?",
+        "title": "Neden RevvTuned'i Seçmelisiniz?",
+        "description": "Uzman ekibimiz, son teknoloji ekipmanlarımız ve müşteri odaklı yaklaşımımızla hizmetinizdeyiz.",
+        "features": [
+            {
+                "title": "Uzman Ekip",
+                "description": "Deneyimli ve sertifikalı uzmanlarımız, en iyi sonuçlar için hizmetinizdedir."
+            },
+            {
+                "title": "Son Teknoloji",
+                "description": "Sektördeki en yeni ve en güvenilir ekipmanları kullanıyoruz."
+            },
+            {
+                "title": "Müşteri Memnuniyeti",
+                "description": "Önceliğimiz, müşterilerimize en üst düzeyde hizmet sunmaktır."
+            }
+        ]
+    },
+    "Testimonials": {
+        "badge": "Müşteri Yorumları",
+        "title": "Müşterilerimiz Ne Diyor?",
+        "testimonials": [
+            {
+                "name": "Ahmet Yılmaz",
+                "role": "BMW F30 Sahibi",
+                "quote": "Aracımın performansı inanılmaz arttı. Artık araba kullanmak çok daha keyifli. Teşekkürler RevvTuned ekibi!",
+                "image": "/images/team/default-avatar.jpg"
+            },
+            {
+                "name": "Ayşe Kaya",
+                "role": "Filo Yöneticisi",
+                "quote": "Şirket araçlarımızda ciddi bir yakıt tasarrufu sağladık. Profesyonel yaklaşımları takdire şayan.",
+                "image": "/images/team/default-avatar.jpg"
+            }
+        ]
+    },
+    "BlogSection": {
+        "badge": "Blog",
+        "title": "Blog'dan Son Yazılar",
+        "description": "Chiptuning dünyası hakkındaki en son haberler, ipuçları ve makaleler için blogumuzu takip edin.",
+        "button": "Tüm Yazıları Gör",
+        "posts": [
+            {
+                "category": "ECU Yazılım",
+                "title": "Stage 1 Yazılım Nedir?",
+                "author": "Ercan Yter",
+                "date": "26 Temmuz 2024"
+            },
+            {
+                "category": "Yakıt Tasarrufu",
+                "title": "Chiptuning ile Yakıt Tasarrufu Mümkün mü?",
+                "author": "Admin",
+                "date": "22 Temmuz 2024"
+            }
+        ]
     }
 }

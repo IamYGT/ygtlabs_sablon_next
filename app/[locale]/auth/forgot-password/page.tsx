@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { Loader2, Mail, ArrowLeft, Check, AlertCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from '@/src/i18n/navigation';
+import { useTranslations } from 'next-intl';
 
 // Optimized loading component
 const LoadingSpinner = memo(({ className, ...props }: React.SVGProps<SVGSVGElement>) => (
@@ -18,63 +19,71 @@ const LoadingSpinner = memo(({ className, ...props }: React.SVGProps<SVGSVGEleme
 LoadingSpinner.displayName = "LoadingSpinner";
 
 // Success state component
-const SuccessState = memo(({ email, onReset }: { email: string; onReset: () => void }) => (
-    <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="text-center space-y-6"
-    >
-        <div className="mx-auto w-16 h-16 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center">
-            <Check className="w-8 h-8 text-green-600 dark:text-green-400" />
-        </div>
+const SuccessState = memo(({ onReset }: { email: string; onReset: () => void }) => {
+    const t = useTranslations('Auth');
+    const nextSteps = t.raw('nextSteps.steps') as string[];
+    return (
+        <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="text-center space-y-6"
+        >
+            <div className="mx-auto w-16 h-16 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center">
+                <Check className="w-8 h-8 text-green-600 dark:text-green-400" />
+            </div>
 
-        <div className="space-y-2">
-            <h2 className="text-xl font-semibold text-foreground">
-                E-posta Gönderildi
-            </h2>
-            <p className="text-muted-foreground text-sm">
-                Şifre sıfırlama bağlantısı <span className="font-medium text-foreground">{email}</span> adresine gönderildi.
-            </p>
-        </div>
+            <div className="space-y-2">
+                <h2 className="text-xl font-semibold text-foreground">
+                    {t('emailSentTitle')}
+                </h2>
+                <p className="text-muted-foreground text-sm">
+                    {t.rich('emailSentDescription', {
+                        email: (chunks) => <span className="font-medium text-foreground">{chunks}</span>,
+                    })}
+                </p>
+            </div>
 
-        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-            <div className="flex items-start space-x-3">
-                <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-                <div className="text-sm text-blue-800 dark:text-blue-200">
-                    <p className="font-medium mb-1">Sonraki Adımlar:</p>
-                    <ul className="space-y-1 text-blue-700 dark:text-blue-300">
-                        <li>• E-posta kutunuzu kontrol edin</li>
-                        <li>• Spam klasörünü de kontrol etmeyi unutmayın</li>
-                        <li>• Bağlantıya tıklayarak şifrenizi sıfırlayın</li>
-                        <li>• Bağlantı 15 dakika boyunca geçerlidir</li>
-                    </ul>
+            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                <div className="flex items-start space-x-3">
+                    <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                    <div className="text-sm text-blue-800 dark:text-blue-200">
+                        <p className="font-medium mb-1">{t('nextSteps.title')}</p>
+                        {Array.isArray(nextSteps) && (
+                            <ul className="space-y-1 text-blue-700 dark:text-blue-300">
+                                {nextSteps.map((step, index) => (
+                                    <li key={index}>• {step}</li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div className="flex flex-col space-y-3">
-            <Button
-                onClick={onReset}
-                variant="outline"
-                className="w-full"
-            >
-                Tekrar Gönder
-            </Button>
-
-            <Link href="/auth/login">
-                <Button variant="ghost" className="w-full">
-                    <ArrowLeft className="w-4 h-4 mr-2" />
-                    Giriş Sayfasına Dön
+            <div className="flex flex-col space-y-3">
+                <Button
+                    onClick={onReset}
+                    variant="outline"
+                    className="w-full"
+                >
+                    {t('sendAgain')}
                 </Button>
-            </Link>
-        </div>
-    </motion.div>
-));
+
+                <Link href="/auth/login">
+                    <Button variant="ghost" className="w-full">
+                        <ArrowLeft className="w-4 h-4 mr-2" />
+                        {t('backToLogin')}
+                    </Button>
+                </Link>
+            </div>
+        </motion.div>
+    );
+});
 SuccessState.displayName = "SuccessState";
 
 // Main forgot password form
 const ForgotPasswordForm = memo(() => {
+    const t = useTranslations('Auth');
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -90,7 +99,7 @@ const ForgotPasswordForm = memo(() => {
 
         setLoading(true);
         const toastId = "forgot-password-toast";
-        toast.loading("E-posta gönderiliyor...", { id: toastId });
+        toast.loading(t('notifications.sending'), { id: toastId });
 
         try {
             const response = await fetch(`/api/auth/forgot-password`, {
@@ -103,19 +112,19 @@ const ForgotPasswordForm = memo(() => {
             const result = await response.json();
 
             if (result.success) {
-                toast.success("Şifre sıfırlama e-postası gönderildi!", { id: toastId });
+                toast.success(t('notifications.sendSuccess'), { id: toastId });
                 setSubmittedEmail(email);
                 setIsSubmitted(true);
             } else {
-                toast.error(result.error || "E-posta gönderilirken bir hata oluştu", { id: toastId });
+                toast.error(result.error || t('notifications.sendError'), { id: toastId });
             }
         } catch (error) {
             console.error("Forgot password error:", error);
-            toast.error("Beklenmeyen bir hata oluştu.", { id: toastId });
+            toast.error(t('unexpectedError'), { id: toastId });
         } finally {
             setLoading(false);
         }
-    }, [email, loading]);
+    }, [email, loading, t]);
 
     const handleReset = useCallback(() => {
         setIsSubmitted(false);
@@ -136,10 +145,10 @@ const ForgotPasswordForm = memo(() => {
                     transition={{ duration: 0.5 }}
                 >
                     <CardTitle className="text-2xl font-bold text-foreground">
-                        Şifremi Unuttum
+                        {t('forgotPasswordTitle')}
                     </CardTitle>
                     <CardDescription className="mt-2 text-muted-foreground">
-                        E-posta adresinizi girin, şifre sıfırlama bağlantısını size gönderelim
+                        {t('forgotPasswordDescription')}
                     </CardDescription>
                 </motion.div>
             </CardHeader>
@@ -153,7 +162,7 @@ const ForgotPasswordForm = memo(() => {
                         transition={{ duration: 0.5, delay: 0.1 }}
                     >
                         <Label htmlFor="email" className="text-sm font-medium text-foreground">
-                            E-posta Adresi
+                            {t('emailLabel')}
                         </Label>
                         <div className="relative">
                             <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -163,7 +172,7 @@ const ForgotPasswordForm = memo(() => {
                                 type="email"
                                 autoComplete="email"
                                 required
-                                placeholder="ornek@adres.com"
+                                placeholder={t('emailPlaceholder')}
                                 disabled={loading}
                                 value={email}
                                 onChange={handleEmailChange}
@@ -171,7 +180,7 @@ const ForgotPasswordForm = memo(() => {
                             />
                         </div>
                         <p className="text-xs text-muted-foreground">
-                            Kayıtlı e-posta adresinizi girin. Size şifre sıfırlama bağlantısı göndereceğiz.
+                            {t('emailHelpText')}
                         </p>
                     </motion.div>
 
@@ -189,10 +198,10 @@ const ForgotPasswordForm = memo(() => {
                             {loading ? (
                                 <span className="flex items-center justify-center">
                                     <LoadingSpinner className="mr-2 h-5 w-5" />
-                                    E-posta Gönderiliyor...
+                                    {t('sendingEmail')}
                                 </span>
                             ) : (
-                                "Şifre Sıfırlama E-postası Gönder"
+                                t('sendResetEmail')
                             )}
                         </Button>
 
@@ -203,7 +212,7 @@ const ForgotPasswordForm = memo(() => {
                                 disabled={loading}
                             >
                                 <ArrowLeft className="w-4 h-4 mr-2" />
-                                Giriş Sayfasına Dön
+                                {t('backToLogin')}
                             </Button>
                         </Link>
                     </motion.div>
@@ -218,10 +227,9 @@ const ForgotPasswordForm = memo(() => {
                     <div className="flex items-start space-x-3">
                         <AlertCircle className="w-5 h-5 text-muted-foreground mt-0.5 flex-shrink-0" />
                         <div className="text-sm text-muted-foreground">
-                            <p className="font-medium mb-1">Güvenlik Bildirimi:</p>
+                            <p className="font-medium mb-1">{t('securityNotice.title')}</p>
                             <p>
-                                Şifre sıfırlama bağlantısı güvenlik nedeniyle 15 dakika sonra geçersiz olacaktır.
-                                E-posta almadıysanız spam klasörünüzü kontrol edin.
+                                {t('securityNotice.description')}
                             </p>
                         </div>
                     </div>

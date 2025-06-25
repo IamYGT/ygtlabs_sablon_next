@@ -8,7 +8,61 @@
         "forgotPassword": "Forgot password",
         "loginSuccess": "Successfully signed in",
         "loginError": "Sign in failed",
-        "invalidCredentials": "Invalid username or password"
+        "invalidCredentials": "Invalid username or password",
+        "welcome": "Welcome",
+        "continue": "Continue by logging into your account",
+        "emailLabel": "Email Address",
+        "emailPlaceholder": "example@address.com",
+        "passwordLabel": "Password",
+        "loggingIn": "Signing in...",
+        "loginSuccessRedirect": "Login successful! Redirecting...",
+        "loginFailed": "Login failed",
+        "unexpectedError": "An unexpected error occurred.",
+        "noAccount": "Don't have an account yet?",
+        "register": "Sign Up",
+        "createAccountTitle": "Create an Account",
+        "createAccountDescription": "Enter your information to create your new account",
+        "fullNameLabel": "Full Name",
+        "fullNamePlaceholder": "Your name and surname",
+        "confirmPasswordLabel": "Confirm Password",
+        "passwordsDontMatch": "Passwords do not match",
+        "registering": "Registering...",
+        "registerSuccess": "Registration successful! Redirecting to login page.",
+        "registerError": "An error occurred during registration",
+        "registerErrorTryAgain": "An error occurred during registration. Please try again.",
+        "alreadyHaveAccount": "Already have an account?",
+        "passwordStrength": {
+            "weak": "Weak",
+            "medium": "Medium",
+            "strong": "Strong"
+        },
+        "forgotPasswordTitle": "Forgot Password",
+        "forgotPasswordDescription": "Enter your email address and we'll send you a link to reset your password",
+        "emailHelpText": "Enter your registered email address. We will send you a password reset link.",
+        "sendResetEmail": "Send Password Reset Email",
+        "sendingEmail": "Sending Email...",
+        "backToLogin": "Back to Login",
+        "emailSentTitle": "Email Sent",
+        "emailSentDescription": "A password reset link has been sent to <email>{email}</email>.",
+        "nextSteps": {
+            "title": "Next Steps:",
+            "steps": [
+                "Check your email inbox",
+                "Don't forget to check your spam folder",
+                "Reset your password by clicking the link",
+                "The link is valid for 15 minutes"
+            ]
+        },
+        "sendAgain": "Send Again",
+        "securityNotice": {
+            "title": "Security Notice:",
+            "description": "For security reasons, the password reset link will expire in 15 minutes. If you did not receive an email, check your spam folder."
+        },
+        "notifications": {
+            "sending": "Sending email...",
+            "sendSuccess": "Password reset email sent successfully!",
+            "sendError": "An error occurred while sending the email"
+        }
     },
     "AuthLayout": {
         "pageTitle": "ECU System",
@@ -138,5 +192,117 @@
             "faq": "Frequently Asked Questions"
         },
         "experience": "Years of Experience"
+    },
+    "ServiceCards": {
+        "title": "Our Services",
+        "description": "We offer a wide range of services to meet your vehicle's needs.",
+        "services": [
+            {
+                "title": "ECU Tuning",
+                "description": "We optimize your vehicle's brain, the ECU, for maximum performance and efficiency.",
+                "link": "/services/ecu-tuning"
+            },
+            {
+                "title": "On-Site Service",
+                "description": "We provide professional chiptuning service at your location, wherever your vehicle is.",
+                "link": "/services/on-site-service"
+            },
+            {
+                "title": "Power Measurement",
+                "description": "We measure your vehicle's power and torque with our state-of-the-art Dyno machine.",
+                "link": "/services/dyno"
+            }
+        ],
+        "learnMore": "Learn More"
+    },
+    "CorporateSection": {
+        "badge": "Corporate",
+        "title": "Professional Solutions for Your Fleet",
+        "description": "We offer special ECU tuning and fleet management solutions for your company vehicles. Increase your efficiency and reduce your costs.",
+        "button": "Get a Quote",
+        "features": [
+            "Fleet-specific software",
+            "Fuel savings",
+            "Performance increase",
+            "Detailed reporting"
+        ]
+    },
+    "Statistics": {
+        "title": "Our Numbers",
+        "stats": [
+            {
+                "value": "10.000+",
+                "label": "Satisfied Customers"
+            },
+            {
+                "value": "15+",
+                "label": "Years of Experience"
+            },
+            {
+                "value": "98%",
+                "label": "Success Rate"
+            },
+            {
+                "value": "50+",
+                "label": "Dealers Worldwide"
+            }
+        ]
+    },
+    "ServiceInfo": {
+        "badge": "Why Us?",
+        "title": "Why Should You Choose RevvTuned?",
+        "description": "We are at your service with our expert team, state-of-the-art equipment, and customer-oriented approach.",
+        "features": [
+            {
+                "title": "Expert Team",
+                "description": "Our experienced and certified experts are at your service for the best results."
+            },
+            {
+                "title": "Latest Technology",
+                "description": "We use the latest and most reliable equipment in the industry."
+            },
+            {
+                "title": "Customer Satisfaction",
+                "description": "Our top priority is to provide the highest level of service to our customers."
+            }
+        ]
+    },
+    "Testimonials": {
+        "badge": "Customer Reviews",
+        "title": "What Do Our Customers Say?",
+        "testimonials": [
+            {
+                "name": "Ahmet Yılmaz",
+                "role": "BMW F30 Owner",
+                "quote": "My car's performance has incredibly increased. It's much more enjoyable to drive now. Thank you RevvTuned team!",
+                "image": "/images/team/default-avatar.jpg"
+            },
+            {
+                "name": "Ayşe Kaya",
+                "role": "Fleet Manager",
+                "quote": "We achieved significant fuel savings in our company vehicles. Their professional approach is admirable.",
+                "image": "/images/team/default-avatar.jpg"
+            }
+        ]
+    },
+    "BlogSection": {
+        "badge": "Blog",
+        "title": "Latest from Our Blog",
+        "description": "Follow our blog for the latest news, tips, and articles about the chiptuning world.",
+        "button": "View All Posts",
+        "posts": [
+            {
+                "category": "ECU Tuning",
+                "title": "What is Stage 1 Software?",
+                "author": "Ercan Yter",
+                "date": "July 26, 2024"
+            },
+            {
+                "category": "Fuel Saving",
+                "title": "Is It Possible to Save Fuel with Chiptuning?",
+                "author": "Admin",
+                "date": "July 22, 2024"
+            }
+        ]
     }
 }

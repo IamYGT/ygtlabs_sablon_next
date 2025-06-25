@@ -2,45 +2,44 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Car, Gauge, Settings } from 'lucide-react';
+import { ArrowRight, Cpu, MapPin, Gauge } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+
+interface Service {
+    title: string;
+    description: string;
+    link: string;
+}
+
+const icons: { [key: string]: React.ElementType } = {
+    "ECU Tuning": Cpu,
+    "On-Site Service": MapPin,
+    "Power Measurement": Gauge,
+    "ECU Yazılım": Cpu,
+    "Yerinde Hizmet": MapPin,
+    "Güç Ölçümü": Gauge
+};
 
 export default function ServiceCards() {
-    const services = [
-        {
-            icon: Car,
-            title: "Chip Tuning",
-            description: "Motor performansını artıran profesyonel chip tuning hizmetleri",
-            features: ["Güç artışı", "Yakıt tasarrufu", "Garanti koruması"]
-        },
-        {
-            icon: Gauge,
-            title: "ECU Yazılımı",
-            description: "Özel ECU yazılım geliştirme ve optimizasyon",
-            features: ["Özel yazılım", "Test sürüşü", "Sürekli destek"]
-        },
-        {
-            icon: Settings,
-            title: "Performans Optimizasyonu",
-            description: "Araç performansının maksimuma çıkarılması",
-            features: ["Dinamometre testi", "Detaylı analiz", "Garanti"]
-        }
-    ];
+    const t = useTranslations('ServiceCards');
+    const services = t.raw('services') as Service[];
 
     return (
         <section id="services" className="py-20 bg-white">
             <div className="container mx-auto px-4">
                 <div className="text-center mb-16">
                     <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                        Hizmetlerimiz
+                        {t('title')}
                     </h2>
                     <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                        Aracınız için en iyi performans çözümlerini sunuyoruz
+                        {t('description')}
                     </p>
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-8">
-                    {services.map((service, index) => {
-                        const IconComponent = service.icon;
+                    {Array.isArray(services) && services.map((service, index) => {
+                        const IconComponent = icons[service.title] || Cpu;
                         return (
                             <motion.div
                                 key={index}
@@ -53,20 +52,16 @@ export default function ServiceCards() {
                                 <div className="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-lg mb-6 mx-auto">
                                     <IconComponent className="w-8 h-8 text-primary" />
                                 </div>
-                                <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                                    {service.title}
-                                </h3>
-                                <p className="text-gray-600 mb-6">
-                                    {service.description}
-                                </p>
-                                <ul className="space-y-2">
-                                    {service.features.map((feature, featureIndex) => (
-                                        <li key={featureIndex} className="flex items-center justify-center text-gray-600">
-                                            <span className="w-2 h-2 bg-primary rounded-full mr-2"></span>
-                                            {feature}
-                                        </li>
-                                    ))}
-                                </ul>
+                                <div className="mt-6 flex-grow">
+                                    <h3 className="text-xl font-bold text-gray-900">{service.title}</h3>
+                                    <p className="mt-2 text-gray-600">{service.description}</p>
+                                </div>
+                                <div className="mt-6 flex-shrink-0">
+                                    <Link href={service.link || '#'} className="group inline-flex items-center text-primary font-semibold">
+                                        {t('learnMore')}
+                                        <ArrowRight className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
+                                    </Link>
+                                </div>
                             </motion.div>
                         );
                     })}

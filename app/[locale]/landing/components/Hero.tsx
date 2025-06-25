@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
 import { ArrowRight, MapPin } from 'lucide-react';
 import Link from 'next/link';
+import { parseJSONField } from '@/lib/utils';
 
 interface LocalizedContent {
     [key: string]: string;
@@ -37,26 +38,9 @@ interface HeroSlider {
     order: number;
 }
 
-// JSON field parse etme fonksiyonu
-function parseJSONField(value: LocalizedContent | string | null | undefined, locale: string): string {
-    if (typeof value === 'string') {
-        try {
-            const parsed = JSON.parse(value);
-            return parsed?.[locale] || parsed?.en || value;
-        } catch {
-            return value;
-        }
-    }
-
-    if (typeof value === 'object' && value !== null) {
-        return value[locale] || value.en || Object.values(value)[0] || '';
-    }
-
-    return value || '';
-}
-
 export default function Hero() {
     const t = useTranslations('Hero');
+    const tCommon = useTranslations('Common');
     const locale = useLocale();
     const [currentSlider, setCurrentSlider] = useState<HeroSlider | null>(null);
     const [loading, setLoading] = useState(true);
@@ -190,7 +174,7 @@ export default function Hero() {
             <div id="home" className="relative min-h-screen bg-white flex items-center justify-center">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-                    <p className="text-gray-600">Yükleniyor...</p>
+                    <p className="text-gray-600">{tCommon('loading')}</p>
                 </div>
             </div>
         );
