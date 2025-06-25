@@ -158,7 +158,7 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                             })
                         )
                     );
-                    toast.success(`${selectedUsers.length} ${t('usersActivated')}`);
+                    toast.success(t('messages.bulkActivateSuccess', { count: selectedUsers.length }));
                     break;
                 }
                 case 'deactivate': {
@@ -171,7 +171,7 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                             })
                         )
                     );
-                    toast.success(`${selectedUsers.length} ${t('usersDeactivated')}`);
+                    toast.success(t('messages.bulkDeactivateSuccess', { count: selectedUsers.length }));
                     break;
                 }
                 case 'export': {
@@ -239,18 +239,18 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
         const csvContent = [
             [t('name'), t('email'), t('status'), t('roles'), t('registrationDate')].join(','),
             ...selectedUserData.map(user => [
-                user.name || '',
-                user.email || '',
+                (user.name || '').replace(/,/g, ''),
+                (user.email || '').replace(/,/g, ''),
                 user.isActive ? t('active') : t('inactive'),
-                user.currentRole ? user.currentRole.displayName : t('noRoleAssigned'),
+                user.currentRole ? user.currentRole.displayName.replace(/,/g, '') : t('noRoleAssigned'),
                 format(new Date(user.createdAt), 'dd/MM/yyyy', { locale: dateLocale })
             ].join(','))
         ].join('\n');
 
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const blob = new Blob([`\uFEFF${csvContent}`], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = `kullanicilar_${format(new Date(), 'yyyyMMdd')}.csv`;
+        link.download = `users_${format(new Date(), 'yyyyMMdd')}.csv`;
         link.click();
 
         toast.success(t('userDataExported'));
@@ -531,10 +531,9 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
             <Dialog open={bulkDeleteModalOpen} onOpenChange={setBulkDeleteModalOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>{t('deleteUsers')}</DialogTitle>
+                        <DialogTitle>{t('messages.bulkDeleteConfirmTitle')}</DialogTitle>
                         <DialogDescription>
-                            {selectedUsers.length} {t('deleteUsersConfirm')}
-                            {t('actionCannotBeUndone')}
+                            {t('messages.bulkDeleteConfirmText', { count: selectedUsers.length })}
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>

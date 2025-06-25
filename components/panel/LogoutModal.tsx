@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { LogOut, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import { useLogout } from "@/lib/hooks/useAuth";
+import { useTranslations } from "next-intl";
 
 interface LogoutModalProps {
     isOpen: boolean;
@@ -11,6 +12,7 @@ interface LogoutModalProps {
 }
 
 export default function LogoutModal({ isOpen, onClose, logoutType }: LogoutModalProps) {
+    const t = useTranslations('LogoutModal');
     const [mounted, setMounted] = useState(false);
     const logoutMutation = useLogout();
 
@@ -26,8 +28,8 @@ export default function LogoutModal({ isOpen, onClose, logoutType }: LogoutModal
             await logoutMutation.mutateAsync(logoutType === 'all');
             onClose();
         } catch (error) {
-            console.error("Çıkış hatası:", error);
-            toast.error("Çıkış yapılırken bir hata oluştu");
+            console.error("Logout error:", error);
+            toast.error(t('error'));
         }
     };
 
@@ -37,6 +39,10 @@ export default function LogoutModal({ isOpen, onClose, logoutType }: LogoutModal
     };
 
     if (!mounted || !isOpen) return null;
+
+    const listItems = logoutType === 'all'
+        ? t.raw('listAll' as any)
+        : t.raw('listCurrent' as any);
 
     const modalContent = (
         <div
@@ -59,7 +65,7 @@ export default function LogoutModal({ isOpen, onClose, logoutType }: LogoutModal
                     </div>
                     <div>
                         <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                            Çıkış Yapmak İstediğinizden Emin misiniz?
+                            {t('title')}
                         </h2>
                     </div>
                 </div>
@@ -67,31 +73,16 @@ export default function LogoutModal({ isOpen, onClose, logoutType }: LogoutModal
                 {/* Content */}
                 <div className="mb-6">
                     <p className="text-slate-600 dark:text-slate-300">
-                        {logoutType === 'all' ? (
-                            <>
-                                <strong className="text-slate-800 dark:text-slate-200">Tüm cihazlardan</strong> çıkış yapacaksınız. Bu işlem sonrasında:
-                            </>
-                        ) : (
-                            <>
-                                <strong className="text-slate-800 dark:text-slate-200">Bu cihazdan</strong> çıkış yapacaksınız. Bu işlem sonrasında:
-                            </>
-                        )}
+                        {logoutType === 'all'
+                            ? t('descriptionAll')
+                            : t('descriptionCurrent')
+                        }
                     </p>
 
                     <ul className="mt-2 ml-4 space-y-1 text-sm text-slate-600 dark:text-slate-400">
-                        {logoutType === 'all' ? (
-                            <>
-                                <li>• Tüm aktif oturumlarınız sonlandırılacak</li>
-                                <li>• Diğer cihazlardaki erişimleriniz kesilecek</li>
-                                <li>• Tekrar giriş yapmanız gerekecek</li>
-                            </>
-                        ) : (
-                            <>
-                                <li>• Mevcut oturumunuz sonlandırılacak</li>
-                                <li>• Diğer cihazlardaki oturumlarınız devam edecek</li>
-                                <li>• Tekrar giriş yapmanız gerekecek</li>
-                            </>
-                        )}
+                        {Array.isArray(listItems) && listItems.map((item, index) => (
+                            <li key={index}>• {item}</li>
+                        ))}
                     </ul>
                 </div>
 
@@ -102,7 +93,7 @@ export default function LogoutModal({ isOpen, onClose, logoutType }: LogoutModal
                         className="flex-1 px-4 py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-600 rounded-md transition-colors"
                         disabled={logoutMutation.isPending}
                     >
-                        İptal
+                        {t('cancel')}
                     </button>
                     <button
                         onClick={handleConfirmLogout}
@@ -112,12 +103,12 @@ export default function LogoutModal({ isOpen, onClose, logoutType }: LogoutModal
                         {logoutMutation.isPending ? (
                             <>
                                 <div className="h-4 w-4 mr-2 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                                Çıkış yapılıyor...
+                                {t('loggingOut')}
                             </>
                         ) : (
                             <>
                                 <LogOut className="h-4 w-4 mr-2" />
-                                {logoutType === 'all' ? "Tüm Cihazlardan Çık" : "Bu Cihazdan Çık"}
+                                {logoutType === 'all' ? t('confirmAll') : t('confirmCurrent')}
                             </>
                         )}
                     </button>

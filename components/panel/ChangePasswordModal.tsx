@@ -14,12 +14,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Key, Lock } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 interface ChangePasswordModalProps {
     children: React.ReactNode;
 }
 
 export default function ChangePasswordModal({ children }: ChangePasswordModalProps) {
+    const t = useTranslations('ChangePasswordModal');
     const [open, setOpen] = useState(false);
     const [showPasswords, setShowPasswords] = useState({
         current: false,
@@ -45,22 +47,22 @@ export default function ChangePasswordModal({ children }: ChangePasswordModalPro
 
         // Validasyon
         if (!formData.currentPassword || !formData.newPassword || !formData.confirmPassword) {
-            toast.error("Tüm alanları doldurun");
+            toast.error(t('validation.fillAll'));
             return;
         }
 
         if (formData.newPassword !== formData.confirmPassword) {
-            toast.error("Yeni şifreler eşleşmiyor");
+            toast.error(t('validation.noMatch'));
             return;
         }
 
         if (formData.newPassword.length < 6) {
-            toast.error("Yeni şifre en az 6 karakter olmalıdır");
+            toast.error(t('validation.minLength'));
             return;
         }
 
         if (formData.currentPassword === formData.newPassword) {
-            toast.error("Yeni şifre mevcut şifreden farklı olmalıdır");
+            toast.error(t('validation.mustBeDifferent'));
             return;
         }
 
@@ -70,7 +72,7 @@ export default function ChangePasswordModal({ children }: ChangePasswordModalPro
             // API çağrısı devre dışı - demo mode
             await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API delay
 
-            toast.success("Şifre değiştirildi (demo mod)");
+            toast.success(t('notifications.success'));
             setFormData({
                 currentPassword: "",
                 newPassword: "",
@@ -78,7 +80,7 @@ export default function ChangePasswordModal({ children }: ChangePasswordModalPro
             });
             setOpen(false);
         } catch (_error) {
-            toast.error("Şifre değiştirilirken hata oluştu");
+            toast.error(t('notifications.error'));
         } finally {
             setIsLoading(false);
         }
@@ -98,6 +100,8 @@ export default function ChangePasswordModal({ children }: ChangePasswordModalPro
         setOpen(false);
     };
 
+    const requirements = t.raw('requirements' as any);
+
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
@@ -107,24 +111,24 @@ export default function ChangePasswordModal({ children }: ChangePasswordModalPro
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
                         <Lock className="h-5 w-5" />
-                        Şifre Değiştir
+                        {t('title')}
                     </DialogTitle>
                     <DialogDescription>
-                        Güvenliğiniz için mevcut şifrenizi girin ve yeni şifrenizi belirleyin.
+                        {t('description')}
                     </DialogDescription>
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Mevcut Şifre */}
                     <div className="space-y-2">
-                        <Label htmlFor="currentPassword">Mevcut Şifre</Label>
+                        <Label htmlFor="currentPassword">{t('currentPasswordLabel')}</Label>
                         <div className="relative">
                             <Input
                                 id="currentPassword"
                                 type={showPasswords.current ? "text" : "password"}
                                 value={formData.currentPassword}
                                 onChange={(e) => setFormData({ ...formData, currentPassword: e.target.value })}
-                                placeholder="Mevcut şifrenizi girin"
+                                placeholder={t('currentPasswordPlaceholder')}
                                 className="pr-10"
                                 disabled={isLoading}
                             />
@@ -147,14 +151,14 @@ export default function ChangePasswordModal({ children }: ChangePasswordModalPro
 
                     {/* Yeni Şifre */}
                     <div className="space-y-2">
-                        <Label htmlFor="newPassword">Yeni Şifre</Label>
+                        <Label htmlFor="newPassword">{t('newPasswordLabel')}</Label>
                         <div className="relative">
                             <Input
                                 id="newPassword"
                                 type={showPasswords.new ? "text" : "password"}
                                 value={formData.newPassword}
                                 onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
-                                placeholder="Yeni şifrenizi girin"
+                                placeholder={t('newPasswordPlaceholder')}
                                 className="pr-10"
                                 disabled={isLoading}
                             />
@@ -177,14 +181,14 @@ export default function ChangePasswordModal({ children }: ChangePasswordModalPro
 
                     {/* Yeni Şifre Tekrar */}
                     <div className="space-y-2">
-                        <Label htmlFor="confirmPassword">Yeni Şifre (Tekrar)</Label>
+                        <Label htmlFor="confirmPassword">{t('confirmPasswordLabel')}</Label>
                         <div className="relative">
                             <Input
                                 id="confirmPassword"
                                 type={showPasswords.confirm ? "text" : "password"}
                                 value={formData.confirmPassword}
                                 onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                                placeholder="Yeni şifrenizi tekrar girin"
+                                placeholder={t('confirmPasswordPlaceholder')}
                                 className="pr-10"
                                 disabled={isLoading}
                             />
@@ -207,12 +211,14 @@ export default function ChangePasswordModal({ children }: ChangePasswordModalPro
 
                     {/* Şifre Gereksinimleri */}
                     <div className="text-xs text-gray-500 space-y-1 bg-gray-50 dark:bg-gray-800 p-3 rounded-md">
-                        <p className="font-medium">Şifre gereksinimleri:</p>
-                        <ul className="space-y-1">
-                            <li>• En az 6 karakter uzunluğunda olmalıdır</li>
-                            <li>• Mevcut şifreden farklı olmalıdır</li>
-                            <li>• Güçlü bir şifre kullanmanız önerilir</li>
-                        </ul>
+                        <p className="font-medium">{t('requirementsTitle')}</p>
+                        {Array.isArray(requirements) && (
+                            <ul className="space-y-1">
+                                {requirements.map((req, index) => (
+                                    <li key={index}>• {req}</li>
+                                ))}
+                            </ul>
+                        )}
                     </div>
 
                     {/* Butonlar */}
@@ -223,7 +229,7 @@ export default function ChangePasswordModal({ children }: ChangePasswordModalPro
                             disabled={isLoading}
                         >
                             <Key className="h-4 w-4" />
-                            {isLoading ? "Değiştiriliyor..." : "Şifreyi Değiştir"}
+                            {isLoading ? t('buttons.changing') : t('buttons.change')}
                         </Button>
                         <Button
                             type="button"
@@ -231,7 +237,7 @@ export default function ChangePasswordModal({ children }: ChangePasswordModalPro
                             onClick={handleClose}
                             disabled={isLoading}
                         >
-                            İptal
+                            {t('buttons.cancel')}
                         </Button>
                     </div>
                 </form>

@@ -110,7 +110,7 @@ export default function AdminProfileClient() {
                         <CardHeader>
                             <CardTitle className="text-lg">{t('profileImage')}</CardTitle>
                             <CardDescription>
-                                {t('description')}
+                                {t('profileImageDescription')}
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="flex justify-center">

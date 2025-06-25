@@ -134,6 +134,8 @@
     "AdminUsers": {
         "title": "User Management",
         "subtitle": "Manage users, assign roles and control system access",
+        "users": "Users",
+        "system": "System",
         "addUser": "Add User",
         "editUser": "Edit User",
         "deleteUser": "Delete User",
@@ -264,7 +266,9 @@
             "roleUpdateSuccess": "User role updated successfully.",
             "roleUpdateError": "Could not update user role.",
             "exportSuccess": "User data successfully exported to CSV.",
-            "genericError": "An unexpected error occurred. Please try again."
+            "genericError": "An unexpected error occurred. Please try again.",
+            "bulkActivateSuccess": "{count} users activated successfully.",
+            "bulkDeactivateSuccess": "{count} users deactivated successfully."
         },
         "createUser": {
             "title": "Create New User",
@@ -292,12 +296,193 @@
             "successMessage": "User created successfully!",
             "errorMessage": "Could not create user. Please check the information.",
             "genericError": "An unexpected error occurred. Please try again.",
+            "accountStatusLabel": "Account Status",
+            "accountStatusDescription": "Should the user be active upon creation?",
+            "roleAndStatus": "Role & Status",
+            "roleSearchPlaceholder": "Search for a role...",
+            "roleNotFound": "No roles match your search.",
+            "selectedRoleLabel": "Selected Role",
+            "cancel": "Cancel",
+            "creating": "Creating...",
             "validation": {
                 "nameRequired": "Full name is required.",
                 "emailRequired": "A valid email address is required.",
                 "passwordMinLength": "Password must be at least 6 characters long.",
                 "roleRequired": "Please select a role for the user."
             }
+        },
+        "editUser": {
+            "title": "Edit User",
+            "unnamedUser": "User",
+            "description": "Update user information, password, and roles.",
+            "profileImage": {
+                "title": "Profile Image",
+                "description": "Manage user's profile image. PNG, JPG, GIF formats are supported. Max 5MB.",
+                "enlargeHint": "Click to enlarge",
+                "uploadButton": "Upload",
+                "revertButton": "Revert",
+                "removeButton": "Remove",
+                "dropzone": {
+                    "title": "Drag and drop the image file",
+                    "subtitle": "or",
+                    "link": "click to select a file",
+                    "requirements": "PNG, JPG, GIF - Max 5MB",
+                    "recommendedSize": "Recommended size: 400x400 pixels",
+                    "dropPrompt": "Drop the file"
+                },
+                "status": {
+                    "removed": "Profile image removed",
+                    "changed": "Profile image changed",
+                    "savePrompt": "Click \"Update\" to save the changes."
+                }
+            },
+            "basicInfo": {
+                "title": "Basic Information",
+                "nameLabel": "Full Name *",
+                "namePlaceholder": "Enter user's name",
+                "emailLabel": "Email Address *",
+                "emailPlaceholder": "user@example.com",
+                "statusLabel": "Account Status",
+                "statusDescription": "User's access to the system",
+                "active": "Active",
+                "passive": "Inactive"
+            },
+            "password": {
+                "title": "Change Password",
+                "description": "Fill in the fields below to change the user's password.",
+                "checkboxLabel": "Change password",
+                "newPasswordLabel": "New Password *",
+                "newPasswordPlaceholder": "At least 8 characters",
+                "confirmPasswordLabel": "Confirm Password *",
+                "confirmPasswordPlaceholder": "Re-enter the password",
+                "requirementsTitle": "Password requirements:",
+                "reqMinLength": "At least 8 characters",
+                "reqMatch": "Passwords must match"
+            },
+            "roleAssignment": {
+                "title": "Role Assignments",
+                "descriptionSelfNoPermission": "You cannot change your own roles this way.",
+                "descriptionSelfWithPermission": "As Super Admin, you can manage your own roles.",
+                "descriptionOther": "Select roles to assign to the user.",
+                "securityWarningTitle": "Security Warning",
+                "securityWarningText": "You cannot change your own roles. Please contact another administrator for this action.",
+                "superAdminWarningTitle": "Super Admin Power",
+                "superAdminWarningText": "As Super Admin, you can edit your own account. Be careful!",
+                "currentRoleSuffix": "(Current)",
+                "restrictedRolesTitle": "Restricted Roles",
+                "restrictedRolesText": "Roles at your level or higher are not displayed.",
+                "noRoleSelected": "No role selected yet",
+                "selectedRoleLabel": "Selected Role:"
+            },
+            "buttons": {
+                "cancel": "Cancel",
+                "updating": "Updating...",
+                "update": "Update"
+            },
+            "imageViewer": {
+                "title": "{name} - Profile Image",
+                "closeButton": "Close",
+                "changeButton": "Change",
+                "revertButton": "Revert",
+                "removeButton": "Remove"
+            },
+            "notifications": {
+                "fileTooLarge": "File is too large! Maximum size is 5MB.",
+                "invalidFileType": "Invalid file type. Please upload a PNG, JPG, or GIF.",
+                "imageUploadSuccess": "Image uploaded successfully.",
+                "imageRemoveSuccess": "Image removed.",
+                "imageRevertSuccess": "Image reverted.",
+                "passwordRequired": "New password is required.",
+                "passwordMinLength": "Password must be at least 8 characters.",
+                "passwordsNoMatch": "Passwords do not match.",
+                "editSelfError": "You cannot edit your own account this way.",
+                "nameRequired": "Name field is required.",
+                "emailRequired": "Email field is required.",
+                "updateSuccess": "User updated successfully.",
+                "updateError": "Could not update user."
+            }
+        },
+        "deleteUser": {
+            "title": "Delete User",
+            "description": "This will permanently delete the user and all associated data.",
+            "userAvatarAlt": "User Avatar",
+            "unnamed": "Unnamed User",
+            "registeredAt": "Registered",
+            "status": {
+                "active": "Active",
+                "passive": "Inactive"
+            },
+            "userRole": "User Role",
+            "warning": {
+                "title": "Warning",
+                "permanentDeletion": "This is a permanent deletion.",
+                "roleRemoval": "All role assignments will be removed.",
+                "unrecoverable": "This action is unrecoverable.",
+                "roleAssignmentLost": "User's role history will be lost.",
+                "superAdmin": "Super Admins cannot be deleted. You must first remove their role."
+            },
+            "buttons": {
+                "cancel": "Cancel",
+                "deleting": "Deleting...",
+                "delete": "Delete"
+            },
+            "notifications": {
+                "deleteSuccess": "User deleted successfully.",
+                "deleteError": "Could not delete user.",
+                "unexpectedError": "An unexpected error occurred."
+            }
+        },
+        "addUserDialog": {
+            "title": "Add User",
+            "description": "Create a new user by filling out the form below.",
+            "form": {
+                "nameLabel": "Full Name",
+                "namePlaceholder": "John Doe",
+                "emailLabel": "Email",
+                "emailPlaceholder": "user@example.com",
+                "passwordLabel": "Password",
+                "passwordPlaceholder": "Enter a secure password",
+                "rolesLabel": "Roles",
+                "activeUserLabel": "Active User",
+                "activeUserDescription": "The user will be able to log in immediately."
+            },
+            "buttons": {
+                "cancel": "Cancel",
+                "create": "Create User",
+                "creating": "Creating..."
+            },
+            "validation": {
+                "nameMinLength": "Name must be at least 2 characters long.",
+                "emailInvalid": "Please enter a valid email address.",
+                "passwordMinLength": "Password must be at least 6 characters long.",
+                "roleRequired": "At least one role must be selected."
+            },
+            "notifications": {
+                "createSuccess": "User created successfully.",
+                "createError": "Could not create user.",
+                "unexpectedError": "An unexpected error occurred."
+            }
+        },
+        "userFilters": {
+            "filterButton": "Filter",
+            "categories": {
+                "status": "Status",
+                "role": "Role",
+                "activity": "Activity"
+            },
+            "status": {
+                "activeUsers": "Active Users",
+                "inactiveUsers": "Inactive Users"
+            },
+            "role": {
+                "admins": "Administrators",
+                "noRole": "Without Role"
+            },
+            "activity": {
+                "recentLogin": "Recent Login",
+                "neverLogin": "Never Logged In"
+            },
+            "clearAll": "Clear All Filters"
         }
     },
     "AdminRoles": {
@@ -311,7 +496,51 @@
         "roleHierarchy": "Role Hierarchy",
         "totalRoles": "Total Roles",
         "activeRoles": "Active Roles",
-        "totalUsers": "Total Users"
+        "totalUsers": "Total Users",
+        "totalPermissions": "Total Permissions",
+        "searchRoles": "Search roles...",
+        "filterByStatus": "Filter by status",
+        "all": "All",
+        "active": "Active",
+        "inactive": "Inactive",
+        "newRole": "New Role",
+        "roleDetails": "Role Details",
+        "permissions": "Permissions",
+        "users": "Users",
+        "viewDetails": "View Details",
+        "edit": "Edit",
+        "delete": "Delete",
+        "superAdmin": "Super Admin",
+        "admin": "Admin",
+        "user": "User",
+        "custom": "Custom",
+        "systemRole": "System Role",
+        "customRole": "Custom Role",
+        "noRolesFound": "No Roles Found",
+        "tryDifferentSearch": "Try different search criteria",
+        "loading": "Loading...",
+        "refresh": "Refresh",
+        "rolesShowing": "roles showing",
+        "rolesLoading": "Loading roles...",
+        "details": "Details",
+        "editPermissions": "Edit Permissions",
+        "protected": "Protected",
+        "usersCount": "users",
+        "permissionsCount": "permissions",
+        "view": "View",
+        "noRolesMatchCriteria": "No roles match your search criteria.",
+        "debug": {
+            "title": "Debug: User Permissions",
+            "userLabel": "User",
+            "rolesLabel": "Roles",
+            "noRole": "No role",
+            "permissionLabel": "roles.edit permission",
+            "hasPermission": "YES ✓",
+            "noPermission": "NO ✗",
+            "fixPermissions": "Fix Permissions",
+            "fixDescription": "This button will give you admin role and roles:edit permission",
+            "allPermissions": "All Permissions ({count})"
+        }
     },
     "AdminPermissions": {
         "title": "Permission Management",
@@ -399,6 +628,7 @@
     "AdminProfile": {
         "title": "Profile Management",
         "description": "View and edit your personal information",
+        "profileImageDescription": "Manage your profile picture.",
         "edit": "Edit",
         "save": "Save",
         "cancel": "Cancel",
@@ -571,6 +801,57 @@
         "languages": {
             "tr": "Türkçe",
             "en": "English"
+        }
+    },
+    "LogoutModal": {
+        "title": "Are you sure you want to log out?",
+        "descriptionCurrent": "You are about to log out from this device. After this action:",
+        "descriptionAll": "You are about to log out from all devices. After this action:",
+        "listCurrent": [
+            "Your current session will be terminated.",
+            "Your sessions on other devices will continue.",
+            "You will need to log in again."
+        ],
+        "listAll": [
+            "All your active sessions will be terminated.",
+            "Your access from other devices will be cut off.",
+            "You will need to log in again."
+        ],
+        "cancel": "Cancel",
+        "confirmCurrent": "Log Out From This Device",
+        "confirmAll": "Log Out From All Devices",
+        "loggingOut": "Logging out...",
+        "error": "An error occurred while logging out."
+    },
+    "ChangePasswordModal": {
+        "title": "Change Password",
+        "description": "For your security, enter your current password and set a new one.",
+        "currentPasswordLabel": "Current Password",
+        "currentPasswordPlaceholder": "Enter your current password",
+        "newPasswordLabel": "New Password",
+        "newPasswordPlaceholder": "Enter your new password",
+        "confirmPasswordLabel": "New Password (Confirm)",
+        "confirmPasswordPlaceholder": "Re-enter your new password",
+        "requirementsTitle": "Password requirements:",
+        "requirements": [
+            "Must be at least 6 characters long",
+            "Must be different from the current password",
+            "Using a strong password is recommended"
+        ],
+        "buttons": {
+            "change": "Change Password",
+            "changing": "Changing...",
+            "cancel": "Cancel"
+        },
+        "validation": {
+            "fillAll": "Please fill in all fields",
+            "noMatch": "New passwords do not match",
+            "minLength": "New password must be at least 6 characters long",
+            "mustBeDifferent": "New password must be different from the current password"
+        },
+        "notifications": {
+            "success": "Password changed successfully (demo mode)",
+            "error": "An error occurred while changing the password"
         }
     }
 }

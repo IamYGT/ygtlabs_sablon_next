@@ -245,12 +245,10 @@ export default function UserEditModal({
     };
 
     const handleFileUpload = (file: File) => {
-        // Dosya boyutu kontrolü (5MB)
         if (file.size > 5 * 1024 * 1024) {
             toast.error(t('notifications.fileTooLarge'));
             return;
         }
-        // Dosya türü kontrolü
         const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
         if (!allowedTypes.includes(file.type)) {
             toast.error(t('notifications.invalidFileType'));
@@ -259,7 +257,7 @@ export default function UserEditModal({
         const reader = new FileReader();
         reader.onload = (e) => {
             setProfileImage(e.target?.result as string);
-            toast.success('Resim başarıyla yüklendi');
+            toast.success(t('notifications.imageUploadSuccess'));
         };
         reader.readAsDataURL(file);
     };
@@ -269,7 +267,7 @@ export default function UserEditModal({
         if (fileInputRef.current) {
             fileInputRef.current.value = '';
         }
-        toast.success('Resim kaldırıldı');
+        toast.success(t('notifications.imageRemoveSuccess'));
     };
 
     const handleImageReset = () => {
@@ -277,7 +275,7 @@ export default function UserEditModal({
         if (fileInputRef.current) {
             fileInputRef.current.value = '';
         }
-        toast.success('Resim geri yüklendi');
+        toast.success(t('notifications.imageRevertSuccess'));
     };
 
     // Drag & Drop handlers
@@ -305,17 +303,17 @@ export default function UserEditModal({
         if (!changePassword) return true;
 
         if (!newPassword) {
-            toast.error('Yeni şifre gereklidir');
+            toast.error(t('notifications.passwordRequired'));
             return false;
         }
 
         if (newPassword.length < 8) {
-            toast.error('Şifre en az 8 karakter olmalıdır');
+            toast.error(t('notifications.passwordMinLength'));
             return false;
         }
 
         if (newPassword !== confirmPassword) {
-            toast.error('Şifreler uyuşmuyor');
+            toast.error(t('notifications.passwordsNoMatch'));
             return false;
         }
 
@@ -325,19 +323,18 @@ export default function UserEditModal({
     const handleSubmit = async () => {
         if (!user) return;
 
-        // Güvenlik kontrolü: Kendi kendini düzenleme engeli (süper admin hariç)
         if (isEditingSelf && !isSuperAdmin) {
-            toast.error('Kendi hesabınızı bu şekilde düzenleyemezsiniz');
+            toast.error(t('notifications.editSelfError'));
             return;
         }
 
         if (!name.trim()) {
-            toast.error('İsim alanı gereklidir');
+            toast.error(t('notifications.nameRequired'));
             return;
         }
 
         if (!email.trim()) {
-            toast.error('Email alanı gereklidir');
+            toast.error(t('notifications.emailRequired'));
             return;
         }
 
@@ -348,14 +345,13 @@ export default function UserEditModal({
         setLoading(true);
 
         try {
-            // Kullanıcı bilgilerini ve tek rolü güncelle
             const updateData: UpdateUserData = {
                 id: user.id,
                 name: name.trim(),
                 email: email.trim(),
                 isActive,
                 profileImage,
-                roleId: selectedRole, // Tek rol sistemi
+                roleId: selectedRole,
             };
 
             if (changePassword && newPassword) {
@@ -371,20 +367,16 @@ export default function UserEditModal({
             const updateResult = await updateResponse.json();
 
             if (!updateResponse.ok) {
-                throw new Error(updateResult.error || 'Kullanıcı güncellenemedi');
+                throw new Error(updateResult.error || t('notifications.updateError'));
             }
 
-            toast.success('Kullanıcı başarıyla güncellendi');
-
-            // Parent component'i güncelle (bu yeni user verilerini getirecek)
+            toast.success(t('notifications.updateSuccess'));
             onUserUpdated();
-
-            // Modal'ı kapat
             onOpenChange(false);
 
         } catch (error) {
             console.error('User update error:', error);
-            toast.error(error instanceof Error ? error.message : 'Bir hata oluştu');
+            toast.error(error instanceof Error ? error.message : t('notifications.updateError'));
         } finally {
             setLoading(false);
         }
@@ -399,29 +391,26 @@ export default function UserEditModal({
                     <DialogHeader>
                         <DialogTitle className="flex items-center gap-2">
                             <User className="h-5 w-5" />
-                            Kullanıcı Düzenle
+                            {t('title')}
                         </DialogTitle>
                         <DialogDescription>
-                            Kullanıcı bilgilerini, şifresini ve rollerini güncelleyin
+                            {t('description')}
                         </DialogDescription>
                     </DialogHeader>
 
                     <div className="space-y-6">
-                        {/* Modern Profil Resmi Yönetimi */}
                         <Card>
                             <CardHeader>
                                 <CardTitle className="text-sm flex items-center gap-2">
                                     <ImageIcon className="h-4 w-4" />
-                                    Profil Resmi
+                                    {t('profileImage.title')}
                                 </CardTitle>
                                 <CardDescription>
-                                    Kullanıcının profil resmini yönetin. PNG, JPG, GIF formatları desteklenir. Maksimum 5MB.
+                                    {t('profileImage.description')}
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-6">
-                                {/* Resim Önizleme ve Kontroller */}
                                 <div className="flex flex-col lg:flex-row gap-6 items-start">
-                                    {/* Sol: Avatar ve Butonlar */}
                                     <div className="flex flex-col items-center gap-4">
                                         <div className="relative group">
                                             <Avatar
@@ -438,8 +427,6 @@ export default function UserEditModal({
                                                     <User className="h-16 w-16 text-muted-foreground" />
                                                 </AvatarFallback>
                                             </Avatar>
-
-                                            {/* Quick Action Overlay */}
                                             <div className="absolute inset-0 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center justify-center">
                                                 <div className="flex gap-2">
                                                     {hasImage && (
@@ -468,16 +455,12 @@ export default function UserEditModal({
                                                     </Button>
                                                 </div>
                                             </div>
-
-                                            {/* Büyütme İpucu */}
                                             {hasImage && (
                                                 <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    Büyütmek için tıklayın
+                                                    {t('profileImage.enlargeHint')}
                                                 </div>
                                             )}
                                         </div>
-
-                                        {/* Aksiyon Butonları */}
                                         <div className="flex gap-2 flex-wrap justify-center">
                                             <Button
                                                 variant="outline"
@@ -486,9 +469,8 @@ export default function UserEditModal({
                                                 className="flex items-center gap-2"
                                             >
                                                 <Upload className="h-4 w-4" />
-                                                Yükle
+                                                {t('profileImage.uploadButton')}
                                             </Button>
-
                                             {hasAnyChange && (
                                                 <Button
                                                     variant="outline"
@@ -497,10 +479,9 @@ export default function UserEditModal({
                                                     className="flex items-center gap-2"
                                                 >
                                                     <RotateCcw className="h-4 w-4" />
-                                                    Geri Al
+                                                    {t('profileImage.revertButton')}
                                                 </Button>
                                             )}
-
                                             {hasImage && (
                                                 <Button
                                                     variant="outline"
@@ -509,13 +490,11 @@ export default function UserEditModal({
                                                     className="flex items-center gap-2 text-destructive hover:text-destructive"
                                                 >
                                                     <Trash2 className="h-4 w-4" />
-                                                    Kaldır
+                                                    {t('profileImage.removeButton')}
                                                 </Button>
                                             )}
                                         </div>
                                     </div>
-
-                                    {/* Sağ: Upload Alanı */}
                                     <div className="flex-1 w-full">
                                         <input
                                             ref={fileInputRef}
@@ -525,17 +504,8 @@ export default function UserEditModal({
                                             className="hidden"
                                             onChange={handleImageUpload}
                                         />
-
-                                        {/* Drag & Drop Alanı */}
                                         <div
-                                            className={`
-                                                relative border-2 border-dashed rounded-xl p-8 text-center cursor-pointer
-                                                transition-all duration-200 ease-in-out
-                                                ${dragActive
-                                                    ? 'border-primary bg-primary/5 scale-105'
-                                                    : 'border-muted-foreground/25 hover:border-muted-foreground/50 hover:bg-muted/25'
-                                                }
-                                            `}
+                                            className={`relative border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-200 ease-in-out ${dragActive ? 'border-primary bg-primary/5 scale-105' : 'border-muted-foreground/25 hover:border-muted-foreground/50 hover:bg-muted/25'}`}
                                             onClick={() => fileInputRef.current?.click()}
                                             onDragEnter={handleDrag}
                                             onDragLeave={handleDrag}
@@ -546,36 +516,31 @@ export default function UserEditModal({
                                                 <div className="absolute inset-0 bg-primary/10 border-2 border-primary border-dashed rounded-xl flex items-center justify-center">
                                                     <div className="text-primary">
                                                         <Upload className="h-12 w-12 mx-auto mb-2" />
-                                                        <p className="font-medium">Dosyayı bırakın</p>
+                                                        <p className="font-medium">{t('profileImage.dropzone.dropPrompt')}</p>
                                                     </div>
                                                 </div>
                                             )}
-
                                             <div className="space-y-4">
                                                 <div className="mx-auto w-16 h-16 bg-muted rounded-full flex items-center justify-center">
                                                     <ImageIcon className="h-8 w-8 text-muted-foreground" />
                                                 </div>
-
                                                 <div className="space-y-2">
                                                     <p className="font-medium text-foreground">
-                                                        Resim dosyasını sürükleyip bırakın
+                                                        {t('profileImage.dropzone.title')}
                                                     </p>
                                                     <p className="text-sm text-muted-foreground">
-                                                        veya{" "}
-                                                        <span className="text-primary font-medium">dosya seçmek için tıklayın</span>
+                                                        {t('profileImage.dropzone.subtitle')}{" "}
+                                                        <span className="text-primary font-medium">{t('profileImage.dropzone.link')}</span>
                                                     </p>
                                                 </div>
-
                                                 <div className="text-xs text-muted-foreground space-y-1">
-                                                    <p>PNG, JPG, GIF - Maksimum 5MB</p>
-                                                    <p>Önerilen boyut: 400x400 piksel</p>
+                                                    <p>{t('profileImage.dropzone.requirements')}</p>
+                                                    <p>{t('profileImage.dropzone.recommendedSize')}</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
-                                {/* Durum Mesajları */}
                                 {hasAnyChange && (
                                     <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
                                         <div className="flex items-start gap-3">
@@ -584,10 +549,10 @@ export default function UserEditModal({
                                             </div>
                                             <div className="flex-1">
                                                 <p className="text-sm font-medium text-amber-800">
-                                                    {isImageRemoved ? 'Profil resmi kaldırıldı' : 'Profil resmi değiştirildi'}
+                                                    {isImageRemoved ? t('profileImage.status.removed') : t('profileImage.status.changed')}
                                                 </p>
                                                 <p className="text-xs text-amber-700 mt-1">
-                                                    Değişiklikleri kaydetmek için &quot;Güncelle&quot; butonuna tıklayın
+                                                    {t('profileImage.status.savePrompt')}
                                                 </p>
                                             </div>
                                         </div>
@@ -595,25 +560,22 @@ export default function UserEditModal({
                                 )}
                             </CardContent>
                         </Card>
-
-                        {/* Temel Bilgiler */}
                         <Card>
                             <CardHeader>
-                                <CardTitle className="text-sm">Temel Bilgiler</CardTitle>
+                                <CardTitle className="text-sm">{t('basicInfo.title')}</CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="name">Ad Soyad *</Label>
+                                    <Label htmlFor="name">{t('basicInfo.nameLabel')}</Label>
                                     <Input
                                         id="name"
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
-                                        placeholder="Kullanıcının adını girin"
+                                        placeholder={t('basicInfo.namePlaceholder')}
                                     />
                                 </div>
-
                                 <div className="space-y-2">
-                                    <Label htmlFor="email">Email Adresi *</Label>
+                                    <Label htmlFor="email">{t('basicInfo.emailLabel')}</Label>
                                     <div className="relative">
                                         <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                                         <Input
@@ -621,17 +583,16 @@ export default function UserEditModal({
                                             type="email"
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
-                                            placeholder="kullanici@example.com"
+                                            placeholder={t('basicInfo.emailPlaceholder')}
                                             className="pl-9"
                                         />
                                     </div>
                                 </div>
-
                                 <div className="flex items-center justify-between">
                                     <div className="space-y-0.5">
-                                        <Label>Hesap Durumu</Label>
+                                        <Label>{t('basicInfo.statusLabel')}</Label>
                                         <p className="text-sm text-muted-foreground">
-                                            Kullanıcının sisteme erişim durumu
+                                            {t('basicInfo.statusDescription')}
                                         </p>
                                     </div>
                                     <div className="flex items-center gap-2">
@@ -643,12 +604,12 @@ export default function UserEditModal({
                                             {isActive ? (
                                                 <>
                                                     <CheckCircle className="h-3 w-3 mr-1" />
-                                                    Aktif
+                                                    {t('basicInfo.active')}
                                                 </>
                                             ) : (
                                                 <>
                                                     <XCircle className="h-3 w-3 mr-1" />
-                                                    Pasif
+                                                    {t('basicInfo.passive')}
                                                 </>
                                             )}
                                         </Badge>
@@ -656,16 +617,14 @@ export default function UserEditModal({
                                 </div>
                             </CardContent>
                         </Card>
-
-                        {/* Şifre Değiştirme */}
                         <Card>
                             <CardHeader>
                                 <CardTitle className="text-sm flex items-center gap-2">
                                     <Key className="h-4 w-4" />
-                                    Şifre Değiştir
+                                    {t('password.title')}
                                 </CardTitle>
                                 <CardDescription>
-                                    Kullanıcının şifresini değiştirmek için aşağıdaki alanları doldurun
+                                    {t('password.description')}
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
@@ -677,21 +636,20 @@ export default function UserEditModal({
                                             onCheckedChange={(checked) => setChangePassword(checked === true)}
                                         />
                                         <Label htmlFor="change-password" className="text-sm font-medium">
-                                            Şifre değiştir
+                                            {t('password.checkboxLabel')}
                                         </Label>
                                     </div>
-
                                     {changePassword && (
                                         <div className="space-y-4 pt-2">
                                             <div className="space-y-2">
-                                                <Label htmlFor="new-password">Yeni Şifre *</Label>
+                                                <Label htmlFor="new-password">{t('password.newPasswordLabel')}</Label>
                                                 <div className="relative">
                                                     <Input
                                                         id="new-password"
                                                         type={showNewPassword ? "text" : "password"}
                                                         value={newPassword}
                                                         onChange={(e) => setNewPassword(e.target.value)}
-                                                        placeholder="En az 8 karakter"
+                                                        placeholder={t('password.newPasswordPlaceholder')}
                                                         className="pr-10"
                                                     />
                                                     <Button
@@ -709,16 +667,15 @@ export default function UserEditModal({
                                                     </Button>
                                                 </div>
                                             </div>
-
                                             <div className="space-y-2">
-                                                <Label htmlFor="confirm-password">Şifre Tekrarı *</Label>
+                                                <Label htmlFor="confirm-password">{t('password.confirmPasswordLabel')}</Label>
                                                 <div className="relative">
                                                     <Input
                                                         id="confirm-password"
                                                         type={showConfirmPassword ? "text" : "password"}
                                                         value={confirmPassword}
                                                         onChange={(e) => setConfirmPassword(e.target.value)}
-                                                        placeholder="Şifreyi tekrar girin"
+                                                        placeholder={t('password.confirmPasswordPlaceholder')}
                                                         className="pr-10"
                                                     />
                                                     <Button
@@ -736,16 +693,14 @@ export default function UserEditModal({
                                                     </Button>
                                                 </div>
                                             </div>
-
-                                            {/* Şifre Kuralları */}
                                             <div className="text-xs text-muted-foreground space-y-1">
-                                                <p>Şifre gereksinimleri:</p>
+                                                <p>{t('password.requirementsTitle')}</p>
                                                 <ul className="list-disc list-inside space-y-0.5 pl-2">
                                                     <li className={newPassword.length >= 8 ? 'text-green-600' : ''}>
-                                                        En az 8 karakter
+                                                        {t('password.reqMinLength')}
                                                     </li>
                                                     <li className={newPassword === confirmPassword && confirmPassword ? 'text-green-600' : ''}>
-                                                        Şifreler uyuşmalı
+                                                        {t('password.reqMatch')}
                                                     </li>
                                                 </ul>
                                             </div>
@@ -754,20 +709,18 @@ export default function UserEditModal({
                                 </div>
                             </CardContent>
                         </Card>
-
-                        {/* Rol Atamaları */}
                         <Card>
                             <CardHeader>
                                 <CardTitle className="text-sm flex items-center gap-2">
                                     <Shield className="h-4 w-4" />
-                                    Rol Atamaları
+                                    {t('roleAssignment.title')}
                                 </CardTitle>
                                 <CardDescription>
                                     {isEditingSelf && !isSuperAdmin
-                                        ? "Kendi rollerinizi bu şekilde değiştiremezsiniz"
+                                        ? t('roleAssignment.descriptionSelfNoPermission')
                                         : isEditingSelf && isSuperAdmin
-                                            ? "Süper Yönetici olarak kendi rollerinizi yönetebilirsiniz"
-                                            : "Kullanıcıya atanacak rolleri seçin"
+                                            ? t('roleAssignment.descriptionSelfWithPermission')
+                                            : t('roleAssignment.descriptionOther')
                                     }
                                 </CardDescription>
                             </CardHeader>
@@ -776,26 +729,24 @@ export default function UserEditModal({
                                     <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
                                         <div className="flex items-center gap-2 text-amber-800">
                                             <Shield className="h-4 w-4" />
-                                            <span className="text-sm font-medium">Güvenlik Uyarısı</span>
+                                            <span className="text-sm font-medium">{t('roleAssignment.securityWarningTitle')}</span>
                                         </div>
                                         <p className="text-sm text-amber-700 mt-1">
-                                            Kendi hesabınızın rollerini değiştiremezsiniz. Bu işlem için başka bir yönetici ile iletişime geçin.
+                                            {t('roleAssignment.securityWarningText')}
                                         </p>
                                     </div>
                                 )}
-
                                 {isEditingSelf && isSuperAdmin && (
                                     <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
                                         <div className="flex items-center gap-2 text-blue-800">
                                             <Shield className="h-4 w-4" />
-                                            <span className="text-sm font-medium">Süper Yönetici Yetkisi</span>
+                                            <span className="text-sm font-medium">{t('roleAssignment.superAdminWarningTitle')}</span>
                                         </div>
                                         <p className="text-sm text-blue-700 mt-1">
-                                            Süper Yönetici olarak kendi hesabınızı düzenleyebilirsiniz. Dikkatli olun!
+                                            {t('roleAssignment.superAdminWarningText')}
                                         </p>
                                     </div>
                                 )}
-
                                 <div className="space-y-3 max-h-48 overflow-y-auto">
                                     {availableRoles.filter(role => role.isActive).map((role) => {
                                         const isCurrentUserRole = user?.currentRole?.id === role.id;
@@ -820,7 +771,7 @@ export default function UserEditModal({
                                                         {role.displayName}
                                                         {isCurrentUserRole && (
                                                             <span className="ml-2 text-xs text-muted-foreground">
-                                                                (Mevcut)
+                                                                {t('roleAssignment.currentRoleSuffix')}
                                                             </span>
                                                         )}
                                                     </Label>
@@ -835,31 +786,27 @@ export default function UserEditModal({
                                             </div>
                                         );
                                     })}
-
-                                    {/* Atayamayacağı roller için bilgi */}
                                     {roles.filter(role => role.isActive && !availableRoles.includes(role)).length > 0 && (
                                         <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
                                             <div className="flex items-center gap-2 text-blue-800">
                                                 <Shield className="h-4 w-4" />
-                                                <span className="text-sm font-medium">Kısıtlı Roller</span>
+                                                <span className="text-sm font-medium">{t('roleAssignment.restrictedRolesTitle')}</span>
                                             </div>
                                             <p className="text-sm text-blue-700 mt-1">
-                                                Kendi seviyenizde veya üst seviyedeki roller görüntülenmemektedir.
+                                                {t('roleAssignment.restrictedRolesText')}
                                             </p>
                                         </div>
                                     )}
                                 </div>
-
                                 {!selectedRole && (
                                     <div className="text-center py-4 text-muted-foreground">
                                         <Shield className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                                        <p className="text-sm">Henüz rol seçilmedi</p>
+                                        <p className="text-sm">{t('roleAssignment.noRoleSelected')}</p>
                                     </div>
                                 )}
-
                                 {selectedRole && (
                                     <div className="mt-4 pt-4 border-t">
-                                        <Label className="text-sm font-medium">Seçili Rol:</Label>
+                                        <Label className="text-sm font-medium">{t('roleAssignment.selectedRoleLabel')}</Label>
                                         <div className="flex flex-wrap gap-2 mt-2">
                                             {(() => {
                                                 const role = roles.find(r => r.id === selectedRole);
@@ -889,7 +836,7 @@ export default function UserEditModal({
                             onClick={() => onOpenChange(false)}
                             disabled={loading}
                         >
-                            İptal
+                            {t('buttons.cancel')}
                         </Button>
                         <Button
                             onClick={handleSubmit}
@@ -898,29 +845,26 @@ export default function UserEditModal({
                             {loading ? (
                                 <>
                                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                                    Güncelleniyor...
+                                    {t('buttons.updating')}
                                 </>
                             ) : (
                                 <>
                                     <CheckCircle className="h-4 w-4 mr-2" />
-                                    Güncelle
+                                    {t('buttons.update')}
                                 </>
                             )}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-
-            {/* Büyük Resim Görüntüleme Modal'ı */}
             <Dialog open={imageViewerOpen} onOpenChange={setImageViewerOpen}>
                 <DialogContent className="max-w-4xl w-[90vw] h-[90vh] p-0 overflow-hidden">
                     <div className="relative w-full h-full bg-black/95 flex items-center justify-center">
-                        {/* Büyük Resim */}
                         <div className="relative max-w-full max-h-full">
                             {imageToDisplay && (
                                 <Image
                                     src={imageToDisplay}
-                                    alt="Profil resmi büyük görünüm"
+                                    alt={t('imageViewer.title', { name: user.name || t('unnamedUser') })}
                                     width={800}
                                     height={600}
                                     className="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl"
@@ -928,15 +872,12 @@ export default function UserEditModal({
                                 />
                             )}
                         </div>
-
-                        {/* Üst Kontrol Çubuğu */}
                         <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
                             <div className="bg-black/50 rounded-lg px-3 py-2 backdrop-blur-sm">
                                 <p className="text-white text-sm font-medium">
-                                    {user?.name || 'Kullanıcı'} - Profil Resmi
+                                    {t('imageViewer.title', { name: user.name || t('unnamedUser') })}
                                 </p>
                             </div>
-
                             <Button
                                 variant="secondary"
                                 size="sm"
@@ -946,8 +887,6 @@ export default function UserEditModal({
                                 <X className="h-4 w-4" />
                             </Button>
                         </div>
-
-                        {/* Alt Aksiyon Çubuğu */}
                         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
                             <div className="bg-black/80 backdrop-blur-sm rounded-xl p-4 flex items-center gap-3">
                                 <Button
@@ -960,9 +899,8 @@ export default function UserEditModal({
                                     className="bg-white/10 hover:bg-white/20 border-white/20 text-white"
                                 >
                                     <Camera className="h-4 w-4 mr-2" />
-                                    Değiştir
+                                    {t('imageViewer.changeButton')}
                                 </Button>
-
                                 {hasAnyChange && (
                                     <Button
                                         variant="secondary"
@@ -974,10 +912,9 @@ export default function UserEditModal({
                                         className="bg-white/10 hover:bg-white/20 border-white/20 text-white"
                                     >
                                         <RotateCcw className="h-4 w-4 mr-2" />
-                                        Geri Al
+                                        {t('imageViewer.revertButton')}
                                     </Button>
                                 )}
-
                                 <Button
                                     variant="destructive"
                                     size="sm"
@@ -988,12 +925,10 @@ export default function UserEditModal({
                                     className="bg-red-500/20 hover:bg-red-500/30 border-red-500/20 text-red-300"
                                 >
                                     <Trash2 className="h-4 w-4 mr-2" />
-                                    Kaldır
+                                    {t('imageViewer.removeButton')}
                                 </Button>
                             </div>
                         </div>
-
-                        {/* Arka Plan Tıklama ile Kapatma */}
                         <div
                             className="absolute inset-0 -z-10"
                             onClick={() => setImageViewerOpen(false)}

@@ -320,7 +320,7 @@ export default function CreateUserModal({
                                                 <div className="text-xs text-muted-foreground">{role.name}</div>
                                             </div>
                                             {role.isSystemDefault && (
-                                                <Badge variant="outline" className="text-xs">Sistem</Badge>
+                                                <Badge variant="outline" className="text-xs">{t('systemDefault')}</Badge>
                                             )}
                                         </label>
                                     </div>
@@ -335,7 +335,7 @@ export default function CreateUserModal({
                         {/* Seçili Rol */}
                         {selectedRole && (
                             <div>
-                                <Label className="text-sm">Seçili Rol</Label>
+                                <Label className="text-sm">{t('selectedRoleLabel')}</Label>
                                 <div className="mt-2">
                                     {(() => {
                                         const role = roles.find(r => r.id === selectedRole);

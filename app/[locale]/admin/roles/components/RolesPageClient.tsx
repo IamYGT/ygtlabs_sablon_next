@@ -243,22 +243,22 @@ export default function RolesPageClient({
             <Toaster position="top-right" />
             <div className="space-y-6">
                 {/* Debug - Kullanıcı Yetkileri */}
-                {currentUser && (
+                {currentUser && process.env.NODE_ENV === 'development' && (
                     <Card className="bg-amber-50 dark:bg-amber-950 border-amber-200 dark:border-amber-800">
                         <CardHeader className="pb-3">
-                            <CardTitle className="text-sm font-medium">Debug: Kullanıcı Yetkileri</CardTitle>
+                            <CardTitle className="text-sm font-medium">{t('debug.title')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-2 text-sm">
-                                <p>Kullanıcı: {currentUser.email}</p>
-                                <p>Roller: {currentUser.userRoles?.join(", ") || "Rol yok"}</p>
+                                <p>{t('debug.userLabel')}: {currentUser.email}</p>
+                                <p>{t('debug.rolesLabel')}: {currentUser.userRoles?.join(", ") || t('debug.noRole')}</p>
                                 <p className="font-medium">
-                                    roles.edit yetkisi:
-                                    <span className={currentUser.permissions?.includes("roles.edit") ? "text-green-600 ml-2" : "text-red-600 ml-2"}>
-                                        {currentUser.permissions?.includes("roles.edit") ? "VAR ✓" : "YOK ✗"}
+                                    {t('debug.permissionLabel')}:
+                                    <span className={userPermissions.includes("roles.edit") ? "text-green-600 ml-2" : "text-red-600 ml-2"}>
+                                        {userPermissions.includes("roles.edit") ? t('debug.hasPermission') : t('debug.noPermission')}
                                     </span>
                                 </p>
-                                {!currentUser.permissions?.includes("roles.edit") && (
+                                {!userPermissions.includes("roles.edit") && (
                                     <div className="mt-3">
                                         <Button
                                             size="sm"
@@ -271,33 +271,31 @@ export default function RolesPageClient({
                                                             'Content-Type': 'application/json',
                                                         }
                                                     });
-
                                                     const data = await response.json();
-
                                                     if (response.ok) {
-                                                        alert('Yetkiler güncellendi! Sayfayı yenileyin.');
+                                                        alert('Permissions updated! Please refresh the page.');
                                                         window.location.reload();
                                                     } else {
-                                                        alert('Hata: ' + (data.error || 'Bilinmeyen hata'));
+                                                        alert('Error: ' + (data.error || 'Unknown error'));
                                                     }
                                                 } catch (error) {
-                                                    alert('Hata oluştu: ' + error);
+                                                    alert('Error: ' + error);
                                                 }
                                             }}
                                         >
-                                            Yetkileri Düzelt
+                                            {t('debug.fixPermissions')}
                                         </Button>
                                         <p className="text-xs text-gray-600 mt-1">
-                                            Bu buton size admin rolü ve roles:edit yetkisi verecek
+                                            {t('debug.fixDescription')}
                                         </p>
                                     </div>
                                 )}
                                 <details className="mt-2">
                                     <summary className="cursor-pointer text-blue-600">
-                                        Tüm Yetkiler ({currentUser.permissions?.length || 0})
+                                        {t('debug.allPermissions', { count: userPermissions.length })}
                                     </summary>
                                     <div className="mt-2 space-y-1 text-xs">
-                                        {currentUser.permissions?.map((perm: string) => (
+                                        {userPermissions.map((perm: string) => (
                                             <div key={perm} className="text-gray-600">
                                                 • {perm}
                                             </div>

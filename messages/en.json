@@ -1,5 +1,4 @@
 {
-
     "Auth": {
         "login": "Sign In",
         "logout": "Sign Out",
@@ -10,6 +9,11 @@
         "loginSuccess": "Successfully signed in",
         "loginError": "Sign in failed",
         "invalidCredentials": "Invalid username or password"
+    },
+    "AuthLayout": {
+        "pageTitle": "ECU System",
+        "pageSubtitle": "Management Panel",
+        "copyright": "© 2024 ECU System. All rights reserved."
     },
     "Navigation": {
         "dashboard": "Dashboard",
