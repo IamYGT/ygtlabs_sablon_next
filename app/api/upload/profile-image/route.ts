@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       message: "Profil resmi başarıyla yüklendi",
-      profileImage: profileImagePath,
+      data: { profileImage: profileImagePath },
     });
   } catch (error) {
     console.error("Profil resmi yükleme hatası:", error);

@@ -400,16 +400,21 @@ if (typeof window !== "undefined") {
         const warningTime = 5 * 60 * 1000; // 5 minutes
 
         if (timeUntilExpiry > warningTime && timeUntilExpiry > 0) {
-          setTimeout(() => {
-            const currentExpiry = useAuthStore.getState().sessionExpiry;
-            if (
-              currentExpiry &&
-              new Date(currentExpiry).getTime() === new Date(expiry).getTime()
-            ) {
-              console.warn("⚠️ Session will expire in 5 minutes");
-              // You can dispatch a notification here
-            }
-          }, timeUntilExpiry - warningTime);
+          // Use requestAnimationFrame for better performance
+          const scheduleWarning = () => {
+            setTimeout(() => {
+              const currentExpiry = useAuthStore.getState().sessionExpiry;
+              if (
+                currentExpiry &&
+                new Date(currentExpiry).getTime() === new Date(expiry).getTime()
+              ) {
+                console.warn("⚠️ Session will expire in 5 minutes");
+                // You can dispatch a notification here
+              }
+            }, Math.min(timeUntilExpiry - warningTime, 300000)); // Max 5 minutes
+          };
+
+          requestAnimationFrame(scheduleWarning);
         }
       }
       previousExpiry = expiry;
@@ -421,9 +426,12 @@ if (typeof window !== "undefined") {
     if (!isUpdatingActivity) {
       isUpdatingActivity = true;
       useAuthStore.getState().updateLastActivity();
-      setTimeout(() => {
-        isUpdatingActivity = false;
-      }, 100); // Small delay to prevent rapid updates
+      // Use requestAnimationFrame for better performance
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          isUpdatingActivity = false;
+        }, 50); // Reduced from 100ms to 50ms
+      });
     }
   };
 

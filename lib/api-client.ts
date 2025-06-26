@@ -204,6 +204,29 @@ class ModernAPIClient {
       return { success: false, error: ERROR_MESSAGES.NETWORK_ERROR };
     }
   }
+
+  async upload<T>(
+    url: string,
+    formData: FormData
+  ): Promise<ApiResponse<T>> {
+    try {
+      const response = await fetch(`${this.baseURL}${url}`, {
+        method: "POST",
+        // "Content-Type" header'ı kasıtlı olarak ayarlanmadı.
+        // Tarayıcı, FormData ile birlikte doğru `boundary` ile ayarlar.
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        credentials: "include",
+        body: formData,
+      });
+
+      return this.handleResponse<T>(response);
+    } catch (error) {
+      console.error("❌ Upload request error:", error);
+      return { success: false, error: ERROR_MESSAGES.NETWORK_ERROR };
+    }
+  }
 }
 
 // =============================================================================
@@ -343,6 +366,16 @@ export const permissionsAPI = {
     apiClient.delete(API_ENDPOINTS.PERMISSION_BY_ID(id)),
 } as const;
 
+// Profile API functions
+export const profileAPI = {
+  uploadProfileImage: (formData: FormData) =>
+    apiClient.upload(API_ENDPOINTS.UPLOAD_PROFILE_IMAGE, formData),
+
+  deleteProfileImage: () =>
+    apiClient.delete(API_ENDPOINTS.UPLOAD_PROFILE_IMAGE),
+} as const;
+
+
 // =============================================================================
 // ENHANCED HELPER FUNCTIONS
 // =============================================================================
@@ -350,7 +383,7 @@ export const permissionsAPI = {
 // Type-safe success checker
 export const isSuccess = <T>(
   response: ApiResponse<T>
-): response is ApiResponse<T> & { success: true } => {
+): response is ApiResponse<T> & { success: true; data: T } => {
   return response.success;
 };
 

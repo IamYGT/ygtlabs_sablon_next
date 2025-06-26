@@ -173,6 +173,7 @@ export function ImageUpload({
                             src={value}
                             alt="Preview"
                             fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             className="object-cover"
                             onLoad={() => setError(null)}
                             onError={() => setError('Görsel yüklenirken hata oluştu')}

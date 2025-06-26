@@ -2,148 +2,52 @@
 
 import React from 'react';
 import '../styles/admin.css'; // Admin CSS'ini import ediyoruz
-import { Card, CardContent } from "@/components/ui/card";
-import { Activity, Users, FileText, Shield, Clock, ArrowRight, BarChart3, PieChart, Calendar } from "lucide-react";
+import { Users, FileText, Shield, ArrowRight, BarChart3, Calendar, Clock } from "lucide-react";
 import { useAdminAuth } from "@/lib/hooks/useAuth";
 import { type SimpleUser as AuthUser } from "@/lib";
 import { useTranslations, useLocale } from 'next-intl';
-import LanguageSwitcher from '@/components/panel/LanguageSwitcher';
 import { Link } from '@/src/i18n/navigation';
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { StatsChart } from './components/StatsChart';
+import { Card, CardContent } from "@/components/ui/card";
 import { DashboardSkeleton } from './components/DashboardSkeleton';
 
 type TFunction = ReturnType<typeof useTranslations<"AdminDashboard">>;
 
-// Corporate Professional dashboard cards - Banking/Finance style
-function getDashboardCards(t: TFunction): DashboardCardProps[] {
-    return [
-        {
-            title: t('totalRevenue'),
-            icon: BarChart3,
-            value: "₺2,847,350",
-            description: t('totalRevenueDesc'),
-            trend: "+12.5%",
-            trendUp: true,
-            color: "blue" as const,
-        },
-        {
-            title: t('activeCustomers'),
-            icon: Users,
-            value: "15,847",
-            description: t('activeCustomersDesc'),
-            trend: "+8.2%",
-            trendUp: true,
-            color: "emerald" as const,
-        },
-        {
-            title: t('transactionVolume'),
-            icon: Activity,
-            value: "₺45.2M",
-            description: t('transactionVolumeDesc'),
-            trend: "+15.7%",
-            trendUp: true,
-            color: "purple" as const,
-        },
-        {
-            title: t('systemSecurity'),
-            icon: Shield,
-            value: "99.98%",
-            description: t('systemSecurityDesc'),
-            trend: "+0.02%",
-            trendUp: true,
-            color: "orange" as const,
-        },
-    ];
-}
-
-// Corporate Professional quick actions - Banking/Finance style
+// Management Center quick actions
 function getQuickActions(t: TFunction): QuickActionProps[] {
     return [
         {
             title: t('customerManagement'),
             description: t('customerManagementDesc'),
-            href: "/admin/customers",
+            href: "/admin/users",
             icon: Users,
             color: "blue" as const,
         },
         {
             title: t('financialReports'),
             description: t('financialReportsDesc'),
-            href: "/admin/financial-reports",
+            href: "/admin/roles",
             icon: BarChart3,
             color: "emerald" as const,
         },
         {
             title: t('securityCenter'),
             description: t('securityCenterDesc'),
-            href: "/admin/security",
+            href: "/admin/permissions",
             icon: Shield,
             color: "purple" as const,
         },
         {
             title: t('transactionLogs'),
             description: t('transactionLogsDesc'),
-            href: "/admin/transaction-logs",
+            href: "/admin/hero-slider",
             icon: FileText,
             color: "orange" as const,
         },
     ];
 }
 
-// Corporate Professional recent activities - Banking/Finance style
-function getRecentActivities(t: TFunction) {
-    return [
-        {
-            title: t('bigTransactionAlert'),
-            description: t('bigTransactionAlertDesc'),
-            time: t('timeAgo15min'),
-            type: "warning" as const,
-            priority: "high" as const,
-        },
-        {
-            title: t('newCorporateCustomer'),
-            description: t('newCorporateCustomerDesc'),
-            time: t('timeAgo2hours'),
-            type: "success" as const,
-            priority: "medium" as const,
-        },
-        {
-            title: t('securityScan'),
-            description: t('securityScanDesc'),
-            time: t('timeAgo6hours'),
-            type: "info" as const,
-            priority: "low" as const,
-        },
-        {
-            title: t('systemMaintenance'),
-            description: t('systemMaintenanceDesc'),
-            time: t('timeAgo1day'),
-            type: "success" as const,
-            priority: "medium" as const,
-        },
-        {
-            title: t('complianceReport'),
-            description: t('complianceReportDesc'),
-            time: t('timeAgo2days'),
-            type: "info" as const,
-            priority: "low" as const,
-        },
-    ];
-}
-
-// Corporate Professional type definitions - Banking/Finance style
-type DashboardCardProps = {
-    title: string;
-    icon: React.ComponentType<{ className?: string }>;
-    value: string;
-    description: string;
-    trend: string;
-    trendUp: boolean;
-    color: "blue" | "emerald" | "purple" | "orange";
-};
-
+// Type definitions
 type QuickActionProps = {
     title: string;
     description: string;
@@ -152,94 +56,36 @@ type QuickActionProps = {
     color: "blue" | "emerald" | "purple" | "orange";
 };
 
-type ActivityItemProps = {
-    title: string;
-    description: string;
-    time: string;
-    type: "info" | "success" | "warning";
-    priority: "low" | "medium" | "high";
-};
-
-// Corporate Professional dashboard card component - Banking/Finance style
-function DashboardCard({ title, icon: Icon, value, description, trend, trendUp, color }: DashboardCardProps) {
-    const colorStyles = {
-        blue: {
-            bg: "bg-white dark:bg-slate-800",
-            border: "border-gray-200 dark:border-slate-700",
-            icon: "bg-blue-600 text-white",
-            accent: "text-blue-600 dark:text-blue-400",
-            trend: trendUp ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"
-        },
-        emerald: {
-            bg: "bg-white dark:bg-slate-800",
-            border: "border-gray-200 dark:border-slate-700",
-            icon: "bg-emerald-600 text-white",
-            accent: "text-emerald-600 dark:text-emerald-400",
-            trend: trendUp ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"
-        },
-        purple: {
-            bg: "bg-white dark:bg-slate-800",
-            border: "border-gray-200 dark:border-slate-700",
-            icon: "bg-purple-600 text-white",
-            accent: "text-purple-600 dark:text-purple-400",
-            trend: trendUp ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"
-        },
-        orange: {
-            bg: "bg-white dark:bg-slate-800",
-            border: "border-gray-200 dark:border-slate-700",
-            icon: "bg-orange-600 text-white",
-            accent: "text-orange-600 dark:text-orange-400",
-            trend: trendUp ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"
-        }
-    }[color];
-
-    return (
-        <Card className={`${colorStyles.bg} ${colorStyles.border} border shadow-lg hover:shadow-xl transition-all duration-300`}>
-            <CardContent className="p-6">
-                <div className="flex items-start justify-between mb-6">
-                    <div className={`p-3 rounded-lg ${colorStyles.icon} shadow-md`}>
-                        <Icon className="h-6 w-6" />
-                    </div>
-                    <div className={`text-sm font-semibold px-2 py-1 rounded ${colorStyles.trend} bg-gray-100 dark:bg-slate-700`}>
-                        {trend}
-                    </div>
-                </div>
-                <div className="space-y-2">
-                    <p className="text-sm font-medium text-gray-600 dark:text-slate-400 uppercase tracking-wide">{title}</p>
-                    <p className="text-3xl font-bold text-gray-900 dark:text-white">{value}</p>
-                    <p className="text-sm text-gray-600 dark:text-slate-300">{description}</p>
-                </div>
-            </CardContent>
-        </Card>
-    );
-}
-
-// Corporate Professional quick action component - Banking/Finance style
+// Enhanced Quick action component with better visual design
 function QuickAction({ title, description, href, icon: Icon, color }: QuickActionProps) {
     const colorStyles = {
         blue: {
-            bg: "bg-white dark:bg-slate-800",
-            border: "border-gray-200 dark:border-slate-700",
-            icon: "bg-blue-600 text-white",
-            hover: "hover:bg-gray-50 dark:hover:bg-slate-700"
+            gradient: "bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20",
+            border: "border-blue-200/50 dark:border-blue-700/30",
+            icon: "bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-blue-500/25",
+            hover: "hover:from-blue-100 hover:to-blue-150 dark:hover:from-blue-900/30 dark:hover:to-blue-800/30",
+            ring: "hover:ring-2 hover:ring-blue-500/20"
         },
         emerald: {
-            bg: "bg-white dark:bg-slate-800",
-            border: "border-gray-200 dark:border-slate-700",
-            icon: "bg-emerald-600 text-white",
-            hover: "hover:bg-gray-50 dark:hover:bg-slate-700"
+            gradient: "bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-800/20",
+            border: "border-emerald-200/50 dark:border-emerald-700/30",
+            icon: "bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-emerald-500/25",
+            hover: "hover:from-emerald-100 hover:to-emerald-150 dark:hover:from-emerald-900/30 dark:hover:to-emerald-800/30",
+            ring: "hover:ring-2 hover:ring-emerald-500/20"
         },
         purple: {
-            bg: "bg-white dark:bg-slate-800",
-            border: "border-gray-200 dark:border-slate-700",
-            icon: "bg-purple-600 text-white",
-            hover: "hover:bg-gray-50 dark:hover:bg-slate-700"
+            gradient: "bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20",
+            border: "border-purple-200/50 dark:border-purple-700/30",
+            icon: "bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-purple-500/25",
+            hover: "hover:from-purple-100 hover:to-purple-150 dark:hover:from-purple-900/30 dark:hover:to-purple-800/30",
+            ring: "hover:ring-2 hover:ring-purple-500/20"
         },
         orange: {
-            bg: "bg-white dark:bg-slate-800",
-            border: "border-gray-200 dark:border-slate-700",
-            icon: "bg-orange-600 text-white",
-            hover: "hover:bg-gray-50 dark:hover:bg-slate-700"
+            gradient: "bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20",
+            border: "border-orange-200/50 dark:border-orange-700/30",
+            icon: "bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-orange-500/25",
+            hover: "hover:from-orange-100 hover:to-orange-150 dark:hover:from-orange-900/30 dark:hover:to-orange-800/30",
+            ring: "hover:ring-2 hover:ring-orange-500/20"
         }
     }[color];
 
@@ -247,76 +93,30 @@ function QuickAction({ title, description, href, icon: Icon, color }: QuickActio
     const linkHref = href as any;
 
     return (
-        <Link href={linkHref}>
-            <div className={`group p-6 ${colorStyles.bg} ${colorStyles.border} border rounded-lg ${colorStyles.hover} shadow-lg hover:shadow-xl transition-all duration-300`}>
-                <div className="flex items-start space-x-4">
-                    <div className={`p-3 rounded-lg ${colorStyles.icon} shadow-md group-hover:scale-105 transition-transform duration-200`}>
-                        <Icon className="h-6 w-6" />
+        <Link href={linkHref} className="group block">
+            <Card className={`${colorStyles.gradient} ${colorStyles.border} ${colorStyles.hover} ${colorStyles.ring} border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden`}>
+                <CardContent className="p-6">
+                    <div className="flex items-start space-x-4">
+                        <div className={`p-4 rounded-xl ${colorStyles.icon} shadow-lg group-hover:scale-110 transition-all duration-300`}>
+                            <Icon className="h-6 w-6" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <h3 className="font-bold text-gray-900 dark:text-white text-xl mb-2 group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors">
+                                {title}
+                            </h3>
+                            <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm">
+                                {description}
+                            </p>
+                        </div>
+                        <ArrowRight className="h-5 w-5 text-gray-400 dark:text-slate-500 group-hover:text-gray-600 dark:group-hover:text-gray-300 group-hover:translate-x-2 transition-all duration-300 flex-shrink-0 mt-1" />
                     </div>
-                    <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900 dark:text-white text-lg mb-2">
-                            {title}
-                        </h3>
-                        <p className="text-sm text-gray-600 dark:text-slate-300 leading-relaxed">
-                            {description}
-                        </p>
-                    </div>
-                    <ArrowRight className="h-5 w-5 text-gray-400 dark:text-slate-400 group-hover:text-gray-600 dark:group-hover:text-white group-hover:translate-x-1 transition-all duration-200" />
-                </div>
-            </div>
+                </CardContent>
+            </Card>
         </Link>
     );
 }
 
-// Corporate Professional activity item component - Banking/Finance style
-function ActivityItem({ title, description, time, type, priority }: ActivityItemProps) {
-    const typeStyles = {
-        info: {
-            icon: PieChart,
-            bg: 'bg-blue-100 dark:bg-blue-900/50',
-            text: 'text-blue-800 dark:text-blue-300',
-            iconColor: 'text-blue-600 dark:text-blue-400'
-        },
-        success: {
-            icon: Calendar,
-            bg: 'bg-emerald-100 dark:bg-emerald-900/50',
-            text: 'text-emerald-800 dark:text-emerald-300',
-            iconColor: 'text-emerald-600 dark:text-emerald-400'
-        },
-        warning: {
-            icon: Shield,
-            bg: 'bg-orange-100 dark:bg-orange-900/50',
-            text: 'text-orange-800 dark:text-orange-300',
-            iconColor: 'text-orange-600 dark:text-orange-400'
-        }
-    };
-
-    const priorityStyles = {
-        low: "border-l-4 border-transparent",
-        medium: "border-l-4 border-yellow-500",
-        high: "border-l-4 border-red-600"
-    };
-
-    const { icon: Icon, bg, text, iconColor } = typeStyles[type];
-
-    return (
-        <div className={`p-4 rounded-lg shadow-sm transition-all duration-300 flex items-start space-x-4 ${bg} ${priorityStyles[priority]}`}>
-            <div className={`p-2 rounded-full ${iconColor} bg-white dark:bg-slate-700`}>
-                <Icon className="h-5 w-5" />
-            </div>
-            <div className="flex-1">
-                <p className={`font-semibold ${text}`}>{title}</p>
-                <p className={`text-sm ${text} opacity-80`}>{description}</p>
-            </div>
-            <div className={`text-xs ${text} opacity-70 flex items-center space-x-1`}>
-                <Clock className="h-3 w-3" />
-                <span>{time}</span>
-            </div>
-        </div>
-    );
-}
-
-// Corporate Professional welcome section component - Banking/Finance style
+// Enhanced Welcome section with better visual hierarchy
 function WelcomeSection({ admin, t }: { admin: AuthUser; t: TFunction }) {
     const locale = useLocale();
 
@@ -332,152 +132,96 @@ function WelcomeSection({ admin, t }: { admin: AuthUser; t: TFunction }) {
     });
 
     return (
-        <div className="relative mb-8 p-8 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg shadow-2xl overflow-hidden">
-            {/* Corporate background pattern */}
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-slate-800 dark:via-slate-800 dark:to-slate-900 opacity-50"></div>
-            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-600/5 dark:from-blue-600/10 to-purple-600/5 dark:to-purple-600/10 rounded-full -translate-y-32 translate-x-32"></div>
-
-            <div className="relative flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6">
-                <div className="flex-1">
-                    <div className="flex items-center gap-4 mb-4">
-                        <div className="p-3 rounded-lg bg-blue-600 shadow-lg">
-                            <Shield className="h-6 w-6 text-white" />
-                        </div>
-                        <div>
-                            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-1">
-                                {t('welcome')}, {admin.name || admin.email}
-                            </h2>
-                            <p className="text-gray-600 dark:text-slate-300 text-sm uppercase tracking-wide">
-                                {currentDate} • {currentTime}
-                            </p>
-                        </div>
-                    </div>
-
-                    <p className="text-gray-700 dark:text-slate-300 mb-6 text-lg leading-relaxed">
-                        {t('welcomeMessage')}
-                    </p>
-
-                    <div className="flex flex-wrap items-center gap-3">
-                        <Badge className="bg-blue-600 text-white border-blue-500 px-3 py-1 text-sm font-medium">
-                            <Shield className="h-4 w-4 mr-2" />
-                            {admin.primaryRole || t('admin')} {t('authority')}
-                        </Badge>
-                        {admin.userRoles && admin.userRoles.length > 0 && (
-                            admin.userRoles.map((roleName, index) => (
-                                <Badge
-                                    key={index}
-                                    variant="secondary"
-                                    className="bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 border-gray-200 dark:border-slate-600 px-3 py-1 text-sm"
-                                >
-                                    {roleName}
-                                </Badge>
-                            ))
-                        )}
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                    <LanguageSwitcher />
-                    <Button variant="outline" size="sm" className="bg-gray-100 dark:bg-slate-700 border-gray-200 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600 hover:text-gray-900 dark:hover:text-white transition-all duration-200">
-                        <Calendar className="h-4 w-4 mr-2" />
-                        {t('calendar')}
-                    </Button>
-                </div>
+        <Card className="relative overflow-hidden border-0 shadow-2xl bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+            {/* Enhanced background patterns */}
+            <div className="absolute inset-0">
+                <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-transparent rounded-full -translate-y-48 translate-x-48"></div>
+                <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-emerald-500/10 via-blue-500/5 to-transparent rounded-full translate-y-32 -translate-x-32"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent dark:via-slate-800/50"></div>
             </div>
-        </div>
-    );
-}
 
+            <CardContent className="relative p-8 lg:p-12">
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+                    <div className="flex-1">
+                        <div className="flex items-start gap-6 mb-6">
+                            <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-xl shadow-blue-500/25">
+                                <Shield className="h-8 w-8 text-white" />
+                            </div>
+                            <div className="flex-1">
+                                <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
+                                    {t('welcome')}, <span className="text-blue-600 dark:text-blue-400">{admin.name || admin.email}</span>
+                                </h1>
+                                <div className="flex items-center gap-4 text-gray-500 dark:text-slate-400 text-sm font-medium">
+                                    <div className="flex items-center gap-2">
+                                        <Calendar className="h-4 w-4" />
+                                        <span>{currentDate}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <Clock className="h-4 w-4" />
+                                        <span>{currentTime}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
+                        <p className="text-gray-700 dark:text-slate-300 mb-8 text-lg leading-relaxed max-w-2xl">
+                            {t('welcomeMessage')}
+                        </p>
 
-// Dashboard stats component
-function DashboardStats({ t }: { t: TFunction }) {
-    const dashboardCards = getDashboardCards(t);
-    return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {dashboardCards.map((card) => (
-                <DashboardCard key={card.title} {...card} />
-            ))}
-        </div>
+                        <div className="flex flex-wrap items-center gap-3">
+                            <Badge className="bg-gradient-to-r from-blue-600 to-blue-700 text-white border-0 px-4 py-2 text-sm font-semibold shadow-lg shadow-blue-500/25">
+                                <Shield className="h-4 w-4 mr-2" />
+                                {admin.primaryRole || t('admin')} {t('authority')}
+                            </Badge>
+                            {admin.userRoles && admin.userRoles.length > 0 && (
+                                admin.userRoles.map((roleName, index) => (
+                                    <Badge
+                                        key={index}
+                                        variant="secondary"
+                                        className="bg-white/80 dark:bg-slate-700/80 text-gray-700 dark:text-slate-300 border border-gray-200/50 dark:border-slate-600/50 px-4 py-2 text-sm font-medium backdrop-blur-sm"
+                                    >
+                                        {roleName}
+                                    </Badge>
+                                ))
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </CardContent>
+        </Card>
     );
 }
 
 export default function AdminDashboardClient() {
-    // Modern hook kullanımı
     const admin = useAdminAuth();
     const t = useTranslations('AdminDashboard');
 
-    // Enhanced loading state while auth is being checked
     if (!admin) {
         return <DashboardSkeleton />;
     }
 
     return (
-        <div className="space-y-8">
-            <WelcomeSection admin={admin} t={t} />
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+                <WelcomeSection admin={admin} t={t} />
 
-            {/* Corporate Dashboard Metrics */}
-            <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{t('financialSummary')}</h3>
-                        <p className="text-gray-600 dark:text-slate-300">{t('financialSummaryDesc')}</p>
+                {/* Enhanced Management Center Section */}
+                <div className="space-y-8">
+                    <div className="text-center">
+                        <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                            {t('managementCenter')}
+                        </h2>
+                        <p className="text-gray-600 dark:text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
+                            {t('managementCenterDesc')}
+                        </p>
+                        <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mx-auto mt-6"></div>
                     </div>
-                    <Button variant="outline" size="sm" className="gap-2 bg-gray-100 dark:bg-slate-700 border-gray-200 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600 hover:text-gray-900 dark:hover:text-white">
-                        <PieChart className="h-4 w-4" />
-                        {t('detailedAnalysis')}
-                    </Button>
-                </div>
-                <DashboardStats t={t} />
-            </div>
 
-            {/* Corporate Quick Actions */}
-            <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{t('managementCenter')}</h3>
-                        <p className="text-gray-600 dark:text-slate-300">{t('managementCenterDesc')}</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                        {getQuickActions(t).map((action) => (
+                            <QuickAction key={action.title} {...action} />
+                        ))}
                     </div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-                    {getQuickActions(t).map((action) => (
-                        <QuickAction key={action.title} {...action} />
-                    ))}
-                </div>
-            </div>
-
-            {/* Corporate Activities and Analytics Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Recent activities */}
-                <div className="lg:col-span-2 space-y-6">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{t('systemActivities')}</h3>
-                            <p className="text-gray-600 dark:text-slate-300">{t('systemActivitiesDesc')}</p>
-                        </div>
-                        <Button variant="outline" size="sm" className="gap-2 bg-gray-100 dark:bg-slate-700 border-gray-200 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600 hover:text-gray-900 dark:hover:text-white">
-                            <Clock className="h-4 w-4" />
-                            {t('allLogs')}
-                        </Button>
-                    </div>
-                    <Card className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-2xl">
-                        <CardContent className="p-6">
-                            <div className="space-y-0">
-                                {getRecentActivities(t).map((activity, index) => (
-                                    <ActivityItem key={index} {...activity} />
-                                ))}
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
-
-                {/* Analytics Chart */}
-                <div className="space-y-6">
-                    <div>
-                        <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{t('performance')}</h3>
-                        <p className="text-gray-600 dark:text-slate-300">{t('performanceDesc')}</p>
-                    </div>
-                    <StatsChart />
                 </div>
             </div>
         </div>

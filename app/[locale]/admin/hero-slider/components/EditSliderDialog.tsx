@@ -8,6 +8,7 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
+    DialogDescription
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -278,6 +279,9 @@ export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: Edit
                         <Edit className="h-5 w-5" />
                         {t('editSlider')}
                     </DialogTitle>
+                    <DialogDescription className="sr-only">
+                        {t('editSliderDescription')}
+                    </DialogDescription>
                 </DialogHeader>
 
                 <div className="flex-grow overflow-y-auto pr-4 -mr-4">

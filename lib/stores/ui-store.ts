@@ -133,12 +133,23 @@ export const useUIStore = create<UIStore>()(
           notifications: [...state.notifications, newNotification],
         }));
 
-        // Auto-remove after duration
-        setTimeout(() => {
-          set((state) => ({
-            notifications: state.notifications.filter((n) => n.id !== id),
-          }));
-        }, notification.duration || NOTIFICATION_CONFIG.DEFAULT_DURATION);
+        // Optimize setTimeout - use shorter duration and requestAnimationFrame
+        const duration = Math.min(
+          notification.duration || NOTIFICATION_CONFIG.DEFAULT_DURATION,
+          5000
+        );
+
+        // Use requestAnimationFrame for better performance
+        const removeNotification = () => {
+          setTimeout(() => {
+            set((state) => ({
+              notifications: state.notifications.filter((n) => n.id !== id),
+            }));
+          }, duration);
+        };
+
+        // Schedule removal using RAF for better performance
+        requestAnimationFrame(removeNotification);
       },
       removeNotification: (id: string) => {
         set((state) => ({

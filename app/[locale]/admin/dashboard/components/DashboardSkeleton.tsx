@@ -4,27 +4,27 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 export function DashboardSkeleton() {
     return (
-        <div className="space-y-8 animate-pulse">
+        <div className="space-y-8 animate-pulse duration-1000">
             {/* Enhanced Welcome Section Skeleton with better dark mode support */}
-            <div className="relative p-6 rounded-2xl bg-gradient-to-br from-gray-100/80 to-gray-200/60 dark:from-gray-800/60 dark:to-gray-700/40 border border-gray-200/50 dark:border-gray-600/30 backdrop-blur-sm transition-all duration-300">
+            <div className="relative p-6 rounded-2xl bg-gradient-to-br from-gray-100/80 to-gray-200/60 dark:from-gray-800/60 dark:to-gray-700/40 border border-gray-200/50 dark:border-gray-600/30 backdrop-blur-sm transition-all duration-200">
                 <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6">
                     <div className="flex-1">
                         <div className="flex items-center gap-3 mb-3">
-                            <div className="w-10 h-10 bg-gray-300/80 dark:bg-gray-600/60 rounded-lg transition-colors duration-200"></div>
+                            <div className="w-10 h-10 bg-gray-300/80 dark:bg-gray-600/60 rounded-lg transition-colors duration-150"></div>
                             <div>
-                                <div className="h-8 bg-gray-300/80 dark:bg-gray-600/60 rounded w-64 mb-2 transition-colors duration-200"></div>
-                                <div className="h-4 bg-gray-300/80 dark:bg-gray-600/60 rounded w-32 transition-colors duration-200"></div>
+                                <div className="h-8 bg-gray-300/80 dark:bg-gray-600/60 rounded w-64 mb-2 transition-colors duration-150"></div>
+                                <div className="h-4 bg-gray-300/80 dark:bg-gray-600/60 rounded w-32 transition-colors duration-150"></div>
                             </div>
                         </div>
-                        <div className="h-6 bg-gray-300/80 dark:bg-gray-600/60 rounded w-96 mb-4 transition-colors duration-200"></div>
+                        <div className="h-6 bg-gray-300/80 dark:bg-gray-600/60 rounded w-96 mb-4 transition-colors duration-150"></div>
                         <div className="flex gap-3">
-                            <div className="h-6 bg-gray-300/80 dark:bg-gray-600/60 rounded w-24 transition-colors duration-200"></div>
-                            <div className="h-6 bg-gray-300/80 dark:bg-gray-600/60 rounded w-20 transition-colors duration-200"></div>
+                            <div className="h-6 bg-gray-300/80 dark:bg-gray-600/60 rounded w-24 transition-colors duration-150"></div>
+                            <div className="h-6 bg-gray-300/80 dark:bg-gray-600/60 rounded w-20 transition-colors duration-150"></div>
                         </div>
                     </div>
                     <div className="flex gap-3">
-                        <div className="h-8 bg-gray-300/80 dark:bg-gray-600/60 rounded w-24 transition-colors duration-200"></div>
-                        <div className="h-8 bg-gray-300/80 dark:bg-gray-600/60 rounded w-20 transition-colors duration-200"></div>
+                        <div className="h-8 bg-gray-300/80 dark:bg-gray-600/60 rounded w-24 transition-colors duration-150"></div>
+                        <div className="h-8 bg-gray-300/80 dark:bg-gray-600/60 rounded w-20 transition-colors duration-150"></div>
                     </div>
                 </div>
             </div>

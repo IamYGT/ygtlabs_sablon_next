@@ -95,12 +95,12 @@ export function useCurrentUser() {
         return null;
       }
     },
-    staleTime: 30 * 1000, // 30 saniye fresh (daha sık kontrol)
-    gcTime: 2 * 60 * 1000, // 2 dakika cache
+    staleTime: 60 * 1000, // Increased to 60 seconds to reduce API calls
+    gcTime: 5 * 60 * 1000, // Increased to 5 minutes cache
     retry: false,
-    refetchOnWindowFocus: true,
+    refetchOnWindowFocus: false, // Disabled to reduce unnecessary calls
     refetchOnMount: true,
-    refetchInterval: 60 * 1000, // Her dakika kontrol et
+    refetchInterval: 5 * 60 * 1000, // Reduced frequency to every 5 minutes
     refetchIntervalInBackground: false,
   });
 }
@@ -216,9 +216,14 @@ export function useLogout() {
 
       // Hard redirect to login page to ensure clean state
       // Bu şekilde tüm client-side state tamamen temizlenir
-      setTimeout(() => {
+      const redirectToLogin = () => {
         window.location.href = `/${locale}/auth/login`;
-      }, 500); // Toast mesajının görünmesi için kısa bekleme
+      };
+
+      // Use requestAnimationFrame for better performance
+      requestAnimationFrame(() => {
+        setTimeout(redirectToLogin, 300); // Reduced from 500ms to 300ms
+      });
     },
   });
 }
