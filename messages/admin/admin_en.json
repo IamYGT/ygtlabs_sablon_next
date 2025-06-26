@@ -30,7 +30,8 @@
                 "apr": "Apr",
                 "may": "May",
                 "jun": "Jun"
-            }
+            },
+            "trend": "+18.7%"
         },
         "title": "Admin Panel - ECU System",
         "subtitle": "Corporate Management Panel",
@@ -540,7 +541,20 @@
             "noPermission": "NO ✗",
             "fixPermissions": "Fix Permissions",
             "fixDescription": "This button will give you admin role and roles:edit permission",
-            "allPermissions": "All Permissions ({count})"
+            "allPermissions": "All Permissions ({count})",
+            "grantAdminSuccess": "✅ Admin access granted successfully!",
+            "setupError": "❌ Error",
+            "connectionError": "❌ Connection error",
+            "unknownError": "Unknown error"
+        },
+        "info": {
+            "noViewPermission": "🚫 Role list API call not made - no permission",
+            "refreshingPage": "🔄 Refreshing page due to lack of permission"
+        },
+        "error": {
+            "failedToLoad": "Failed to load roles:",
+            "errorLoading": "Error loading roles:",
+            "errorLoadingInitial": "Error loading initial data:"
         },
         "createDialog": {
             "title": "Create New Role",
@@ -654,12 +668,47 @@
                 "updateError": "Could not update role.",
                 "updateErrorGeneric": "An error occurred while updating the role.",
                 "protectedError": "Super Admin role cannot be edited.",
-                "protectedErrorGeneric": "This role cannot be edited."
+                "protectedErrorGeneric": "This role cannot be edited.",
+                "permissionsLoadError": "Could not load permissions",
+                "rolePermissionsLoadError": "Could not load role permissions",
+                "updateErrorWithMessage": "Could not update role: {message}",
+                "permissionsUpdateErrorWithMessage": "Could not update permissions: {message}",
+                "genericUpdateError": "An error occurred while updating the role"
+            },
+            "info": {
+                "loadingPermissionsForRole": "🔄 Loading permissions for role: {roleId}",
+                "allPermissionsLoaded": "📋 All permissions loaded: {count}",
+                "rolePermissionsLoaded": "🎯 Role permissions loaded: {count}",
+                "rolePermissionsData": "🎯 Role permissions data: {data}",
+                "lookingForPermission": "🔍 Looking for permission: {perm}",
+                "foundMatchingPermission": "✅ Found matching permission: {id} {displayName}",
+                "noMatchingPermission": "❌ No matching permission found for: {perm}",
+                "selectedPermissionsCount": "🎯 Selected permissions count: {count}",
+                "dataLoadingError": "Data loading error:",
+                "filteringPermissions": "🔍 Filtering permissions for accessType: {accessType}",
+                "totalPermissionsBeforeFiltering": "📋 Total permissions before filtering: {count}",
+                "layoutPermissionsFiltered": "🚫 Layout permissions filtered out: {count}",
+                "accessTypeFilter": "🎯 Access type filter ({accessType}): {before} → {after}",
+                "searchFilter": "🔍 Search filter: {before} → {after}",
+                "finalFilteredPermissions": "✅ Final filtered permissions: {count}",
+                "processingPermissionForApi": "🔍 Processing permission for API: {data}",
+                "permissionNotFoundForId": "❌ Permission not found for ID: {id}",
+                "sendingPermissionsToApi": "🔄 Sending permissions to API: {permissions}",
+                "updateError": "Update error:",
+                "accessTypeChanged": "🔄 Access type changed to: {value}",
+                "autoAddedLayoutPermission": "✅ Auto-added layout permission: {permission}",
+                "layoutPermissionNotFound": "⚠️ Layout permission not found: {permission}",
+                "permissionsUpdated": "🎯 Permissions updated: {kept} kept, {removed} removed, layout access auto-added",
+                "incompatiblePermissionsRemoved": "{count} incompatible permissions removed, {kept} permissions kept",
+                "renderingPermissionsStep": "🎯 Rendering permissions step:",
+                "accessType": "- Access type: {accessType}",
+                "currentPermissions": "- Current permissions: {count}",
+                "availablePermissions": "- Available permissions: {count}"
             }
         },
         "deleteDialog": {
             "title": "Delete Role",
-            "description": "Are you sure you want to delete the role \"{roleName}\"?",
+            "description": "Are you sure you want to delete the role \"{roleName}\"",
             "confirmMessage": "role? Are you sure you want to delete it?",
             "permanentAction": "This action is permanent and cannot be undone.",
             "assignedUsers": "This role is currently assigned to {userCount} users.",
@@ -738,7 +787,11 @@
                 "permissions": "Permissions",
                 "users": "Users",
                 "activity": "Activity"
-            }
+            },
+            "error": {
+                "loadingPermissions": "Error loading permissions:"
+            },
+            "unnamed": "Unnamed"
         },
         "permissionsDisplay": {
             "title": "Permissions",
@@ -752,6 +805,16 @@
                 "layout": "Layout",
                 "view": "View",
                 "function": "Functions"
+            },
+            "actions": {
+                "access": "Access",
+                "view": "View",
+                "create": "Create",
+                "edit": "Edit",
+                "delete": "Delete"
+            },
+            "error": {
+                "loadingPermissions": "Error loading permissions:"
             }
         }
     },
@@ -827,7 +890,16 @@
             "error": "Could not create permission.",
             "validation": {
                 "fieldsRequired": "Category, resource path and action fields are required"
-            }
+            },
+            "resourceType": {
+                "layout": "Layout",
+                "page": "Page",
+                "function": "Function"
+            },
+            "action": "Action *",
+            "actionPlaceholder": "Select an action",
+            "permissionType": "Permission Type",
+            "permissionTypePlaceholder": "Select a permission type"
         },
         "editDialog": {
             "title": "Edit Permission",
@@ -855,7 +927,17 @@
             "admin": "Admin",
             "user": "User",
             "active": "Active",
-            "inactive": "Inactive"
+            "inactive": "Inactive",
+            "overview": {
+                "title": "Permission Information",
+                "description": "Current information of the permission you want to edit",
+                "descriptionLabel": "Description",
+                "categoryLabel": "Category",
+                "typeLabel": "Type",
+                "creationLabel": "Creation",
+                "roleLabel": "Role",
+                "unknownRole": "Unknown"
+            }
         }
     },
     "AdminSettings": {
@@ -1013,6 +1095,10 @@
             "buttonText": "Button Text",
             "buttonTextEn": "Button Text",
             "buttonUrl": "URL",
+            "tr": "TR",
+            "en": "EN",
+            "tr_parentheses": "(TR)",
+            "en_parentheses": "(EN)",
             "statistics": "Statistics",
             "statisticsOptional": "Optional",
             "statisticsNumber": "Statistic #",

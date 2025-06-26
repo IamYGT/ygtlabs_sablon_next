@@ -273,7 +273,7 @@ export function PermissionsPageClient() {
                 </Card>
                 <Card>
                     <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium">Layout</CardTitle>
+                        <CardTitle className="text-sm font-medium">{t('layout')}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">{stats.byCategory.layout || 0}</div>
@@ -281,7 +281,7 @@ export function PermissionsPageClient() {
                 </Card>
                 <Card>
                     <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium">Function</CardTitle>
+                        <CardTitle className="text-sm font-medium">{t('function')}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">{stats.byCategory.function || 0}</div>
@@ -321,10 +321,10 @@ export function PermissionsPageClient() {
 
                         <Select value={selectedResourcePath} onValueChange={setSelectedResourcePath}>
                             <SelectTrigger className="w-48">
-                                <SelectValue placeholder="Kaynak yolu seçin" />
+                                <SelectValue placeholder={t('resourcePathPlaceholder')} />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="all">Tüm Kaynak Yolları</SelectItem>
+                                <SelectItem value="all">{t('allResourcePaths')}</SelectItem>
                                 {resourcePaths.map((path) => (
                                     <SelectItem key={path} value={path}>
                                         {path} ({stats.byResourcePath[path] || 0})
@@ -351,10 +351,10 @@ export function PermissionsPageClient() {
                             <TableRow>
                                 <TableHead>{t("permissionDetails")}</TableHead>
                                 <TableHead>{t("category")}</TableHead>
-                                <TableHead>Kaynak Yolu</TableHead>
-                                <TableHead>Eylem</TableHead>
-                                <TableHead>Tür</TableHead>
-                                <TableHead>Durum</TableHead>
+                                <TableHead>{t('resourcePath')}</TableHead>
+                                <TableHead>{t('action')}</TableHead>
+                                <TableHead>{t('type')}</TableHead>
+                                <TableHead>{t('status')}</TableHead>
                                 <TableHead className="w-[50px]"></TableHead>
                             </TableRow>
                         </TableHeader>

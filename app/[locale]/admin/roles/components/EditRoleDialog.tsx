@@ -93,7 +93,7 @@ function parseJSONField(value: string | Record<string, string> | null | undefine
     return value || '';
 }
 
-function formatPermission(permission: Permission): Permission {
+function formatPermission(permission: Permission, t: (key: string) => string): Permission {
     // displayName formatla
     let displayName = permission.displayName;
     if (typeof permission.displayName === 'string' && permission.displayName !== permission.name) {
@@ -104,22 +104,8 @@ function formatPermission(permission: Permission): Permission {
             displayName = parsed;
         } else {
             // Fallback: Daha okunabilir format
-            const categoryMap: Record<string, string> = {
-                layout: 'Layout',
-                view: 'Görüntüleme',
-                function: 'İşlev'
-            };
-
-            const actionMap: Record<string, string> = {
-                access: 'Erişimi',
-                view: 'Görüntüleme',
-                create: 'Oluşturma',
-                edit: 'Düzenleme',
-                delete: 'Silme'
-            };
-
-            const categoryName = categoryMap[permission.category] || permission.category;
-            const actionName = actionMap[permission.action] || permission.action;
+            const categoryName = t(`categories.${permission.category}`) || permission.category;
+            const actionName = t(`actions.${permission.action}`) || permission.action;
             const resourceName = permission.resourcePath.replace(/^\//, '').replace(/\//g, ' ');
 
             displayName = `${categoryName} - ${resourceName} ${actionName}`;
@@ -136,22 +122,8 @@ function formatPermission(permission: Permission): Permission {
             description = parsed;
         } else {
             // Fallback: Daha açıklayıcı format
-            const categoryMap: Record<string, string> = {
-                layout: 'layout erişim',
-                view: 'görüntüleme',
-                function: 'işlev'
-            };
-
-            const actionMap: Record<string, string> = {
-                access: 'erişim',
-                view: 'görüntüleme',
-                create: 'oluşturma',
-                edit: 'düzenleme',
-                delete: 'silme'
-            };
-
-            const categoryName = categoryMap[permission.category] || permission.category;
-            const actionName = actionMap[permission.action] || permission.action;
+            const categoryName = t(`categories.${permission.category}`) || permission.category;
+            const actionName = t(`actions.${permission.action}`) || permission.action;
 
             description = `${permission.resourcePath} için ${categoryName} ${actionName} yetkisi`;
         }
@@ -232,52 +204,52 @@ export default function EditRoleDialog({
         setLoadingPermissions(true);
 
         try {
-            console.log('🔄 Loading permissions for role:', role.id);
+            console.log(t('info.loadingPermissionsForRole', { roleId: role.id }));
 
             // Load all permissions
             const permissionsResponse = await fetch('/api/admin/permissions?limit=1000');
             if (!permissionsResponse.ok) {
-                throw new Error('Yetkiler yüklenemedi');
+                throw new Error(t('notifications.permissionsLoadError'));
             }
             const permissionsData = await permissionsResponse.json();
-            console.log('📋 All permissions loaded:', permissionsData.permissions?.length || 0);
+            console.log(t('info.allPermissionsLoaded', { count: permissionsData.permissions?.length || 0 }));
 
-            const formattedPermissions = (permissionsData.permissions || []).map(formatPermission);
+            const formattedPermissions = (permissionsData.permissions || []).map(p => formatPermission(p, t));
 
             // Load role permissions
             const roleResponse = await fetch(`/api/admin/roles/${role.id}/permissions`);
             if (!roleResponse.ok) {
-                throw new Error('Rol yetkileri yüklenemedi');
+                throw new Error(t('notifications.rolePermissionsLoadError'));
             }
             const roleData = await roleResponse.json();
-            console.log('🎯 Role permissions loaded:', roleData.permissions?.length || 0);
-            console.log('🎯 Role permissions data:', roleData.permissions);
+            console.log(t('info.rolePermissionsLoaded', { count: roleData.permissions?.length || 0 }));
+            console.log(t('info.rolePermissionsData', { data: roleData.permissions }));
 
             // Set selected permissions
             const selectedIds = new Set<string>();
             (roleData.permissions || []).forEach((perm: Record<string, string>) => {
-                console.log('🔍 Looking for permission:', perm);
+                console.log(t('info.lookingForPermission', { perm }));
                 const permission = formattedPermissions.find((p: Permission) =>
                     p.category === perm.category &&
                     p.resourcePath === perm.resourcePath &&
                     p.action === perm.action
                 );
                 if (permission) {
-                    console.log('✅ Found matching permission:', permission.id, permission.displayName);
+                    console.log(t('info.foundMatchingPermission', { id: permission.id, displayName: permission.displayName }));
                     selectedIds.add(permission.id);
                 } else {
-                    console.log('❌ No matching permission found for:', perm);
+                    console.log(t('info.noMatchingPermission', { perm }));
                 }
             });
 
-            console.log('🎯 Selected permissions count:', selectedIds.size);
+            console.log(t('info.selectedPermissionsCount', { count: selectedIds.size }));
 
             // State'leri aynı anda set et
             setPermissions(formattedPermissions);
             setSelectedPermissions(selectedIds);
 
         } catch (error) {
-            console.error('Data loading error:', error);
+            console.error(t('info.dataLoadingError'), error);
             toast.error(t('notifications.updateErrorGeneric'));
         } finally {
             setLoadingPermissions(false);
@@ -333,8 +305,8 @@ export default function EditRoleDialog({
 
     // Group permissions by category with filtering
     const groupedPermissions = useMemo(() => {
-        console.log('🔍 Filtering permissions for accessType:', formData.layoutType);
-        console.log('📋 Total permissions before filtering:', permissions.length);
+        console.log(t('info.filteringPermissions', { accessType: formData.layoutType }));
+        console.log(t('info.totalPermissionsBeforeFiltering', { count: permissions.length }));
 
         let filtered = permissions;
 
@@ -343,7 +315,7 @@ export default function EditRoleDialog({
         filtered = filtered.filter(permission =>
             permission.category !== 'layout'
         );
-        console.log(`🚫 Layout permissions filtered out: ${beforeLayoutFilter - filtered.length}`);
+        console.log(t('info.layoutPermissionsFiltered', { count: beforeLayoutFilter - filtered.length }));
 
         // Erişim tipine göre filtrele
         const beforeAccessFilter = filtered.length;
@@ -351,7 +323,7 @@ export default function EditRoleDialog({
             const permissionType = permission.permissionType || 'user';
             return permissionType === formData.layoutType;
         });
-        console.log(`🎯 Access type filter (${formData.layoutType}): ${beforeAccessFilter} → ${filtered.length}`);
+        console.log(t('info.accessTypeFilter', { accessType: formData.layoutType, before: beforeAccessFilter, after: filtered.length }));
 
         // Arama terimine göre filtrele
         if (searchTerm) {
@@ -363,10 +335,10 @@ export default function EditRoleDialog({
                 permission.category.toLowerCase().includes(term) ||
                 permission.action.toLowerCase().includes(term)
             );
-            console.log(`🔍 Search filter: ${beforeSearchFilter} → ${filtered.length}`);
+            console.log(t('info.searchFilter', { before: beforeSearchFilter, after: filtered.length }));
         }
 
-        console.log('✅ Final filtered permissions:', filtered.length);
+        console.log(t('info.finalFilteredPermissions', { count: filtered.length }));
 
         return filtered.reduce((acc, permission) => {
             const category = permission.category || 'other';
@@ -376,7 +348,7 @@ export default function EditRoleDialog({
             acc[category].push(permission);
             return acc;
         }, {} as Record<string, Permission[]>);
-    }, [permissions, searchTerm, formData.layoutType]);
+    }, [permissions, searchTerm, formData.layoutType, t]);
 
     // Category helpers
     const getCategoryIcon = (category: string) => {
@@ -415,7 +387,7 @@ export default function EditRoleDialog({
 
             if (!roleResponse.ok) {
                 const error = await roleResponse.json();
-                throw new Error(error.message || 'Rol güncellenemedi');
+                throw new Error(error.message || t('notifications.updateError'));
             }
 
             // Update permissions - API permission name'leri bekliyor
@@ -424,23 +396,23 @@ export default function EditRoleDialog({
             selectedPermissions.forEach(permissionId => {
                 const permission = permissions.find(p => p.id === permissionId);
                 if (permission) {
-                    console.log('🔍 Processing permission for API:', {
+                    console.log(t('info.processingPermissionForApi', { data: {
                         id: permission.id,
                         category: permission.category,
                         resourcePath: permission.resourcePath,
                         action: permission.action,
                         displayName: permission.displayName
-                    });
+                    } }));
 
                     // Permission name formatı: category.resourcePath.action (veritabanındaki format)
                     const permissionName = `${permission.category}.${permission.resourcePath}.${permission.action}`;
                     permissionNames.push(permissionName);
                 } else {
-                    console.log('❌ Permission not found for ID:', permissionId);
+                    console.log(t('info.permissionNotFoundForId', { id: permissionId }));
                 }
             });
 
-            console.log('🔄 Sending permissions to API:', permissionNames);
+            console.log(t('info.sendingPermissionsToApi', { permissions: permissionNames }));
 
             const permissionsResponse = await fetch(`/api/admin/roles/${role.id}/permissions`, {
                 method: 'PUT',
@@ -450,7 +422,7 @@ export default function EditRoleDialog({
 
             if (!permissionsResponse.ok) {
                 const error = await permissionsResponse.json();
-                throw new Error(error.error || 'Yetkiler güncellenemedi');
+                throw new Error(error.error || t('notifications.permissionsUpdateErrorWithMessage', { message: '' }));
             }
 
             toast.success(t('notifications.updateSuccess'));
@@ -458,8 +430,8 @@ export default function EditRoleDialog({
             onOpenChange(false);
 
         } catch (error) {
-            console.error('Update error:', error);
-            const errorMessage = error instanceof Error ? error.message : 'Rol güncellenirken bir hata oluştu';
+            console.error(t('info.updateError'), error);
+            const errorMessage = error instanceof Error ? error.message : t('notifications.genericUpdateError');
             toast.error(errorMessage);
         } finally {
             setLoading(false);
@@ -964,10 +936,12 @@ export default function EditRoleDialog({
                         </div>
                         {role.displayName} {t('title')}
                         {isProtectedRole && (
+                            <div className="flex items-center gap-2 ml-auto">
                             <Badge variant="outline" className="text-orange-600 border-orange-600 text-xs">
                                 <ShieldCheck className="w-2 h-2 mr-1" />
-                                {role.name === 'super_admin' ? 'Super' : t('protectedRole')}
+                                {role.name === 'super_admin' ? t('super') : t('protectedRole')}
                             </Badge>
+                        </div>
                         )}
                     </DialogTitle>
                     <DialogDescription className="text-xs">

@@ -118,7 +118,7 @@ export default function RolesPageClient({
             // User permissions'ları currentUser'dan al
             setUserPermissions(currentUser.permissions || []);
         } catch (error) {
-            console.error('Error loading initial data:', error);
+            console.error(t('error.errorLoadingInitial'), error);
         } finally {
             setLoading(false);
         }
@@ -176,7 +176,7 @@ export default function RolesPageClient({
         );
 
         if (!hasViewPermission) {
-            console.log('🚫 Rol listesi API çağrısı yapılmadı - yetki yok');
+            console.log(t('info.noViewPermission'));
             return;
         }
 
@@ -187,10 +187,10 @@ export default function RolesPageClient({
                 const data = await response.json();
                 setRoles(data.roles || []);
             } else {
-                console.error('Failed to load roles:', response.status);
+                console.error(t('error.failedToLoad'), response.status);
             }
         } catch (error) {
-            console.error('Error loading roles:', error);
+            console.error(t('error.errorLoading'), error);
         } finally {
             setLoading(false);
         }
@@ -203,7 +203,7 @@ export default function RolesPageClient({
         );
 
         if (!hasViewPermission) {
-            console.log('🔄 Yetki olmadığı için sayfa refresh edilecek');
+            console.log(t('info.refreshingPage'));
             window.location.reload();
             return;
         }

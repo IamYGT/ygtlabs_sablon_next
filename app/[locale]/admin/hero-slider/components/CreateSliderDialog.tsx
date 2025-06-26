@@ -236,7 +236,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                             {t('form.turkishContent')}
                                             <Badge variant="outline" className="bg-blue-50 dark:bg-blue-950/50 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 flex items-center gap-1">
                                                 <FlagWrapper locale="tr" className="w-4 h-2.5 rounded-sm object-cover" />
-                                                TR
+                                                {t('form.tr')}
                                             </Badge>
                                         </CardTitle>
                                     </CardHeader>
@@ -269,7 +269,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                             <div className="p-2 bg-emerald-100 dark:bg-emerald-900/50 rounded-lg">
                                                 <Link className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
                                             </div>
-                                            Buton Ayarları
+                                            {t('form.buttonSettings')}
                                         </CardTitle>
                                     </CardHeader>
                                     <CardContent className="space-y-6">
@@ -277,30 +277,30 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                             <div className="space-y-4 p-4 bg-white/60 dark:bg-gray-900/60 rounded-lg border border-emerald-200 dark:border-emerald-800">
                                                 <div className="flex items-center gap-2 mb-3">
                                                     <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                                                    <h4 className="font-semibold text-emerald-800 dark:text-emerald-300">Ana Buton</h4>
-                                                    <Badge variant="destructive" className="h-4 text-xs">Zorunlu</Badge>
+                                                    <h4 className="font-semibold text-emerald-800 dark:text-emerald-300">{t('form.primaryButton')}</h4>
+                                                    <Badge variant="destructive" className="h-4 text-xs">{t('form.required')}</Badge>
                                                 </div>
                                                 <div className="space-y-2">
-                                                    <Label className="text-sm font-medium">Buton Metni</Label>
+                                                    <Label className="text-sm font-medium">{t('form.buttonText')}</Label>
                                                     <Input
                                                         value={primaryButton.tr.text}
                                                         onChange={(e) => setPrimaryButton({
                                                             ...primaryButton,
                                                             tr: { ...primaryButton.tr, text: e.target.value }
                                                         })}
-                                                        placeholder="Hemen Başlayın"
+                                                        placeholder={t('form.placeholders.primaryButtonTr')}
                                                         className="border-emerald-200 dark:border-emerald-800"
                                                     />
                                                 </div>
                                                 <div className="space-y-2">
-                                                    <Label className="text-sm font-medium">URL</Label>
+                                                    <Label className="text-sm font-medium">{t('form.url')}</Label>
                                                     <Input
                                                         value={primaryButton.tr.url}
                                                         onChange={(e) => setPrimaryButton({
                                                             ...primaryButton,
                                                             tr: { ...primaryButton.tr, url: e.target.value }
                                                         })}
-                                                        placeholder="/services"
+                                                        placeholder={t('form.placeholders.primaryButtonUrlTr')}
                                                         className="border-emerald-200 dark:border-emerald-800"
                                                     />
                                                 </div>
@@ -309,30 +309,30 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                             <div className="space-y-4 p-4 bg-white/60 dark:bg-gray-900/60 rounded-lg border border-gray-200 dark:border-gray-700">
                                                 <div className="flex items-center gap-2 mb-3">
                                                     <div className="w-3 h-3 bg-gray-400 rounded-full"></div>
-                                                    <h4 className="font-semibold text-gray-700 dark:text-gray-300">İkincil Buton</h4>
-                                                    <Badge variant="secondary" className="h-4 text-xs">Opsiyonel</Badge>
+                                                    <h4 className="font-semibold text-gray-700 dark:text-gray-300">{t('form.secondaryButton')}</h4>
+                                                    <Badge variant="secondary" className="h-4 text-xs">{t('form.optional')}</Badge>
                                                 </div>
                                                 <div className="space-y-2">
-                                                    <Label className="text-sm font-medium">Buton Metni</Label>
+                                                    <Label className="text-sm font-medium">{t('form.buttonText')}</Label>
                                                     <Input
                                                         value={secondaryButton.tr.text}
                                                         onChange={(e) => setSecondaryButton({
                                                             ...secondaryButton,
                                                             tr: { ...secondaryButton.tr, text: e.target.value }
                                                         })}
-                                                        placeholder="Daha Fazla Bilgi"
+                                                        placeholder={t('form.placeholders.secondaryButtonTr')}
                                                         className="border-gray-200 dark:border-gray-700"
                                                     />
                                                 </div>
                                                 <div className="space-y-2">
-                                                    <Label className="text-sm font-medium">URL</Label>
+                                                    <Label className="text-sm font-medium">{t('form.url')}</Label>
                                                     <Input
                                                         value={secondaryButton.tr.url}
                                                         onChange={(e) => setSecondaryButton({
                                                             ...secondaryButton,
                                                             tr: { ...secondaryButton.tr, url: e.target.value }
                                                         })}
-                                                        placeholder="/about"
+                                                        placeholder={t('form.placeholders.secondaryButtonUrlTr')}
                                                         className="border-gray-200 dark:border-gray-700"
                                                     />
                                                 </div>
@@ -353,7 +353,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                             {t('form.englishContent')}
                                             <Badge variant="outline" className="bg-green-50 dark:bg-green-950/50 border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 flex items-center gap-1">
                                                 <FlagWrapper locale="en" className="w-4 h-2.5 rounded-sm object-cover" />
-                                                EN
+                                                {t('form.en')}
                                             </Badge>
                                         </CardTitle>
                                     </CardHeader>
@@ -393,10 +393,10 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                 <CardContent className="space-y-6">
                                     <Tabs defaultValue="primary-tr" className="w-full">
                                         <TabsList className="grid w-full grid-cols-4">
-                                            <TabsTrigger value="primary-tr">{t('form.primaryButton')} (TR)</TabsTrigger>
-                                            <TabsTrigger value="primary-en">{t('form.primaryButton')} (EN)</TabsTrigger>
-                                            <TabsTrigger value="secondary-tr">{t('form.secondaryButton')} (TR)</TabsTrigger>
-                                            <TabsTrigger value="secondary-en">{t('form.secondaryButton')} (EN)</TabsTrigger>
+                                            <TabsTrigger value="primary-tr">{t('form.primaryButton')} {t('form.tr_parentheses')}</TabsTrigger>
+                                            <TabsTrigger value="primary-en">{t('form.primaryButton')} {t('form.en_parentheses')}</TabsTrigger>
+                                            <TabsTrigger value="secondary-tr">{t('form.secondaryButton')} {t('form.tr_parentheses')}</TabsTrigger>
+                                            <TabsTrigger value="secondary-en">{t('form.secondaryButton')} {t('form.en_parentheses')}</TabsTrigger>
                                         </TabsList>
                                         <TabsContent value="primary-tr" className="pt-4 space-y-4">
                                             <div className="space-y-2">

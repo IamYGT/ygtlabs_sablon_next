@@ -36,7 +36,7 @@ function parseJSONField(value: string | LocalizedValue | null | undefined, local
     return value || '';
 }
 
-function formatPermissionDisplayName(permission: RolePermission, locale: string = 'tr'): string {
+function formatPermissionDisplayName(permission: RolePermission, locale: string = 'tr', t: (key: string) => string): string {
     // Eğer displayName zaten string ise (API'den formatlanmış geliyorsa) direkt kullan
     if (typeof permission.displayName === 'string' && permission.displayName !== permission.name) {
         return permission.displayName;
@@ -49,28 +49,14 @@ function formatPermissionDisplayName(permission: RolePermission, locale: string 
     }
 
     // Fallback: Daha okunabilir format
-    const categoryMap: Record<string, string> = {
-        layout: 'Layout',
-        view: 'Görüntüleme',
-        function: 'İşlev'
-    };
-
-    const actionMap: Record<string, string> = {
-        access: 'Erişimi',
-        view: 'Görüntüleme',
-        create: 'Oluşturma',
-        edit: 'Düzenleme',
-        delete: 'Silme'
-    };
-
-    const categoryName = categoryMap[permission.category] || permission.category;
-    const actionName = actionMap[permission.action] || permission.action;
+    const categoryName = t(`categories.${permission.category}`) || permission.category;
+    const actionName = t(`actions.${permission.action}`) || permission.action;
     const resourceName = permission.resourcePath.replace(/^\//, '').replace(/\//g, ' ');
 
     return `${categoryName} - ${resourceName} ${actionName}`;
 }
 
-function formatPermissionDescription(permission: RolePermission, locale: string = 'tr'): string {
+function formatPermissionDescription(permission: RolePermission, locale: string = 'tr', t: (key: string) => string): string {
     // Eğer description zaten string ise (API'den formatlanmış geliyorsa) direkt kullan
     if (typeof permission.description === 'string' && permission.description !== permission.name) {
         return permission.description;
@@ -83,31 +69,17 @@ function formatPermissionDescription(permission: RolePermission, locale: string 
     }
 
     // Fallback: Daha açıklayıcı format
-    const categoryMap: Record<string, string> = {
-        layout: 'layout erişim',
-        view: 'görüntüleme',
-        function: 'işlev'
-    };
-
-    const actionMap: Record<string, string> = {
-        access: 'erişim',
-        view: 'görüntüleme',
-        create: 'oluşturma',
-        edit: 'düzenleme',
-        delete: 'silme'
-    };
-
-    const categoryName = categoryMap[permission.category] || permission.category;
-    const actionName = actionMap[permission.action] || permission.action;
+    const categoryName = t(`categories.${permission.category}`) || permission.category;
+    const actionName = t(`actions.${permission.action}`) || permission.action;
 
     return `${permission.resourcePath} için ${categoryName} ${actionName} yetkisi`;
 }
 
-function formatPermissionsList(permissions: RolePermission[], locale: string = 'tr'): RolePermission[] {
+function formatPermissionsList(permissions: RolePermission[], locale: string = 'tr', t: (key: string) => string): RolePermission[] {
     return permissions.map(permission => ({
         ...permission,
-        displayName: formatPermissionDisplayName(permission, locale),
-        description: formatPermissionDescription(permission, locale),
+        displayName: formatPermissionDisplayName(permission, locale, t),
+        description: formatPermissionDescription(permission, locale, t),
     }));
 }
 
@@ -156,17 +128,8 @@ const getCategoryColor = (category: string) => {
     }
 };
 
-const getCategoryDisplayName = (category: string) => {
-    switch (category) {
-        case 'layout':
-            return 'Layout';
-        case 'view':
-            return 'Görüntüleme';
-        case 'function':
-            return 'İşlevler';
-        default:
-            return category;
-    }
+const getCategoryDisplayName = (category: string, t: (key: string) => string) => {
+    return t(`categories.${category}`) || category;
 };
 
 export default function RolePermissionsDisplay({
@@ -195,11 +158,11 @@ export default function RolePermissionsDisplay({
                 const data = await response.json();
 
                 // API'den gelen yetkileri formatla
-                const formattedPermissions = formatPermissionsList(data.permissions || []);
+                const formattedPermissions = formatPermissionsList(data.permissions || [], undefined, tRoles);
 
                 setPermissions(formattedPermissions);
             } catch (err) {
-                console.error("Yetkiler yüklenirken hata:", err);
+                console.error(tRoles('error.loadingPermissions'), err);
                 setError(err instanceof Error ? err.message : t('unknownError'));
             } finally {
                 setLoading(false);
@@ -288,7 +251,7 @@ export default function RolePermissionsDisplay({
                             <CardTitle className="flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                     {getCategoryIcon(category)}
-                                    <span>{tRoles(`categories.${category}`) || getCategoryDisplayName(category)}</span>
+                                    <span>{getCategoryDisplayName(category, tRoles)}</span>
                                     <Badge className={getCategoryColor(category)}>
                                         {categoryPermissions.length} {tRoles('permissionCount')}
                                     </Badge>

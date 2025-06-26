@@ -253,9 +253,9 @@ export function EditPermissionDialog({
     const renderOverviewStep = () => (
         <div className="space-y-6">
             <div className="text-center">
-                <h3 className="text-lg font-semibold mb-2">Yetki Bilgileri</h3>
+                <h3 className="text-lg font-semibold mb-2">{t('overview.title')}</h3>
                 <p className="text-muted-foreground text-sm">
-                    Düzenlemek istediğiniz yetkinin mevcut bilgileri
+                    {t('overview.description')}
                 </p>
             </div>
 
@@ -293,7 +293,7 @@ export function EditPermissionDialog({
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div>
-                        <p className="text-sm font-medium mb-1">Açıklama</p>
+                        <p className="text-sm font-medium mb-1">{t('overview.descriptionLabel')}</p>
                         <p className="text-sm text-muted-foreground">
                             {formatPermissionDescription(permission)}
                         </p>
@@ -303,25 +303,25 @@ export function EditPermissionDialog({
                         <div className="text-center p-3 bg-muted/50 rounded-lg">
                             <Shield className="w-6 h-6 mx-auto mb-2 text-blue-500" />
                             <p className="text-sm font-bold">{permission.category}</p>
-                            <p className="text-xs text-muted-foreground">Kategori</p>
+                            <p className="text-xs text-muted-foreground">{t('overview.categoryLabel')}</p>
                         </div>
                         <div className="text-center p-3 bg-muted/50 rounded-lg">
                             <User className="w-6 h-6 mx-auto mb-2 text-green-500" />
                             <p className="text-sm font-bold">{permission.permissionType || 'user'}</p>
-                            <p className="text-xs text-muted-foreground">Tür</p>
+                            <p className="text-xs text-muted-foreground">{t('overview.typeLabel')}</p>
                         </div>
                         <div className="text-center p-3 bg-muted/50 rounded-lg">
                             <Calendar className="w-6 h-6 mx-auto mb-2 text-purple-500" />
                             <p className="text-xs font-bold">
                                 {new Date(permission.createdAt).toLocaleDateString('tr-TR')}
                             </p>
-                            <p className="text-xs text-muted-foreground">Oluşturma</p>
+                            <p className="text-xs text-muted-foreground">{t('overview.creationLabel')}</p>
                         </div>
                         <div className="text-center p-3 bg-muted/50 rounded-lg">
                             <Badge variant="outline" className="w-full">
-                                {permission.role?.displayName || permission.roleName || 'Bilinmeyen'}
+                                {permission.role?.displayName || permission.roleName || t('overview.unknownRole')}
                             </Badge>
-                            <p className="text-xs text-muted-foreground mt-1">Rol</p>
+                            <p className="text-xs text-muted-foreground mt-1">{t('overview.roleLabel')}</p>
                         </div>
                     </div>
                 </CardContent>
@@ -333,9 +333,9 @@ export function EditPermissionDialog({
     const renderDetailsStep = () => (
         <div className="space-y-6">
             <div className="text-center">
-                <h3 className="text-lg font-semibold mb-2">Yetki Detayları</h3>
+                <h3 className="text-lg font-semibold mb-2">{t('details.title')}</h3>
                 <p className="text-muted-foreground text-sm">
-                    Yetkinin görünen adını ve açıklamasını güncelleyin
+                    {t('details.description')}
                 </p>
             </div>
 
@@ -344,30 +344,30 @@ export function EditPermissionDialog({
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2 text-base">
                             <Edit className="w-4 h-4" />
-                            Temel Bilgiler
+                            {t('details.basicInfo')}
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="displayName">Görünen Ad</Label>
+                            <Label htmlFor="displayName">{t('details.displayName')}</Label>
                             <Input
                                 id="displayName"
                                 value={formData.displayName}
                                 onChange={(e) => handleInputChange("displayName", e.target.value)}
-                                placeholder="Yetkinin Türkçe adı"
+                                placeholder={t('details.displayNamePlaceholder')}
                             />
                             <p className="text-xs text-muted-foreground">
-                                Bu ad kullanıcı arayüzünde görüntülenecek
+                                {t('details.displayNameDescription')}
                             </p>
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="description">Açıklama</Label>
+                            <Label htmlFor="description">{t('details.descriptionLabel')}</Label>
                             <Textarea
                                 id="description"
                                 value={formData.description}
                                 onChange={(e) => handleInputChange("description", e.target.value)}
-                                placeholder="Yetkinin ne işe yaradığını açıklayın"
+                                placeholder={t('details.descriptionPlaceholder')}
                                 rows={3}
                             />
                         </div>
@@ -379,21 +379,21 @@ export function EditPermissionDialog({
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2 text-base">
                             <Info className="w-4 h-4" />
-                            Sistem Bilgileri (Değiştirilemez)
+                            {t('details.systemInfo')}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="grid grid-cols-2 gap-4 text-sm">
                             <div className="flex justify-between">
-                                <span className="text-muted-foreground">Kaynak Türü:</span>
+                                <span className="text-muted-foreground">{t('details.resourceType')}:</span>
                                 <Badge variant="outline">{permission.resourceType}</Badge>
                             </div>
                             <div className="flex justify-between">
-                                <span className="text-muted-foreground">Eylem:</span>
+                                <span className="text-muted-foreground">{t('details.action')}:</span>
                                 <Badge variant="outline">{permission.action}</Badge>
                             </div>
                             <div className="col-span-2 flex justify-between">
-                                <span className="text-muted-foreground">Kaynak Yolu:</span>
+                                <span className="text-muted-foreground">{t('details.resourcePath')}:</span>
                                 <code className="bg-muted px-2 py-1 rounded text-xs">
                                     {permission.resourcePath}
                                 </code>
@@ -409,9 +409,9 @@ export function EditPermissionDialog({
     const renderSettingsStep = () => (
         <div className="space-y-6">
             <div className="text-center">
-                <h3 className="text-lg font-semibold mb-2">Yetki Ayarları</h3>
+                <h3 className="text-lg font-semibold mb-2">{t('settings.title')}</h3>
                 <p className="text-muted-foreground text-sm">
-                    Kategori ve yetki türü ayarlarını yapın
+                    {t('settings.description')}
                 </p>
             </div>
 
@@ -420,7 +420,7 @@ export function EditPermissionDialog({
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2 text-base">
                             <Settings className="w-4 h-4" />
-                            Kategori
+                            {t('settings.category')}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -429,7 +429,7 @@ export function EditPermissionDialog({
                             onValueChange={(value) => handleInputChange("category", value)}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder="Kategori seçin" />
+                                <SelectValue placeholder={t('settings.categoryPlaceholder')} />
                             </SelectTrigger>
                             <SelectContent>
                                 {categoryOptions.map((option) => {
@@ -452,7 +452,7 @@ export function EditPermissionDialog({
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2 text-base">
                             <Shield className="w-4 h-4" />
-                            Yetki Türü
+                            {t('settings.permissionType')}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -461,7 +461,7 @@ export function EditPermissionDialog({
                             onValueChange={(value) => handleInputChange("permissionType", value)}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder="Yetki türü seçin" />
+                                <SelectValue placeholder={t('settings.permissionTypePlaceholder')} />
                             </SelectTrigger>
                             <SelectContent>
                                 {permissionTypeOptions.map((option) => (
@@ -475,7 +475,7 @@ export function EditPermissionDialog({
                             </SelectContent>
                         </Select>
                         <p className="text-xs text-muted-foreground mt-1">
-                            Admin yetkisi sadece yöneticiler tarafından kullanılabilir
+                            {t('settings.permissionTypeDescription')}
                         </p>
                     </CardContent>
                 </Card>
@@ -484,15 +484,15 @@ export function EditPermissionDialog({
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2 text-base">
                             <Check className="w-4 h-4" />
-                            Durum
+                            {t('settings.status')}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="font-medium">Yetki Aktif</p>
+                                <p className="font-medium">{t('settings.permissionActive')}</p>
                                 <p className="text-sm text-muted-foreground">
-                                    Pasif yetkiler sistemde kullanılamaz
+                                    {t('settings.permissionActiveDescription')}
                                 </p>
                             </div>
                             <Switch
@@ -511,9 +511,9 @@ export function EditPermissionDialog({
     const renderReviewStep = () => (
         <div className="space-y-6">
             <div className="text-center">
-                <h3 className="text-lg font-semibold mb-2">Değişiklik Önizlemesi</h3>
+                <h3 className="text-lg font-semibold mb-2">{t('review.title')}</h3>
                 <p className="text-muted-foreground text-sm">
-                    Yetki güncellenmeden önce değişiklikleri kontrol edin
+                    {t('review.description')}
                 </p>
             </div>
 
@@ -532,46 +532,46 @@ export function EditPermissionDialog({
                                 {formData.isActive ? (
                                     <>
                                         <Check className="w-3 h-3 mr-1" />
-                                        Aktif
+                                        {t('active')}
                                     </>
                                 ) : (
                                     <>
                                         <AlertTriangle className="w-3 h-3 mr-1" />
-                                        Pasif
+                                        {t('inactive')}
                                     </>
                                 )}
                             </Badge>
                             <Badge variant="outline">
-                                {formData.permissionType === 'admin' ? 'Admin' : 'User'}
+                                {formData.permissionType === 'admin' ? t('admin') : t('user')}
                             </Badge>
                         </div>
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div>
-                        <p className="text-sm font-medium mb-1">Açıklama</p>
+                        <p className="text-sm font-medium mb-1">{t('review.descriptionLabel')}</p>
                         <p className="text-sm text-muted-foreground">{formData.description}</p>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 pt-4">
                         <div>
-                            <p className="text-sm font-medium text-muted-foreground">Önceki Değerler</p>
+                            <p className="text-sm font-medium text-muted-foreground">{t('review.previousValues')}</p>
                             <div className="space-y-1 text-sm">
-                                <p><span className="font-medium">Ad:</span> {formatPermissionDisplayName(permission)}</p>
-                                <p><span className="font-medium">Açıklama:</span> {formatPermissionDescription(permission)}</p>
-                                <p><span className="font-medium">Kategori:</span> {permission.category}</p>
-                                <p><span className="font-medium">Tür:</span> {permission.permissionType}</p>
-                                <p><span className="font-medium">Durum:</span> {permission.isActive ? 'Aktif' : 'Pasif'}</p>
+                                <p><span className="font-medium">{t('review.nameLabel')}:</span> {formatPermissionDisplayName(permission)}</p>
+                                <p><span className="font-medium">{t('review.descriptionLabel')}:</span> {formatPermissionDescription(permission)}</p>
+                                <p><span className="font-medium">{t('review.categoryLabel')}:</span> {permission.category}</p>
+                                <p><span className="font-medium">{t('review.typeLabel')}:</span> {permission.permissionType}</p>
+                                <p><span className="font-medium">{t('review.statusLabel')}:</span> {permission.isActive ? t('active') : t('inactive')}</p>
                             </div>
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-primary">Yeni Değerler</p>
+                            <p className="text-sm font-medium text-primary">{t('review.newValues')}</p>
                             <div className="space-y-1 text-sm">
-                                <p><span className="font-medium">Ad:</span> {formData.displayName}</p>
-                                <p><span className="font-medium">Açıklama:</span> {formData.description}</p>
-                                <p><span className="font-medium">Kategori:</span> {formData.category}</p>
-                                <p><span className="font-medium">Tür:</span> {formData.permissionType}</p>
-                                <p><span className="font-medium">Durum:</span> {formData.isActive ? 'Aktif' : 'Pasif'}</p>
+                                <p><span className="font-medium">{t('review.nameLabel')}:</span> {formData.displayName}</p>
+                                <p><span className="font-medium">{t('review.descriptionLabel')}:</span> {formData.description}</p>
+                                <p><span className="font-medium">{t('review.categoryLabel')}:</span> {formData.category}</p>
+                                <p><span className="font-medium">{t('review.typeLabel')}:</span> {formData.permissionType}</p>
+                                <p><span className="font-medium">{t('review.statusLabel')}:</span> {formData.isActive ? t('active') : t('inactive')}</p>
                             </div>
                         </div>
                     </div>
@@ -583,13 +583,13 @@ export function EditPermissionDialog({
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-base">
                         <Calendar className="w-4 h-4" />
-                        Geçmiş Bilgileri
+                        {t('review.history')}
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
-                            <span className="text-muted-foreground">Oluşturulma:</span>
+                            <span className="text-muted-foreground">{t('review.creationDate')}:</span>
                             <div className="mt-1">
                                 <p className="font-mono text-xs">
                                     {new Date(permission.createdAt).toLocaleString("tr-TR")}
@@ -602,7 +602,7 @@ export function EditPermissionDialog({
                             </div>
                         </div>
                         <div>
-                            <span className="text-muted-foreground">Son Güncelleme:</span>
+                            <span className="text-muted-foreground">{t('review.lastUpdate')}:</span>
                             <div className="mt-1">
                                 <p className="font-mono text-xs">
                                     {new Date(permission.updatedAt).toLocaleString("tr-TR")}
@@ -669,11 +669,11 @@ export function EditPermissionDialog({
                         disabled={loading}
                     >
                         {currentStep === 0 ? (
-                            'İptal'
+                            t('cancel')
                         ) : (
                             <>
                                 <ChevronLeft className="w-4 h-4 mr-1" />
-                                Geri
+                                {t('back')}
                             </>
                         )}
                     </Button>
@@ -684,7 +684,7 @@ export function EditPermissionDialog({
                                 onClick={nextStep}
                                 disabled={loading}
                             >
-                                Devam Et
+                                {t('continue')}
                                 <ChevronRight className="w-4 h-4 ml-1" />
                             </Button>
                         ) : (
@@ -692,7 +692,7 @@ export function EditPermissionDialog({
                                 onClick={handleSubmit}
                                 disabled={loading}
                             >
-                                {loading ? 'Güncelleniyor...' : 'Yetki Güncelle'}
+                                {loading ? t('saving') : t('save')}
                             </Button>
                         )}
                     </div>

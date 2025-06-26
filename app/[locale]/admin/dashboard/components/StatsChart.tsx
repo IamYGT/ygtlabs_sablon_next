@@ -44,7 +44,7 @@ export function StatsChart() {
                     </div>
                     <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
                         <TrendingUp className="h-4 w-4" />
-                        <span className="text-sm font-medium">+18.7%</span>
+                        <span className="text-sm font-medium">{t('chart.trend')}</span>
                     </div>
                 </div>
             </CardHeader>

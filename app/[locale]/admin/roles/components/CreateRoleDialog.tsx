@@ -608,7 +608,7 @@ export default function CreateRoleDialog({
                                 className="flex-1"
                             >
                                 <Users className="w-4 h-4 mr-1" />
-                                User
+                                {t('user')}
                             </Button>
                             <Button
                                 type="button"
@@ -657,7 +657,7 @@ export default function CreateRoleDialog({
                                 className="flex-1"
                             >
                                 <Crown className="w-4 h-4 mr-1" />
-                                Admin
+                                {t('admin')}
                             </Button>
                         </div>
                     </div>

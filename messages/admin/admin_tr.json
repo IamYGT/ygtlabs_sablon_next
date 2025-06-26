@@ -30,7 +30,8 @@
                 "apr": "Nis",
                 "may": "May",
                 "jun": "Haz"
-            }
+            },
+            "trend": "+18.7%"
         },
         "title": "Admin Paneli - ECU Sistem",
         "subtitle": "Kurumsal Yönetim Paneli",
@@ -543,7 +544,20 @@
             "noPermission": "YOK ✗",
             "fixPermissions": "Yetkileri Düzelt",
             "fixDescription": "Bu buton size admin rolü ve roller:düzenleme yetkisi verecektir",
-            "allPermissions": "Tüm Yetkiler ({count})"
+            "allPermissions": "Tüm Yetkiler ({count})",
+            "grantAdminSuccess": "✅ Admin yetkisi başarıyla verildi!",
+            "setupError": "❌ Hata",
+            "connectionError": "❌ Bağlantı hatası",
+            "unknownError": "Bilinmeyen hata"
+        },
+        "info": {
+            "noViewPermission": "🚫 Rol listesi API çağrısı yapılmadı - yetki yok",
+            "refreshingPage": "🔄 Yetki olmadığı için sayfa yenileniyor"
+        },
+        "error": {
+            "failedToLoad": "Roller yüklenemedi:",
+            "errorLoading": "Roller yüklenirken hata:",
+            "errorLoadingInitial": "Başlangıç verileri yüklenirken hata:"
         },
         "createDialog": {
             "title": "Yeni Rol Oluştur",
@@ -663,7 +677,42 @@
                 "updateError": "Rol güncellenemedi.",
                 "updateErrorGeneric": "Rol güncellenirken bir hata oluştu.",
                 "protectedError": "Super Admin rolü düzenlenemez.",
-                "protectedErrorGeneric": "Bu rol düzenlenemez."
+                "protectedErrorGeneric": "Bu rol düzenlenemez.",
+                "permissionsLoadError": "Yetkiler yüklenemedi",
+                "rolePermissionsLoadError": "Rol yetkileri yüklenemedi",
+                "updateErrorWithMessage": "Rol güncellenemedi: {message}",
+                "permissionsUpdateErrorWithMessage": "Yetkiler güncellenemedi: {message}",
+                "genericUpdateError": "Rol güncellenirken bir hata oluştu"
+            },
+            "info": {
+                "loadingPermissionsForRole": "🔄 Rol için yetkiler yükleniyor: {roleId}",
+                "allPermissionsLoaded": "📋 Tüm yetkiler yüklendi: {count}",
+                "rolePermissionsLoaded": "🎯 Rol yetkileri yüklendi: {count}",
+                "rolePermissionsData": "🎯 Rol yetki verisi: {data}",
+                "lookingForPermission": "🔍 Yetki aranıyor: {perm}",
+                "foundMatchingPermission": "✅ Eşleşen yetki bulundu: {id} {displayName}",
+                "noMatchingPermission": "❌ Eşleşen yetki bulunamadı: {perm}",
+                "selectedPermissionsCount": "🎯 Seçili yetki sayısı: {count}",
+                "dataLoadingError": "Veri yükleme hatası:",
+                "filteringPermissions": "🔍 Erişim tipine göre yetkiler filtreleniyor: {accessType}",
+                "totalPermissionsBeforeFiltering": "📋 Filtrelemeden önceki toplam yetki sayısı: {count}",
+                "layoutPermissionsFiltered": "🚫 Layout yetkileri filtrelendi: {count}",
+                "accessTypeFilter": "🎯 Erişim tipi filtresi ({accessType}): {before} → {after}",
+                "searchFilter": "🔍 Arama filtresi: {before} → {after}",
+                "finalFilteredPermissions": "✅ Son filtrelenmiş yetki sayısı: {count}",
+                "processingPermissionForApi": "🔍 API için yetki işleniyor: {data}",
+                "permissionNotFoundForId": "❌ ID için yetki bulunamadı: {id}",
+                "sendingPermissionsToApi": "🔄 Yetkiler API'ye gönderiliyor: {permissions}",
+                "updateError": "Güncelleme hatası:",
+                "accessTypeChanged": "🔄 Erişim tipi değiştirildi: {value}",
+                "autoAddedLayoutPermission": "✅ Otomatik layout yetkisi eklendi: {permission}",
+                "layoutPermissionNotFound": "⚠️ Layout yetkisi bulunamadı: {permission}",
+                "permissionsUpdated": "🎯 Yetkiler güncellendi: {kept} korundu, {removed} kaldırıldı, layout erişimi otomatik eklendi",
+                "incompatiblePermissionsRemoved": "{count} uyumsuz yetki kaldırıldı, {kept} yetki korundu",
+                "renderingPermissionsStep": "🎯 Yetkiler adımı render ediliyor:",
+                "accessType": "- Erişim tipi: {accessType}",
+                "currentPermissions": "- Mevcut yetkiler: {count}",
+                "availablePermissions": "- Eklenebilir yetkiler: {count}"
             }
         },
         "deleteDialog": {
@@ -747,7 +796,11 @@
                 "permissions": "Yetkiler", 
                 "users": "Kullanıcılar",
                 "activity": "Aktivite"
-            }
+            },
+            "error": {
+                "loadingPermissions": "Yetki yükleme hatası:"
+            },
+            "unnamed": "İsimsiz"
         },
         "permissionsDisplay": {
             "title": "Yetkileri",
@@ -761,6 +814,16 @@
                 "layout": "Layout",
                 "view": "Görüntüleme",
                 "function": "İşlevler"
+            },
+            "actions": {
+                "access": "Erişimi",
+                "view": "Görüntüleme",
+                "create": "Oluşturma",
+                "edit": "Düzenleme",
+                "delete": "Silme"
+            },
+            "error": {
+                "loadingPermissions": "Yetkiler yüklenirken hata:"
             }
         },
         "common": {
@@ -860,7 +923,16 @@
             "error": "Yetki oluşturulamadı.",
             "validation": {
                 "fieldsRequired": "Kategori, kaynak yolu ve eylem alanları zorunludur"
-            }
+            },
+            "resourceType": {
+                "layout": "Layout",
+                "page": "Sayfa",
+                "function": "Fonksiyon"
+            },
+            "action": "Eylem *",
+            "actionPlaceholder": "Eylem seçin",
+            "permissionType": "Yetki Türü",
+            "permissionTypePlaceholder": "Yetki türü seçin"
         },
         "editDialog": {
             "title": "Yetki Düzenle",
@@ -888,7 +960,17 @@
             "admin": "Admin",
             "user": "Kullanıcı",
             "active": "Aktif",
-            "inactive": "Pasif"
+            "inactive": "Pasif",
+            "overview": {
+                "title": "Yetki Bilgileri",
+                "description": "Düzenlemek istediğiniz yetkinin mevcut bilgileri",
+                "descriptionLabel": "Açıklama",
+                "categoryLabel": "Kategori",
+                "typeLabel": "Tür",
+                "creationLabel": "Oluşturma",
+                "roleLabel": "Rol",
+                "unknownRole": "Bilinmeyen"
+            }
         }
     },
     "AdminSettings": {
@@ -1042,6 +1124,10 @@
             "buttonText": "Buton Metni",
             "buttonTextEn": "Button Text",
             "buttonUrl": "URL",
+            "tr": "TR",
+            "en": "EN",
+            "tr_parentheses": "(TR)",
+            "en_parentheses": "(EN)",
             "statistics": "İstatistikler",
             "statisticsOptional": "Opsiyonel",
             "statisticsNumber": "İstatistik #",

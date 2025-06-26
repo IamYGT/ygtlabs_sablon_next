@@ -33,9 +33,9 @@ interface CreatePermissionDialogProps {
 
 
 const resourceTypeOptions = [
-    { value: "layout", label: "Layout" },
-    { value: "page", label: "Page" },
-    { value: "function", label: "Function" },
+    { value: "layout", label: t('resourceType.layout') },
+    { value: "page", label: t('resourceType.page') },
+    { value: "function", label: t('resourceType.function') },
 ];
 
 export function CreatePermissionDialog({
@@ -158,13 +158,13 @@ export function CreatePermissionDialog({
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="action">Eylem *</Label>
+                            <Label htmlFor="action">{t('action')}</Label>
                             <Select
                                 value={formData.action}
                                 onValueChange={(value) => handleInputChange("action", value)}
                             >
                                 <SelectTrigger>
-                                    <SelectValue placeholder="Eylem seçin" />
+                                    <SelectValue placeholder={t('actionPlaceholder')} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {actionOptions.map((option) => (
@@ -211,13 +211,13 @@ export function CreatePermissionDialog({
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="permissionType">Yetki Türü</Label>
+                        <Label htmlFor="permissionType">{t('permissionType')}</Label>
                         <Select
                             value={formData.permissionType}
                             onValueChange={(value) => handleInputChange("permissionType", value)}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder="Yetki türü seçin" />
+                                <SelectValue placeholder={t('permissionTypePlaceholder')} />
                             </SelectTrigger>
                             <SelectContent>
                                 {permissionTypeOptions.map((option) => (
