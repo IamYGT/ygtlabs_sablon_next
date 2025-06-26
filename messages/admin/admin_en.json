@@ -48,7 +48,6 @@
         "analytics": "Analytics",
         "issues": "Issues",
         "themeToggle": "Toggle Theme",
-        "debugUserPermissions": "Debug: User Permissions",
         "user": "User",
         "roles": "Roles",
         "allPermissions": "All Permissions",
@@ -115,22 +114,6 @@
             "securityScan": "Daily security check completed",
             "maintenance": "Scheduled maintenance completed successfully",
             "compliance": "Monthly compliance report prepared"
-        },
-        "debug": {
-            "title": "Debug: User Permissions",
-            "user": "User",
-            "roles": "Roles",
-            "allPermissions": "All Permissions ({count})",
-            "hasPermission": "{permission} permission",
-            "permissionYes": "YES ✓",
-            "permissionNo": "NO ✗",
-            "setupSuccess": "✅ Page permissions set up successfully!",
-            "setupError": "❌ Error",
-            "connectionError": "❌ Connection error",
-            "grantAdminSuccess": "✅ Admin access granted successfully!",
-            "addPermissionSuccess": "✅ Permission {permissionName} added to role {roleName}!",
-            "pageRefresh": "Page will reload to apply changes.",
-            "unknownError": "Unknown error"
         },
         "admin": "Admin"
     },
@@ -531,22 +514,6 @@
         "permissionsCount": "permissions",
         "view": "View",
         "noRolesMatchCriteria": "No roles match your search criteria.",
-        "debug": {
-            "title": "Debug: User Permissions",
-            "userLabel": "User",
-            "rolesLabel": "Roles",
-            "noRole": "No role",
-            "permissionLabel": "roles.edit permission",
-            "hasPermission": "YES ✓",
-            "noPermission": "NO ✗",
-            "fixPermissions": "Fix Permissions",
-            "fixDescription": "This button will give you admin role and roles:edit permission",
-            "allPermissions": "All Permissions ({count})",
-            "grantAdminSuccess": "✅ Admin access granted successfully!",
-            "setupError": "❌ Error",
-            "connectionError": "❌ Connection error",
-            "unknownError": "Unknown error"
-        },
         "info": {
             "noViewPermission": "🚫 Role list API call not made - no permission",
             "refreshingPage": "🔄 Refreshing page due to lack of permission"
@@ -1095,6 +1062,9 @@
             "buttonText": "Button Text",
             "buttonTextEn": "Button Text",
             "buttonUrl": "URL",
+            "url": "URL",
+            "required": "Required",
+            "optional": "Optional",
             "tr": "TR",
             "en": "EN",
             "tr_parentheses": "(TR)",
@@ -1139,6 +1109,7 @@
         },
         "actions": {
             "edit": "Edit",
+            "activate": "Activate",
             "deactivate": "Deactivate",
             "save": "Save",
             "cancel": "Cancel",

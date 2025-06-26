@@ -242,70 +242,7 @@ export default function RolesPageClient({
         <>
             <Toaster position="top-right" />
             <div className="space-y-6">
-                {/* Debug - Kullanıcı Yetkileri */}
-                {currentUser && process.env.NODE_ENV === 'development' && (
-                    <Card className="bg-amber-50 dark:bg-amber-950 border-amber-200 dark:border-amber-800">
-                        <CardHeader className="pb-3">
-                            <CardTitle className="text-sm font-medium">{t('debug.title')}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="space-y-2 text-sm">
-                                <p>{t('debug.userLabel')}: {currentUser.email}</p>
-                                <p>{t('debug.rolesLabel')}: {currentUser.userRoles?.join(", ") || t('debug.noRole')}</p>
-                                <p className="font-medium">
-                                    {t('debug.permissionLabel')}:
-                                    <span className={userPermissions.includes("roles.edit") ? "text-green-600 ml-2" : "text-red-600 ml-2"}>
-                                        {userPermissions.includes("roles.edit") ? t('debug.hasPermission') : t('debug.noPermission')}
-                                    </span>
-                                </p>
-                                {!userPermissions.includes("roles.edit") && (
-                                    <div className="mt-3">
-                                        <Button
-                                            size="sm"
-                                            variant="default"
-                                            onClick={async () => {
-                                                try {
-                                                    const response = await fetch('/api/admin/users/fix-permissions', {
-                                                        method: 'POST',
-                                                        headers: {
-                                                            'Content-Type': 'application/json',
-                                                        }
-                                                    });
-                                                    const data = await response.json();
-                                                    if (response.ok) {
-                                                        alert(t('debug.grantAdminSuccess'));
-                                                        window.location.reload();
-                                                    } else {
-                                                        alert(t('debug.setupError') + ': ' + (data.error || t('debug.unknownError')));
-                                                    }
-                                                } catch (error) {
-                                                    alert(t('debug.connectionError') + ': ' + error);
-                                                }
-                                            }}
-                                        >
-                                            {t('debug.fixPermissions')}
-                                        </Button>
-                                        <p className="text-xs text-gray-600 mt-1">
-                                            {t('debug.fixDescription')}
-                                        </p>
-                                    </div>
-                                )}
-                                <details className="mt-2">
-                                    <summary className="cursor-pointer text-blue-600">
-                                        {t('debug.allPermissions', { count: userPermissions.length })}
-                                    </summary>
-                                    <div className="mt-2 space-y-1 text-xs">
-                                        {userPermissions.map((perm: string) => (
-                                            <div key={perm} className="text-gray-600">
-                                                • {perm}
-                                            </div>
-                                        ))}
-                                    </div>
-                                </details>
-                            </div>
-                        </CardContent>
-                    </Card>
-                )}
+
 
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

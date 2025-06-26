@@ -63,11 +63,6 @@ export const API_ENDPOINTS = {
 
   // Upload endpoints
   UPLOAD_PROFILE_IMAGE: "/api/upload/profile-image",
-
-  // Debug endpoints (development only)
-  DEBUG_USER_INFO: "/api/debug/user-info",
-  DEBUG_USER_SIMPLE: "/api/debug/user-simple",
-  DEBUG_USER_NAVIGATION: "/api/debug/user-navigation",
 } as const;
 
 // =============================================================================

@@ -8,6 +8,7 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
+    DialogDescription
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -199,6 +200,9 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                             </p>
                         </div>
                     </DialogTitle>
+                    <DialogDescription className="sr-only">
+                        {t('createSliderDescription')}
+                    </DialogDescription>
                 </DialogHeader>
 
                 <div className="flex-1 overflow-y-auto px-1">

@@ -48,7 +48,6 @@
         "analytics": "Analitik",
         "issues": "Sorunlar",
         "themeToggle": "Tema değiştir",
-        "debugUserPermissions": "Debug: Kullanıcı Yetkileri",
         "user": "Kullanıcı",
         "roles": "Roller",
         "allPermissions": "Tüm Yetkiler",
@@ -115,22 +114,6 @@
             "securityScan": "Günlük güvenlik kontrolü tamamlandı",
             "maintenance": "Planlı bakım başarıyla gerçekleştirildi",
             "compliance": "Aylık uygunluk raporu hazırlandı"
-        },
-        "debug": {
-            "title": "Debug: Kullanıcı Yetkileri",
-            "user": "Kullanıcı",
-            "roles": "Roller",
-            "allPermissions": "Tüm Yetkiler ({count})",
-            "hasPermission": "{permission} yetkisi",
-            "permissionYes": "VAR ✓",
-            "permissionNo": "YOK ✗",
-            "setupSuccess": "✅ Sayfa yetkileri başarıyla kuruldu!",
-            "setupError": "❌ Hata",
-            "connectionError": "❌ Bağlantı hatası",
-            "grantAdminSuccess": "✅ Admin yetkisi başarıyla verildi!",
-            "addPermissionSuccess": "✅ {permissionName} yetkisi {roleName} rolüne eklendi!",
-            "pageRefresh": "Değişikliklerin uygulanması için sayfa yeniden yüklenecek.",
-            "unknownError": "Bilinmeyen hata"
         },
         "admin": "Admin"
     },
@@ -534,22 +517,6 @@
         "permissionsCount": "yetki",
         "view": "Görüntüle",
         "noRolesMatchCriteria": "Arama kriterlerinize uygun rol bulunamadı.",
-        "debug": {
-            "title": "Debug: Kullanıcı Yetkileri",
-            "userLabel": "Kullanıcı",
-            "rolesLabel": "Roller",
-            "noRole": "Rol yok",
-            "permissionLabel": "roles.edit yetkisi",
-            "hasPermission": "VAR ✓",
-            "noPermission": "YOK ✗",
-            "fixPermissions": "Yetkileri Düzelt",
-            "fixDescription": "Bu buton size admin rolü ve roller:düzenleme yetkisi verecektir",
-            "allPermissions": "Tüm Yetkiler ({count})",
-            "grantAdminSuccess": "✅ Admin yetkisi başarıyla verildi!",
-            "setupError": "❌ Hata",
-            "connectionError": "❌ Bağlantı hatası",
-            "unknownError": "Bilinmeyen hata"
-        },
         "info": {
             "noViewPermission": "🚫 Rol listesi API çağrısı yapılmadı - yetki yok",
             "refreshingPage": "🔄 Yetki olmadığı için sayfa yenileniyor"
@@ -793,7 +760,7 @@
             },
             "steps": {
                 "overview": "Genel Bakış",
-                "permissions": "Yetkiler", 
+                "permissions": "Yetkiler",
                 "users": "Kullanıcılar",
                 "activity": "Aktivite"
             },
@@ -887,7 +854,7 @@
         "deleteError": "Yetki silinirken bir hata oluştu",
         "active": "Aktif",
         "inactive": "Pasif",
-        "admin": "Admin", 
+        "admin": "Admin",
         "user": "Kullanıcı",
         "createDialog": {
             "title": "Yeni Yetki Oluştur",
@@ -1124,6 +1091,9 @@
             "buttonText": "Buton Metni",
             "buttonTextEn": "Button Text",
             "buttonUrl": "URL",
+            "url": "URL",
+            "required": "Zorunlu",
+            "optional": "Opsiyonel",
             "tr": "TR",
             "en": "EN",
             "tr_parentheses": "(TR)",
@@ -1168,6 +1138,8 @@
         },
         "actions": {
             "edit": "Düzenle",
+            "activate": "Aktif Et",
+            "deactivate": "Devre Dışı Bırak",
             "save": "Kaydet",
             "cancel": "İptal",
             "create": "Slider Oluştur",
