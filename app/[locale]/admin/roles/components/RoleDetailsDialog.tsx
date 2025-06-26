@@ -99,15 +99,15 @@ function formatPermissionDescription(permission: Permission, locale: string = 't
     return `${permission.resourcePath} için ${categoryName} ${actionName} yetkisi`;
 }
 
-function formatPermissionsList(permissions: Permission[], locale: string = 'tr', t: (key: string) => string): Permission[] {
+function formatPermissionsList(permissions: Permission[], _locale: string = 'tr', t: (key: string) => string): Permission[] {
     return permissions.map(permission => ({
         ...permission,
-        displayName: formatPermissionDisplayName(permission, locale, t),
-        description: formatPermissionDescription(permission, locale, t),
+        displayName: formatPermissionDisplayName(permission, _locale, t),
+        description: formatPermissionDescription(permission, _locale, t),
     }));
 }
 
-function formatCategoryDisplayName(category: string, locale: string = 'tr', t: (key: string) => string): string {
+function formatCategoryDisplayName(category: string, _locale: string = 'tr', t: (key: string) => string): string {
     return t(`categories.${category}`) || category;
 }
 
@@ -196,7 +196,7 @@ export default function RoleDetailsDialog({
         } finally {
             setLoading(false);
         }
-    }, [role]);
+    }, [role, t]);
 
     React.useEffect(() => {
         if (open && role) {
@@ -304,12 +304,12 @@ export default function RoleDetailsDialog({
                                     </>
                                 )}
                             </Badge>
-                                                                <Badge variant="outline">
-                                        {role.layoutType === 'admin' ? t('adminAccess') : t('userAccess')}
-                                    </Badge>
-                                    {role.isSystemDefault && (
-                                        <Badge variant="secondary">{t('systemRole')}</Badge>
-                                    )}
+                            <Badge variant="outline">
+                                {role.layoutType === 'admin' ? t('adminAccess') : t('userAccess')}
+                            </Badge>
+                            {role.isSystemDefault && (
+                                <Badge variant="secondary">{t('systemRole')}</Badge>
+                            )}
                         </div>
                     </CardTitle>
                 </CardHeader>

@@ -214,7 +214,7 @@ export default function EditRoleDialog({
             const permissionsData = await permissionsResponse.json();
             console.log(t('info.allPermissionsLoaded', { count: permissionsData.permissions?.length || 0 }));
 
-            const formattedPermissions = (permissionsData.permissions || []).map(p => formatPermission(p, t));
+            const formattedPermissions = (permissionsData.permissions || []).map((p: Permission) => formatPermission(p, t));
 
             // Load role permissions
             const roleResponse = await fetch(`/api/admin/roles/${role.id}/permissions`);
@@ -228,7 +228,7 @@ export default function EditRoleDialog({
             // Set selected permissions
             const selectedIds = new Set<string>();
             (roleData.permissions || []).forEach((perm: Record<string, string>) => {
-                console.log(t('info.lookingForPermission', { perm }));
+                console.log(t('info.lookingForPermission'), perm);
                 const permission = formattedPermissions.find((p: Permission) =>
                     p.category === perm.category &&
                     p.resourcePath === perm.resourcePath &&
@@ -238,7 +238,7 @@ export default function EditRoleDialog({
                     console.log(t('info.foundMatchingPermission', { id: permission.id, displayName: permission.displayName }));
                     selectedIds.add(permission.id);
                 } else {
-                    console.log(t('info.noMatchingPermission', { perm }));
+                    console.log(t('info.noMatchingPermission'), perm);
                 }
             });
 
@@ -396,13 +396,13 @@ export default function EditRoleDialog({
             selectedPermissions.forEach(permissionId => {
                 const permission = permissions.find(p => p.id === permissionId);
                 if (permission) {
-                    console.log(t('info.processingPermissionForApi', { data: {
+                    console.log(t('info.processingPermissionForApi'), {
                         id: permission.id,
                         category: permission.category,
                         resourcePath: permission.resourcePath,
                         action: permission.action,
                         displayName: permission.displayName
-                    } }));
+                    });
 
                     // Permission name formatı: category.resourcePath.action (veritabanındaki format)
                     const permissionName = `${permission.category}.${permission.resourcePath}.${permission.action}`;
@@ -412,7 +412,7 @@ export default function EditRoleDialog({
                 }
             });
 
-            console.log(t('info.sendingPermissionsToApi', { permissions: permissionNames }));
+            console.log(t('info.sendingPermissionsToApi'), permissionNames);
 
             const permissionsResponse = await fetch(`/api/admin/roles/${role.id}/permissions`, {
                 method: 'PUT',
@@ -937,11 +937,11 @@ export default function EditRoleDialog({
                         {role.displayName} {t('title')}
                         {isProtectedRole && (
                             <div className="flex items-center gap-2 ml-auto">
-                            <Badge variant="outline" className="text-orange-600 border-orange-600 text-xs">
-                                <ShieldCheck className="w-2 h-2 mr-1" />
-                                {role.name === 'super_admin' ? t('super') : t('protectedRole')}
-                            </Badge>
-                        </div>
+                                <Badge variant="outline" className="text-orange-600 border-orange-600 text-xs">
+                                    <ShieldCheck className="w-2 h-2 mr-1" />
+                                    {role.name === 'super_admin' ? t('super') : t('protectedRole')}
+                                </Badge>
+                            </div>
                         )}
                     </DialogTitle>
                     <DialogDescription className="text-xs">

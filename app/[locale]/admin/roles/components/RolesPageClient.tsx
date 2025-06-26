@@ -122,7 +122,7 @@ export default function RolesPageClient({
         } finally {
             setLoading(false);
         }
-    }, [currentUser]);
+    }, [currentUser, t]);
 
     // Client-side data fetching
     useEffect(() => {
@@ -263,25 +263,25 @@ export default function RolesPageClient({
                                         <Button
                                             size="sm"
                                             variant="default"
-                                                                                    onClick={async () => {
-                                            try {
-                                                const response = await fetch('/api/admin/users/fix-permissions', {
-                                                    method: 'POST',
-                                                    headers: {
-                                                        'Content-Type': 'application/json',
+                                            onClick={async () => {
+                                                try {
+                                                    const response = await fetch('/api/admin/users/fix-permissions', {
+                                                        method: 'POST',
+                                                        headers: {
+                                                            'Content-Type': 'application/json',
+                                                        }
+                                                    });
+                                                    const data = await response.json();
+                                                    if (response.ok) {
+                                                        alert(t('debug.grantAdminSuccess'));
+                                                        window.location.reload();
+                                                    } else {
+                                                        alert(t('debug.setupError') + ': ' + (data.error || t('debug.unknownError')));
                                                     }
-                                                });
-                                                const data = await response.json();
-                                                if (response.ok) {
-                                                    alert(t('debug.grantAdminSuccess'));
-                                                    window.location.reload();
-                                                } else {
-                                                    alert(t('debug.setupError') + ': ' + (data.error || t('debug.unknownError')));
+                                                } catch (error) {
+                                                    alert(t('debug.connectionError') + ': ' + error);
                                                 }
-                                            } catch (error) {
-                                                alert(t('debug.connectionError') + ': ' + error);
-                                            }
-                                        }}
+                                            }}
                                         >
                                             {t('debug.fixPermissions')}
                                         </Button>

@@ -30,22 +30,20 @@ interface CreatePermissionDialogProps {
     onSuccess: () => void;
 }
 
-
-
-const resourceTypeOptions = [
-    { value: "layout", label: t('resourceType.layout') },
-    { value: "page", label: t('resourceType.page') },
-    { value: "function", label: t('resourceType.function') },
-];
-
 export function CreatePermissionDialog({
     open,
     onOpenChange,
     onSuccess,
 }: CreatePermissionDialogProps) {
     const t = useTranslations('AdminPermissions.createDialog');
+
+    const resourceTypeOptions = [
+        { value: "layout", label: t('resourceType.layout') },
+        { value: "page", label: t('resourceType.page') },
+        { value: "function", label: t('resourceType.function') },
+    ];
     const [loading, setLoading] = useState(false);
-    
+
     const actionOptions = [
         { value: "access", label: t('actions.access') },
         { value: "view", label: t('actions.view') },
