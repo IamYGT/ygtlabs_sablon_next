@@ -84,6 +84,7 @@
     "AdminUsers": {
         "title": "Kullanıcı Yönetimi",
         "subtitle": "Kullanıcıları görüntüleyin, düzenleyin ve rolleri yönetin.",
+        "description": "Tüm sistem kullanıcılarını yönetin ve izleyin",
         "users": "Kullanıcılar",
         "system": "Sistem",
         "name": "Ad Soyad",
@@ -93,8 +94,21 @@
         "registrationDate": "Kayıt Tarihi",
         "active": "Aktif",
         "inactive": "Pasif",
+        "rolesAssigned": "Rol Atanmış",
+        "last30Days": "Son 30 Gün",
+        "new": "Yeni",
+        "selected": "Seçili",
+        "user": "Kullanıcı",
+        "activeUsersRatio": "Aktif Kullanıcı Oranı",
+        "roleAssignmentRatio": "Rol Ataması Oranı",
+        "usersActive": "kullanıcı aktif",
+        "usersRoleAssigned": "kullanıcıya rol atanmış",
+        "users": "Kullanıcılar",
         "search": {
-            "placeholder": "Kullanıcı adı, email veya role göre ara..."
+            "placeholder": "Kullanıcı adı, email veya role göre ara...",
+            "usersSelected": "{count} kullanıcı seçildi",
+            "clearSelection": "Seçimi Temizle",
+            "filters": "Filtreler"
         },
         "bulkActions": {
             "selected": "{count} seçili",

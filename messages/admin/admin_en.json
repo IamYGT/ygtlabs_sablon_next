@@ -83,14 +83,25 @@
     },
     "AdminUsers": {
         "title": "User Management",
-        "subtitle": "Manage users, assign roles and control system access",
+        "subtitle": "View, edit users and manage roles.",
+        "description": "Manage and monitor all system users",
         "users": "Users",
         "system": "System",
+        "name": "Name",
+        "email": "Email",
+        "roles": "Roles",
+        "status": "Status",
+        "registrationDate": "Registration Date",
+        "active": "Active",
+        "inactive": "Inactive",
+        "rolesAssigned": "Roles Assigned",
+        "last30Days": "Last 30 Days",
+        "new": "New",
+        "selected": "Selected",
+        "user": "User",
         "addUser": "Add User",
         "deleteUser": "Delete User",
         "userList": "User List",
-        "active": "Active",
-        "inactive": "Inactive",
         "bulkActions": {
             "selected": "{count} selected",
             "title": "Bulk Actions",
@@ -139,11 +150,6 @@
         "userActivated": "User activated",
         "userDeactivated": "User deactivated",
         "statusNotUpdated": "Status could not be updated",
-        "name": "Name",
-        "email": "Email",
-        "status": "Status",
-        "roles": "Roles",
-        "registrationDate": "Registration Date",
         "noRoleAssigned": "No Role Assigned",
         "actions": "Actions",
         "assignRole": "Assign Role",
@@ -154,7 +160,6 @@
         "deactivate": "Deactivate",
         "export": "Export",
         "selectAll": "Select All",
-        "selected": "selected",
         "newUser": "New User",
         "editUserDetails": "Edit User Details",
         "quickRoleAssign": {
@@ -180,7 +185,6 @@
         },
         "deleteConfirmation": "Delete Confirmation",
         "bulkDeleteConfirmation": "Bulk Delete Confirmation",
-        "user": "User",
         "noName": "Unnamed User",
         "noEmail": "No email",
         "activateUser": "Activate",
@@ -199,7 +203,10 @@
             "suffix": "page"
         },
         "search": {
-            "placeholder": "Search by user name, email, or role..."
+            "placeholder": "Search by user name, email, or role...",
+            "usersSelected": "{count} users selected",
+            "clearSelection": "Clear Selection",
+            "filters": "Filters"
         },
         "messages": {
             "deleteSuccess": "User deleted successfully.",
@@ -432,7 +439,12 @@
                 "neverLogin": "Never Logged In"
             },
             "clearAll": "Clear All Filters"
-        }
+        },
+        "user": "User",
+        "activeUsersRatio": "Active Users Ratio",
+        "roleAssignmentRatio": "Role Assignment Ratio",
+        "usersActive": "users active",
+        "usersRoleAssigned": "users have assigned roles"
     },
     "AdminRoles": {
         "title": "Role Management",
