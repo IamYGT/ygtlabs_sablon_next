@@ -46,9 +46,10 @@ model Session {
   maxConcurrentSessions Int? @default(10)
 
   // Relations
-  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  parentSession Session?  @relation("SessionHierarchy", fields: [parentSessionId], references: [id])
-  childSessions Session[] @relation("SessionHierarchy")
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parentSession Session?       @relation("SessionHierarchy", fields: [parentSessionId], references: [id])
+  childSessions Session[]      @relation("SessionHierarchy")
+  LoginHistory  LoginHistory[]
 
   @@index([userId])
   @@index([lastActive])
@@ -91,6 +92,8 @@ model User {
   grantedRolePermissions RoleHasPermission[] @relation("RolePermissionGrantedBy")
   createdHeroSliders     HeroSlider[]        @relation("HeroSliderCreatedBy")
   updatedHeroSliders     HeroSlider[]        @relation("HeroSliderUpdatedBy")
+  LoginHistory           LoginHistory[]
+  UserStats              UserStats?
 
   @@schema("public")
 }
@@ -104,6 +107,55 @@ model UserActivityLog {
   userAgent String?
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@schema("public")
+}
+
+// Login geçmişi için yeni model
+model LoginHistory {
+  id              String    @id @default(uuid())
+  userId          String
+  ipAddress       String?
+  userAgent       String?
+  location        String?
+  deviceInfo      Json?
+  loginMethod     String?   @default("password") // password, oauth, etc.
+  isSuccessful    Boolean   @default(true)
+  failureReason   String?
+  sessionId       String?
+  loggedInAt      DateTime  @default(now())
+  loggedOutAt     DateTime?
+  sessionDuration Int? // dakika cinsinden
+
+  // Relations
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  session Session? @relation(fields: [sessionId], references: [id])
+
+  @@index([userId])
+  @@index([loggedInAt])
+  @@index([isSuccessful])
+  @@schema("public")
+}
+
+// Kullanıcı istatistikleri için model
+model UserStats {
+  id                    String    @id @default(uuid())
+  userId                String    @unique
+  totalLogins           Int       @default(0)
+  lastLoginAt           DateTime?
+  profileCompletionRate Int       @default(0) // 0-100 arası
+  securityScore         Int       @default(50) // 0-100 arası
+  emailVerified         Boolean   @default(false)
+  twoFactorEnabled      Boolean   @default(false)
+  lastPasswordChange    DateTime?
+  passwordStrength      Int       @default(0) // 0-100 arası
+  accountAge            Int       @default(0) // gün cinsinden
+  lastActivityAt        DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@schema("public")
 }
