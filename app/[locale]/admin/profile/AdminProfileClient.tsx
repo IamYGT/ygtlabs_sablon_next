@@ -1,40 +1,18 @@
 "use client";
 
-import { Suspense, useRef, useState, Dispatch, SetStateAction } from 'react';
+import { Suspense, useState } from 'react';
 import { useProfile } from './hooks/useProfile';
-import { useProfileStats } from './hooks/useProfileStats';
-import ProfileHeader from './components/ProfileHeader';
-import ProfileStats from './components/ProfileStats';
 import ProfileTabs from './components/ProfileTabs';
 
 export default function AdminProfileClient() {
     const { profile, isLoading: profileLoading, isError: profileError } = useProfile();
-    const { data: stats, isLoading: statsLoading } = useProfileStats();
     const [activeTab, setActiveTab] = useState('overview');
-    const profileTabsRef = useRef<HTMLDivElement>(null);
-
-    const handleEditClick = () => {
-        setActiveTab('details');
-        // Scroll to ProfileTabs section
-        setTimeout(() => {
-            profileTabsRef.current?.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }, 100);
-    };
 
     if (profileLoading) {
         return (
             <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-                <div className="container mx-auto p-6 space-y-8 max-w-7xl">
-                    <div className="h-40 bg-white dark:bg-gray-800 rounded-xl animate-pulse border border-gray-200 dark:border-gray-700 shadow-sm" />
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {[1, 2, 3].map((i) => (
-                            <div key={i} className="h-32 bg-white dark:bg-gray-800 rounded-xl animate-pulse border border-gray-200 dark:border-gray-700 shadow-sm" />
-                        ))}
-                    </div>
-                    <div className="h-[600px] bg-white dark:bg-gray-800 rounded-xl animate-pulse border border-gray-200 dark:border-gray-700 shadow-sm" />
+                <div className="container mx-auto p-6 max-w-7xl">
+                    <div className="h-[700px] bg-white dark:bg-gray-800 rounded-xl animate-pulse border border-gray-200 dark:border-gray-700 shadow-sm" />
                 </div>
             </div>
         );
@@ -66,33 +44,12 @@ export default function AdminProfileClient() {
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-            <div className="container mx-auto p-6 space-y-8 max-w-7xl">
-                {/* Profile Header */}
+            <div className="container mx-auto p-6 max-w-7xl">
                 <Suspense fallback={
-                    <div className="h-40 bg-white dark:bg-gray-800 rounded-xl animate-pulse border border-gray-200 dark:border-gray-700 shadow-sm" />
+                    <div className="h-[700px] bg-white dark:bg-gray-800 rounded-xl animate-pulse border border-gray-200 dark:border-gray-700 shadow-sm" />
                 }>
-                    <ProfileHeader profile={profile} onEditClick={handleEditClick} />
+                    <ProfileTabs profile={profile} activeTab={activeTab} onTabChange={setActiveTab} />
                 </Suspense>
-
-                {/* Profile Stats */}
-                <Suspense fallback={
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {[1, 2, 3].map((i) => (
-                            <div key={i} className="h-32 bg-white dark:bg-gray-800 rounded-xl animate-pulse border border-gray-200 dark:border-gray-700 shadow-sm" />
-                        ))}
-                    </div>
-                }>
-                    <ProfileStats stats={stats} isLoading={statsLoading} />
-                </Suspense>
-
-                {/* Profile Tabs */}
-                <div ref={profileTabsRef}>
-                    <Suspense fallback={
-                        <div className="h-[600px] bg-white dark:bg-gray-800 rounded-xl animate-pulse border border-gray-200 dark:border-gray-700 shadow-sm" />
-                    }>
-                        <ProfileTabs activeTab={activeTab} onTabChange={setActiveTab} />
-                    </Suspense>
-                </div>
             </div>
         </div>
     );
