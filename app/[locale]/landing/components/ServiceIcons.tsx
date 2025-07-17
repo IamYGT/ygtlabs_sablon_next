@@ -5,16 +5,44 @@ import { motion } from 'framer-motion';
 import { Settings, Wrench, Power, Gauge, Zap } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-const ServiceIcon = ({ icon: Icon, title }: { icon: React.ElementType, title: string }) => (
+const ServiceIcon = ({ icon: Icon, title, index }: { icon: React.ElementType, title: string, index: number }) => (
     <motion.div
-        whileHover={{ y: -8, scale: 1.05 }}
-        transition={{ type: 'spring', stiffness: 300 }}
-        className="flex flex-col items-center space-y-3 text-center"
+        initial={{ opacity: 0, y: 30, scale: 0.8 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ 
+            delay: index * 0.1, 
+            duration: 0.6,
+            type: 'spring',
+            stiffness: 120,
+            damping: 20
+        }}
+        whileHover={{ 
+            y: -10, 
+            scale: 1.08,
+            transition: { type: 'spring', stiffness: 400, damping: 10 }
+        }}
+        className="group flex flex-col items-center space-y-3 text-center cursor-pointer"
     >
-        <div className="bg-primary/10 p-4 rounded-full border-2 border-primary/20">
-            <Icon className="h-8 w-8 text-primary" />
-        </div>
-        <p className="text-sm font-semibold text-gray-700">{title}</p>
+        <motion.div 
+            className="relative bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-sm p-4 rounded-2xl border border-white/30 shadow-landing-custom overflow-hidden"
+            whileHover={{ boxShadow: "0 0 30px rgba(255, 30, 30, 0.4)" }}
+            transition={{ duration: 0.3 }}
+        >
+            {/* Gradient background overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-landing-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            
+            {/* Shine effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
+            
+            <Icon className="relative h-7 w-7 sm:h-8 sm:w-8 text-white group-hover:text-landing-primary transition-colors duration-300" />
+        </motion.div>
+        
+        <motion.p 
+            className="text-xs sm:text-sm font-semibold text-white/90 group-hover:text-white transition-colors duration-300 leading-tight"
+            whileHover={{ scale: 1.05 }}
+        >
+            {title}
+        </motion.p>
     </motion.div>
 );
 
@@ -48,7 +76,7 @@ export default function ServiceIcons() {
                         {services.map((service, index) => {
                             const IconComponent = service.icon;
                             return (
-                                <ServiceIcon key={index} icon={IconComponent} title={service.title} />
+                                <ServiceIcon key={index} icon={IconComponent} title={service.title} index={index} />
                             );
                         })}
                     </div>
