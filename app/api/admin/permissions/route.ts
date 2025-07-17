@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser, prisma } from "@/lib";
+import { Permission } from "@prisma/client";
 
 // Tüm yetkileri getir
 export async function GET(request: NextRequest) {
@@ -49,7 +50,7 @@ export async function GET(request: NextRequest) {
     });
 
     // Format permissions for frontend compatibility
-    const formattedPermissions = permissions.map((perm) => ({
+    const formattedPermissions = permissions.map((perm: Permission) => ({
       id: perm.id,
       name: perm.name,
       category: perm.category,
@@ -74,7 +75,7 @@ export async function GET(request: NextRequest) {
     }));
 
     // Kategoriye göre grupla
-    const categorizedPermissions = formattedPermissions.reduce((acc, perm) => {
+    const categorizedPermissions = formattedPermissions.reduce((acc: Record<string, typeof formattedPermissions>, perm: (typeof formattedPermissions)[0]) => {
       const category = perm.category || "general";
       if (!acc[category]) {
         acc[category] = [];
