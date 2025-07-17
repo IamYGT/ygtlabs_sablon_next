@@ -1,6 +1,5 @@
 ---
-description: project-structure
-globs: 
+description: yapı
 alwaysApply: false
 ---
 # Project Structure & Organization

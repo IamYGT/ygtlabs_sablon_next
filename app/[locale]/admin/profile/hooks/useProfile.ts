@@ -4,6 +4,7 @@ import {
   AdminProfile,
   ProfileFormData,
   ProfileUpdateResponse,
+  ProfilePreferences,
 } from "../types/profile.types";
 import { QUERY_KEYS } from "@/lib/constants";
 
@@ -211,8 +212,8 @@ export const useProfileImageRemove = () => {
 export const usePreferencesUpdate = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<{ success: boolean; message: string }, Error, any>({
-    mutationFn: async (preferences) => {
+  return useMutation<{ success: boolean; message: string }, Error, ProfilePreferences>({
+    mutationFn: async (preferences: ProfilePreferences) => {
       const response = await fetch("/api/admin/profile/preferences", {
         method: "PUT",
         headers: {

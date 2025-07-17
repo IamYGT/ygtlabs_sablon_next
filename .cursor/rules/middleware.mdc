@@ -1,6 +1,5 @@
 ---
 description: middleware
-globs: 
 alwaysApply: false
 ---
 # Middleware Configuration

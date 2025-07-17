@@ -8,10 +8,10 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Palette, Globe, Save, Sun, Moon, Monitor, Check } from 'lucide-react';
 import { toast } from 'sonner';
-import { ProfilePreferences } from '../types/profile.types';
+import type { ProfilePreferences as ProfilePreferencesType } from '../types/profile.types';
 
 export default function ProfilePreferences() {
-    const [preferences, setPreferences] = useState<ProfilePreferences>({
+    const [preferences, setPreferences] = useState<ProfilePreferencesType>({
         theme: 'system',
         language: 'tr',
     });
@@ -41,7 +41,7 @@ export default function ProfilePreferences() {
             }
 
             toast.success('Preferences saved successfully');
-        } catch (error) {
+        } catch (_error) {
             toast.error('Failed to save preferences');
         } finally {
             setIsLoading(false);

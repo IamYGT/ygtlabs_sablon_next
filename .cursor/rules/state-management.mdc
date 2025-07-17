@@ -1,6 +1,5 @@
 ---
 description: state
-globs: 
 alwaysApply: false
 ---
 # State Management Architecture

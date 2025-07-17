@@ -600,6 +600,32 @@ html * {
     }
 }
 
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-landing-primary);
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-landing-primary-dark);
+}
+
+/* Firefox için scrollbar styling */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-landing-primary) rgba(0, 0, 0, 0.1);
+}
+
 /* Landing Page Specific Styles */
 @layer components {
 
