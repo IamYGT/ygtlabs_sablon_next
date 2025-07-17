@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Palette, Globe, Save } from 'lucide-react';
+import { Palette, Globe, Save, Sun, Moon, Monitor, Check } from 'lucide-react';
 import { toast } from 'sonner';
 import { ProfilePreferences } from '../types/profile.types';
 
@@ -48,82 +48,135 @@ export default function ProfilePreferences() {
         }
     };
 
+    const themeOptions = [
+        { value: 'light', label: 'Light', icon: Sun, description: 'Always use light theme' },
+        { value: 'dark', label: 'Dark', icon: Moon, description: 'Always use dark theme' },
+        { value: 'system', label: 'System', icon: Monitor, description: 'Follow system preference' }
+    ];
+
+    const languageOptions = [
+        { value: 'tr', label: 'Türkçe', flag: '🇹🇷' },
+        { value: 'en', label: 'English', flag: '🇺🇸' }
+    ];
+
     return (
         <div className="space-y-6">
             {/* Theme Settings */}
-            <Card>
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                        <Palette className="h-5 w-5" />
-                        Theme
+            <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-sm rounded-xl hover:shadow-md transition-shadow duration-200">
+                <CardHeader className="pb-4">
+                    <CardTitle className="flex items-center gap-3 text-gray-900 dark:text-white">
+                        <div className="p-2.5 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-lg shadow-sm">
+                            <Palette className="h-4 w-4" />
+                        </div>
+                        Theme Preference
                     </CardTitle>
-                    <CardDescription>
+                    <CardDescription className="text-gray-500 dark:text-gray-400 ml-11">
                         Choose your preferred theme for the application
                     </CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-2">
                     <RadioGroup
                         value={preferences.theme}
                         onValueChange={(value) => setPreferences({ ...preferences, theme: value as 'light' | 'dark' | 'system' })}
+                        className="space-y-3"
                     >
-                        <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="light" id="light" />
-                            <Label htmlFor="light">Light</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="dark" id="dark" />
-                            <Label htmlFor="dark">Dark</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="system" id="system" />
-                            <Label htmlFor="system">System</Label>
-                        </div>
+                        {themeOptions.map((option) => {
+                            const IconComponent = option.icon;
+                            const isSelected = preferences.theme === option.value;
+                            return (
+                                <div
+                                    key={option.value}
+                                    className={`group flex items-center space-x-3 p-3 rounded-lg border transition-all duration-200 cursor-pointer ${isSelected
+                                        ? 'border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20'
+                                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700/30'
+                                        }`}
+                                >
+                                    <RadioGroupItem value={option.value} id={option.value} className="mt-0.5" />
+                                    <div className={`p-2 rounded-lg transition-colors duration-200 ${isSelected
+                                        ? 'bg-blue-100 dark:bg-blue-900/40'
+                                        : 'bg-gray-100 dark:bg-gray-700 group-hover:bg-gray-200 dark:group-hover:bg-gray-600'
+                                        }`}>
+                                        <IconComponent className={`h-4 w-4 ${isSelected
+                                            ? 'text-blue-600 dark:text-blue-400'
+                                            : 'text-gray-600 dark:text-gray-400'
+                                            }`} />
+                                    </div>
+                                    <div className="flex-1">
+                                        <Label
+                                            htmlFor={option.value}
+                                            className={`font-medium cursor-pointer transition-colors duration-200 ${isSelected
+                                                ? 'text-blue-900 dark:text-blue-100'
+                                                : 'text-gray-700 dark:text-gray-300'
+                                                }`}
+                                        >
+                                            {option.label}
+                                        </Label>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+                                            {option.description}
+                                        </p>
+                                    </div>
+                                    {isSelected && (
+                                        <Check className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                                    )}
+                                </div>
+                            );
+                        })}
                     </RadioGroup>
                 </CardContent>
             </Card>
 
             {/* Language Settings */}
-            <Card>
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                        <Globe className="h-5 w-5" />
-                        Language
+            <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-sm rounded-xl hover:shadow-md transition-shadow duration-200">
+                <CardHeader className="pb-4">
+                    <CardTitle className="flex items-center gap-3 text-gray-900 dark:text-white">
+                        <div className="p-2.5 bg-gradient-to-br from-green-500 to-green-600 text-white rounded-lg shadow-sm">
+                            <Globe className="h-4 w-4" />
+                        </div>
+                        Language Preference
                     </CardTitle>
-                    <CardDescription>
+                    <CardDescription className="text-gray-500 dark:text-gray-400 ml-11">
                         Select your preferred language for the application
                     </CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-2">
                     <Select
                         value={preferences.language}
                         onValueChange={(value) => setPreferences({ ...preferences, language: value as 'tr' | 'en' })}
                     >
-                        <SelectTrigger className="w-full">
+                        <SelectTrigger className="w-full border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200 focus:ring-2 focus:ring-green-500 focus:border-green-500">
                             <SelectValue placeholder="Select language" />
                         </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="tr">Türkçe</SelectItem>
-                            <SelectItem value="en">English</SelectItem>
+                        <SelectContent className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+                            {languageOptions.map((option) => (
+                                <SelectItem
+                                    key={option.value}
+                                    value={option.value}
+                                    className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 focus:bg-gray-100 dark:focus:bg-gray-700"
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-lg">{option.flag}</span>
+                                        <span>{option.label}</span>
+                                    </div>
+                                </SelectItem>
+                            ))}
                         </SelectContent>
                     </Select>
                 </CardContent>
             </Card>
 
             {/* Save Button */}
-            <Card>
+            <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-sm rounded-xl hover:shadow-md transition-shadow duration-200">
                 <CardContent className="pt-6">
                     <Button
                         onClick={handleSavePreferences}
                         disabled={isLoading}
-                        className="w-full"
+                        className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 shadow-sm hover:shadow transition-all duration-200 disabled:opacity-50 text-white"
                     >
                         <Save className="h-4 w-4 mr-2" />
-                        {isLoading ? 'Saving...' : 'Save Preferences'}
+                        {isLoading ? 'Saving Preferences...' : 'Save Preferences'}
                     </Button>
                 </CardContent>
             </Card>
         </div>
     );
 }
-
-// Export default ProfilePreferences
