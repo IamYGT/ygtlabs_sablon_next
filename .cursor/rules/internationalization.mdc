@@ -1,6 +1,5 @@
 ---
-description: internationalization
-globs: 
+description: dil
 alwaysApply: false
 ---
 # Internationalization (i18n) System

@@ -1,6 +1,5 @@
 ---
 description: api
-globs: 
 alwaysApply: false
 ---
 # API Client & TypeScript Types

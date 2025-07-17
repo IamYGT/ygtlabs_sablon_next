@@ -1,6 +1,5 @@
 ---
 description: auth
-globs: 
 alwaysApply: false
 ---
 # Authentication & Authorization System
