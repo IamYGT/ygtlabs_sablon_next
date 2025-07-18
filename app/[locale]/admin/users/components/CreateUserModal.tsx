@@ -370,6 +370,7 @@ export default function CreateUserModal({
                         type="button"
                         onClick={handleSubmit}
                         disabled={loading || !formData.name || !formData.email || !formData.password || !selectedRole}
+                        className="shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4"
                     >
                         {loading ? t('creating') : t('createButton')}
                     </Button>

@@ -505,8 +505,7 @@ export function HeroSliderPageClient() {
         <DndProvider backend={HTML5Backend}>
             <div className="space-y-8 p-1">
                 {/* Enhanced Header */}
-                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-950/50 dark:via-indigo-950/50 dark:to-purple-950/50 border border-blue-100 dark:border-blue-900/50">
-                    <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+                <div className="relative overflow-hidden rounded-2xl">
                     <div className="relative flex items-center justify-between p-8">
                         <div className="space-y-2">
                             <div className="flex items-center gap-3">
@@ -514,7 +513,7 @@ export function HeroSliderPageClient() {
                                     <Sparkles className="h-6 w-6 text-white" />
                                 </div>
                                 <div>
-                                    <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-700 bg-clip-text text-transparent">
+                                    <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
                                         {t('title')}
                                     </h1>
                                     <p className="text-gray-600 dark:text-gray-400 mt-1 font-medium">
@@ -548,7 +547,7 @@ export function HeroSliderPageClient() {
                             </Select>
                             <Button
                                 onClick={() => setCreateDialogOpen(true)}
-                                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 font-semibold"
+                                className="shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4"
                             >
                                 <Plus className="h-4 w-4 mr-2" />
                                 {t('newSlider')}
@@ -698,7 +697,7 @@ export function HeroSliderPageClient() {
                                 </p>
                                 <Button
                                     onClick={() => setCreateDialogOpen(true)}
-                                    className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 font-semibold px-8 py-3"
+                                    className="shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4"
                                 >
                                     <Plus className="h-5 w-5 mr-2" />
                                     {t('createFirstSlider')}

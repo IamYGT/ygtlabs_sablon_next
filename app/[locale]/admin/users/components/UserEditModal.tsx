@@ -841,6 +841,7 @@ export default function UserEditModal({
                         <Button
                             onClick={handleSubmit}
                             disabled={loading || !name.trim() || !email.trim()}
+                            className="shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4"
                         >
                             {loading ? (
                                 <>

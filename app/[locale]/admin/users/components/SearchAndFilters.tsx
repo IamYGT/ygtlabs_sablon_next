@@ -64,7 +64,7 @@ export default function SearchAndFilters({
 
                         <Button
                             variant="outline"
-                            className="border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors duration-200 whitespace-nowrap"
+                            className="shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4"
                         >
                             <Filter className="h-4 w-4 mr-2" />
                             {t('search.filters')}

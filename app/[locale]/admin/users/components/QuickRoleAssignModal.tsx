@@ -276,6 +276,7 @@ export default function QuickRoleAssignModal({
                         type="button"
                         onClick={handleSave}
                         disabled={loading || !hasChanges}
+                        className="shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4"
                     >
                         {loading ? t('saving') : t('save')}
                     </Button>

@@ -48,7 +48,7 @@ export default function BulkActionsDropdown({
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button
-                        className="bg-emerald-600 hover:bg-emerald-700 text-white font-medium shadow-sm hover:shadow transition-all duration-200"
+                        className="shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4"
                         size="sm"
                     >
                         <Settings className="h-4 w-4 mr-2" />

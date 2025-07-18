@@ -241,7 +241,7 @@ export default function AddUserDialog({ availableRoles, onUserAdded }: AddUserDi
                             >
                                 {t('buttons.cancel')}
                             </Button>
-                            <Button type="submit" disabled={isLoading}>
+                            <Button type="submit" disabled={isLoading} className="shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4">
                                 {isLoading ? t('buttons.creating') : t('buttons.create')}
                             </Button>
                         </DialogFooter>

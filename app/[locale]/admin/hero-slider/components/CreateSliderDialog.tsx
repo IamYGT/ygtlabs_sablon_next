@@ -535,7 +535,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                             type="submit"
                             onClick={handleSubmit}
                             disabled={loading}
-                            className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg hover:from-blue-700 hover:to-indigo-800 transform hover:scale-105 transition-all duration-200"
+                            className="shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4"
                         >
                             {loading ? (
                                 <>

@@ -563,7 +563,7 @@ export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: Edit
                             <X className="mr-2 h-4 w-4" />
                             {t('actions.cancel')}
                         </Button>
-                        <Button onClick={handleSubmit} disabled={loading}>
+                        <Button onClick={handleSubmit} disabled={loading} className="shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4">
                             {loading ? (
                                 <>
                                     <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2" />
