@@ -1,8 +1,8 @@
 "use client";
 
 import { Suspense, useState } from 'react';
-import { useProfile } from './hooks/useProfile';
-import ProfileTabs from './components/ProfileTabs';
+import { useProfile } from '../hooks/useProfile';
+import ProfileTabs from './ProfileTabs';
 
 export default function AdminProfileClient() {
     const { profile, isLoading: profileLoading, isError: profileError } = useProfile();

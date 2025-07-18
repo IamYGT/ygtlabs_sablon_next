@@ -158,7 +158,7 @@ export default function ProfileImageUpload({
                         )}
                     </div>
 
-                    <div className="flex gap-2">
+                    <div className="flex flex-col space-y-2 w-full">
                         <Button
                             variant="outline"
                             size="sm"

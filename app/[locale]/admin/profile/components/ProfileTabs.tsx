@@ -43,11 +43,18 @@ export default function ProfileTabs({ profile, activeTab: externalActiveTab, onT
     };
 
     const tabs = [
-        { id: 'overview', label: 'Overview', icon: User, component: ProfileOverview, color: 'blue-600', bgColor: 'bg-blue-50 dark:bg-blue-900/20' },
-        { id: 'details', label: 'Details', icon: Settings, component: ProfileDetails, color: 'purple-600', bgColor: 'bg-purple-50 dark:bg-purple-900/20' },
-        { id: 'security', label: 'Security', icon: Shield, component: ProfileSecurity, color: 'green-600', bgColor: 'bg-green-50 dark:bg-green-900/20' },
-        { id: 'preferences', label: 'Preferences', icon: Palette, component: ProfilePreferences, color: 'orange-600', bgColor: 'bg-orange-50 dark:bg-orange-900/20' },
+        { id: 'overview', label: 'Overview', icon: User, component: ProfileOverview, color: 'blue', bgColor: 'bg-blue-50 dark:bg-blue-900/20' },
+        { id: 'details', label: 'Details', icon: Settings, component: ProfileDetails, color: 'purple', bgColor: 'bg-purple-50 dark:bg-purple-900/20' },
+        { id: 'security', label: 'Security', icon: Shield, component: ProfileSecurity, color: 'green', bgColor: 'bg-green-50 dark:bg-green-900/20' },
+        { id: 'preferences', label: 'Preferences', icon: Palette, component: ProfilePreferences, color: 'orange', bgColor: 'bg-orange-50 dark:bg-orange-900/20' },
     ];
+
+    const colorMap = {
+        blue: 'bg-blue-600',
+        purple: 'bg-purple-600',
+        green: 'bg-green-600',
+        orange: 'bg-orange-600',
+    };
 
     return (
         <div className="w-full">
@@ -89,13 +96,13 @@ export default function ProfileTabs({ profile, activeTab: externalActiveTab, onT
                                         value={tab.id}
                                         className="w-full flex items-center justify-start gap-3 p-3 text-left bg-transparent border-0 shadow-none rounded-lg data-[state=active]:bg-gray-100 dark:data-[state=active]:bg-gray-700 data-[state=inactive]:text-gray-600 dark:data-[state=inactive]:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-all duration-200 group"
                                     >
-                                        <div className={`p-2 rounded-lg transition-all duration-200 flex-shrink-0 ${activeTab === tab.id ? `bg-${tab.color} text-white shadow-sm` : `${tab.bgColor} group-hover:scale-105`}`}>
+                                        <div className={`p-2 rounded-lg transition-all duration-200 flex-shrink-0 ${activeTab === tab.id ? `${colorMap[tab.color as keyof typeof colorMap]} text-white shadow-sm` : `${tab.bgColor} group-hover:scale-105`}`}>
                                             <tab.icon className={`h-5 w-5 transition-all duration-200 ${activeTab === tab.id ? 'text-white' : 'text-gray-600 dark:text-gray-400 group-hover:text-gray-800 dark:group-hover:text-gray-200'}`} />
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <div className="font-semibold">{tab.label}</div>
                                         </div>
-                                        {activeTab === tab.id && <div className="w-1.5 h-6 bg-blue-600 rounded-full flex-shrink-0" />}
+                                        {activeTab === tab.id && <div className={`w-1.5 h-6 rounded-full flex-shrink-0 ${colorMap[tab.color as keyof typeof colorMap]}`} />}
                                     </TabsTrigger>
                                 ))}
                             </TabsList>

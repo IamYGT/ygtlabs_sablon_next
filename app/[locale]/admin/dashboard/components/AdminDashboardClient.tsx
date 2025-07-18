@@ -1,15 +1,15 @@
 'use client';
 
 import React from 'react';
-import '../styles/admin.css'; // Admin CSS'ini import ediyoruz
+import '../../styles/admin.css'; // Admin CSS'ini import ediyoruz
 import { Users, FileText, Shield, ArrowRight, BarChart3, Calendar, Clock } from "lucide-react";
 import { useAdminAuth } from "@/lib/hooks/useAuth";
 import { type SimpleUser as AuthUser } from "@/lib";
 import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/src/i18n/navigation';
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { DashboardSkeleton } from './components/DashboardSkeleton';
+import { Card, CardContent } from "@/components/ui/card";   
+import { DashboardSkeleton } from './../components/DashboardSkeleton';
 
 type TFunction = ReturnType<typeof useTranslations<"AdminDashboard">>;
 
@@ -201,12 +201,10 @@ export default function AdminDashboardClient() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+        <>
                 <WelcomeSection admin={admin} t={t} />
-
                 {/* Enhanced Management Center Section */}
-                <div className="space-y-8">
+                <div className="space-y-8 mt-10">
                     <div className="text-center">
                         <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
                             {t('managementCenter')}
@@ -214,7 +212,7 @@ export default function AdminDashboardClient() {
                         <p className="text-gray-600 dark:text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
                             {t('managementCenterDesc')}
                         </p>
-                        <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mx-auto mt-6"></div>
+                        <div className="w-24 h-1 rounded-full mx-auto mt-6 bg-blue-300 dark:bg-white"></div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
@@ -223,7 +221,6 @@ export default function AdminDashboardClient() {
                         ))}
                     </div>
                 </div>
-            </div>
-        </div>
+        </>
     );
 }

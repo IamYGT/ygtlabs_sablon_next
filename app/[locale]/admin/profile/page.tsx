@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import AdminProfileClient from "./AdminProfileClient";
+import AdminProfileClient from "./components/AdminProfileClient";
 
 type Props = {
     params: Promise<{ locale: string }>;

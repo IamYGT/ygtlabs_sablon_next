@@ -119,7 +119,6 @@ Shadcn/ui tabanlı temel UI bileşenleri
 - **Next.js API Routes**: Backend API
 - **Prisma**: ORM ve veritabanı yönetimi
 - **PostgreSQL**: Veritabanı
-- **NextAuth.js**: Kimlik doğrulama (planlı)
 
 ### Araçlar
 - **ESLint**: Kod kalitesi
