@@ -43,7 +43,7 @@ export default function AdminProfileClient() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div >
             <div className="container mx-auto p-6 max-w-7xl">
                 <Suspense fallback={
                     <div className="h-[700px] bg-white dark:bg-gray-800 rounded-xl animate-pulse border border-gray-200 dark:border-gray-700 shadow-sm" />

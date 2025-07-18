@@ -59,10 +59,10 @@ export default function ProfileTabs({ profile, activeTab: externalActiveTab, onT
     return (
         <div className="w-full">
             <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-                <div className="flex flex-col lg:flex-row gap-6">
+                <div className="flex flex-col lg:flex-row gap-6 lg:items-start">
                     {/* Left Sidebar - Integrated Profile Info & Vertical Tab List */}
                     <div className="lg:w-80 flex-shrink-0">
-                        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4 h-full">
+                        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4">
                             {/* Integrated Profile Header */}
                             <div className="flex flex-col items-center text-center p-4 mb-4 border-b border-gray-200 dark:border-gray-700">
                                 <div className="relative group mb-3">
@@ -94,7 +94,7 @@ export default function ProfileTabs({ profile, activeTab: externalActiveTab, onT
                                     <TabsTrigger
                                         key={tab.id}
                                         value={tab.id}
-                                        className="w-full flex items-center justify-start gap-3 p-3 text-left bg-transparent border-0 shadow-none rounded-lg data-[state=active]:bg-gray-100 dark:data-[state=active]:bg-gray-700 data-[state=inactive]:text-gray-600 dark:data-[state=inactive]:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-all duration-200 group"
+                                        className="w-full flex items-center justify-start gap-3 p-3 text-left bg-transparent border-0 shadow-none rounded-lg data-[state=active]:text-blue-700 dark:data-[state=active]:text-white data-[state=inactive]:text-gray-500 dark:data-[state=inactive]:text-gray-400 hover:bg-blue-50/70 dark:hover:bg-gray-700/60 transition-all duration-200 group"
                                     >
                                         <div className={`p-2 rounded-lg transition-all duration-200 flex-shrink-0 ${activeTab === tab.id ? `${colorMap[tab.color as keyof typeof colorMap]} text-white shadow-sm` : `${tab.bgColor} group-hover:scale-105`}`}>
                                             <tab.icon className={`h-5 w-5 transition-all duration-200 ${activeTab === tab.id ? 'text-white' : 'text-gray-600 dark:text-gray-400 group-hover:text-gray-800 dark:group-hover:text-gray-200'}`} />

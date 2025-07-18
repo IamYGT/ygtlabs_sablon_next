@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Edit3, Save, X, Camera } from 'lucide-react';
+import { Edit3, Save, X, Camera, Calendar, Clock } from 'lucide-react';
 import { useProfile } from '../hooks/useProfile';
 import ProfileImageUpload from '@/components/panel/ProfileImageUpload';
 
@@ -52,9 +52,9 @@ export default function ProfileDetails() {
     if (isLoading) {
         return (
             <div className="space-y-6">
-                <div className="h-4 bg-gray-200 rounded animate-pulse" />
-                <div className="h-4 bg-gray-200 rounded animate-pulse" />
-                <div className="h-4 bg-gray-200 rounded animate-pulse" />
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
             </div>
         );
     }
@@ -62,36 +62,42 @@ export default function ProfileDetails() {
     return (
         <div className="space-y-6">
             {/* Profile Image Section */}
-            <Card>
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                        <Camera className="h-5 w-5" />
+            <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-sm rounded-xl hover:shadow-md transition-all duration-200">
+                <CardHeader className="pb-4">
+                    <CardTitle className="flex items-center gap-3 text-gray-900 dark:text-white">
+                        <div className="p-2.5 bg-gradient-to-br from-gray-500 to-gray-600 text-white rounded-lg shadow-sm">
+                            <Camera className="h-4 w-4" />
+                        </div>
                         Profile Image
                     </CardTitle>
-                    <CardDescription>
+                    <CardDescription className="text-gray-500 dark:text-gray-400 ml-11">
                         Upload or change your profile picture
                     </CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <ProfileImageUpload
-                        currentImage={profileImage}
-                        userName={profile?.name || profile?.email || ''}
-                        onImageUpdate={handleImageUpdate}
-                        size="lg"
-                    />
+                <CardContent className="pt-2">
+                    <div className="flex justify-center">
+                        <ProfileImageUpload
+                            currentImage={profileImage}
+                            userName={profile?.name || profile?.email || ''}
+                            onImageUpdate={handleImageUpdate}
+                            size="lg"
+                        />
+                    </div>
                 </CardContent>
             </Card>
 
             {/* Profile Details Section */}
-            <Card>
-                <CardHeader>
+            <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-sm rounded-xl hover:shadow-md transition-all duration-200">
+                <CardHeader className="pb-4">
                     <div className="flex items-center justify-between">
                         <div>
-                            <CardTitle className="flex items-center gap-2">
-                                <Edit3 className="h-5 w-5" />
+                            <CardTitle className="flex items-center gap-3 text-gray-900 dark:text-white">
+                                <div className="p-2.5 bg-gradient-to-br from-gray-500 to-gray-600 text-white rounded-lg shadow-sm">
+                                    <Edit3 className="h-4 w-4" />
+                                </div>
                                 Profile Details
                             </CardTitle>
-                            <CardDescription>
+                            <CardDescription className="text-gray-500 dark:text-gray-400 ml-11">
                                 Update your profile information
                             </CardDescription>
                         </div>
@@ -100,6 +106,7 @@ export default function ProfileDetails() {
                                 variant="outline"
                                 size="sm"
                                 onClick={() => setIsEditing(true)}
+                                className="border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200"
                             >
                                 <Edit3 className="h-4 w-4 mr-2" />
                                 Edit
@@ -107,57 +114,84 @@ export default function ProfileDetails() {
                         )}
                     </div>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <CardContent className="space-y-6 pt-2">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                            <Label htmlFor="name">Name *</Label>
+                            <Label htmlFor="name" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                Full Name *
+                            </Label>
                             <Input
                                 id="name"
                                 value={formData.name}
                                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                 disabled={!isEditing}
-                                placeholder="Enter your name"
+                                placeholder="Enter your full name"
+                                className={`border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-all duration-200 ${isEditing
+                                    ? 'focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                                    : 'cursor-not-allowed bg-gray-50 dark:bg-gray-700/50'
+                                    }`}
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="email">Email *</Label>
+                            <Label htmlFor="email" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                Email Address *
+                            </Label>
                             <Input
                                 id="email"
                                 type="email"
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                 disabled={!isEditing}
-                                placeholder="Enter your email"
+                                placeholder="Enter your email address"
+                                className={`border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-all duration-200 ${isEditing
+                                    ? 'focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                                    : 'cursor-not-allowed bg-gray-50 dark:bg-gray-700/50'
+                                    }`}
                             />
                         </div>
                     </div>
 
                     {profile && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t">
-                            <div>
-                                <Label className="text-sm text-gray-500">Created At</Label>
-                                <p className="font-medium">
-                                    {new Date(profile.createdAt).toLocaleDateString()}
-                                </p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                            <div className="group">
+                                <Label className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">Account Created</Label>
+                                <div className="flex items-center gap-2">
+                                    <Calendar className="h-4 w-4 text-gray-400" />
+                                    <p className="font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+                                        {new Date(profile.createdAt).toLocaleDateString('en-US', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric'
+                                        })}
+                                    </p>
+                                </div>
                             </div>
-                            <div>
-                                <Label className="text-sm text-gray-500">Last Login</Label>
-                                <p className="font-medium">
-                                    {profile.lastLoginAt
-                                        ? new Date(profile.lastLoginAt).toLocaleDateString()
-                                        : 'Never'
-                                    }
-                                </p>
+                            <div className="group">
+                                <Label className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">Last Login</Label>
+                                <div className="flex items-center gap-2">
+                                    <Clock className="h-4 w-4 text-gray-400" />
+                                    <p className="font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+                                        {profile.lastLoginAt
+                                            ? new Date(profile.lastLoginAt).toLocaleDateString('en-US', {
+                                                year: 'numeric',
+                                                month: 'long',
+                                                day: 'numeric'
+                                            })
+                                            : 'Never'
+                                        }
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     )}
 
                     {isEditing && (
-                        <div className="flex justify-end gap-3 pt-4 border-t">
+                        <div className="flex justify-end gap-3 pt-6 border-t border-gray-200 dark:border-gray-700">
                             <Button
                                 variant="outline"
                                 onClick={handleCancel}
                                 disabled={updateProfile.isPending}
+                                className="border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200"
                             >
                                 <X className="h-4 w-4 mr-2" />
                                 Cancel
@@ -165,9 +199,10 @@ export default function ProfileDetails() {
                             <Button
                                 onClick={handleSave}
                                 disabled={updateProfile.isPending}
+                                className="bg-blue-600 hover:bg-blue-700 shadow-sm hover:shadow transition-all duration-200"
                             >
                                 <Save className="h-4 w-4 mr-2" />
-                                {updateProfile.isPending ? 'Saving...' : 'Save'}
+                                {updateProfile.isPending ? 'Saving...' : 'Save Changes'}
                             </Button>
                         </div>
                     )}
@@ -176,5 +211,3 @@ export default function ProfileDetails() {
         </div>
     );
 }
-
-// Export default ProfileDetails
