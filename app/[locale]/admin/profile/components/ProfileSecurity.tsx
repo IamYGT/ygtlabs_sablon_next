@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Monitor, MapPin, Clock, X, Shield, Smartphone, Laptop, Globe } from 'lucide-react';
 import { useProfileSessions } from '../hooks/useProfileSessions';
+import ChangePasswordForm from './ChangePasswordForm';
 
 export default function ProfileSecurity() {
     const { sessions, isLoading, terminateSession, isTerminating } = useProfileSessions();
@@ -42,6 +43,7 @@ export default function ProfileSecurity() {
 
     return (
         <div className="space-y-6">
+            <ChangePasswordForm />
             <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-sm rounded-xl hover:shadow-md transition-shadow duration-200">
                 <CardHeader className="pb-4">
                     <CardTitle className="flex items-center gap-3 text-gray-900 dark:text-white">

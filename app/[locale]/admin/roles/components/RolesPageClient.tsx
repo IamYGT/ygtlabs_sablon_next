@@ -277,7 +277,7 @@ export default function RolesPageClient({
 
                 {/* İstatistikler */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <Card className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
                         <CardContent className="p-4">
                             <div className="flex items-center space-x-2">
                                 <Shield className="h-5 w-5 text-blue-500" />
@@ -288,7 +288,7 @@ export default function RolesPageClient({
                             </div>
                         </CardContent>
                     </Card>
-                    <Card className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
                         <CardContent className="p-4">
                             <div className="flex items-center space-x-2">
                                 <Users className="h-5 w-5 text-green-500" />
@@ -299,7 +299,7 @@ export default function RolesPageClient({
                             </div>
                         </CardContent>
                     </Card>
-                    <Card className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
                         <CardContent className="p-4">
                             <div className="flex items-center space-x-2">
                                 <Settings className="h-5 w-5 text-purple-500" />
@@ -310,7 +310,7 @@ export default function RolesPageClient({
                             </div>
                         </CardContent>
                     </Card>
-                    <Card className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
                         <CardContent className="p-4">
                             <div className="flex items-center space-x-2">
                                 <Filter className="h-5 w-5 text-orange-500" />
@@ -324,7 +324,7 @@ export default function RolesPageClient({
                 </div>
 
                 {/* Filtreler */}
-                <Card className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
                     <CardContent className="p-4">
                         <div className="flex flex-col md:flex-row gap-4">
                             <div className="flex-1">
@@ -371,7 +371,7 @@ export default function RolesPageClient({
                             const isProtected = role.name === 'super_admin' || role.name === 'user';
 
                             return (
-                                <Card key={role.id} className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                                <Card key={role.id} className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
                                     <CardHeader className="pb-3">
                                         <div className="flex items-start justify-between">
                                             <div className="flex items-center space-x-3">

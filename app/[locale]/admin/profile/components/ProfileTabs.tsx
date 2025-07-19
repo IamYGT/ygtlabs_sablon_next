@@ -62,7 +62,7 @@ export default function ProfileTabs({ profile, activeTab: externalActiveTab, onT
                 <div className="flex flex-col lg:flex-row gap-6 lg:items-start">
                     {/* Left Sidebar - Integrated Profile Info & Vertical Tab List */}
                     <div className="lg:w-80 flex-shrink-0">
-                        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4">
+                        <div className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4">
                             {/* Integrated Profile Header */}
                             <div className="flex flex-col items-center text-center p-4 mb-4 border-b border-gray-200 dark:border-gray-700">
                                 <div className="relative group mb-3">
@@ -113,7 +113,7 @@ export default function ProfileTabs({ profile, activeTab: externalActiveTab, onT
                     <div className="flex-1 min-w-0">
                         {tabs.map((tab) => (
                             <TabsContent key={tab.id} value={tab.id} className="mt-0 focus-visible:ring-0 focus-visible:ring-offset-0">
-                                <div className="relative bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden" style={{ animation: 'fadeInRight 0.4s ease-out forwards' }}>
+                                <div className="relative bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden" style={{ animation: 'fadeInRight 0.4s ease-out forwards' }}>
                                     <div className="relative p-6"><tab.component /></div>
                                 </div>
                             </TabsContent>

@@ -556,10 +556,10 @@ export function HeroSliderPageClient() {
 
                 {/* Enhanced Statistics */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    <Card className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/50 dark:to-blue-900/50">
+                    <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
                         <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-400/20 to-blue-600/20 rounded-full -translate-y-10 translate-x-10"></div>
                         <CardHeader className="relative">
-                            <CardTitle className="text-sm font-semibold flex items-center gap-2 text-blue-700 dark:text-blue-300">
+                            <CardTitle className="text-sm font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
                                 <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
                                     <BarChart3 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                                 </div>
@@ -567,17 +567,17 @@ export function HeroSliderPageClient() {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="relative">
-                            <div className="text-3xl font-bold text-blue-800 dark:text-blue-200">
+                            <div className="text-3xl font-bold text-gray-900 dark:text-gray-100">
                                 {sliders.length}
                             </div>
-                            <p className="text-xs text-blue-600 dark:text-blue-400">{t('stats.totalDesc')}</p>
+                            <p className="text-xs text-gray-900 dark:text-gray-100">{t('stats.totalDesc')}</p>
                         </CardContent>
                     </Card>
 
-                    <Card className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-950/50 dark:to-emerald-900/50">
+                    <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
                         <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-green-400/20 to-emerald-600/20 rounded-full -translate-y-10 translate-x-10"></div>
                         <CardHeader className="relative">
-                            <CardTitle className="text-sm font-semibold flex items-center gap-2 text-green-700 dark:text-green-300">
+                            <CardTitle className="text-sm font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
                                 <div className="p-2 bg-green-100 dark:bg-green-900/50 rounded-lg">
                                     <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
                                 </div>
@@ -585,35 +585,35 @@ export function HeroSliderPageClient() {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="relative">
-                            <div className="text-3xl font-bold text-green-800 dark:text-green-200">
+                            <div className="text-3xl font-bold text-gray-900 dark:text-gray-100">
                                 {activeSliders.length}
                             </div>
-                            <p className="text-xs text-green-600 dark:text-green-400">{t('stats.activeDesc')}</p>
+                            <p className="text-xs text-gray-900 dark:text-gray-100">{t('stats.activeDesc')}</p>
                         </CardContent>
                     </Card>
 
-                    <Card className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-gray-50 to-slate-100 dark:from-gray-950/50 dark:to-slate-900/50">
+                    <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
                         <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-gray-400/20 to-slate-600/20 rounded-full -translate-y-10 translate-x-10"></div>
                         <CardHeader className="relative">
-                            <CardTitle className="text-sm font-semibold flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                                <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                            <CardTitle className="text-sm font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
+                                <div className="p-2 bg-gray-200 dark:bg-gray-700 rounded-lg">
                                     <XCircle className="h-4 w-4 text-gray-600 dark:text-gray-400" />
                                 </div>
                                 {t('stats.inactive')}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="relative">
-                            <div className="text-3xl font-bold text-gray-800 dark:text-gray-200">
+                            <div className="text-3xl font-bold text-gray-900 dark:text-gray-100">
                                 {inactiveSliders.length}
                             </div>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">{t('stats.inactiveDesc')}</p>
+                            <p className="text-xs text-gray-900 dark:text-gray-100">{t('stats.inactiveDesc')}</p>
                         </CardContent>
                     </Card>
 
-                    <Card className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-purple-50 to-violet-100 dark:from-purple-950/50 dark:to-violet-900/50">
+                    <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
                         <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-purple-400/20 to-violet-600/20 rounded-full -translate-y-10 translate-x-10"></div>
                         <CardHeader className="relative">
-                            <CardTitle className="text-sm font-semibold flex items-center gap-2 text-purple-700 dark:text-purple-300">
+                            <CardTitle className="text-sm font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
                                 <div className="p-2 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
                                     <Languages className="h-4 w-4 text-purple-600 dark:text-purple-400" />
                                 </div>
@@ -621,17 +621,17 @@ export function HeroSliderPageClient() {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="relative">
-                            <div className="text-2xl font-bold text-purple-800 dark:text-purple-200 flex items-center gap-3">
+                            <div className="text-2xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
                                 <FlagWrapper locale={locale} className="w-8 h-5 rounded-md object-cover shadow-md" />
                                 <span>{locale.toUpperCase()}</span>
                             </div>
-                            <p className="text-xs text-purple-600 dark:text-purple-400">{t('stats.currentLanguageDesc')}</p>
+                            <p className="text-xs text-gray-900 dark:text-gray-100">{t('stats.currentLanguageDesc')}</p>
                         </CardContent>
                     </Card>
                 </div>
 
                 {/* Enhanced Slider List */}
-                <Card className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4">
+                <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4">
                     <CardHeader className="border-b border-gray-200 dark:border-gray-700">
                         <CardTitle className="flex items-center gap-3 text-gray-900 dark:text-gray-100">
                             <div className="p-2 bg-blue-600 rounded-xl shadow-lg">
@@ -642,7 +642,7 @@ export function HeroSliderPageClient() {
                                 <Badge variant="outline" className="ml-3 border-indigo-300 dark:border-indigo-600 text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/50">
                                     {sliders.length} {t('slider')}
                                 </Badge>
-                                <Badge variant="outline" className="ml-2 border-purple-300 dark:border-purple-600 text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/50 flex items-center gap-1.5">
+                                <Badge variant="outline" className="ml-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-950/50 flex items-center gap-1.5">
                                     <FlagWrapper locale={locale} className="w-4 h-2.5 rounded-sm object-cover" />
                                     {locale === 'tr' ? t('languages.tr') : t('languages.en')}
                                 </Badge>

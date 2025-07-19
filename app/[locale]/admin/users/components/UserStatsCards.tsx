@@ -76,7 +76,7 @@ export default function UserStatsCards({ users, roles }: UserStatsCardsProps) {
     return (
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Toplam Kullanıcılar */}
-            <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+            <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('users')}</CardTitle>
                     <div className="p-3 bg-emerald-100 dark:bg-emerald-900/20 rounded-lg">
@@ -103,7 +103,7 @@ export default function UserStatsCards({ users, roles }: UserStatsCardsProps) {
             </Card>
 
             {/* Roller */}
-            <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+            <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('roles')}</CardTitle>
                     <div className="p-3 bg-orange-100 dark:bg-orange-900/20 rounded-lg">
@@ -129,7 +129,7 @@ export default function UserStatsCards({ users, roles }: UserStatsCardsProps) {
             </Card>
 
             {/* Aktif Kullanıcılar Yüzdesi */}
-            <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+            <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('activeUsersRatio')}</CardTitle>
                     <div className="p-3 bg-purple-100 dark:bg-purple-900/20 rounded-lg">
@@ -155,7 +155,7 @@ export default function UserStatsCards({ users, roles }: UserStatsCardsProps) {
             </Card>
 
             {/* Rol Ataması Oranı */}
-            <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+            <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('roleAssignmentRatio')}</CardTitle>
                     <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">

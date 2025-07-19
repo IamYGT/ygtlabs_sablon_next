@@ -55,7 +55,7 @@ export default function ProfileDetails() {
             <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-sm rounded-xl hover:shadow-md transition-all duration-200">
                 <CardHeader className="pb-4">
                     <CardTitle className="flex items-center gap-3 text-gray-900 dark:text-white">
-                        <div className="p-2.5 bg-gradient-to-br from-gray-500 to-gray-600 text-white rounded-lg shadow-sm">
+                        <div className="p-2.5 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-lg shadow-sm">
                             <Camera className="h-4 w-4" />
                         </div>
                         Profile Image
@@ -81,7 +81,7 @@ export default function ProfileDetails() {
                 <CardHeader className="pb-4">
                     <div>
                         <CardTitle className="flex items-center gap-3 text-gray-900 dark:text-white">
-                            <div className="p-2.5 bg-gradient-to-br from-gray-500 to-gray-600 text-white rounded-lg shadow-sm">
+                            <div className="p-2.5 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-lg shadow-sm">
                                 <Edit3 className="h-4 w-4" />
                             </div>
                             Profile Details

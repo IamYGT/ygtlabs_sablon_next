@@ -1013,7 +1013,23 @@
         "timeAgo2Minutes": "2 minutes ago",
         "timeAgo1Hour": "1 hour ago",
         "timeAgo3Hours": "3 hours ago",
-        "timeAgo1Day": "1 day ago"
+        "timeAgo1Day": "1 day ago",
+        "security": {
+            "changePasswordTitle": "Change Password",
+            "changePasswordDescription": "Update your password for better security. Choose a strong and unique password.",
+            "currentPassword": "Current Password",
+            "newPassword": "New Password",
+            "confirmNewPassword": "Confirm New Password",
+            "updatePasswordButton": "Update Password",
+            "updating": "Updating...",
+            "passwordUpdateSuccess": "Password updated successfully!",
+            "passwordUpdateError": "Failed to update password.",
+            "validation": {
+                "currentPasswordRequired": "Current password is required.",
+                "newPasswordMinLength": "New password must be at least 8 characters.",
+                "passwordsDoNotMatch": "Passwords do not match."
+            }
+        }
     },
     "HeroSlider": {
         "title": "Hero Slider Management",

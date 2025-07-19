@@ -347,8 +347,8 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
             <UserStatsCards users={users} roles={roles} />
 
             {/* Users Table */}
-            <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
-                <CardHeader className="border-b border-gray-100 dark:border-gray-800">
+            <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+                <CardHeader className="border-b border-gray-200 dark:border-gray-700">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                         <div className="flex items-center gap-4">
                             <div className="relative">
@@ -470,7 +470,7 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                 <CardContent className="p-0">
                     <Table>
                         <TableHeader>
-                            <TableRow className="bg-gray-50/50 dark:bg-gray-800/50 hover:bg-gray-50/70 dark:hover:bg-gray-800/70">
+                            <TableRow className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow duration-200 p-4">
                                 <TableHead className="w-[50px] pl-6">
                                     <Checkbox
                                         checked={selectedUsers.length === filteredUsers.length && filteredUsers.length > 0}
@@ -520,7 +520,7 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                             {filteredUsers.map((user) => (
                                 <TableRow
                                     key={user.id}
-                                    className="hover:bg-gray-50/70 dark:hover:bg-gray-800/50 transition-all duration-200 border-b border-gray-100 dark:border-gray-800 group"
+                                    className="hover:bg-gray-50/70 dark:hover:bg-gray-800/50 transition-all duration-200 border-b border-gray-200 dark:border-gray-700 group"
                                 >
                                     <TableCell className="pl-6">
                                         <Checkbox
