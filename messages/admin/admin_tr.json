@@ -1210,8 +1210,8 @@
         "loading": "Yükleniyor...",
         "notifications": "Bildirimler",
         "noNotifications": "Yeni bildirim yok",
-        "markAllAsRead": "Tümünü okundu olarak işaretle",
-        "viewAllNotifications": "Tüm bildirimleri görüntüle",
+        "markAllAsRead": "Tümünü Okundu Olarak İşaretle",
+        "viewAllNotifications": "Tüm Bildirimleri Görüntüle",
         "adminPanel": "Admin Paneli",
         "profile": "Profil",
         "settings": "Ayarlar",
@@ -1226,7 +1226,7 @@
             "message": "Proje başarıyla çalışıyor."
         },
         "unreadBadge": "{count} yeni",
-        "defaultUserName": "Admin",
+        "defaultUserName": "Kullanıcı",
         "viewNotification": "Bildirimi Görüntüle"
     },
     "LogoutModal": {

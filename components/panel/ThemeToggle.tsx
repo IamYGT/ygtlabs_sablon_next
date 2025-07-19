@@ -2,11 +2,15 @@
 
 import * as React from "react";
 import { Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
+import { useTheme as useNextTheme } from "next-themes";
+import { useSidebar } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 
+export { useTheme } from "next-themes";
+
 export function ThemeToggle() {
-    const { setTheme, theme } = useTheme();
+    const { theme, setTheme } = useNextTheme();
+    const { open } = useSidebar();
     const [mounted, setMounted] = React.useState(false);
 
     React.useEffect(() => {

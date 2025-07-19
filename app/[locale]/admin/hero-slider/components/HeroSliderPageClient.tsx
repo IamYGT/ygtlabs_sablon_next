@@ -503,64 +503,62 @@ export function HeroSliderPageClient() {
 
     return (
         <DndProvider backend={HTML5Backend}>
-            <div className="space-y-8 p-1">
-                {/* Enhanced Header */}
-                <div className="relative overflow-hidden rounded-2xl">
-                    <div className="relative flex items-center justify-between p-8">
-                        <div className="space-y-2">
-                            <div className="flex items-center gap-3">
-                                <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg">
-                                    <Sparkles className="h-6 w-6 text-white" />
-                                </div>
-                                <div>
-                                    <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-                                        {t('title')}
-                                    </h1>
-                                    <p className="text-gray-600 dark:text-gray-400 mt-1 font-medium">
-                                        {t('subtitle')}
-                                    </p>
-                                </div>
+            <div className="space-y-6">
+                {/* Header */}
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-3">
+                            <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+                                <Sparkles className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                            </div>
+                            <div>
+                                <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+                                    {t('title')}
+                                </h1>
+                                <p className="text-gray-600 dark:text-gray-400 text-lg">
+                                    {t('subtitle')}
+                                </p>
                             </div>
                         </div>
-                        <div className="flex items-center gap-4">
-                            <Select value={locale} onValueChange={(value: 'tr' | 'en') => setLocale(value)}>
-                                <SelectTrigger className="w-36 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-blue-200 dark:border-blue-800 shadow-lg hover:shadow-xl transition-all duration-200">
+                    </div>
+                    <div className="flex items-center justify-center lg:justify-end gap-4">
+                        <Select value={locale} onValueChange={(value: 'tr' | 'en') => setLocale(value)}>
+                            <SelectTrigger className="w-36 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-blue-200 dark:border-blue-800 shadow-lg hover:shadow-xl transition-all duration-200">
+                                <div className="flex items-center gap-2">
+                                    <Languages className="h-4 w-4 text-blue-600" />
+                                    <SelectValue />
+                                </div>
+                            </SelectTrigger>
+                            <SelectContent className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-blue-200 dark:border-blue-800">
+                                <SelectItem value="tr">
                                     <div className="flex items-center gap-2">
-                                        <Languages className="h-4 w-4 text-blue-600" />
-                                        <SelectValue />
+                                        <FlagWrapper locale="tr" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
+                                        {t('languages.tr')}
                                     </div>
-                                </SelectTrigger>
-                                <SelectContent className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-blue-200 dark:border-blue-800">
-                                    <SelectItem value="tr">
-                                        <div className="flex items-center gap-2">
-                                            <FlagWrapper locale="tr" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
-                                            {t('languages.tr')}
-                                        </div>
-                                    </SelectItem>
-                                    <SelectItem value="en">
-                                        <div className="flex items-center gap-2">
-                                            <FlagWrapper locale="en" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
-                                            {t('languages.en')}
-                                        </div>
-                                    </SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <Button
-                                onClick={() => setCreateDialogOpen(true)}
-                                className="shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4"
-                            >
-                                <Plus className="h-4 w-4 mr-2" />
-                                {t('newSlider')}
-                            </Button>
-                        </div>
+                                </SelectItem>
+                                <SelectItem value="en">
+                                    <div className="flex items-center gap-2">
+                                        <FlagWrapper locale="en" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
+                                        {t('languages.en')}
+                                    </div>
+                                </SelectItem>
+                            </SelectContent>
+                        </Select>
+                        <Button
+                            onClick={() => setCreateDialogOpen(true)}
+                            className="shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4"
+                        >
+                            <Plus className="h-4 w-4 mr-2" />
+                            {t('newSlider')}
+                        </Button>
                     </div>
                 </div>
 
                 {/* Enhanced Statistics */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <Card className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/50 dark:to-blue-900/50">
                         <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-400/20 to-blue-600/20 rounded-full -translate-y-10 translate-x-10"></div>
-                        <CardHeader className="pb-3 relative">
+                        <CardHeader className="relative">
                             <CardTitle className="text-sm font-semibold flex items-center gap-2 text-blue-700 dark:text-blue-300">
                                 <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
                                     <BarChart3 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
@@ -572,13 +570,13 @@ export function HeroSliderPageClient() {
                             <div className="text-3xl font-bold text-blue-800 dark:text-blue-200">
                                 {sliders.length}
                             </div>
-                            <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">{t('stats.totalDesc')}</p>
+                            <p className="text-xs text-blue-600 dark:text-blue-400">{t('stats.totalDesc')}</p>
                         </CardContent>
                     </Card>
 
                     <Card className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-950/50 dark:to-emerald-900/50">
                         <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-green-400/20 to-emerald-600/20 rounded-full -translate-y-10 translate-x-10"></div>
-                        <CardHeader className="pb-3 relative">
+                        <CardHeader className="relative">
                             <CardTitle className="text-sm font-semibold flex items-center gap-2 text-green-700 dark:text-green-300">
                                 <div className="p-2 bg-green-100 dark:bg-green-900/50 rounded-lg">
                                     <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
@@ -590,13 +588,13 @@ export function HeroSliderPageClient() {
                             <div className="text-3xl font-bold text-green-800 dark:text-green-200">
                                 {activeSliders.length}
                             </div>
-                            <p className="text-xs text-green-600 dark:text-green-400 mt-1">{t('stats.activeDesc')}</p>
+                            <p className="text-xs text-green-600 dark:text-green-400">{t('stats.activeDesc')}</p>
                         </CardContent>
                     </Card>
 
                     <Card className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-gray-50 to-slate-100 dark:from-gray-950/50 dark:to-slate-900/50">
                         <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-gray-400/20 to-slate-600/20 rounded-full -translate-y-10 translate-x-10"></div>
-                        <CardHeader className="pb-3 relative">
+                        <CardHeader className="relative">
                             <CardTitle className="text-sm font-semibold flex items-center gap-2 text-gray-700 dark:text-gray-300">
                                 <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
                                     <XCircle className="h-4 w-4 text-gray-600 dark:text-gray-400" />
@@ -608,13 +606,13 @@ export function HeroSliderPageClient() {
                             <div className="text-3xl font-bold text-gray-800 dark:text-gray-200">
                                 {inactiveSliders.length}
                             </div>
-                            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{t('stats.inactiveDesc')}</p>
+                            <p className="text-xs text-gray-600 dark:text-gray-400">{t('stats.inactiveDesc')}</p>
                         </CardContent>
                     </Card>
 
                     <Card className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-purple-50 to-violet-100 dark:from-purple-950/50 dark:to-violet-900/50">
                         <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-purple-400/20 to-violet-600/20 rounded-full -translate-y-10 translate-x-10"></div>
-                        <CardHeader className="pb-3 relative">
+                        <CardHeader className="relative">
                             <CardTitle className="text-sm font-semibold flex items-center gap-2 text-purple-700 dark:text-purple-300">
                                 <div className="p-2 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
                                     <Languages className="h-4 w-4 text-purple-600 dark:text-purple-400" />
@@ -627,16 +625,16 @@ export function HeroSliderPageClient() {
                                 <FlagWrapper locale={locale} className="w-8 h-5 rounded-md object-cover shadow-md" />
                                 <span>{locale.toUpperCase()}</span>
                             </div>
-                            <p className="text-xs text-purple-600 dark:text-purple-400 mt-1">{t('stats.currentLanguageDesc')}</p>
+                            <p className="text-xs text-purple-600 dark:text-purple-400">{t('stats.currentLanguageDesc')}</p>
                         </CardContent>
                     </Card>
                 </div>
 
                 {/* Enhanced Slider List */}
-                <Card className="border-0 shadow-xl bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm">
-                    <CardHeader className="border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50 to-slate-50 dark:from-gray-800/80 dark:to-slate-800/80 backdrop-blur-sm">
+                <Card className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4">
+                    <CardHeader className="border-b border-gray-200 dark:border-gray-700">
                         <CardTitle className="flex items-center gap-3 text-gray-900 dark:text-gray-100">
-                            <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg shadow-lg">
+                            <div className="p-2 bg-blue-600 rounded-xl shadow-lg">
                                 <ArrowUpDown className="h-5 w-5 text-white" />
                             </div>
                             <div>

@@ -12,6 +12,7 @@ import {
     Monitor,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { useAdminAuth } from "@/lib/hooks/useAuth";
 import LogoutButton from "@/components/panel/LogoutButton";
@@ -67,7 +68,7 @@ export function AdminSidebar() {
             <SidebarBody className="justify-between gap-6 md:gap-10">
                 <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
                     {/* Logo - Responsive */}
-                    <div className="mb-4 md:mb-6">
+                    <div className="mb-4 md:mb-6 px-2 flex items-center justify-center">
                         {open ? <AdminLogo /> : <AdminLogoIcon />}
                     </div>
 
@@ -129,16 +130,15 @@ export const AdminLogo = () => {
         <div className="flex items-center justify-between w-full">
             <Link
                 href="/admin/dashboard"
-                className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
+                className="font-normal flex items-center text-sm text-black py-1 relative z-20"
             >
-                <div className="h-5 w-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
-                <motion.span
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="font-medium text-black dark:text-white whitespace-pre"
-                >
-                    ECU Admin
-                </motion.span>
+                <Image
+                    src="/logo/mems.png"
+                    alt="Memsidea Logo"
+                    width={160}
+                    height={40}
+                    priority
+                />
             </Link>
 
             {/* Kilit Butonu - Sadece Desktop */}
@@ -169,9 +169,15 @@ export const AdminLogoIcon = () => {
     return (
         <Link
             href="/admin/dashboard"
-            className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
+            className="font-normal flex items-center justify-center text-sm text-black py-1 relative z-20"
         >
-            <div className="h-5 w-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
+            <Image
+                src="/logo/memskucuk.png"
+                alt="Memsidea Logo Icon"
+                width={40}
+                height={40}
+                priority
+            />
         </Link>
     );
 }; 

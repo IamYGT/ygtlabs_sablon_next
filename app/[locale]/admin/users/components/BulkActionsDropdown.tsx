@@ -37,14 +37,6 @@ export default function BulkActionsDropdown({
 
     return (
         <div className="flex items-center gap-3">
-            {/* Seçili sayı badge'i */}
-            <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-300 px-3 py-1 text-sm font-medium">
-                {t('selected', { count: selectedCount })}
-            </Badge>
-
-            <Separator orientation="vertical" className="h-6 bg-gray-300 dark:bg-gray-600" />
-
-            {/* Ana işlemler dropdown */}
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button

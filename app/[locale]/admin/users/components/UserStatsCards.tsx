@@ -74,7 +74,7 @@ export default function UserStatsCards({ users, roles }: UserStatsCardsProps) {
     };
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Toplam Kullanıcılar */}
             <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -85,7 +85,7 @@ export default function UserStatsCards({ users, roles }: UserStatsCardsProps) {
                 </CardHeader>
                 <CardContent>
                     <div className="text-3xl font-bold text-gray-900 dark:text-gray-100">{userStats.total}</div>
-                    <div className="flex items-center gap-2 mt-3">
+                    <div className="flex items-center flex-wrap gap-2 mt-3">
                         <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-300 text-xs">
                             <CheckCircle className="h-3 w-3 mr-1" />
                             {userStats.active} {t('active')}
@@ -112,7 +112,7 @@ export default function UserStatsCards({ users, roles }: UserStatsCardsProps) {
                 </CardHeader>
                 <CardContent>
                     <div className="text-3xl font-bold text-gray-900 dark:text-gray-100">{roleStats.total}</div>
-                    <div className="flex items-center gap-2 mt-3">
+                    <div className="flex items-center flex-wrap gap-2 mt-3">
                         <Badge className="bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300 text-xs">
                             <Activity className="h-3 w-3 mr-1" />
                             {roleStats.active} {t('active')}

@@ -35,6 +35,8 @@ import {
     User,
     Activity,
     Settings,
+    Search,
+    Filter,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
@@ -47,7 +49,8 @@ import CreateUserModal from './CreateUserModal';
 import DeleteUserModal from './DeleteUserModal';
 import UserEditModal from './UserEditModal';
 import UserStatsCards from './UserStatsCards';
-import SearchAndFilters from './SearchAndFilters';
+import BulkActionsDropdown from './BulkActionsDropdown';
+import { Input } from '@/components/ui/input';
 import {
     Dialog,
     DialogContent,
@@ -314,13 +317,14 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
     return (
         <div className="space-y-8">
             <Toaster />
-
             {/* Header */}
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 <div className="space-y-2">
                     <div className="flex items-center gap-3">
-                        <div className="p-3 bg-emerald-100 dark:bg-emerald-900/20 rounded-lg">
-                            <Users className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
+                        <div className="relative">
+                            <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+                                <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                            </div>
                         </div>
                         <div>
                             <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">{t('title')}</h1>
@@ -342,45 +346,36 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
             {/* Stats Cards */}
             <UserStatsCards users={users} roles={roles} />
 
-            {/* Search and Filters */}
-            <SearchAndFilters
-                searchTerm={searchTerm}
-                onSearchChange={setSearchTerm}
-                selectedUsers={selectedUsers}
-                onBulkAction={handleBulkAction}
-            />
-
             {/* Users Table */}
             <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
-                <CardHeader className="border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 p-6">
-                    <div className="flex items-center justify-between">
+                <CardHeader className="border-b border-gray-100 dark:border-gray-800">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                         <div className="flex items-center gap-4">
                             <div className="relative">
-                                <div className="p-4 bg-emerald-600 rounded-xl shadow-lg">
-                                    <Users className="h-6 w-6 text-white" />
+                                <div className="p-2 sm:p-4 bg-blue-600 rounded-lg sm:rounded-xl shadow-lg">
+                                    <Users className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                                 </div>
-                                <div className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-400 rounded-full animate-pulse"></div>
                             </div>
                             <div className="flex flex-col">
-                                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">{t('userList')}</h3>
+                                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">{t('userList')}</h3>
                                 <p className="text-sm text-gray-600 dark:text-gray-400">{t('description')}</p>
                             </div>
                         </div>
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2 sm:gap-4 flex-wrap justify-end w-full sm:w-auto">
                             <div className="flex flex-col items-end">
                                 <div className="flex items-center gap-2 mb-1">
                                     <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-                                    <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">{filteredUsers.length}</span>
+                                    <span className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">{filteredUsers.length}</span>
                                 </div>
                                 <span className="text-xs text-gray-500 dark:text-gray-500 uppercase tracking-wide font-medium">
                                     {filteredUsers.length === 1 ? t('user') : t('users')}
                                 </span>
                             </div>
-                            <div className="h-12 w-px bg-gray-200 dark:bg-gray-700"></div>
+                            <div className="h-12 w-px bg-gray-200 dark:bg-gray-700 hidden sm:block"></div>
                             <div className="flex flex-col items-end">
                                 <div className="flex items-center gap-2 mb-1">
                                     <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                                    <span className="text-lg font-semibold text-green-600 dark:text-green-400">
+                                    <span className="text-base sm:text-lg font-semibold text-green-600 dark:text-green-400">
                                         {users.filter(u => u.isActive).length}
                                     </span>
                                 </div>
@@ -391,7 +386,7 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                             <div className="flex flex-col items-end">
                                 <div className="flex items-center gap-2 mb-1">
                                     <div className="w-2 h-2 bg-red-400 rounded-full"></div>
-                                    <span className="text-lg font-semibold text-red-600 dark:text-red-400">
+                                    <span className="text-base sm:text-lg font-semibold text-red-600 dark:text-red-400">
                                         {users.filter(u => !u.isActive).length}
                                     </span>
                                 </div>
@@ -403,8 +398,8 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                     </div>
 
                     {/* Secondary Info Bar */}
-                    <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
-                        <div className="flex items-center gap-6">
+                    <div className="mt-4 border-gray-200 dark:border-gray-700 flex items-center justify-between flex-wrap gap-4">
+                        <div className="flex items-center gap-6 flex-wrap">
                             <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                                 <div className="p-1.5 bg-emerald-100 dark:bg-emerald-900/20 rounded">
                                     <ShieldCheck className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
@@ -423,13 +418,53 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                             </div>
                         </div>
                         {selectedUsers.length > 0 && (
-                            <div className="flex items-center gap-2 bg-emerald-100 dark:bg-emerald-900/20 px-3 py-1.5 rounded-full">
-                                <CheckCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                                <span className="text-sm font-semibold text-emerald-700 dark:text-emerald-400">
-                                    {selectedUsers.length} {t('selected')}
-                                </span>
+                            <div className="flex items-center gap-2 flex-wrap">
+                                <div className="flex items-center gap-2 bg-emerald-100 dark:bg-emerald-900/20 px-3 py-1.5 rounded-full">
+                                    <CheckCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                                    <span className="text-sm font-semibold text-emerald-700 dark:text-emerald-400">
+                                        {selectedUsers.length} {t('selected')}
+                                    </span>
+                                </div>
+                                <div
+                                    className="flex items-center gap-2 bg-red-100 dark:bg-red-900/20 px-3 py-1.5 rounded-full cursor-pointer hover:bg-red-200 dark:hover:bg-red-900/40 transition-colors"
+                                    onClick={() => handleBulkAction('clear')}
+                                >
+                                    <XCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
+                                    <span className="text-sm font-semibold text-red-700 dark:text-red-400">
+                                        {t('search.clearSelection')}
+                                    </span>
+                                </div>
                             </div>
                         )}
+                    </div>
+                    {/* Search and Filters */}
+                    <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div className="relative w-full sm:max-w-lg">
+                                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <Search className="h-4 w-4 text-gray-400 dark:text-gray-500" />
+                                </div>
+                                <Input
+                                    placeholder={t('search.placeholder')}
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all duration-200 text-base"
+                                />
+                            </div>
+                            <div className="flex items-center justify-start sm:justify-end gap-3 w-full sm:w-auto">
+                                <Button
+                                    variant="outline"
+                                    className="shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4"
+                                >
+                                    <Filter className="h-4 w-4 mr-2" />
+                                    {t('search.filters')}
+                                </Button>
+                                <BulkActionsDropdown
+                                    selectedCount={selectedUsers.length}
+                                    onBulkAction={handleBulkAction}
+                                />
+                            </div>
+                        </div>
                     </div>
                 </CardHeader>
                 <CardContent className="p-0">

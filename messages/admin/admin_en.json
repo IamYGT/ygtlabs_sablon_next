@@ -1179,8 +1179,8 @@
         "loading": "Loading...",
         "notifications": "Notifications",
         "noNotifications": "No new notifications",
-        "markAllAsRead": "Mark all as read",
-        "viewAllNotifications": "View all notifications",
+        "markAllAsRead": "Mark All as Read",
+        "viewAllNotifications": "View All Notifications",
         "adminPanel": "Admin Panel",
         "profile": "Profile",
         "settings": "Settings",
@@ -1195,8 +1195,12 @@
             "message": "The project is running successfully."
         },
         "unreadBadge": "{count} new",
-        "defaultUserName": "Admin",
-        "viewNotification": "View Notification"
+        "defaultUserName": "User",
+        "viewNotification": "View Notification",
+        "language": "Language",
+        "theme": "Theme",
+        "light": "Light",
+        "dark": "Dark"
     },
     "ApiMessages": {
         "common": {

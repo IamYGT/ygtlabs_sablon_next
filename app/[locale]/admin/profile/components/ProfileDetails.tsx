@@ -5,13 +5,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Edit3, Save, X, Camera, Calendar, Clock } from 'lucide-react';
+import { Save, X, Camera, Calendar, Clock, Edit3 } from 'lucide-react';
 import { useProfile } from '../hooks/useProfile';
 import ProfileImageUpload from '@/components/panel/ProfileImageUpload';
 
 export default function ProfileDetails() {
     const { profile, updateProfile, isLoading } = useProfile();
-    const [isEditing, setIsEditing] = useState(false);
     const [profileImage, setProfileImage] = useState(profile?.profileImage || null);
     const [formData, setFormData] = useState({
         name: profile?.name || '',
@@ -31,18 +30,9 @@ export default function ProfileDetails() {
     const handleSave = async () => {
         try {
             await updateProfile.mutateAsync(formData);
-            setIsEditing(false);
         } catch (error) {
             console.error('Update error:', error);
         }
-    };
-
-    const handleCancel = () => {
-        setFormData({
-            name: profile?.name || '',
-            email: profile?.email || '',
-        });
-        setIsEditing(false);
     };
 
     const handleImageUpdate = (newImageUrl: string | null) => {
@@ -89,29 +79,16 @@ export default function ProfileDetails() {
             {/* Profile Details Section */}
             <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-sm rounded-xl hover:shadow-md transition-all duration-200">
                 <CardHeader className="pb-4">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <CardTitle className="flex items-center gap-3 text-gray-900 dark:text-white">
-                                <div className="p-2.5 bg-gradient-to-br from-gray-500 to-gray-600 text-white rounded-lg shadow-sm">
-                                    <Edit3 className="h-4 w-4" />
-                                </div>
-                                Profile Details
-                            </CardTitle>
-                            <CardDescription className="text-gray-500 dark:text-gray-400 ml-11">
-                                Update your profile information
-                            </CardDescription>
-                        </div>
-                        {!isEditing && (
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setIsEditing(true)}
-                                className="border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200"
-                            >
-                                <Edit3 className="h-4 w-4 mr-2" />
-                                Edit
-                            </Button>
-                        )}
+                    <div>
+                        <CardTitle className="flex items-center gap-3 text-gray-900 dark:text-white">
+                            <div className="p-2.5 bg-gradient-to-br from-gray-500 to-gray-600 text-white rounded-lg shadow-sm">
+                                <Edit3 className="h-4 w-4" />
+                            </div>
+                            Profile Details
+                        </CardTitle>
+                        <CardDescription className="text-gray-500 dark:text-gray-400 ml-11">
+                            Update your profile information
+                        </CardDescription>
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-6 pt-2">
@@ -124,12 +101,8 @@ export default function ProfileDetails() {
                                 id="name"
                                 value={formData.name}
                                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                disabled={!isEditing}
                                 placeholder="Enter your full name"
-                                className={`border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-all duration-200 ${isEditing
-                                    ? 'focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
-                                    : 'cursor-not-allowed bg-gray-50 dark:bg-gray-700/50'
-                                    }`}
+                                className="border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             />
                         </div>
                         <div className="space-y-2">
@@ -141,12 +114,8 @@ export default function ProfileDetails() {
                                 type="email"
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                disabled={!isEditing}
                                 placeholder="Enter your email address"
-                                className={`border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-all duration-200 ${isEditing
-                                    ? 'focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
-                                    : 'cursor-not-allowed bg-gray-50 dark:bg-gray-700/50'
-                                    }`}
+                                className="border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             />
                         </div>
                     </div>
@@ -185,27 +154,16 @@ export default function ProfileDetails() {
                         </div>
                     )}
 
-                    {isEditing && (
-                        <div className="flex justify-end gap-3 pt-6 border-t border-gray-200 dark:border-gray-700">
-                            <Button
-                                variant="outline"
-                                onClick={handleCancel}
-                                disabled={updateProfile.isPending}
-                                className="border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200"
-                            >
-                                <X className="h-4 w-4 mr-2" />
-                                Cancel
-                            </Button>
-                            <Button
-                                onClick={handleSave}
-                                disabled={updateProfile.isPending}
-                                className="bg-blue-600 hover:bg-blue-700 shadow-sm hover:shadow transition-all duration-200"
-                            >
-                                <Save className="h-4 w-4 mr-2" />
-                                {updateProfile.isPending ? 'Saving...' : 'Save Changes'}
-                            </Button>
-                        </div>
-                    )}
+                    <div className="flex justify-end gap-3 pt-6 border-t border-gray-200 dark:border-gray-700">
+                        <Button
+                            onClick={handleSave}
+                            disabled={updateProfile.isPending}
+                            className="bg-blue-600 hover:bg-blue-700 shadow-sm hover:shadow transition-all duration-200"
+                        >
+                            <Save className="h-4 w-4 mr-2" />
+                            {updateProfile.isPending ? 'Saving...' : 'Save Changes'}
+                        </Button>
+                    </div>
                 </CardContent>
             </Card>
         </div>

@@ -188,11 +188,11 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
             <DialogContent className="max-w-6xl max-h-[95vh] bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-0 shadow-2xl flex flex-col">
                 <DialogHeader className="border-b border-gray-200 dark:border-gray-700 pb-6 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/50 dark:to-indigo-950/50 -m-6 mb-0 p-6 rounded-t-lg">
                     <DialogTitle className="flex items-center gap-3 text-2xl font-bold text-gray-900 dark:text-gray-100">
-                        <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg">
-                            <Sparkles className="h-6 w-6 text-white" />
+                        <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+                            <Sparkles className="h-5 w-5 text-white" />
                         </div>
                         <div>
-                            <span className="bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-700 bg-clip-text text-transparent">
+                            <span>
                                 {t('createSlider')}
                             </span>
                             <p className="text-sm font-normal text-gray-600 dark:text-gray-400 mt-1">
@@ -210,7 +210,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                         <TabsList className="grid w-full grid-cols-2 bg-gradient-to-r from-gray-100 to-slate-100 dark:from-gray-800 dark:to-slate-800 p-1 rounded-xl shadow-inner">
                             <TabsTrigger
                                 value="tr"
-                                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-200 font-semibold"
+                                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-200 font-semibold"
                             >
                                 <div className="flex items-center gap-2">
                                     <FlagWrapper locale="tr" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
@@ -219,7 +219,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                             </TabsTrigger>
                             <TabsTrigger
                                 value="en"
-                                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-200 font-semibold"
+                                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-200 font-semibold"
                             >
                                 <div className="flex items-center gap-2">
                                     <FlagWrapper locale="en" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
@@ -231,7 +231,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                         <div className="mt-6 space-y-6">
                             {/* İçerik Sekmeleri */}
                             <TabsContent value="tr" className="space-y-6 mt-0">
-                                <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-blue-950/20 dark:to-indigo-950/20">
+                                <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
                                     <CardHeader className="pb-4">
                                         <CardTitle className="flex items-center gap-3 text-blue-800 dark:text-blue-300">
                                             <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
@@ -267,7 +267,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                 </Card>
 
                                 {/* Butonlar TR */}
-                                <Card className="border-0 shadow-lg bg-gradient-to-br from-emerald-50/50 to-green-50/50 dark:from-emerald-950/20 dark:to-green-950/20">
+                                <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
                                     <CardHeader className="pb-4">
                                         <CardTitle className="flex items-center gap-3 text-emerald-800 dark:text-emerald-300">
                                             <div className="p-2 bg-emerald-100 dark:bg-emerald-900/50 rounded-lg">
@@ -348,14 +348,14 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
 
                             {/* English Content Tab */}
                             <TabsContent value="en" className="space-y-6 mt-0">
-                                <Card className="border-0 shadow-lg bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-950/20 dark:to-emerald-950/20">
+                                <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
                                     <CardHeader className="pb-4">
-                                        <CardTitle className="flex items-center gap-3 text-green-800 dark:text-green-300">
-                                            <div className="p-2 bg-green-100 dark:bg-green-900/50 rounded-lg">
-                                                <Globe className="h-5 w-5 text-green-600 dark:text-green-400" />
+                                        <CardTitle className="flex items-center gap-3 text-blue-800 dark:text-blue-300">
+                                            <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
+                                                <Globe className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                                             </div>
                                             {t('form.englishContent')}
-                                            <Badge variant="outline" className="bg-green-50 dark:bg-green-950/50 border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 flex items-center gap-1">
+                                            <Badge variant="outline" className="bg-blue-50 dark:bg-blue-950/50 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 flex items-center gap-1">
                                                 <FlagWrapper locale="en" className="w-4 h-2.5 rounded-sm object-cover" />
                                                 {t('form.en')}
                                             </Badge>
@@ -382,72 +382,89 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                         </div>
                                     </CardContent>
                                 </Card>
+
+                                {/* Butonlar EN */}
+                                <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
+                                    <CardHeader className="pb-4">
+                                        <CardTitle className="flex items-center gap-3 text-emerald-800 dark:text-emerald-300">
+                                            <div className="p-2 bg-emerald-100 dark:bg-emerald-900/50 rounded-lg">
+                                                <Link className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                                            </div>
+                                            {t('form.buttonSettings')}
+                                        </CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="space-y-6">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div className="space-y-4 p-4 bg-white/60 dark:bg-gray-900/60 rounded-lg border border-emerald-200 dark:border-emerald-800">
+                                                <div className="flex items-center gap-2 mb-3">
+                                                    <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
+                                                    <h4 className="font-semibold text-emerald-800 dark:text-emerald-300">{t('form.primaryButton')}</h4>
+                                                    <Badge variant="destructive" className="h-4 text-xs">{t('form.required')}</Badge>
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <Label className="text-sm font-medium">{t('form.buttonText')}</Label>
+                                                    <Input
+                                                        value={primaryButton.en.text}
+                                                        onChange={(e) => setPrimaryButton({
+                                                            ...primaryButton,
+                                                            en: { ...primaryButton.en, text: e.target.value }
+                                                        })}
+                                                        placeholder={t('form.placeholders.primaryButtonEn')}
+                                                        className="border-emerald-200 dark:border-emerald-800"
+                                                    />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <Label className="text-sm font-medium">{t('form.url')}</Label>
+                                                    <Input
+                                                        value={primaryButton.en.url}
+                                                        onChange={(e) => setPrimaryButton({
+                                                            ...primaryButton,
+                                                            en: { ...primaryButton.en, url: e.target.value }
+                                                        })}
+                                                        placeholder={t('form.placeholders.primaryButtonUrlEn')}
+                                                        className="border-emerald-200 dark:border-emerald-800"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-4 p-4 bg-white/60 dark:bg-gray-900/60 rounded-lg border border-gray-200 dark:border-gray-700">
+                                                <div className="flex items-center gap-2 mb-3">
+                                                    <div className="w-3 h-3 bg-gray-400 rounded-full"></div>
+                                                    <h4 className="font-semibold text-gray-700 dark:text-gray-300">{t('form.secondaryButton')}</h4>
+                                                    <Badge variant="secondary" className="h-4 text-xs">{t('form.optional')}</Badge>
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <Label className="text-sm font-medium">{t('form.buttonText')}</Label>
+                                                    <Input
+                                                        value={secondaryButton.en.text}
+                                                        onChange={(e) => setSecondaryButton({
+                                                            ...secondaryButton,
+                                                            en: { ...secondaryButton.en, text: e.target.value }
+                                                        })}
+                                                        placeholder={t('form.placeholders.secondaryButtonEn')}
+                                                        className="border-gray-200 dark:border-gray-700"
+                                                    />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <Label className="text-sm font-medium">{t('form.url')}</Label>
+                                                    <Input
+                                                        value={secondaryButton.en.url}
+                                                        onChange={(e) => setSecondaryButton({
+                                                            ...secondaryButton,
+                                                            en: { ...secondaryButton.en, url: e.target.value }
+                                                        })}
+                                                        placeholder={t('form.placeholders.secondaryButtonUrlEn')}
+                                                        className="border-gray-200 dark:border-gray-700"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </CardContent>
+                                </Card>
                             </TabsContent>
 
-                            {/* Buton Ayarları */}
-                            <Card className="border-0 shadow-lg bg-gradient-to-br from-purple-50/50 to-violet-50/50 dark:from-purple-950/20 dark:to-violet-950/20">
-                                <CardHeader className="pb-4">
-                                    <CardTitle className="flex items-center gap-3 text-purple-800 dark:text-purple-300">
-                                        <div className="p-2 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
-                                            <Link className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                                        </div>
-                                        {t('form.buttonSettings')}
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="space-y-6">
-                                    <Tabs defaultValue="primary-tr" className="w-full">
-                                        <TabsList className="grid w-full grid-cols-4">
-                                            <TabsTrigger value="primary-tr">{t('form.primaryButton')} {t('form.tr_parentheses')}</TabsTrigger>
-                                            <TabsTrigger value="primary-en">{t('form.primaryButton')} {t('form.en_parentheses')}</TabsTrigger>
-                                            <TabsTrigger value="secondary-tr">{t('form.secondaryButton')} {t('form.tr_parentheses')}</TabsTrigger>
-                                            <TabsTrigger value="secondary-en">{t('form.secondaryButton')} {t('form.en_parentheses')}</TabsTrigger>
-                                        </TabsList>
-                                        <TabsContent value="primary-tr" className="pt-4 space-y-4">
-                                            <div className="space-y-2">
-                                                <Label htmlFor="primary-button-text-tr">{t('form.buttonText')} <span className="text-red-500">*</span></Label>
-                                                <Input id="primary-button-text-tr" value={primaryButton.tr.text} onChange={(e) => setPrimaryButton({ ...primaryButton, tr: { ...primaryButton.tr, text: e.target.value } })} placeholder={t('form.placeholders.primaryButtonTr')} />
-                                            </div>
-                                            <div className="space-y-2">
-                                                <Label htmlFor="primary-button-url-tr">{t('form.buttonUrl')}</Label>
-                                                <Input id="primary-button-url-tr" value={primaryButton.tr.url} onChange={(e) => setPrimaryButton({ ...primaryButton, tr: { ...primaryButton.tr, url: e.target.value } })} placeholder={t('form.placeholders.primaryButtonUrlTr')} />
-                                            </div>
-                                        </TabsContent>
-                                        <TabsContent value="primary-en" className="pt-4 space-y-4">
-                                            <div className="space-y-2">
-                                                <Label htmlFor="primary-button-text-en">{t('form.buttonTextEn')} <span className="text-red-500">*</span></Label>
-                                                <Input id="primary-button-text-en" value={primaryButton.en.text} onChange={(e) => setPrimaryButton({ ...primaryButton, en: { ...primaryButton.en, text: e.target.value } })} placeholder={t('form.placeholders.primaryButtonEn')} />
-                                            </div>
-                                            <div className="space-y-2">
-                                                <Label htmlFor="primary-button-url-en">{t('form.buttonUrl')}</Label>
-                                                <Input id="primary-button-url-en" value={primaryButton.en.url} onChange={(e) => setPrimaryButton({ ...primaryButton, en: { ...primaryButton.en, url: e.target.value } })} placeholder={t('form.placeholders.primaryButtonUrlEn')} />
-                                            </div>
-                                        </TabsContent>
-                                        <TabsContent value="secondary-tr" className="pt-4 space-y-4">
-                                            <div className="space-y-2">
-                                                <Label htmlFor="secondary-button-text-tr">{t('form.buttonText')}</Label>
-                                                <Input id="secondary-button-text-tr" value={secondaryButton.tr.text} onChange={(e) => setSecondaryButton({ ...secondaryButton, tr: { ...secondaryButton.tr, text: e.target.value } })} placeholder={t('form.placeholders.secondaryButtonTr')} />
-                                            </div>
-                                            <div className="space-y-2">
-                                                <Label htmlFor="secondary-button-url-tr">{t('form.buttonUrl')}</Label>
-                                                <Input id="secondary-button-url-tr" value={secondaryButton.tr.url} onChange={(e) => setSecondaryButton({ ...secondaryButton, tr: { ...secondaryButton.tr, url: e.target.value } })} placeholder={t('form.placeholders.secondaryButtonUrlTr')} />
-                                            </div>
-                                        </TabsContent>
-                                        <TabsContent value="secondary-en" className="pt-4 space-y-4">
-                                            <div className="space-y-2">
-                                                <Label htmlFor="secondary-button-text-en">{t('form.buttonTextEn')}</Label>
-                                                <Input id="secondary-button-text-en" value={secondaryButton.en.text} onChange={(e) => setSecondaryButton({ ...secondaryButton, en: { ...secondaryButton.en, text: e.target.value } })} placeholder={t('form.placeholders.secondaryButtonEn')} />
-                                            </div>
-                                            <div className="space-y-2">
-                                                <Label htmlFor="secondary-button-url-en">{t('form.buttonUrl')}</Label>
-                                                <Input id="secondary-button-url-en" value={secondaryButton.en.url} onChange={(e) => setSecondaryButton({ ...secondaryButton, en: { ...secondaryButton.en, url: e.target.value } })} placeholder={t('form.placeholders.secondaryButtonUrlEn')} />
-                                            </div>
-                                        </TabsContent>
-                                    </Tabs>
-                                </CardContent>
-                            </Card>
-
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                <Card className="border-0 shadow-lg bg-gradient-to-br from-yellow-50/50 to-amber-50/50 dark:from-yellow-950/20 dark:to-amber-950/20">
+                            <div className="space-y-6">
+                                <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
                                     <CardHeader className="pb-4">
                                         <CardTitle className="flex items-center gap-3 text-yellow-800 dark:text-yellow-300">
                                             <div className="p-2 bg-yellow-100 dark:bg-yellow-900/50 rounded-lg">
@@ -485,7 +502,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                     </CardContent>
                                 </Card>
 
-                                <Card className="border-0 shadow-lg bg-gradient-to-br from-red-50/50 to-rose-50/50 dark:from-red-950/20 dark:to-rose-950/20">
+                                <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
                                     <CardHeader className="pb-4">
                                         <CardTitle className="flex items-center gap-3 text-red-800 dark:text-red-300">
                                             <div className="p-2 bg-red-100 dark:bg-red-900/50 rounded-lg">

@@ -246,17 +246,29 @@ export default function RolesPageClient({
 
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div>
-                        <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
-                        <p className="text-muted-foreground">
-                            {t('subtitle')}
-                        </p>
+                    <div className="flex items-center gap-3">
+                        <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+                            <Shield className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                        </div>
+                        <div>
+                            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+                            <p className="text-muted-foreground">
+                                {t('subtitle')}
+                            </p>
+                        </div>
                     </div>
                     <div className="flex gap-2">
-                        <Button variant="outline" onClick={handleRefresh} disabled={loading}>
+                        <Button
+                            onClick={handleRefresh}
+                            disabled={loading}
+                            className="h-8 rounded-md px-4 text-s shadow transition-colors duration-200 border bg-white/80 dark:bg-gray-900/80 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/50 backdrop-blur-sm"
+                        >
                             {loading ? t('loading') : t('refresh')}
                         </Button>
-                        <Button onClick={() => setShowCreateDialog(true)}>
+                        <Button
+                            onClick={() => setShowCreateDialog(true)}
+                            className="shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4"
+                        >
                             <Plus className="mr-2 h-4 w-4" />
                             {t('newRole')}
                         </Button>
@@ -265,7 +277,7 @@ export default function RolesPageClient({
 
                 {/* İstatistikler */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <Card>
+                    <Card className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
                         <CardContent className="p-4">
                             <div className="flex items-center space-x-2">
                                 <Shield className="h-5 w-5 text-blue-500" />
@@ -276,7 +288,7 @@ export default function RolesPageClient({
                             </div>
                         </CardContent>
                     </Card>
-                    <Card>
+                    <Card className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
                         <CardContent className="p-4">
                             <div className="flex items-center space-x-2">
                                 <Users className="h-5 w-5 text-green-500" />
@@ -287,7 +299,7 @@ export default function RolesPageClient({
                             </div>
                         </CardContent>
                     </Card>
-                    <Card>
+                    <Card className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
                         <CardContent className="p-4">
                             <div className="flex items-center space-x-2">
                                 <Settings className="h-5 w-5 text-purple-500" />
@@ -298,7 +310,7 @@ export default function RolesPageClient({
                             </div>
                         </CardContent>
                     </Card>
-                    <Card>
+                    <Card className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
                         <CardContent className="p-4">
                             <div className="flex items-center space-x-2">
                                 <Filter className="h-5 w-5 text-orange-500" />
@@ -312,7 +324,7 @@ export default function RolesPageClient({
                 </div>
 
                 {/* Filtreler */}
-                <Card>
+                <Card className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
                     <CardContent className="p-4">
                         <div className="flex flex-col md:flex-row gap-4">
                             <div className="flex-1">
@@ -322,12 +334,12 @@ export default function RolesPageClient({
                                         placeholder={t('searchRoles')}
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
-                                        className="pl-10"
+                                        className="pl-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all duration-200"
                                     />
                                 </div>
                             </div>
                             <Select value={statusFilter} onValueChange={(value: 'all' | 'active' | 'inactive') => setStatusFilter(value)}>
-                                <SelectTrigger className="w-[140px]">
+                                <SelectTrigger className="w-[140px] bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all duration-200">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -359,7 +371,7 @@ export default function RolesPageClient({
                             const isProtected = role.name === 'super_admin' || role.name === 'user';
 
                             return (
-                                <Card key={role.id} className="hover:shadow-md transition-shadow">
+                                <Card key={role.id} className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
                                     <CardHeader className="pb-3">
                                         <div className="flex items-start justify-between">
                                             <div className="flex items-center space-x-3">

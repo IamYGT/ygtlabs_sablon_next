@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Bell, Search, User, Menu } from "lucide-react";
+import { Bell, Search, Menu, User, Languages, Moon, Sun, Check, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,11 +16,15 @@ import { Badge } from "@/components/ui/badge";
 import { useAdminAuth } from "@/lib/hooks/useAuth";
 import LogoutButton from "@/components/panel/LogoutButton";
 import { useSidebar } from "@/components/ui/sidebar";
-import { ThemeToggle } from "@/components/panel/ThemeToggle";
+import { ThemeToggle, useTheme } from "@/components/panel/ThemeToggle";
 import { AdminStatusWidget } from "@/components/panel/AdminStatusWidget";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useTranslations, useLocale } from "next-intl";
+import { useRouter, usePathname } from '@/src/i18n/navigation';
+import { routing } from '@/src/i18n/routing';
+import TR from 'country-flag-icons/react/3x2/TR';
+import US from 'country-flag-icons/react/3x2/US';
 
 interface AdminHeaderProps {
     title?: string;
@@ -41,7 +45,22 @@ export function AdminHeader({ title = "Dashboard", subtitle, setOpen }: AdminHea
     const admin = useAdminAuth();
     const { setOpen: setSidebarOpen } = useSidebar();
     const t = useTranslations('AdminHeader');
+    const tLang = useTranslations('Language');
     const locale = useLocale();
+    const router = useRouter();
+    const pathname = usePathname();
+    const { theme, setTheme } = useTheme();
+
+    const getLanguageFlag = (loc: string) => {
+        switch (loc) {
+            case 'tr':
+                return <TR className="w-5 h-4 rounded-sm" />;
+            case 'en':
+                return <US className="w-5 h-4 rounded-sm" />;
+            default:
+                return null;
+        }
+    };
 
     // setOpen prop'u varsa onu kullan, yoksa sidebar hook'undan al
     const handleMenuToggle = setOpen || setSidebarOpen;
@@ -116,24 +135,11 @@ export function AdminHeader({ title = "Dashboard", subtitle, setOpen }: AdminHea
                         <Menu className="h-5 w-5" />
                     </Button>
 
-                    {/* Logo/Brand Area */}
-                    <div className="hidden md:flex items-center space-x-3">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
-                            <div className="w-4 h-4 bg-white rounded-sm"></div>
-                        </div>
-                        <div className="h-6 w-px bg-border/60"></div>
-                    </div>
-
                     {/* Başlık */}
                     <div className="min-w-0">
-                        <h1 className="text-lg md:text-xl lg:text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent truncate transition-all duration-300">
+                        <h1 className="hidden md:block text-lg md:text-xl lg:text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent truncate transition-all duration-300">
                             {title}
                         </h1>
-                        {subtitle && (
-                            <p className="text-xs md:text-sm text-muted-foreground/80 truncate hidden sm:block transition-colors duration-300 font-medium">
-                                {subtitle}
-                            </p>
-                        )}
                     </div>
                 </div>
 
@@ -258,13 +264,19 @@ export function AdminHeader({ title = "Dashboard", subtitle, setOpen }: AdminHea
                     </DropdownMenu>
 
                     {/* Sistem Durumu Widget */}
-                    <AdminStatusWidget />
+                    <div className="hidden md:flex">
+                        <AdminStatusWidget />
+                    </div>
 
                     {/* Dil Değiştirici */}
-                    <LanguageSwitcher isAdmin={true} />
+                    <div className="hidden md:flex">
+                        <LanguageSwitcher isAdmin={true} />
+                    </div>
 
                     {/* Tema Değiştirici */}
-                    <ThemeToggle />
+                    <div className="hidden md:flex">
+                        <ThemeToggle />
+                    </div>
 
                     {/* Admin Profil Menüsü */}
                     <DropdownMenu>
@@ -316,6 +328,60 @@ export function AdminHeader({ title = "Dashboard", subtitle, setOpen }: AdminHea
                                 <User className="mr-2 h-4 w-4" />
                                 <span>{t('profile')}</span>
                             </DropdownMenuItem>
+                            <div className="md:hidden">
+                                <DropdownMenuSeparator />
+                                <DropdownMenuLabel>{t('settings')}</DropdownMenuLabel>
+
+                                {/* Language Switcher Widget */}
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="ghost" className="w-full justify-between px-3 py-2 h-auto font-normal cursor-pointer hover:bg-accent rounded-md">
+                                            <div className="flex items-center gap-2">
+                                                <Languages className="h-4 w-4 text-muted-foreground" />
+                                                <span>{t('language')}</span>
+                                            </div>
+                                            <div className="flex items-center gap-2 text-muted-foreground">
+                                                {getLanguageFlag(locale)}
+                                                <ChevronRight className="h-4 w-4" />
+                                            </div>
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end">
+                                        {routing.locales.map((loc) => (
+                                            <DropdownMenuItem
+                                                key={loc}
+                                                onClick={() => router.push(pathname, { locale: loc })}
+                                                className="flex items-center justify-between"
+                                            >
+                                                <div className="flex items-center gap-2">
+                                                    {getLanguageFlag(loc)}
+                                                    <span>{loc === 'tr' ? tLang('turkish') : tLang('english')}</span>
+                                                </div>
+                                                {locale === loc && <Check className="h-4 w-4 text-blue-500" />}
+                                            </DropdownMenuItem>
+                                        ))}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+
+                                {/* Theme Switcher Widget */}
+                                <Button
+                                    variant="ghost"
+                                    className="w-full justify-between px-3 py-2 h-auto font-normal cursor-pointer hover:bg-accent rounded-md"
+                                    onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <div className="relative h-4 w-4">
+                                            <Sun className="absolute h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                                            <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                                        </div>
+                                        <span>{t('theme')}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 text-muted-foreground">
+                                        <span className="capitalize text-sm">{theme === 'dark' ? t('dark') : t('light')}</span>
+                                    </div>
+                                </Button>
+
+                            </div>
                             <DropdownMenuSeparator />
                             <div className="p-1">
                                 <LogoutButton
