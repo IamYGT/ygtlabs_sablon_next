@@ -828,7 +828,11 @@ export default function CreateRoleDialog({
                                     </div>
                                     <div className="space-y-2">
                                         {currentPermissions.map((permission) => (
-                                            <div key={permission.id} className="flex items-center justify-between p-3 bg-card border rounded-xl shadow-sm">
+                                            <div
+                                                key={permission.id}
+                                                className="flex items-center justify-between p-3 bg-card border rounded-xl shadow-sm cursor-pointer hover:bg-muted transition-colors"
+                                                onClick={() => removePermission(permission)}
+                                            >
                                                 <div className="flex items-center gap-3">
                                                     <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center text-muted-foreground">
                                                         {getCategoryIcon(permission.category)}
@@ -841,7 +845,10 @@ export default function CreateRoleDialog({
                                                 <Button
                                                     variant="ghost"
                                                     size="sm"
-                                                    onClick={() => removePermission(permission)}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        removePermission(permission);
+                                                    }}
                                                     className="text-red-600 hover:text-red-700 hover:bg-red-50"
                                                 >
                                                     <X className="w-4 h-4" />
@@ -862,7 +869,11 @@ export default function CreateRoleDialog({
                                     </div>
                                     <div className="space-y-2 max-h-60 overflow-y-auto">
                                         {availablePermissionsFiltered.map((permission) => (
-                                            <div key={permission.id} className="flex items-center justify-between p-3 bg-card border rounded-xl shadow-sm hover:bg-accent transition-colors">
+                                            <div
+                                                key={permission.id}
+                                                className="flex items-center justify-between p-3 bg-card border rounded-xl shadow-sm hover:bg-accent transition-colors cursor-pointer"
+                                                onClick={() => addPermission(permission)}
+                                            >
                                                 <div className="flex items-center gap-3">
                                                     <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center text-muted-foreground">
                                                         {getCategoryIcon(permission.category)}
@@ -875,7 +886,10 @@ export default function CreateRoleDialog({
                                                 <Button
                                                     variant="ghost"
                                                     size="sm"
-                                                    onClick={() => addPermission(permission)}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        addPermission(permission);
+                                                    }}
                                                     className="text-green-600 hover:text-green-700 hover:bg-green-50"
                                                 >
                                                     <Plus className="w-4 h-4" />

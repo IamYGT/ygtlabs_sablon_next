@@ -447,6 +447,8 @@
         "usersRoleAssigned": "users have assigned roles"
     },
     "AdminRoles": {
+        "activate": "Activate",
+        "deactivate": "Deactivate",
         "title": "Role Management",
         "subtitle": "Manage system roles and control permissions",
         "createRole": "Create Role",

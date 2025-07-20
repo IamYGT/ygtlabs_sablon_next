@@ -452,6 +452,8 @@
         }
     },
     "AdminRoles": {
+        "activate": "Aktif Et",
+        "deactivate": "Pasif Yap",
         "title": "Rol Yönetimi",
         "subtitle": "Sistem rollerini yönetin ve yetkileri kontrol edin",
         "createRole": "Rol Oluştur",

@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Shield, Users, Plus, Search, Filter, Eye, Edit2, MoreHorizontal, Trash2, Settings, Crown } from 'lucide-react';
+import { Shield, Users, Plus, Search, Filter, Eye, Edit2, MoreHorizontal, Trash2, Settings, Crown, CheckCircle, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -20,7 +20,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
 
 import { useAuth } from '@/lib/hooks/useAuth';
@@ -209,6 +209,29 @@ export default function RolesPageClient({
         }
 
         loadRoles();
+    };
+
+    const handleToggleRoleStatus = async (role: Role) => {
+        const newStatus = !role.isActive;
+
+        try {
+            const response = await fetch(`/api/admin/roles/${role.id}/update`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ isActive: newStatus }),
+            });
+
+            if (response.ok) {
+                toast.success(newStatus ? t('success.roleActivated') : t('success.roleDeactivated'));
+                await loadRoles();
+            } else {
+                const errorData = await response.json();
+                toast.error(errorData.error || t('error.statusUpdateFailed'));
+            }
+        } catch (error) {
+            console.error('Role status update error:', error);
+            toast.error(t('error.statusUpdateFailed'));
+        }
     };
 
     const handleRoleAction = (action: string, role: Role) => {
@@ -402,6 +425,19 @@ export default function RolesPageClient({
                                                             <DropdownMenuItem onClick={() => handleRoleAction('edit', role)}>
                                                                 <Edit2 className="mr-2 h-4 w-4" />
                                                                 {t('edit')}
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem onClick={() => handleToggleRoleStatus(role)}>
+                                                                {role.isActive ? (
+                                                                    <>
+                                                                        <XCircle className="mr-2 h-4 w-4" />
+                                                                        {t('deactivate')}
+                                                                    </>
+                                                                ) : (
+                                                                    <>
+                                                                        <CheckCircle className="mr-2 h-4 w-4" />
+                                                                        {t('activate')}
+                                                                    </>
+                                                                )}
                                                             </DropdownMenuItem>
                                                             <DropdownMenuSeparator />
                                                             <DropdownMenuItem
