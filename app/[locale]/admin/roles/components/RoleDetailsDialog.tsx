@@ -532,8 +532,8 @@ export default function RoleDetailsDialog({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden">
-                <DialogHeader>
+            <DialogContent className="max-w-4xl max-h-[90vh] bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-0 shadow-2xl flex flex-col overflow-hidden p-0">
+                <DialogHeader className="border-b border-gray-200 dark:border-gray-700 pb-6 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/50 dark:to-indigo-950/50 p-6 rounded-t-lg">
                     <DialogTitle className="flex items-center gap-2">
                         <Eye className="w-5 h-5" />
                         {role.displayName} - {t('title')}
@@ -543,27 +543,27 @@ export default function RoleDetailsDialog({
                     </DialogDescription>
                 </DialogHeader>
 
-                {/* Progress Bar */}
-                <div className="space-y-2">
-                    <Progress value={progress} className="h-2" />
-                    <div className="flex justify-between text-xs text-muted-foreground">
-                        {DIALOG_STEPS.map((step, index) => (
-                            <span
-                                key={step.id}
-                                className={`cursor-pointer transition-colors ${index <= currentStep ? 'text-primary font-medium' : ''
-                                    }`}
-                                onClick={() => setCurrentStep(index)}
-                            >
-                                {step.title}
-                            </span>
-                        ))}
+                <div className="px-6 py-4 space-y-4 border-b dark:border-gray-700">
+                    {/* Progress Bar */}
+                    <div className="space-y-2">
+                        <Progress value={progress} className="h-2" />
+                        <div className="flex justify-between text-xs text-muted-foreground">
+                            {DIALOG_STEPS.map((step, index) => (
+                                <span
+                                    key={step.id}
+                                    className={`cursor-pointer transition-colors ${index <= currentStep ? 'text-primary font-medium' : ''
+                                        }`}
+                                    onClick={() => setCurrentStep(index)}
+                                >
+                                    {step.title}
+                                </span>
+                            ))}
+                        </div>
                     </div>
                 </div>
 
-                <Separator />
-
                 {/* Step Content */}
-                <div className="max-h-[60vh] overflow-y-auto">
+                <div className="flex-1 overflow-y-auto p-6">
                     {currentStep === 0 && renderOverviewStep()}
                     {currentStep === 1 && renderPermissionsStep()}
                     {currentStep === 2 && renderUsersStep()}
@@ -571,7 +571,7 @@ export default function RoleDetailsDialog({
                 </div>
 
                 {/* Footer */}
-                <DialogFooter>
+                <DialogFooter className="bg-gray-100/80 dark:bg-gray-800/80 border-t border-gray-200 dark:border-gray-700 p-6 mt-auto rounded-b-lg">
                     <Button
                         variant="outline"
                         onClick={() => currentStep === 0 ? onOpenChange(false) : prevStep()}

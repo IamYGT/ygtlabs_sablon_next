@@ -505,6 +505,8 @@
             "errorLoadingInitial": "Başlangıç verileri yüklenirken hata:"
         },
         "createDialog": {
+            "admin": "Admin Paneli",
+            "user": "Kullanıcı Paneli",
             "title": "Yeni Rol Oluştur",
             "description": "Özelliklerini ve yetkilerini tanımlayarak yeni bir rol oluşturun.",
             "roleName": "Rol Adı",

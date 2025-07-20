@@ -500,6 +500,8 @@
             "errorLoadingInitial": "Error loading initial data:"
         },
         "createDialog": {
+            "admin": "Admin Panel",
+            "user": "User Panel",
             "title": "Create New Role",
             "description": "Create a new role by defining its properties and permissions.",
             "roleName": "Role Name",

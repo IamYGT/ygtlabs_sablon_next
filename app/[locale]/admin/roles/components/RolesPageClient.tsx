@@ -403,10 +403,6 @@ export default function RolesPageClient({
                                                                 <Edit2 className="mr-2 h-4 w-4" />
                                                                 {t('edit')}
                                                             </DropdownMenuItem>
-                                                            <DropdownMenuItem onClick={() => handleRoleAction('edit-permissions', role)}>
-                                                                <Settings className="mr-2 h-4 w-4" />
-                                                                {t('editPermissions')}
-                                                            </DropdownMenuItem>
                                                             <DropdownMenuSeparator />
                                                             <DropdownMenuItem
                                                                 className="text-destructive"
@@ -465,9 +461,7 @@ export default function RolesPageClient({
                                             </Button>
                                             {!isProtected && (
                                                 <Button
-                                                    variant="outline"
-                                                    size="sm"
-                                                    className="flex-1"
+                                                    className="flex-1 inline-flex items-center justify-center whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 py-2 shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4"
                                                     onClick={() => handleRoleAction('edit', role)}
                                                 >
                                                     <Edit2 className="mr-1 h-3 w-3" />
