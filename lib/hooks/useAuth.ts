@@ -99,8 +99,7 @@ export function useCurrentUser() {
     gcTime: 5 * 60 * 1000, // Increased to 5 minutes cache
     retry: false,
     refetchOnWindowFocus: false, // Disabled to reduce unnecessary calls
-    refetchOnMount: true,
-    refetchInterval: 5 * 60 * 1000, // Reduced frequency to every 5 minutes
+    refetchOnMount: false,
     refetchIntervalInBackground: false,
   });
 }
