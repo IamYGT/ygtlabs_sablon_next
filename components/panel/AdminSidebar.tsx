@@ -19,6 +19,7 @@ import LogoutButton from "@/components/panel/LogoutButton";
 import { useTranslations } from 'next-intl';
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useEffect } from "react";
+import { cn } from "@/lib/utils";
 
 
 export function AdminSidebar() {
@@ -85,12 +86,18 @@ export function AdminSidebar() {
                     </div>
 
                     {/* Navigation Links - Responsive Spacing */}
-                    <div className="flex flex-col gap-1 md:gap-2">
+                    <div className={cn(
+                        "flex flex-col gap-1 md:gap-2",
+                        open ? "px-2" : "items-center"
+                    )}>
                         {links.map((link, idx) => (
                             <SidebarLink
                                 key={idx}
                                 link={link}
-                                className="py-2 md:py-3 px-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                                className={cn(
+                                    "rounded-lg",
+                                    open ? "py-2 md:py-2.5 px-3 w-full" : "p-3"
+                                )}
                             />
                         ))}
                     </div>
@@ -181,13 +188,13 @@ export const AdminLogoIcon = () => {
     return (
         <Link
             href="/admin/dashboard"
-            className="font-normal flex items-center justify-center text-sm text-black py-1 relative z-20"
+            className="font-normal flex items-center justify-center text-sm text-black py-1 relative z-20 w-full"
         >
             <Image
                 src="/logo/memskucuk.png"
                 alt="Memsidea Logo Icon"
-                width={40}
-                height={40}
+                width={48}
+                height={48}
                 priority
             />
         </Link>

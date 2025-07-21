@@ -5,6 +5,7 @@ import Link, { LinkProps } from "next/link";
 import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
+import { usePathname } from "next/navigation";
 import {
   useUIStore,
   useSetSidebarOpen,
@@ -77,7 +78,11 @@ export const SidebarBody = ({
           className
         )}
         animate={{
-          width: open ? "280px" : "60px",
+          width: open ? "280px" : "80px",
+        }}
+        transition={{
+          duration: 0.3,
+          ease: "easeInOut",
         }}
         onMouseEnter={() => !collapsed && setOpen(true)}
         onMouseLeave={() => !collapsed && setOpen(false)}
@@ -148,7 +153,11 @@ export const DesktopSidebar = ({
         className
       )}
       animate={{
-        width: open ? "280px" : "60px",
+        width: open ? "280px" : "80px",
+      }}
+      transition={{
+        duration: 0.3,
+        ease: "easeInOut",
       }}
       onMouseEnter={() => !collapsed && setOpen(true)}
       onMouseLeave={() => !collapsed && setOpen(false)}
@@ -226,12 +235,18 @@ export const SidebarLink = ({
   props?: LinkProps;
 }) => {
   const { open } = useSidebar();
+  const pathname = usePathname();
+  const isActive = pathname === link.href;
 
   return (
     <Link
       href={link.href}
       className={cn(
-        "flex items-center justify-start gap-2 group/sidebar py-2",
+        "flex items-center group/sidebar transition-colors duration-200",
+        open ? "justify-start gap-2" : "justify-center",
+        isActive
+          ? "bg-slate-200 dark:bg-slate-700"
+          : "hover:bg-slate-100 dark:hover:bg-slate-700/50",
         className
       )}
       {...props}
@@ -240,10 +255,17 @@ export const SidebarLink = ({
 
       <motion.span
         animate={{
-          display: open ? "inline-block" : "none",
+          width: open ? "auto" : 0,
           opacity: open ? 1 : 0,
         }}
-        className="text-slate-700 dark:text-slate-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
+        transition={{
+          duration: 0.25,
+          ease: "easeInOut"
+        }}
+        className={cn(
+          "text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre !p-0 !m-0 overflow-hidden",
+          isActive ? "text-slate-800 dark:text-slate-100 font-semibold" : "text-slate-700 dark:text-slate-200"
+        )}
       >
         {link.label}
       </motion.span>
