@@ -135,8 +135,8 @@ export default function QuickRoleAssignModal({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-md">
-                <DialogHeader>
+            <DialogContent className="max-w-md bg-white dark:bg-gray-900">
+                <DialogHeader className="border-b border-gray-200 dark:border-gray-800">
                     <DialogTitle className="flex items-center gap-2">
                         <Shield className="h-5 w-5" />
                         {t('title')}

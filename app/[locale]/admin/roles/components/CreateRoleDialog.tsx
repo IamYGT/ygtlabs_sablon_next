@@ -1001,7 +1001,7 @@ export default function CreateRoleDialog({
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-4xl max-h-[95vh] bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-0 shadow-2xl flex flex-col overflow-hidden p-0">
-                <DialogHeader className="border-b border-gray-200 dark:border-gray-700 pb-6 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/50 dark:to-indigo-950/50 p-6 rounded-t-lg">
+                <DialogHeader className="border-b border-gray-200 dark:border-gray-700 pb-6 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/50 dark:to-indigo-950/50 p-4 rounded-t-lg">
                     <DialogTitle className="flex items-center gap-3 text-xl font-bold text-gray-900 dark:text-gray-100">
                         <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
                             <Plus className="h-5 w-5 text-blue-600 dark:text-blue-400" />
@@ -1042,7 +1042,7 @@ export default function CreateRoleDialog({
 
 
                 {/* Footer */}
-                <div className="flex items-center justify-between p-6 bg-gray-100/80 dark:bg-gray-800/80 border-t border-gray-200 dark:border-gray-700 mt-auto rounded-b-lg">
+                <div className="flex items-center justify-between p-3 bg-gray-100/80 dark:bg-gray-800/80 border-t border-gray-200 dark:border-gray-700 mt-auto rounded-b-lg">
                     <Button
                         variant="outline"
                         onClick={() => currentStep === 0 ? onOpenChange(false) : prevStep()}

@@ -571,7 +571,7 @@ export default function RoleDetailsDialog({
                 </div>
 
                 {/* Footer */}
-                <DialogFooter className="bg-gray-100/80 dark:bg-gray-800/80 border-t border-gray-200 dark:border-gray-700 p-6 mt-auto rounded-b-lg">
+                <DialogFooter className="bg-gray-100/80 dark:bg-gray-800/80 border-t border-gray-200 dark:border-gray-700 p-3 mt-auto rounded-b-lg">
                     <Button
                         variant="outline"
                         onClick={() => currentStep === 0 ? onOpenChange(false) : prevStep()}

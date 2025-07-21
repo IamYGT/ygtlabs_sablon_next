@@ -366,16 +366,20 @@ export default function UserEditModal({
         <>
             <Dialog open={open} onOpenChange={onOpenChange}>
                 <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm p-0">
-                    <DialogHeader className="p-3 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/50 dark:to-indigo-950/50">
-                        <DialogTitle className="flex items-center gap-3 text-gray-900 dark:text-gray-100">
-                            <div className="bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+                    <DialogHeader className="border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/50 dark:to-indigo-950/50 p-3 rounded-t-lg">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex-shrink-0">
                                 <User className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                             </div>
-                            <span>{t('title')}</span>
-                        </DialogTitle>
-                        <DialogDescription className="pt-1">
-                            {t('description')}
-                        </DialogDescription>
+                            <div>
+                                <DialogTitle className="text-base font-semibold text-gray-900 dark:text-gray-100">
+                                    {t('title')}
+                                </DialogTitle>
+                                <DialogDescription className="text-sm text-muted-foreground">
+                                    {t('description')}
+                                </DialogDescription>
+                            </div>
+                        </div>
                     </DialogHeader>
 
                     <div className="space-y-6 p-4">
@@ -392,7 +396,7 @@ export default function UserEditModal({
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-6">
-                                <div className="flex flex-col lg:flex-row gap-6 items-start">
+                                <div className="flex flex-col gap-4 items-center">
                                     <input
                                         ref={fileInputRef}
                                         id="image-upload"
@@ -444,13 +448,8 @@ export default function UserEditModal({
                                                 </Button>
                                             </div>
                                         </div>
-                                        {hasImage && (
-                                            <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-                                                {t('profileImage.enlargeHint')}
-                                            </div>
-                                        )}
                                     </div>
-                                    <div className="flex gap-2 flex-wrap justify-center">
+                                    <div className="flex flex-col gap-2">
                                         <Button
                                             variant="outline"
                                             size="sm"
@@ -699,7 +698,7 @@ export default function UserEditModal({
                                         </p>
                                     </div>
                                 )}
-                                <div className="space-y-3 max-h-48 overflow-y-auto">
+                                <div className="space-y-3">
                                     {availableRoles.filter(role => role.isActive).map((role) => {
                                         const isCurrentUserRole = user?.currentRole?.id === role.id;
                                         const canModifyRole = !isEditingSelf || isSuperAdmin;
@@ -782,7 +781,7 @@ export default function UserEditModal({
                         </Card>
                     </div>
 
-                    <DialogFooter className="p-6 bg-gray-100/80 dark:bg-gray-800/80 border-t border-gray-200 dark:border-gray-700">
+                    <DialogFooter className="p-3 bg-gray-100/80 dark:bg-gray-800/80 border-t border-gray-200 dark:border-gray-700">
                         <Button
                             variant="outline"
                             onClick={() => onOpenChange(false)}
@@ -811,7 +810,7 @@ export default function UserEditModal({
                 </DialogContent>
             </Dialog>
             <Dialog open={imageViewerOpen} onOpenChange={setImageViewerOpen}>
-                <DialogContent className="max-w-4xl w-[90vw] h-[90vh] p-0 overflow-hidden">
+                <DialogContent className="max-w-xl w-[60vw] h-[60vh] p-0 overflow-hidden">
                     <div className="relative w-full h-full bg-black/95 flex items-center justify-center">
                         <div className="relative max-w-full max-h-full">
                             {imageToDisplay && (
@@ -820,25 +819,17 @@ export default function UserEditModal({
                                     alt={t('imageViewer.title', { name: user.name || t('unnamedUser') })}
                                     width={800}
                                     height={600}
-                                    className="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl"
+                                    className="max-w-full max-h-[60vh] object-contain rounded-lg shadow-2xl"
                                     priority
                                 />
                             )}
                         </div>
-                        <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
+                        <div className="absolute top-4 left-4">
                             <div className="bg-black/50 rounded-lg px-3 py-2 backdrop-blur-sm">
                                 <p className="text-white text-sm font-medium">
                                     {t('imageViewer.title', { name: user.name || t('unnamedUser') })}
                                 </p>
                             </div>
-                            <Button
-                                variant="secondary"
-                                size="sm"
-                                className="bg-black/50 hover:bg-black/70 border-white/20 text-white"
-                                onClick={() => setImageViewerOpen(false)}
-                            >
-                                <X className="h-4 w-4" />
-                            </Button>
                         </div>
                         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
                             <div className="bg-black/80 backdrop-blur-sm rounded-xl p-4 flex items-center gap-3">

@@ -667,9 +667,9 @@ export default function EditRoleDialog({
                 ) : (
                     <div className="space-y-6">
                         {/* Erişim Tipi ve Özet */}
-                        <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border">
+                        <div className="flex items-center justify-between p-4 bg-card rounded-xl border shadow-sm">
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center">
+                                <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
                                     {formData.layoutType === 'admin' ? (
                                         <Crown className="w-6 h-6 text-amber-600" />
                                     ) : (
@@ -765,7 +765,7 @@ export default function EditRoleDialog({
                         </div>
 
                         {/* Yetki Listesi */}
-                        <div className="space-y-4">
+                        <div className="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border p-6 shadow-sm">
                             {/* Seçili Yetkiler */}
                             {currentPermissions.length > 0 && (
                                 <div>
@@ -776,9 +776,13 @@ export default function EditRoleDialog({
                                     </div>
                                     <div className="space-y-2">
                                         {currentPermissions.map((permission) => (
-                                            <div key={permission.id} className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
+                                            <div
+                                                key={permission.id}
+                                                className="flex items-center justify-between p-3 bg-card border rounded-xl shadow-sm cursor-pointer hover:bg-muted transition-colors"
+                                                onClick={() => removePermission(permission)}
+                                            >
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                                    <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center text-muted-foreground">
                                                         {getCategoryIcon(permission.category)}
                                                     </div>
                                                     <div>
@@ -789,7 +793,10 @@ export default function EditRoleDialog({
                                                 <Button
                                                     variant="ghost"
                                                     size="sm"
-                                                    onClick={() => removePermission(permission)}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        removePermission(permission);
+                                                    }}
                                                     className="text-red-600 hover:text-red-700 hover:bg-red-50"
                                                 >
                                                     <X className="w-4 h-4" />
@@ -810,9 +817,13 @@ export default function EditRoleDialog({
                                     </div>
                                     <div className="space-y-2 max-h-60 overflow-y-auto">
                                         {availablePermissions.map((permission) => (
-                                            <div key={permission.id} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors">
+                                            <div
+                                                key={permission.id}
+                                                className="flex items-center justify-between p-3 bg-card border rounded-xl shadow-sm hover:bg-accent transition-colors cursor-pointer"
+                                                onClick={() => addPermission(permission)}
+                                            >
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                                                    <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center text-muted-foreground">
                                                         {getCategoryIcon(permission.category)}
                                                     </div>
                                                     <div>
@@ -823,7 +834,10 @@ export default function EditRoleDialog({
                                                 <Button
                                                     variant="ghost"
                                                     size="sm"
-                                                    onClick={() => addPermission(permission)}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        addPermission(permission);
+                                                    }}
                                                     className="text-green-600 hover:text-green-700 hover:bg-green-50"
                                                 >
                                                     <Plus className="w-4 h-4" />
@@ -925,16 +939,20 @@ export default function EditRoleDialog({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden">
-                <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2 text-base">
+            <DialogContent className="max-w-4xl max-h-[95vh] bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-0 shadow-2xl flex flex-col overflow-hidden p-0">
+                <DialogHeader className="border-b border-gray-200 dark:border-gray-700 pb-6 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/50 dark:to-indigo-950/50 p-4 rounded-t-lg">
+                    <DialogTitle className="flex items-center gap-3 text-xl font-bold text-gray-900 dark:text-gray-100">
                         <div
-                            className="w-6 h-6 rounded flex items-center justify-center"
-                            style={{ backgroundColor: role.color || '#6366f1' }}
+                            className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg"
                         >
-                            <Edit className="w-3 h-3 text-white" />
+                            <Edit className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                         </div>
-                        {role.displayName} {t('title')}
+                        <div>
+                            <span>{role.displayName} {t('title')}</span>
+                            <p className="text-sm font-normal text-gray-600 dark:text-gray-400 mt-1">
+                                {WIZARD_STEPS[currentStep].description}
+                            </p>
+                        </div>
                         {isProtectedRole && (
                             <div className="flex items-center gap-2 ml-auto">
                                 <Badge variant="outline" className="text-orange-600 border-orange-600 text-xs">
@@ -944,39 +962,39 @@ export default function EditRoleDialog({
                             </div>
                         )}
                     </DialogTitle>
-                    <DialogDescription className="text-xs">
+                    <DialogDescription className="sr-only">
                         {WIZARD_STEPS[currentStep].description}
                     </DialogDescription>
                 </DialogHeader>
 
-                {/* Progress Bar */}
-                <div className="space-y-1">
-                    <Progress value={progress} className="h-1" />
-                    <div className="flex justify-between text-[10px] text-muted-foreground">
-                        {WIZARD_STEPS.map((step, index) => (
-                            <span
-                                key={step.id}
-                                className={`cursor-pointer transition-colors ${index <= currentStep ? 'text-primary font-medium' : ''
-                                    }`}
-                                onClick={() => setCurrentStep(index)}
-                            >
-                                {step.title}
-                            </span>
-                        ))}
+                <div className="flex-1 overflow-y-auto p-6">
+                    {/* Progress Bar */}
+                    <div className="space-y-1">
+                        <Progress value={progress} className="h-1" />
+                        <div className="flex justify-between text-[10px] text-muted-foreground">
+                            {WIZARD_STEPS.map((step, index) => (
+                                <span
+                                    key={step.id}
+                                    className={`cursor-pointer transition-colors ${index <= currentStep ? 'text-primary font-medium' : ''
+                                        }`}
+                                    onClick={() => setCurrentStep(index)}
+                                >
+                                    {step.title}
+                                </span>
+                            ))}
+                        </div>
                     </div>
-                </div>
 
-                <Separator />
+                    <Separator className="my-6" />
 
-                {/* Step Content */}
-                <div className="max-h-[55vh] overflow-y-auto">
+                    {/* Step Content */}
                     {currentStep === 0 && renderDetailsStep()}
                     {currentStep === 1 && renderPermissionsStep()}
                     {currentStep === 2 && renderReviewStep()}
                 </div>
 
                 {/* Footer */}
-                <DialogFooter>
+                <div className="flex items-center justify-between p-3 bg-gray-100/80 dark:bg-gray-800/80 border-t border-gray-200 dark:border-gray-700 mt-auto rounded-b-lg">
                     <Button
                         variant="outline"
                         onClick={() => currentStep === 0 ? onOpenChange(false) : prevStep()}
@@ -1020,7 +1038,7 @@ export default function EditRoleDialog({
                             </Button>
                         )}
                     </div>
-                </DialogFooter>
+                </div>
             </DialogContent>
         </Dialog>
     );

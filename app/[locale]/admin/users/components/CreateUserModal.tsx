@@ -166,17 +166,21 @@ export default function CreateUserModal({
 
     return (
         <Dialog open={open} onOpenChange={handleClose}>
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm p-0">
-                <DialogHeader className="p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/50 dark:to-indigo-950/50">
-                    <DialogTitle className="flex items-center gap-3 text-gray-900 dark:text-gray-100">
-                        <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+            <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm p-0">
+                <DialogHeader className="border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/50 dark:to-indigo-950/50 p-3 rounded-t-lg">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex-shrink-0">
                             <UserPlus className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                         </div>
-                        <span>{t('title')}</span>
-                    </DialogTitle>
-                    <DialogDescription className="pt-1">
-                        {t('description')}
-                    </DialogDescription>
+                        <div>
+                            <DialogTitle className="text-base font-semibold text-gray-900 dark:text-gray-100">
+                                {t('title')}
+                            </DialogTitle>
+                            <DialogDescription className="text-sm text-muted-foreground">
+                                {t('description')}
+                            </DialogDescription>
+                        </div>
+                    </div>
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit} className="space-y-6 p-6">
@@ -370,7 +374,7 @@ export default function CreateUserModal({
                     </Card>
                 </form>
 
-                <DialogFooter className="p-6 bg-gray-100/80 dark:bg-gray-800/80 border-t border-gray-200 dark:border-gray-700">
+                <DialogFooter className="p-3 bg-gray-100/80 dark:bg-gray-800/80 border-t border-gray-200 dark:border-gray-700">
                     <Button
                         type="button"
                         variant="outline"

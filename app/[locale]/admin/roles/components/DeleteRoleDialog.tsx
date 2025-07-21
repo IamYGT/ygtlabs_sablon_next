@@ -135,7 +135,7 @@ export default function DeleteRoleDialog({
 
     return (
         <AlertDialog open={open} onOpenChange={onOpenChange}>
-            <AlertDialogContent className="max-w-2xl">
+            <AlertDialogContent className="max-w-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm">
                 <AlertDialogHeader>
                     <AlertDialogTitle className="flex items-center gap-2">
                         <Trash2 className="h-5 w-5 text-red-600" />

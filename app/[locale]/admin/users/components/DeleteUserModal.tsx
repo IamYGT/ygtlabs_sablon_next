@@ -98,7 +98,7 @@ export default function DeleteUserModal({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-md">
+            <DialogContent className="max-w-md bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm">
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2 text-red-600">
                         <Trash2 className="h-5 w-5" />
