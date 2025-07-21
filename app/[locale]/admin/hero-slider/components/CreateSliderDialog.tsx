@@ -28,9 +28,12 @@ import {
     Settings,
     Save,
     X,
-    Info
+    Info,
+    PlusCircle,
+    Image as ImageIcon
 } from "lucide-react";
 import { FlagWrapper } from '@/components/ui/flag-wrapper';
+import { ImageUpload } from "@/components/ui/image-upload";
 
 interface CreateSliderDialogProps {
     open: boolean;
@@ -185,7 +188,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-6xl max-h-[95vh] bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-0 shadow-2xl flex flex-col">
+            <DialogContent className="max-w-4xl max-h-[95vh] flex flex-col bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-0 shadow-2xl">
                 <DialogHeader className="border-b border-gray-200 dark:border-gray-700 pb-6 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/50 dark:to-indigo-950/50 -m-6 mb-0 p-6 rounded-t-lg">
                     <DialogTitle className="flex items-center gap-3 text-2xl font-bold text-gray-900 dark:text-gray-100">
                         <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
@@ -231,7 +234,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                         <div className="mt-6 space-y-6">
                             {/* İçerik Sekmeleri */}
                             <TabsContent value="tr" className="space-y-6 mt-0">
-                                <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
+                                <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm rounded-xl">
                                     <CardHeader className="pb-4">
                                         <CardTitle className="flex items-center gap-3 text-blue-800 dark:text-blue-300">
                                             <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
@@ -267,7 +270,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                 </Card>
 
                                 {/* Butonlar TR */}
-                                <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
+                                <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm rounded-xl">
                                     <CardHeader className="pb-4">
                                         <CardTitle className="flex items-center gap-3 text-emerald-800 dark:text-emerald-300">
                                             <div className="p-2 bg-emerald-100 dark:bg-emerald-900/50 rounded-lg">
@@ -348,7 +351,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
 
                             {/* English Content Tab */}
                             <TabsContent value="en" className="space-y-6 mt-0">
-                                <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
+                                <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm rounded-xl">
                                     <CardHeader className="pb-4">
                                         <CardTitle className="flex items-center gap-3 text-blue-800 dark:text-blue-300">
                                             <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
@@ -384,7 +387,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                 </Card>
 
                                 {/* Butonlar EN */}
-                                <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
+                                <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm rounded-xl">
                                     <CardHeader className="pb-4">
                                         <CardTitle className="flex items-center gap-3 text-emerald-800 dark:text-emerald-300">
                                             <div className="p-2 bg-emerald-100 dark:bg-emerald-900/50 rounded-lg">
@@ -464,7 +467,29 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                             </TabsContent>
 
                             <div className="space-y-6">
-                                <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
+                                <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm rounded-xl">
+                                    <CardHeader className="pb-4">
+                                        <CardTitle className="flex items-center gap-3 text-purple-800 dark:text-purple-300">
+                                            <div className="p-2 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
+                                                <ImageIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                                            </div>
+                                            {t('form.backgroundImage')}
+                                            <Badge variant="destructive" className="h-4 text-xs">{t('form.required')}</Badge>
+                                        </CardTitle>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <ImageUpload
+                                            value={backgroundImage}
+                                            onChange={setBackgroundImage}
+                                            uploadEndpoint="/api/upload/hero-slider"
+                                        />
+                                        <p className="text-xs text-muted-foreground mt-2">
+                                            {t('form.imageHint')}
+                                        </p>
+                                    </CardContent>
+                                </Card>
+
+                                <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm rounded-xl">
                                     <CardHeader className="pb-4">
                                         <CardTitle className="flex items-center gap-3 text-yellow-800 dark:text-yellow-300">
                                             <div className="p-2 bg-yellow-100 dark:bg-yellow-900/50 rounded-lg">
@@ -502,7 +527,7 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                                     </CardContent>
                                 </Card>
 
-                                <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
+                                <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm rounded-xl">
                                     <CardHeader className="pb-4">
                                         <CardTitle className="flex items-center gap-3 text-red-800 dark:text-red-300">
                                             <div className="p-2 bg-red-100 dark:bg-red-900/50 rounded-lg">
@@ -538,13 +563,14 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                     </Tabs>
                 </div>
 
-                <div className="flex justify-between items-center p-6 bg-gray-100/80 dark:bg-gray-800/80 border-t border-gray-200 dark:border-gray-700 mt-auto rounded-b-lg">
-                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                        <Info className="h-4 w-4" />
-                        <span>{t('validation.rememberSave')}</span>
-                    </div>
-                    <div className="flex gap-4">
-                        <Button variant="outline" className="bg-white dark:bg-gray-700" onClick={() => onOpenChange(false)} disabled={loading}>
+                <div className="flex-shrink-0 px-6 py-4 mt-6 border-t border-gray-200 dark:border-gray-800">
+                    <div className="flex justify-end gap-3">
+                        <Button
+                            variant="outline"
+                            className="bg-white dark:bg-gray-700"
+                            onClick={() => onOpenChange(false)}
+                            disabled={loading}
+                        >
                             <X className="h-4 w-4 mr-2" />
                             {t('actions.cancel')}
                         </Button>

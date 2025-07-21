@@ -273,7 +273,7 @@ export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: Edit
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-4xl max-h-[95vh] flex flex-col">
+            <DialogContent className="max-w-4xl max-h-[95vh] flex flex-col bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-0 shadow-2xl">
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
                         <Edit className="h-5 w-5" />
@@ -553,7 +553,7 @@ export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: Edit
                     </form>
                 </div>
 
-                <div className="flex-shrink-0 p-6 pt-0 mt-4 border-t">
+                <div className="flex-shrink-0 px-6 py-4 mt-4 border-t">
                     <div className="flex justify-end gap-2">
                         <Button
                             variant="outline"
