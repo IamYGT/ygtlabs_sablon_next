@@ -245,8 +245,8 @@ export const SidebarLink = ({
         "flex items-center group/sidebar transition-colors duration-200",
         open ? "justify-start gap-2" : "justify-center",
         isActive
-          ? "bg-slate-200 dark:bg-slate-700"
-          : "hover:bg-slate-100 dark:hover:bg-slate-700/50",
+          ? "bg-blue-200 dark:bg-slate-700"
+          : "hover:bg-blue-100 dark:hover:bg-slate-700/50",
         className
       )}
       {...props}
