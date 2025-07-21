@@ -181,7 +181,7 @@ export default function CreateUserModal({
 
                 <form onSubmit={handleSubmit} className="space-y-6 p-6">
                     {/* Temel Bilgiler */}
-                    <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
+                    <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm rounded-xl">
                         <CardHeader className="pb-4">
                             <CardTitle className="flex items-center gap-3">
                                 <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
@@ -259,7 +259,7 @@ export default function CreateUserModal({
                         </CardContent>
                     </Card>
 
-                    <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
+                    <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm rounded-xl">
                         <CardHeader className="pb-4">
                             <CardTitle className="flex items-center gap-3">
                                 <div className="p-2 bg-emerald-100 dark:bg-emerald-900/50 rounded-lg">
