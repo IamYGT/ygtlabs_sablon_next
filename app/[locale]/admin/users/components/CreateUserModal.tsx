@@ -242,7 +242,7 @@ export default function CreateUserModal({
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
                                         >
                                             {showPassword ? (
                                                 <EyeOff className="h-4 w-4" />
@@ -307,7 +307,7 @@ export default function CreateUserModal({
                                         filteredRoles.map((role) => (
                                             <div
                                                 key={role.id}
-                                                className="flex items-center space-x-3 p-2 rounded-md hover:bg-muted"
+                                                className="flex items-center space-x-3 p-2 rounded-md"
                                             >
                                                 <input
                                                     type="radio"
@@ -383,7 +383,7 @@ export default function CreateUserModal({
                         type="button"
                         onClick={handleSubmit}
                         disabled={loading || !formData.name || !formData.email || !formData.password || !selectedRole}
-                        className="shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4"
+                        className="shadow h-8 rounded-md bg-blue-600 text-white text-xs px-4"
                     >
                         {loading ? t('creating') : t('createButton')}
                     </Button>
