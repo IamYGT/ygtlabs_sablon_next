@@ -27,6 +27,7 @@ import {
     User
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface Role {
     id: string;
@@ -165,199 +166,211 @@ export default function CreateUserModal({
 
     return (
         <Dialog open={open} onOpenChange={handleClose}>
-            <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-                <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2">
-                        <UserPlus className="h-5 w-5" />
-                        {t('title')}
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm p-0">
+                <DialogHeader className="p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/50 dark:to-indigo-950/50">
+                    <DialogTitle className="flex items-center gap-3 text-gray-900 dark:text-gray-100">
+                        <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+                            <UserPlus className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                        </div>
+                        <span>{t('title')}</span>
                     </DialogTitle>
-                    <DialogDescription>
+                    <DialogDescription className="pt-1">
                         {t('description')}
                     </DialogDescription>
                 </DialogHeader>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6 p-6">
                     {/* Temel Bilgiler */}
-                    <div className="space-y-4">
-                        <div className="flex items-center gap-2 text-sm font-medium">
-                            <User className="h-4 w-4" />
-                            {t('basicInfo')}
-                        </div>
+                    <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
+                        <CardHeader className="pb-4">
+                            <CardTitle className="flex items-center gap-3">
+                                <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
+                                    <User className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                                </div>
+                                {t('basicInfo')}
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className="grid grid-cols-1 gap-4">
+                                <div>
+                                    <Label htmlFor="name">{t('fullNameLabel')} *</Label>
+                                    <Input
+                                        id="name"
+                                        name="name"
+                                        type="text"
+                                        value={formData.name}
+                                        onChange={handleInputChange}
+                                        placeholder={t('fullNamePlaceholder')}
+                                        disabled={loading}
+                                        required
+                                    />
+                                </div>
 
-                        <div className="grid grid-cols-1 gap-4">
-                            <div>
-                                <Label htmlFor="name">{t('fullNameLabel')} *</Label>
-                                <Input
-                                    id="name"
-                                    name="name"
-                                    type="text"
-                                    value={formData.name}
-                                    onChange={handleInputChange}
-                                    placeholder={t('fullNamePlaceholder')}
+                                <div>
+                                    <Label htmlFor="email">{t('emailLabel')} *</Label>
+                                    <div className="relative">
+                                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                        <Input
+                                            id="email"
+                                            name="email"
+                                            type="email"
+                                            value={formData.email}
+                                            onChange={handleInputChange}
+                                            placeholder={t('emailPlaceholder')}
+                                            className="pl-9"
+                                            disabled={loading}
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <Label htmlFor="password">{t('passwordLabel')} *</Label>
+                                    <div className="relative">
+                                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                        <Input
+                                            id="password"
+                                            name="password"
+                                            type={showPassword ? "text" : "password"}
+                                            value={formData.password}
+                                            onChange={handleInputChange}
+                                            placeholder={t('passwordPlaceholder')}
+                                            className="pl-9 pr-9"
+                                            disabled={loading}
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                                        >
+                                            {showPassword ? (
+                                                <EyeOff className="h-4 w-4" />
+                                            ) : (
+                                                <Eye className="h-4 w-4" />
+                                            )}
+                                        </button>
+                                    </div>
+                                    <p className="text-xs text-muted-foreground mt-1">
+                                        {t('passwordHint')}
+                                    </p>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
+                        <CardHeader className="pb-4">
+                            <CardTitle className="flex items-center gap-3">
+                                <div className="p-2 bg-emerald-100 dark:bg-emerald-900/50 rounded-lg">
+                                    <Shield className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                                </div>
+                                {t('roleAndStatus')}
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+                            {/* Durum */}
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <Label htmlFor="isActive">{t('accountStatusLabel')}</Label>
+                                    <p className="text-xs text-muted-foreground">
+                                        {t('accountStatusDescription')}
+                                    </p>
+                                </div>
+                                <Switch
+                                    id="isActive"
+                                    checked={formData.isActive}
+                                    onCheckedChange={handleSwitchChange}
                                     disabled={loading}
-                                    required
                                 />
                             </div>
 
-                            <div>
-                                <Label htmlFor="email">{t('emailLabel')} *</Label>
+                            <Separator />
+
+                            {/* Rol Seçimi */}
+                            <div className="space-y-4">
+                                {/* Arama */}
                                 <div className="relative">
-                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                                     <Input
-                                        id="email"
-                                        name="email"
-                                        type="email"
-                                        value={formData.email}
-                                        onChange={handleInputChange}
-                                        placeholder={t('emailPlaceholder')}
+                                        placeholder={t('roleSearchPlaceholder')}
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
                                         className="pl-9"
                                         disabled={loading}
-                                        required
                                     />
                                 </div>
-                            </div>
 
-                            <div>
-                                <Label htmlFor="password">{t('passwordLabel')} *</Label>
-                                <div className="relative">
-                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                    <Input
-                                        id="password"
-                                        name="password"
-                                        type={showPassword ? "text" : "password"}
-                                        value={formData.password}
-                                        onChange={handleInputChange}
-                                        placeholder={t('passwordPlaceholder')}
-                                        className="pl-9 pr-9"
-                                        disabled={loading}
-                                        required
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                                    >
-                                        {showPassword ? (
-                                            <EyeOff className="h-4 w-4" />
-                                        ) : (
-                                            <Eye className="h-4 w-4" />
-                                        )}
-                                    </button>
-                                </div>
-                                <p className="text-xs text-muted-foreground mt-1">
-                                    {t('passwordHint')}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <Separator />
-
-                    {/* Durum */}
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <Label htmlFor="isActive">{t('accountStatusLabel')}</Label>
-                            <p className="text-xs text-muted-foreground">
-                                {t('accountStatusDescription')}
-                            </p>
-                        </div>
-                        <Switch
-                            id="isActive"
-                            checked={formData.isActive}
-                            onCheckedChange={handleSwitchChange}
-                            disabled={loading}
-                        />
-                    </div>
-
-                    <Separator />
-
-                    {/* Rol Seçimi */}
-                    <div className="space-y-4">
-                        <div className="flex items-center gap-2 text-sm font-medium">
-                            <Shield className="h-4 w-4" />
-                            {t('roleAndStatus')}
-                        </div>
-
-                        {/* Arama */}
-                        <div className="relative">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                            <Input
-                                placeholder={t('roleSearchPlaceholder')}
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="pl-9"
-                                disabled={loading}
-                            />
-                        </div>
-
-                        {/* Rol Listesi */}
-                        <div className="max-h-48 overflow-y-auto space-y-2 border rounded-md p-2">
-                            {filteredRoles.length > 0 ? (
-                                filteredRoles.map((role) => (
-                                    <div
-                                        key={role.id}
-                                        className="flex items-center space-x-3 p-2 rounded-md hover:bg-muted"
-                                    >
-                                        <input
-                                            type="radio"
-                                            id={`role-${role.id}`}
-                                            name="selectedRole"
-                                            checked={selectedRole === role.id}
-                                            onChange={() => handleRoleSelect(role.id)}
-                                            className="h-4 w-4 text-primary"
-                                        />
-                                        <label
-                                            htmlFor={`role-${role.id}`}
-                                            className="flex-1 flex items-center gap-3 cursor-pointer"
-                                            onClick={() => handleRoleSelect(role.id)}
-                                        >
+                                {/* Rol Listesi */}
+                                <div className="max-h-48 overflow-y-auto space-y-2 border rounded-md p-2">
+                                    {filteredRoles.length > 0 ? (
+                                        filteredRoles.map((role) => (
                                             <div
-                                                className="h-3 w-3 rounded-full flex-shrink-0"
-                                                style={{ backgroundColor: role.color || '#6366f1' }}
-                                            />
-                                            <div className="flex-1">
-                                                <div className="text-sm font-medium">{role.displayName}</div>
-                                                <div className="text-xs text-muted-foreground">{role.name}</div>
-                                            </div>
-                                            {role.isSystemDefault && (
-                                                <Badge variant="outline" className="text-xs">{t('systemDefault')}</Badge>
-                                            )}
-                                        </label>
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="text-center py-4 text-muted-foreground">
-                                    {t('roleNotFound')}
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Seçili Rol */}
-                        {selectedRole && (
-                            <div>
-                                <Label className="text-sm">{t('selectedRoleLabel')}</Label>
-                                <div className="mt-2">
-                                    {(() => {
-                                        const role = roles.find(r => r.id === selectedRole);
-                                        return role ? (
-                                            <Badge
-                                                variant="secondary"
-                                                style={{
-                                                    backgroundColor: role.color || '#6366f1',
-                                                    color: 'white',
-                                                }}
+                                                key={role.id}
+                                                className="flex items-center space-x-3 p-2 rounded-md hover:bg-muted"
                                             >
-                                                {role.displayName}
-                                            </Badge>
-                                        ) : null;
-                                    })()}
+                                                <input
+                                                    type="radio"
+                                                    id={`role-${role.id}`}
+                                                    name="selectedRole"
+                                                    checked={selectedRole === role.id}
+                                                    onChange={() => handleRoleSelect(role.id)}
+                                                    className="h-4 w-4 text-primary"
+                                                />
+                                                <label
+                                                    htmlFor={`role-${role.id}`}
+                                                    className="flex-1 flex items-center gap-3 cursor-pointer"
+                                                    onClick={() => handleRoleSelect(role.id)}
+                                                >
+                                                    <div
+                                                        className="h-3 w-3 rounded-full flex-shrink-0"
+                                                        style={{ backgroundColor: role.color || '#6366f1' }}
+                                                    />
+                                                    <div className="flex-1">
+                                                        <div className="text-sm font-medium">{role.displayName}</div>
+                                                        <div className="text-xs text-muted-foreground">{role.name}</div>
+                                                    </div>
+                                                    {role.isSystemDefault && (
+                                                        <Badge variant="outline" className="text-xs">{t('systemDefault')}</Badge>
+                                                    )}
+                                                </label>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="text-center py-4 text-muted-foreground">
+                                            {t('roleNotFound')}
+                                        </div>
+                                    )}
                                 </div>
+
+                                {/* Seçili Rol */}
+                                {selectedRole && (
+                                    <div>
+                                        <Label className="text-sm">{t('selectedRoleLabel')}</Label>
+                                        <div className="mt-2">
+                                            {(() => {
+                                                const role = roles.find(r => r.id === selectedRole);
+                                                return role ? (
+                                                    <Badge
+                                                        variant="secondary"
+                                                        style={{
+                                                            backgroundColor: role.color || '#6366f1',
+                                                            color: 'white',
+                                                        }}
+                                                    >
+                                                        {role.displayName}
+                                                    </Badge>
+                                                ) : null;
+                                            })()}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
-                        )}
-                    </div>
+                        </CardContent>
+                    </Card>
                 </form>
 
-                <DialogFooter>
+                <DialogFooter className="p-6 bg-gray-100/80 dark:bg-gray-800/80 border-t border-gray-200 dark:border-gray-700">
                     <Button
                         type="button"
                         variant="outline"

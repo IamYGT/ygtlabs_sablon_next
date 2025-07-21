@@ -150,7 +150,6 @@ export default function UserEditModal({
     // Image viewer state'leri
     const [imageViewerOpen, setImageViewerOpen] = useState(false);
     const [_currentImage, _setCurrentImage] = useState<string | null>(null);
-    const [dragActive, setDragActive] = useState(false);
 
     // Refs
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -278,27 +277,6 @@ export default function UserEditModal({
         toast.success(t('notifications.imageRevertSuccess'));
     };
 
-    // Drag & Drop handlers
-    const handleDrag = (e: React.DragEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (e.type === "dragenter" || e.type === "dragover") {
-            setDragActive(true);
-        } else if (e.type === "dragleave") {
-            setDragActive(false);
-        }
-    };
-
-    const handleDrop = (e: React.DragEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setDragActive(false);
-
-        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-            handleFileUpload(e.dataTransfer.files[0]);
-        }
-    };
-
     const validatePassword = () => {
         if (!changePassword) return true;
 
@@ -387,158 +365,123 @@ export default function UserEditModal({
     return (
         <>
             <Dialog open={open} onOpenChange={onOpenChange}>
-                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-                    <DialogHeader>
-                        <DialogTitle className="flex items-center gap-2">
-                            <User className="h-5 w-5" />
-                            {t('title')}
+                <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm p-0">
+                    <DialogHeader className="p-3 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/50 dark:to-indigo-950/50">
+                        <DialogTitle className="flex items-center gap-3 text-gray-900 dark:text-gray-100">
+                            <div className="bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+                                <User className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                            </div>
+                            <span>{t('title')}</span>
                         </DialogTitle>
-                        <DialogDescription>
+                        <DialogDescription className="pt-1">
                             {t('description')}
                         </DialogDescription>
                     </DialogHeader>
 
-                    <div className="space-y-6">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="text-sm flex items-center gap-2">
-                                    <ImageIcon className="h-4 w-4" />
+                    <div className="space-y-6 p-4">
+                        <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="flex items-center gap-3">
+                                    <div className="p-0 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg">
+                                        <ImageIcon className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+                                    </div>
                                     {t('profileImage.title')}
                                 </CardTitle>
-                                <CardDescription>
+                                <CardDescription className="pt-2">
                                     {t('profileImage.description')}
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-6">
                                 <div className="flex flex-col lg:flex-row gap-6 items-start">
-                                    <div className="flex flex-col items-center gap-4">
-                                        <div className="relative group">
-                                            <Avatar
-                                                className="h-32 w-32 border-4 border-border shadow-lg cursor-pointer transition-transform hover:scale-105"
-                                                onClick={() => hasImage && setImageViewerOpen(true)}
-                                            >
-                                                {imageToDisplay && (
-                                                    <AvatarImage
-                                                        src={imageToDisplay}
-                                                        className="object-cover"
-                                                    />
-                                                )}
-                                                <AvatarFallback className="text-3xl bg-gradient-to-br from-blue-100 to-purple-100">
-                                                    <User className="h-16 w-16 text-muted-foreground" />
-                                                </AvatarFallback>
-                                            </Avatar>
-                                            <div className="absolute inset-0 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center justify-center">
-                                                <div className="flex gap-2">
-                                                    {hasImage && (
-                                                        <Button
-                                                            variant="secondary"
-                                                            size="sm"
-                                                            className="h-8 w-8 rounded-full p-0 bg-white/20 hover:bg-white/30 border-white/20"
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                setImageViewerOpen(true);
-                                                            }}
-                                                        >
-                                                            <Eye className="h-4 w-4 text-white" />
-                                                        </Button>
-                                                    )}
+                                    <input
+                                        ref={fileInputRef}
+                                        id="image-upload"
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={handleImageUpload}
+                                    />
+                                    <div className="relative group">
+                                        <Avatar
+                                            className="h-32 w-32 border-4 border-border shadow-lg cursor-pointer transition-transform hover:scale-105"
+                                            onClick={() => hasImage && setImageViewerOpen(true)}
+                                        >
+                                            {imageToDisplay && (
+                                                <AvatarImage
+                                                    src={imageToDisplay}
+                                                    className="object-cover"
+                                                />
+                                            )}
+                                            <AvatarFallback className="text-3xl bg-gradient-to-br from-blue-100 to-purple-100">
+                                                <User className="h-16 w-16 text-muted-foreground" />
+                                            </AvatarFallback>
+                                        </Avatar>
+                                        <div className="absolute inset-0 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center justify-center">
+                                            <div className="flex gap-2">
+                                                {hasImage && (
                                                     <Button
                                                         variant="secondary"
                                                         size="sm"
                                                         className="h-8 w-8 rounded-full p-0 bg-white/20 hover:bg-white/30 border-white/20"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            fileInputRef.current?.click();
+                                                            setImageViewerOpen(true);
                                                         }}
                                                     >
-                                                        <Camera className="h-4 w-4 text-white" />
+                                                        <Eye className="h-4 w-4 text-white" />
                                                     </Button>
-                                                </div>
+                                                )}
+                                                <Button
+                                                    variant="secondary"
+                                                    size="sm"
+                                                    className="h-8 w-8 rounded-full p-0 bg-white/20 hover:bg-white/30 border-white/20"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        fileInputRef.current?.click();
+                                                    }}
+                                                >
+                                                    <Camera className="h-4 w-4 text-white" />
+                                                </Button>
                                             </div>
-                                            {hasImage && (
-                                                <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    {t('profileImage.enlargeHint')}
-                                                </div>
-                                            )}
                                         </div>
-                                        <div className="flex gap-2 flex-wrap justify-center">
+                                        {hasImage && (
+                                            <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
+                                                {t('profileImage.enlargeHint')}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="flex gap-2 flex-wrap justify-center">
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => fileInputRef.current?.click()}
+                                            className="flex items-center gap-2"
+                                        >
+                                            <Upload className="h-4 w-4" />
+                                            {t('profileImage.uploadButton')}
+                                        </Button>
+                                        {hasAnyChange && (
                                             <Button
                                                 variant="outline"
                                                 size="sm"
-                                                onClick={() => fileInputRef.current?.click()}
+                                                onClick={handleImageReset}
                                                 className="flex items-center gap-2"
                                             >
-                                                <Upload className="h-4 w-4" />
-                                                {t('profileImage.uploadButton')}
+                                                <RotateCcw className="h-4 w-4" />
+                                                {t('profileImage.revertButton')}
                                             </Button>
-                                            {hasAnyChange && (
-                                                <Button
-                                                    variant="outline"
-                                                    size="sm"
-                                                    onClick={handleImageReset}
-                                                    className="flex items-center gap-2"
-                                                >
-                                                    <RotateCcw className="h-4 w-4" />
-                                                    {t('profileImage.revertButton')}
-                                                </Button>
-                                            )}
-                                            {hasImage && (
-                                                <Button
-                                                    variant="outline"
-                                                    size="sm"
-                                                    onClick={handleImageRemove}
-                                                    className="flex items-center gap-2 text-destructive hover:text-destructive"
-                                                >
-                                                    <Trash2 className="h-4 w-4" />
-                                                    {t('profileImage.removeButton')}
-                                                </Button>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <div className="flex-1 w-full">
-                                        <input
-                                            ref={fileInputRef}
-                                            id="image-upload"
-                                            type="file"
-                                            accept="image/*"
-                                            className="hidden"
-                                            onChange={handleImageUpload}
-                                        />
-                                        <div
-                                            className={`relative border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-200 ease-in-out ${dragActive ? 'border-primary bg-primary/5 scale-105' : 'border-muted-foreground/25 hover:border-muted-foreground/50 hover:bg-muted/25'}`}
-                                            onClick={() => fileInputRef.current?.click()}
-                                            onDragEnter={handleDrag}
-                                            onDragLeave={handleDrag}
-                                            onDragOver={handleDrag}
-                                            onDrop={handleDrop}
-                                        >
-                                            {dragActive && (
-                                                <div className="absolute inset-0 bg-primary/10 border-2 border-primary border-dashed rounded-xl flex items-center justify-center">
-                                                    <div className="text-primary">
-                                                        <Upload className="h-12 w-12 mx-auto mb-2" />
-                                                        <p className="font-medium">{t('profileImage.dropzone.dropPrompt')}</p>
-                                                    </div>
-                                                </div>
-                                            )}
-                                            <div className="space-y-4">
-                                                <div className="mx-auto w-16 h-16 bg-muted rounded-full flex items-center justify-center">
-                                                    <ImageIcon className="h-8 w-8 text-muted-foreground" />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <p className="font-medium text-foreground">
-                                                        {t('profileImage.dropzone.title')}
-                                                    </p>
-                                                    <p className="text-sm text-muted-foreground">
-                                                        {t('profileImage.dropzone.subtitle')}{" "}
-                                                        <span className="text-primary font-medium">{t('profileImage.dropzone.link')}</span>
-                                                    </p>
-                                                </div>
-                                                <div className="text-xs text-muted-foreground space-y-1">
-                                                    <p>{t('profileImage.dropzone.requirements')}</p>
-                                                    <p>{t('profileImage.dropzone.recommendedSize')}</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        )}
+                                        {hasImage && (
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={handleImageRemove}
+                                                className="flex items-center gap-2 text-destructive hover:text-destructive"
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                                {t('profileImage.removeButton')}
+                                            </Button>
+                                        )}
                                     </div>
                                 </div>
                                 {hasAnyChange && (
@@ -560,9 +503,14 @@ export default function UserEditModal({
                                 )}
                             </CardContent>
                         </Card>
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="text-sm">{t('basicInfo.title')}</CardTitle>
+                        <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
+                            <CardHeader className="pb-4">
+                                <CardTitle className="flex items-center gap-3">
+                                    <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
+                                        <User className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                                    </div>
+                                    {t('basicInfo.title')}
+                                </CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="space-y-2">
@@ -617,13 +565,15 @@ export default function UserEditModal({
                                 </div>
                             </CardContent>
                         </Card>
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="text-sm flex items-center gap-2">
-                                    <Key className="h-4 w-4" />
+                        <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
+                            <CardHeader className="pb-4">
+                                <CardTitle className="flex items-center gap-3">
+                                    <div className="p-2 bg-red-100 dark:bg-red-900/50 rounded-lg">
+                                        <Key className="h-5 w-5 text-red-600 dark:text-red-400" />
+                                    </div>
                                     {t('password.title')}
                                 </CardTitle>
-                                <CardDescription>
+                                <CardDescription className="pt-2">
                                     {t('password.description')}
                                 </CardDescription>
                             </CardHeader>
@@ -709,13 +659,15 @@ export default function UserEditModal({
                                 </div>
                             </CardContent>
                         </Card>
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="text-sm flex items-center gap-2">
-                                    <Shield className="h-4 w-4" />
+                        <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
+                            <CardHeader className="pb-4">
+                                <CardTitle className="flex items-center gap-3">
+                                    <div className="p-2 bg-emerald-100 dark:bg-emerald-900/50 rounded-lg">
+                                        <Shield className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                                    </div>
                                     {t('roleAssignment.title')}
                                 </CardTitle>
-                                <CardDescription>
+                                <CardDescription className="pt-2">
                                     {isEditingSelf && !isSuperAdmin
                                         ? t('roleAssignment.descriptionSelfNoPermission')
                                         : isEditingSelf && isSuperAdmin
@@ -830,7 +782,7 @@ export default function UserEditModal({
                         </Card>
                     </div>
 
-                    <DialogFooter>
+                    <DialogFooter className="p-6 bg-gray-100/80 dark:bg-gray-800/80 border-t border-gray-200 dark:border-gray-700">
                         <Button
                             variant="outline"
                             onClick={() => onOpenChange(false)}
