@@ -248,7 +248,7 @@ export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: Edit
                 order
             };
 
-            const response = await fetch(`/api/admin/hero-slider/update?id=${slider.id}`, {
+            const response = await fetch(`/api/admin/hero-slider/${slider.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(sliderData),

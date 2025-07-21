@@ -17,11 +17,23 @@ import { motion } from "framer-motion";
 import { useAdminAuth } from "@/lib/hooks/useAuth";
 import LogoutButton from "@/components/panel/LogoutButton";
 import { useTranslations } from 'next-intl';
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useEffect } from "react";
+
 
 export function AdminSidebar() {
     const admin = useAdminAuth();
     const t = useTranslations('AdminNavigation');
-    const { open, locked: _locked, setLocked: _setLocked } = useSidebar();
+    const { open, locked: _locked, setLocked: _setLocked, setCollapsed } = useSidebar();
+    const isMobile = useIsMobile();
+
+
+    useEffect(() => {
+        if (!isMobile) {
+            setCollapsed(false);
+        }
+    }, [isMobile, setCollapsed]);
+
 
     const links = [
         {

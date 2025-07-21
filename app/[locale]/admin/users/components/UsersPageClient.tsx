@@ -59,6 +59,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
+import { useAdminAuth } from '@/lib/hooks/useAuth';
 
 interface User {
     id: string;
@@ -105,6 +106,7 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
     const locale = useLocale();
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+    const admin = useAdminAuth();
 
     const dateLocale = locale === 'tr' ? tr : enUS;
 
@@ -649,6 +651,7 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem
                                                     onClick={() => toggleUserStatus(user.id, user.isActive)}
+                                                    disabled={user.id === admin?.id}
                                                     className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150 cursor-pointer"
                                                 >
                                                     {user.isActive ? (
