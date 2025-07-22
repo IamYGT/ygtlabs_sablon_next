@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React from "react";
 import { SidebarBody, SidebarLink, useSidebar } from "@/components/ui/sidebar";
@@ -157,6 +157,15 @@ export const AdminLogo = () => {
                     width={160}
                     height={40}
                     priority
+                    className="dark:hidden"
+                />
+                <Image
+                    src="/logo/memsbeyaz.png"
+                    alt="Memsidea Logo"
+                    width={160}
+                    height={40}
+                    priority
+                    className="hidden dark:block"
                 />
             </Link>
 

@@ -53,6 +53,7 @@ import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import Image from "next/image";
 import { FlagWrapper } from '@/components/ui/flag-wrapper';
+import { cn } from "@/lib/utils";
 
 // JSON field tiplerini tanımla
 type LocalizedContent = {
@@ -500,6 +501,7 @@ export function HeroSliderPageClient() {
 
     const activeSliders = sliders.filter(s => s.isActive);
     const inactiveSliders = sliders.filter(s => !s.isActive);
+    const hasInactiveSliders = inactiveSliders.length > 0;
 
     return (
         <DndProvider backend={HTML5Backend}>
@@ -593,11 +595,26 @@ export function HeroSliderPageClient() {
                     </Card>
 
                     <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
-                        <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-gray-400/20 to-slate-600/20 rounded-full -translate-y-10 translate-x-10"></div>
+                        <div className={cn(
+                            "absolute top-0 right-0 w-20 h-20 rounded-full -translate-y-10 translate-x-10",
+                            hasInactiveSliders
+                                ? "bg-gradient-to-br from-orange-400/20 to-amber-500/20"
+                                : "bg-gradient-to-br from-gray-400/20 to-slate-600/20"
+                        )}></div>
                         <CardHeader className="relative">
                             <CardTitle className="text-sm font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
-                                <div className="p-2 bg-gray-200 dark:bg-gray-700 rounded-lg">
-                                    <XCircle className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                                <div className={cn(
+                                    "p-2 rounded-lg",
+                                    hasInactiveSliders
+                                        ? "bg-orange-100 dark:bg-orange-900/50"
+                                        : "bg-gray-200 dark:bg-gray-700"
+                                )}>
+                                    <XCircle className={cn(
+                                        "h-4 w-4",
+                                        hasInactiveSliders
+                                            ? "text-orange-600 dark:text-orange-400"
+                                            : "text-gray-600 dark:text-gray-400"
+                                    )} />
                                 </div>
                                 {t('stats.inactive')}
                             </CardTitle>
