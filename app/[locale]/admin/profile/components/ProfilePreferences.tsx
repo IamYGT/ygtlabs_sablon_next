@@ -65,7 +65,7 @@ export default function ProfilePreferences() {
             <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-sm rounded-xl hover:shadow-md transition-shadow duration-200">
                 <CardHeader className="pb-4">
                     <CardTitle className="flex items-center gap-3 text-gray-900 dark:text-white">
-                        <div className="p-2.5 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-lg shadow-sm">
+                        <div className="p-2.5 bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-lg shadow-sm">
                             <Palette className="h-4 w-4" />
                         </div>
                         Theme Preference
@@ -129,7 +129,7 @@ export default function ProfilePreferences() {
             <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-sm rounded-xl hover:shadow-md transition-shadow duration-200">
                 <CardHeader className="pb-4">
                     <CardTitle className="flex items-center gap-3 text-gray-900 dark:text-white">
-                        <div className="p-2.5 bg-gradient-to-br from-green-500 to-green-600 text-white rounded-lg shadow-sm">
+                        <div className="p-2.5 bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-lg shadow-sm">
                             <Globe className="h-4 w-4" />
                         </div>
                         Language Preference

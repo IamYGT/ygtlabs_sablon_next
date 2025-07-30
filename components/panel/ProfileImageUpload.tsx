@@ -124,90 +124,86 @@ export default function ProfileImageUpload({
     }
 
     return (
-        <Card className="w-fit">
-            <CardContent className="p-4">
-                <div className="flex flex-col items-center space-y-4">
-                    <div className="relative group">
-                        <Avatar className={`${sizeClasses[size]} border-2 border-gray-200 dark:border-gray-700`}>
-                            {currentImage ? (
-                                <AvatarImage
-                                    src={currentImage}
-                                    alt={userName || t('profileImageAlt')}
-                                    className="object-cover"
-                                />
-                            ) : (
-                                <AvatarFallback className="bg-gradient-to-br from-blue-400 to-purple-600 text-white font-semibold">
-                                    {userInitials}
-                                </AvatarFallback>
-                            )}
-                        </Avatar>
+        <div className="p-4 flex flex-col items-center space-y-4">
+            <div className="relative group">
+                <Avatar className={`${sizeClasses[size]} border-2 border-gray-200 dark:border-gray-700`}>
+                    {currentImage ? (
+                        <AvatarImage
+                            src={currentImage}
+                            alt={userName || t('profileImageAlt')}
+                            className="object-cover"
+                        />
+                    ) : (
+                        <AvatarFallback className="bg-gradient-to-br from-blue-400 to-purple-600 text-white font-semibold">
+                            {userInitials}
+                        </AvatarFallback>
+                    )}
+                </Avatar>
 
-                        {(isUploading || isDeleting) && (
-                            <div className={`absolute inset-0 ${sizeClasses[size]} bg-black bg-opacity-50 rounded-full flex items-center justify-center`}>
-                                <Loader2 className="h-6 w-6 text-white animate-spin" />
-                            </div>
-                        )}
-
-                        {!isUploading && !isDeleting && (
-                            <div
-                                className={`absolute inset-0 ${sizeClasses[size]} bg-black bg-opacity-0 hover:bg-opacity-30 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 cursor-pointer`}
-                                onClick={triggerFileInput}
-                            >
-                                <Camera className="h-6 w-6 text-white" />
-                            </div>
-                        )}
+                {(isUploading || isDeleting) && (
+                    <div className={`absolute inset-0 ${sizeClasses[size]} bg-black bg-opacity-50 rounded-full flex items-center justify-center`}>
+                        <Loader2 className="h-6 w-6 text-white animate-spin" />
                     </div>
+                )}
 
-                    <div className="flex flex-col space-y-2 w-full">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={triggerFileInput}
-                            disabled={isUploading || isDeleting}
-                            className="gap-2"
-                        >
-                            {isUploading ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : (
-                                <Upload className="h-4 w-4" />
-                            )}
-                            {isUploading ? t('uploading') : t('selectImage')}
-                        </Button>
-
-                        {currentImage && (
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={handleDeleteImage}
-                                disabled={isUploading || isDeleting}
-                                className="gap-2 text-red-600 hover:text-red-700 hover:bg-red-50"
-                            >
-                                {isDeleting ? (
-                                    <Loader2 className="h-4 w-4 animate-spin" />
-                                ) : (
-                                    <Trash2 className="h-4 w-4" />
-                                )}
-                                {isDeleting ? t('deleting') : t('delete')}
-                            </Button>
-                        )}
+                {!isUploading && !isDeleting && (
+                    <div
+                        className={`absolute inset-0 ${sizeClasses[size]} bg-black bg-opacity-0 hover:bg-opacity-30 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 cursor-pointer`}
+                        onClick={triggerFileInput}
+                    >
+                        <Camera className="h-6 w-6 text-white" />
                     </div>
+                )}
+            </div>
 
-                    <p className="text-xs text-gray-500 text-center max-w-48">
-                        {t('fileDescription')}
-                    </p>
+            <div className="flex flex-col space-y-2 w-full">
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={triggerFileInput}
+                    disabled={isUploading || isDeleting}
+                    className="gap-2"
+                >
+                    {isUploading ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                        <Upload className="h-4 w-4" />
+                    )}
+                    {isUploading ? t('uploading') : t('selectImage')}
+                </Button>
 
-                    <input
-                        ref={fileInputRef}
-                        type="file"
-                        accept="image/png,image/jpeg,image/jpg,image/webp"
-                        onChange={handleFileSelect}
-                        className="hidden"
+                {currentImage && (
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleDeleteImage}
                         disabled={isUploading || isDeleting}
-                        aria-label={t('selectImageAria')}
-                        title={t('selectImageAria')}
-                    />
-                </div>
-            </CardContent>
-        </Card>
+                        className="gap-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+                    >
+                        {isDeleting ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                            <Trash2 className="h-4 w-4" />
+                        )}
+                        {isDeleting ? t('deleting') : t('delete')}
+                    </Button>
+                )}
+            </div>
+
+            <p className="text-xs text-gray-500 text-center max-w-48">
+                {t('fileDescription')}
+            </p>
+
+            <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/png,image/jpeg,image/jpg,image/webp"
+                onChange={handleFileSelect}
+                className="hidden"
+                disabled={isUploading || isDeleting}
+                aria-label={t('selectImageAria')}
+                title={t('selectImageAria')}
+            />
+        </div>
     );
 } 

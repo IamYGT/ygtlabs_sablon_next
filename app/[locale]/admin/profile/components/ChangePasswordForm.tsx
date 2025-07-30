@@ -69,7 +69,7 @@ export default function ChangePasswordForm() {
         <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-sm rounded-xl hover:shadow-md transition-shadow duration-200">
             <CardHeader>
                 <CardTitle className="flex items-center gap-3 text-gray-900 dark:text-white">
-                    <div className="p-2.5 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-lg shadow-sm">
+                    <div className="p-2.5 bg-gradient-to-br from-green-500 to-green-600 text-white rounded-lg shadow-sm">
                         <KeyRound className="h-4 w-4" />
                     </div>
                     {t('security.changePasswordTitle')}
