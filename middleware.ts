@@ -50,6 +50,13 @@ export async function middleware(request: NextRequest) {
       : i18nResponse;
   }
 
+  // /admin yoluna erişim durumunda session varsa dashboard'a yönlendir
+  if (path === "/admin" && isAuthenticated) {
+    return NextResponse.redirect(
+      new URL(`/${locale}/admin/dashboard`, request.url)
+    );
+  }
+
   if (
     (path.startsWith("/admin") || path.startsWith("/users")) &&
     !isAuthenticated
