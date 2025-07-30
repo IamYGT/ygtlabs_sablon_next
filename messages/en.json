@@ -65,9 +65,9 @@
         }
     },
     "AuthLayout": {
-        "pageTitle": "ECU System",
-        "pageSubtitle": "Management Panel",
-        "copyright": "© 2024 ECU System. All rights reserved."
+        "pageTitle": "Memsidea Admin Panel",
+        "pageSubtitle": "Welcome to Management Panel",
+        "copyright": "© {year} Memsidea. All rights reserved."
     },
     "Navigation": {
         "dashboard": "Dashboard",

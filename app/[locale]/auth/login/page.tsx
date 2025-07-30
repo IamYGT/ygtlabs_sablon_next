@@ -100,24 +100,9 @@ const UnifiedAuthLoginForm = memo(() => {
     }, [formData.email, formData.password, loading, locale, t]);
 
     return (
-        <div className="p-6 sm:p-8">
-            <CardHeader className="text-center pb-6 px-0">
-                <motion.div
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <CardTitle className="text-2xl font-bold text-foreground">
-                        {t('welcome')}
-                    </CardTitle>
-                    <CardDescription className="mt-2 text-muted-foreground">
-                        {t('continue')}
-                    </CardDescription>
-                </motion.div>
-            </CardHeader>
-
+        <div className="p-4 sm:p-6">
             <CardContent className="px-0">
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-4">
                     <motion.div
                         className="space-y-2"
                         initial={{ x: -20, opacity: 0 }}

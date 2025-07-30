@@ -72,15 +72,23 @@ const createQueryClient = () => {
         },
         queryCache: new QueryCache({
             onError: (error, query) => {
-                console.error('❌ Query Error:', error, 'Query Key:', query.queryKey);
+                // 401 hatalarını konsola yazmayalım - bu standart bir durum
+                if (error && typeof error === 'object' && 'statusCode' in error) {
+                    const statusCode = (error as { statusCode: number }).statusCode;
+                    if (statusCode !== 401) {
+                        console.error('❌ Query Error:', error, 'Query Key:', query.queryKey);
+                    }
+                } else {
+                    console.error('❌ Query Error:', error, 'Query Key:', query.queryKey);
+                }
 
                 // Global error handling for queries
                 if (error && typeof error === 'object' && 'statusCode' in error) {
                     const statusCode = (error as { statusCode: number }).statusCode;
 
                     if (statusCode === 401) {
-                        // Handle authentication errors globally
-                        console.warn('🔒 Authentication error detected - clearing auth state');
+                        // Handle authentication errors globally (sessizce)
+                        // console.warn('🔒 Authentication error detected - clearing auth state');
 
                         // Import auth store and clear auth state
                         const { useAuthStore } = require('../stores/auth-store');
@@ -109,14 +117,23 @@ const createQueryClient = () => {
         }),
         mutationCache: new MutationCache({
             onError: (error, variables, _context, _mutation) => {
-                console.error('❌ Mutation Error:', error, 'Variables:', variables);
+                // 401 hatalarını konsola yazmayalım - bu standart bir durum
+                if (error && typeof error === 'object' && 'statusCode' in error) {
+                    const statusCode = (error as { statusCode: number }).statusCode;
+                    if (statusCode !== 401) {
+                        console.error('❌ Mutation Error:', error, 'Variables:', variables);
+                    }
+                } else {
+                    console.error('❌ Mutation Error:', error, 'Variables:', variables);
+                }
 
                 // Global error handling for mutations
                 if (error && typeof error === 'object' && 'statusCode' in error) {
                     const statusCode = (error as { statusCode: number }).statusCode;
 
                     if (statusCode === 401) {
-                        console.warn('🔒 Authentication error in mutation - clearing auth state');
+                        // Authentication error in mutation (sessizce işle)
+                        // console.warn('🔒 Authentication error in mutation - clearing auth state');
 
                         // Import auth store and clear auth state
                         const { useAuthStore } = require('../stores/auth-store');
@@ -413,4 +430,4 @@ export const clearAllCacheOnLogout = async () => {
     } catch (error) {
         console.error('❌ Error clearing cache on logout:', error);
     }
-}; 
+};

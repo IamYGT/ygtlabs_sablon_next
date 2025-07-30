@@ -137,7 +137,7 @@ const ForgotPasswordForm = memo(() => {
     }
 
     return (
-        <div className="p-6 sm:p-8">
+        <div className="p-4 sm:p-6">
             <CardHeader className="text-center pb-6 px-0">
                 <motion.div
                     initial={{ scale: 0.9, opacity: 0 }}
@@ -154,7 +154,7 @@ const ForgotPasswordForm = memo(() => {
             </CardHeader>
 
             <CardContent className="px-0">
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-4">
                     <motion.div
                         className="space-y-2"
                         initial={{ x: -20, opacity: 0 }}
@@ -242,4 +242,4 @@ ForgotPasswordForm.displayName = "ForgotPasswordForm";
 
 export default function ForgotPasswordPage() {
     return <ForgotPasswordForm />;
-} 
+}

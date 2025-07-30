@@ -11,25 +11,41 @@ interface LogoProps {
 }
 
 /**
- * Optimize edilmiş Logo komponenti
+ * Optimize edilmiş Logo komponenti - Enhanced with modern effects
  */
 export default function Logo({ width = 160, height = 50, href = "/", className = "" }: LogoProps) {
-  // Logo bileşeni
+  // Simple Logo component without effects
   const LogoImage = (
-    <Image 
-      src="/logo.png" 
-      alt="Dünya Ekonomi Logo" 
-      width={width} 
-      height={height}
-      className={`w-auto h-auto ${className}`}
-      priority
-    />
+    <div className="relative">
+      {/* Main logo - Light theme */}
+      <Image 
+        src="/logo/memsidea.png" 
+        alt="Memsidea Logo" 
+        width={width} 
+        height={height}
+        className={`w-auto h-auto dark:hidden ${className}`}
+        priority
+      />
+      
+      {/* Main logo - Dark theme */}
+      <Image 
+        src="/logo/memsbeyaz.png" 
+        alt="Memsidea Logo" 
+        width={width} 
+        height={height}
+        className={`w-auto h-auto hidden dark:block ${className}`}
+        priority
+      />
+    </div>
   );
 
-  // Link isteniyorsa
+  // Link isteniyorsa with enhanced hover effects
   if (href) {
     return (
-      <Link href={href} className="hover:opacity-90 transition-opacity">
+      <Link 
+        href={href} 
+        className="block transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2 focus:ring-offset-background rounded-lg"
+      >
         {LogoImage}
       </Link>
     );
@@ -37,4 +53,4 @@ export default function Logo({ width = 160, height = 50, href = "/", className =
 
   // Sade logo
   return LogoImage;
-} 
+}

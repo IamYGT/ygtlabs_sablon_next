@@ -65,9 +65,9 @@
         }
     },
     "AuthLayout": {
-        "pageTitle": "ECU Sistem",
-        "pageSubtitle": "Yönetim Paneli",
-        "copyright": "© 2024 ECU Sistem. Tüm hakları saklıdır."
+        "pageTitle": "Memsidea Admin Panel",
+        "pageSubtitle": "Yönetim Paneline Hoş Geldiniz",
+        "copyright": "© {year} Memsidea. Tüm hakları saklıdır."
     },
     "Navigation": {
         "dashboard": "Ana Panel",

@@ -144,7 +144,7 @@ const RegisterForm = memo(() => {
     const passwordsDontMatch = formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword;
 
     return (
-        <div className="p-6 sm:p-8">
+        <div className="p-4 sm:p-6">
             <CardHeader className="text-center pb-6 px-0">
                 <motion.div
                     initial={{ scale: 0.9, opacity: 0 }}
@@ -161,7 +161,7 @@ const RegisterForm = memo(() => {
             </CardHeader>
 
             <CardContent className="px-0">
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-4">
                     <motion.div
                         className="space-y-2"
                         initial={{ x: -20, opacity: 0 }}
@@ -366,4 +366,4 @@ RegisterForm.displayName = "RegisterForm";
 
 export default function RegisterPage() {
     return <RegisterForm />;
-} 
+}

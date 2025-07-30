@@ -45,7 +45,11 @@ class ModernAPIClient {
         data?.error ||
         data?.message ||
         this.getStatusErrorMessage(response.status);
-      console.error(`❌ API Error [${response.status}]:`, errorMessage);
+      
+      // 401 hatalarını konsola yazmayalım - bu standart bir durum
+      if (response.status !== 401) {
+        console.error(`❌ API Error [${response.status}]:`, errorMessage);
+      }
 
       return {
         success: false,

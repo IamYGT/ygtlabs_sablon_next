@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -129,18 +129,13 @@ html {
 }
 
 html * {
-  transition:
-    background-color 0.3s ease-in-out,
-    border-color 0.3s ease-in-out,
-    color 0.3s ease-in-out,
-    fill 0.3s ease-in-out,
-    stroke 0.3s ease-in-out,
+  transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out,
+    color 0.3s ease-in-out, fill 0.3s ease-in-out, stroke 0.3s ease-in-out,
     box-shadow 0.3s ease-in-out;
 }
 
 /* Animasyonları devre dışı bırakmak isteyenler için */
 @media (prefers-reduced-motion: reduce) {
-
   html *,
   html {
     transition: none !important;

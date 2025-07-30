@@ -15,6 +15,12 @@ interface AuthLayoutClientProps {
 
 export function AuthLayoutClient({ children }: AuthLayoutClientProps) {
     const t = useTranslations('AuthLayout');
+    
+    // Dynamic copyright year function
+    const getCopyrightYear = () => {
+        const currentYear = new Date().getFullYear();
+        return `2016-${currentYear}`;
+    };
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-slate-50 to-blue-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 relative overflow-hidden">
             {/* Background Decorations */}
@@ -54,34 +60,24 @@ export function AuthLayoutClient({ children }: AuthLayoutClientProps) {
                 />
             </div>
 
-            {/* Navigation Bar */}
-            <nav className="relative z-10 flex items-center justify-between p-6 lg:p-8">
-                <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="flex items-center space-x-3"
-                >
-                    <Logo />
-                    <div className="hidden sm:block">
-                        <h1 className="text-xl font-bold text-foreground">{t('pageTitle')}</h1>
-                        <p className="text-sm text-muted-foreground">{t('pageSubtitle')}</p>
-                    </div>
-                </motion.div>
-
+            {/* Simplified Navigation Bar */}
+            <nav className="relative z-10 flex items-center justify-end p-4 lg:p-6">
                 <motion.div
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: 0.1 }}
-                    className="flex items-center space-x-3"
+                    transition={{ duration: 0.5 }}
+                    className="flex items-center space-x-2"
                 >
-                    <LanguageSwitcher />
-                    <ThemeToggle />
+                    {/* Simplified Controls */}
+                    <div className="flex items-center space-x-2 p-1 rounded-lg bg-background/40 backdrop-blur-sm border border-border/30 shadow-sm">
+                        <LanguageSwitcher />
+                        <ThemeToggle />
+                    </div>
                 </motion.div>
             </nav>
 
             {/* Main Content */}
-            <div className="relative z-10 flex items-center justify-center min-h-[calc(100vh-120px)] px-4 sm:px-6 lg:px-8">
+            <div className="relative z-10 flex items-center justify-center min-h-[calc(100vh-200px)] px-4 sm:px-6 lg:px-8">
                 <motion.div
                     initial={{ opacity: 0, y: 20, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -89,19 +85,49 @@ export function AuthLayoutClient({ children }: AuthLayoutClientProps) {
                     className="w-full max-w-md"
                 >
                     <Card className="bg-card/80 dark:bg-card/90 backdrop-blur-xl border-border/50 shadow-2xl shadow-blue-500/5 dark:shadow-slate-900/20">
+                        {/* Logo and Title in Form Area */}
+                        <div className="p-3 sm:p-4 border-b border-border/20">
+                            <motion.div
+                                initial={{ scale: 0.9, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                transition={{ duration: 0.5 }}
+                                className="text-center space-y-1"
+                            >
+                                {/* Logo */}
+                                <div className="flex justify-center">
+                                    <div className="relative">
+                                        <Logo width={140} height={45} href="https://memsidea.com" />
+                                    </div>
+                                </div>
+                                
+                                {/* Subtitle */}
+                                <div className="text-center">
+                                    <p className="text-sm text-muted-foreground">
+                                        {t('pageSubtitle')}
+                                    </p>
+                                </div>
+                            </motion.div>
+                        </div>
                         {children}
                     </Card>
                 </motion.div>
             </div>
 
             {/* Footer */}
-            <footer className="relative z-10 text-center py-6 text-sm text-muted-foreground">
+            <footer className="relative z-10 text-center py-3 text-sm text-muted-foreground">
                 <motion.p
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.5, delay: 0.8 }}
                 >
-                    {t('copyright')}
+                    <a 
+                        href="https://memsidea.com" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="hover:text-primary transition-colors duration-200"
+                    >
+                        {t('copyright', { year: getCopyrightYear() })}
+                    </a>
                 </motion.p>
             </footer>
 
@@ -117,4 +143,4 @@ export function AuthLayoutClient({ children }: AuthLayoutClientProps) {
             />
         </div>
     );
-} 
+}
