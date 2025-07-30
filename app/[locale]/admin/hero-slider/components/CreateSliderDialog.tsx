@@ -29,7 +29,6 @@ import {
     Save,
     X,
     Info,
-    PlusCircle,
     Image as ImageIcon
 } from "lucide-react";
 import { FlagWrapper } from '@/components/ui/flag-wrapper';
@@ -597,4 +596,4 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
             </DialogContent>
         </Dialog>
     );
-} 
+}

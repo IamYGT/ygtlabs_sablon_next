@@ -10,7 +10,7 @@ export { useTheme } from "next-themes";
 
 export function ThemeToggle() {
     const { theme, setTheme } = useNextTheme();
-    const { open } = useSidebar();
+    const { open: _open } = useSidebar();
     const [mounted, setMounted] = React.useState(false);
 
     React.useEffect(() => {
@@ -42,4 +42,4 @@ export function ThemeToggle() {
             <span className="sr-only">Tema değiştir</span>
         </Button>
     );
-} 
+}

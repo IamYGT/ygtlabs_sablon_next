@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Monitor, MapPin, Clock, X, Shield, Smartphone, Laptop, Globe } from 'lucide-react';
+import { Monitor, Clock, X, Shield, Smartphone, Laptop, Globe } from 'lucide-react';
 import { useProfileSessions } from '../hooks/useProfileSessions';
 import ChangePasswordForm from './ChangePasswordForm';
 
@@ -118,7 +118,7 @@ export default function ProfileSecurity() {
                             <div className="text-center py-12 text-gray-500 dark:text-gray-400">
                                 <Shield className="h-12 w-12 mx-auto mb-3 text-gray-300 dark:text-gray-600" />
                                 <p className="text-lg font-medium mb-1">No Active Sessions</p>
-                                <p className="text-sm">You don't have any active sessions at the moment</p>
+                                <p className="text-sm">You don&apos;t have any active sessions at the moment</p>
                             </div>
                         )}
                     </div>

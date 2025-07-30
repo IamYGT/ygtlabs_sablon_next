@@ -41,7 +41,7 @@ interface Notification {
     read: boolean;
 }
 
-export function AdminHeader({ title = "Dashboard", subtitle, setOpen }: AdminHeaderProps) {
+export function AdminHeader({ title = "Dashboard", subtitle: _subtitle, setOpen }: AdminHeaderProps) {
     const admin = useAdminAuth();
     const { setOpen: setSidebarOpen } = useSidebar();
     const t = useTranslations('AdminHeader');

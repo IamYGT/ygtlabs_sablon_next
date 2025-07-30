@@ -38,8 +38,7 @@ import {
     EyeOff,
     ImageIcon,
     Trash2,
-    RotateCcw,
-    X
+    RotateCcw
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
@@ -882,4 +881,4 @@ export default function UserEditModal({
             </Dialog>
         </>
     );
-} 
+}
