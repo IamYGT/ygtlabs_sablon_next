@@ -235,7 +235,7 @@ export default function Footer() {
                   {/* Logo */}
                   <div className="relative flex items-center space-x-2">
                     <Image
-                      src="/logo/memsidea.png"
+                      src="/logo/mems.png"
                       alt="Memsidea"
                       width={720}
                       height={192}
@@ -255,4 +255,4 @@ export default function Footer() {
       </div>
     </footer>
   );
-} 
+}

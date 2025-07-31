@@ -19,7 +19,7 @@ export default function Logo({ width = 160, height = 50, href = "/", className =
     <div className="relative">
       {/* Main logo - Light theme */}
       <Image 
-        src="/logo/memsidea.png" 
+        src="/logo/mems.png" 
         alt="Memsidea Logo" 
         width={width} 
         height={height}
