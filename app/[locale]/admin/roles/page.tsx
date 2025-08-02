@@ -1,7 +1,5 @@
-import React from 'react';
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { AdminGuard } from '@/components/panel/AuthGuards';
 import RolesPageClient from './components/RolesPageClient';
 
 type Props = {
@@ -19,9 +17,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default function AdminRolesPage() {
-    return (
-        <AdminGuard>
-            <RolesPageClient />
-        </AdminGuard>
-    );
+    // Permission kontrolü RolesPageClient'ta AdminPageGuard ile yapılıyor
+    return <RolesPageClient />;
 }

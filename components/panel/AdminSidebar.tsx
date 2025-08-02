@@ -1,30 +1,25 @@
 'use client';
 
-import React from "react";
-import { SidebarBody, SidebarLink, useSidebar } from "@/components/ui/sidebar";
-import {
-    LayoutDashboard,
-    Users,
-    Shield,
-    User,
-    Lock,
-    Unlock,
-    Monitor,
-} from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { useAdminAuth } from "@/lib/hooks/useAuth";
 import LogoutButton from "@/components/panel/LogoutButton";
-import { useTranslations } from 'next-intl';
+import { SidebarBody, SidebarLink, useSidebar } from "@/components/ui/sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useEffect } from "react";
+import { useAdminNavigation } from "@/hooks/useAdminNavigation";
+import { useAdminAuth } from "@/lib/hooks/useAuth";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
+import {
+    Lock,
+    Shield,
+    Unlock,
+} from "lucide-react";
+
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect } from "react";
 
 
 export function AdminSidebar() {
     const admin = useAdminAuth();
-    const t = useTranslations('AdminNavigation');
     const { open, locked: _locked, setLocked: _setLocked, setCollapsed } = useSidebar();
     const isMobile = useIsMobile();
 
@@ -36,43 +31,8 @@ export function AdminSidebar() {
     }, [isMobile, setCollapsed]);
 
 
-    const links = [
-        {
-            label: t('dashboard'),
-            href: "/admin/dashboard",
-            icon: (
-                <LayoutDashboard className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-            ),
-        },
-        {
-            label: t('heroSlider'),
-            href: "/admin/hero-slider",
-            icon: (
-                <Monitor className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-            ),
-        },
-        {
-            label: t('users'),
-            href: "/admin/users",
-            icon: (
-                <Users className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-            ),
-        },
-        {
-            label: t('roles'),
-            href: "/admin/roles",
-            icon: (
-                <Shield className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-            ),
-        },
-        {
-            label: t('profile'),
-            href: "/admin/profile",
-            icon: (
-                <User className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-            ),
-        },
-    ];
+    // 🚀 SÜPER BASIT! Tek satırda tüm navigation'ı hallettik
+    const links = useAdminNavigation();
 
 
 
@@ -90,9 +50,9 @@ export function AdminSidebar() {
                         "flex flex-col gap-1 md:gap-2",
                         open ? "px-2" : "items-center"
                     )}>
-                        {links.map((link, idx) => (
+                        {links.map((link) => (
                             <SidebarLink
-                                key={idx}
+                                key={link.key}
                                 link={link}
                                 className={cn(
                                     "rounded-lg",

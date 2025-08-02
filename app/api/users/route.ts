@@ -1,13 +1,12 @@
-import { NextResponse } from "next/server";
-import { getCurrentUser, hasPermission } from "@/lib";
+import { getCurrentUser, hasPermission, hashPasswordPbkdf2 } from "@/lib";
 import { prisma } from "@/lib/prisma";
-import { hashPasswordPbkdf2 } from "@/lib";
+import { NextResponse } from "next/server";
 
 export async function GET(_request: Request) {
   const user = await getCurrentUser();
 
   // Oturum yoksa veya kullanıcı admin değilse yetkisiz hatası döndür
-  if (!user || !(await hasPermission(user, "users.list"))) {
+  if (!user || !(await hasPermission(user, "admin.users.view"))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

@@ -6,8 +6,8 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { PERMISSIONS, ROLES, STORAGE_KEYS } from "../constants";
 import type { SimpleUser } from "../types";
-import { STORAGE_KEYS, PERMISSIONS, ROLES } from "../constants";
 
 // ============================================================================
 // ENHANCED AUTH STORE INTERFACE
@@ -211,15 +211,12 @@ export const useAuthStore = create<AuthStore>()(
       // New computed functions
       hasAdminAccess: () => {
         const { hasPermission } = get();
-        return hasPermission("layout.admin.access");
+        return hasPermission("admin.layout");
       },
 
       hasUserAccess: () => {
         const { hasPermission } = get();
-        return (
-          hasPermission("layout.user.access") ||
-          hasPermission("layout.admin.access")
-        );
+        return hasPermission("user.layout") || hasPermission("admin.layout");
       },
 
       getUserInitials: () => {

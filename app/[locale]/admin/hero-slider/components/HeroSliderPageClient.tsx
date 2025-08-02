@@ -1,11 +1,24 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { useTranslations } from 'next-intl';
+import { AdminPageGuard } from '@/components/panel/AdminPageGuard';
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { FlagWrapper } from '@/components/ui/flag-wrapper';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import {
     Table,
     TableBody,
@@ -14,46 +27,34 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import { toast } from "sonner";
-import {
-    Plus,
-    MoreHorizontal,
+    ArrowUpDown,
+    BarChart3,
+    Calendar,
+    CheckCircle,
     Edit,
-    Trash2,
     Eye,
     EyeOff,
-    Image as ImageIcon,
     GripVertical,
+    Image as ImageIcon,
     Languages,
-    BarChart3,
-    User,
-    CheckCircle,
-    XCircle,
-    Calendar,
-    ArrowUpDown,
+    MoreHorizontal,
+    Plus,
     Sparkles,
+    Trash2,
+    User,
+    XCircle,
     Zap
 } from "lucide-react";
-import { CreateSliderDialog } from "./CreateSliderDialog";
-import { EditSliderDialog } from "./EditSliderDialog";
+import { useTranslations } from 'next-intl';
+import Image from "next/image";
+import { useCallback, useEffect, useState } from "react";
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import Image from "next/image";
-import { FlagWrapper } from '@/components/ui/flag-wrapper';
-import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import { CreateSliderDialog } from "./CreateSliderDialog";
+import { EditSliderDialog } from "./EditSliderDialog";
 
 // JSON field tiplerini tanımla
 type LocalizedContent = {
@@ -504,268 +505,270 @@ export function HeroSliderPageClient() {
     const hasInactiveSliders = inactiveSliders.length > 0;
 
     return (
-        <DndProvider backend={HTML5Backend}>
-            <div className="space-y-6">
-                {/* Header */}
-                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                    <div className="space-y-2">
-                        <div className="flex items-center gap-3">
-                            <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
-                                <Sparkles className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                            </div>
-                            <div>
-                                <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-                                    {t('title')}
-                                </h1>
-                                <p className="text-gray-600 dark:text-gray-400 text-lg">
-                                    {t('subtitle')}
-                                </p>
+        <AdminPageGuard requiredPermission="admin.hero-slider.view">
+            <DndProvider backend={HTML5Backend}>
+                <div className="space-y-6">
+                    {/* Header */}
+                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-3">
+                                <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+                                    <Sparkles className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                                </div>
+                                <div>
+                                    <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+                                        {t('title')}
+                                    </h1>
+                                    <p className="text-gray-600 dark:text-gray-400 text-lg">
+                                        {t('subtitle')}
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="flex items-center justify-center lg:justify-end gap-4">
-                        <Select value={locale} onValueChange={(value: 'tr' | 'en') => setLocale(value)}>
-                            <SelectTrigger className="w-36 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-blue-200 dark:border-blue-800 shadow-lg hover:shadow-xl transition-all duration-200">
-                                <div className="flex items-center gap-2">
-                                    <Languages className="h-4 w-4 text-blue-600" />
-                                    <SelectValue />
-                                </div>
-                            </SelectTrigger>
-                            <SelectContent className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-blue-200 dark:border-blue-800">
-                                <SelectItem value="tr">
+                        <div className="flex items-center justify-center lg:justify-end gap-4">
+                            <Select value={locale} onValueChange={(value: 'tr' | 'en') => setLocale(value)}>
+                                <SelectTrigger className="w-36 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-blue-200 dark:border-blue-800 shadow-lg hover:shadow-xl transition-all duration-200">
                                     <div className="flex items-center gap-2">
-                                        <FlagWrapper locale="tr" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
-                                        {t('languages.tr')}
+                                        <Languages className="h-4 w-4 text-blue-600" />
+                                        <SelectValue />
                                     </div>
-                                </SelectItem>
-                                <SelectItem value="en">
-                                    <div className="flex items-center gap-2">
-                                        <FlagWrapper locale="en" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
-                                        {t('languages.en')}
-                                    </div>
-                                </SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <Button
-                            onClick={() => setCreateDialogOpen(true)}
-                            className="shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4"
-                        >
-                            <Plus className="h-4 w-4 mr-2" />
-                            {t('newSlider')}
-                        </Button>
+                                </SelectTrigger>
+                                <SelectContent className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-blue-200 dark:border-blue-800">
+                                    <SelectItem value="tr">
+                                        <div className="flex items-center gap-2">
+                                            <FlagWrapper locale="tr" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
+                                            {t('languages.tr')}
+                                        </div>
+                                    </SelectItem>
+                                    <SelectItem value="en">
+                                        <div className="flex items-center gap-2">
+                                            <FlagWrapper locale="en" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
+                                            {t('languages.en')}
+                                        </div>
+                                    </SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <Button
+                                onClick={() => setCreateDialogOpen(true)}
+                                className="shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4"
+                            >
+                                <Plus className="h-4 w-4 mr-2" />
+                                {t('newSlider')}
+                            </Button>
+                        </div>
                     </div>
-                </div>
 
-                {/* Enhanced Statistics */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
-                        <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-400/20 to-blue-600/20 rounded-full -translate-y-10 translate-x-10"></div>
-                        <CardHeader className="relative">
-                            <CardTitle className="text-sm font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
-                                <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
-                                    <BarChart3 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                    {/* Enhanced Statistics */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+                            <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-400/20 to-blue-600/20 rounded-full -translate-y-10 translate-x-10"></div>
+                            <CardHeader className="relative">
+                                <CardTitle className="text-sm font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
+                                    <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
+                                        <BarChart3 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                                    </div>
+                                    {t('stats.total')}
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="relative">
+                                <div className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+                                    {sliders.length}
                                 </div>
-                                {t('stats.total')}
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="relative">
-                            <div className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-                                {sliders.length}
-                            </div>
-                            <p className="text-xs text-gray-900 dark:text-gray-100">{t('stats.totalDesc')}</p>
-                        </CardContent>
-                    </Card>
+                                <p className="text-xs text-gray-900 dark:text-gray-100">{t('stats.totalDesc')}</p>
+                            </CardContent>
+                        </Card>
 
-                    <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
-                        <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-green-400/20 to-emerald-600/20 rounded-full -translate-y-10 translate-x-10"></div>
-                        <CardHeader className="relative">
-                            <CardTitle className="text-sm font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
-                                <div className="p-2 bg-green-100 dark:bg-green-900/50 rounded-lg">
-                                    <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
+                        <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+                            <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-green-400/20 to-emerald-600/20 rounded-full -translate-y-10 translate-x-10"></div>
+                            <CardHeader className="relative">
+                                <CardTitle className="text-sm font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
+                                    <div className="p-2 bg-green-100 dark:bg-green-900/50 rounded-lg">
+                                        <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
+                                    </div>
+                                    {t('stats.active')}
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="relative">
+                                <div className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+                                    {activeSliders.length}
                                 </div>
-                                {t('stats.active')}
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="relative">
-                            <div className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-                                {activeSliders.length}
-                            </div>
-                            <p className="text-xs text-gray-900 dark:text-gray-100">{t('stats.activeDesc')}</p>
-                        </CardContent>
-                    </Card>
+                                <p className="text-xs text-gray-900 dark:text-gray-100">{t('stats.activeDesc')}</p>
+                            </CardContent>
+                        </Card>
 
-                    <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
-                        <div className={cn(
-                            "absolute top-0 right-0 w-20 h-20 rounded-full -translate-y-10 translate-x-10",
-                            hasInactiveSliders
-                                ? "bg-gradient-to-br from-orange-400/20 to-amber-500/20"
-                                : "bg-gradient-to-br from-gray-400/20 to-slate-600/20"
-                        )}></div>
-                        <CardHeader className="relative">
-                            <CardTitle className="text-sm font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
-                                <div className={cn(
-                                    "p-2 rounded-lg",
-                                    hasInactiveSliders
-                                        ? "bg-orange-100 dark:bg-orange-900/50"
-                                        : "bg-gray-200 dark:bg-gray-700"
-                                )}>
-                                    <XCircle className={cn(
-                                        "h-4 w-4",
+                        <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+                            <div className={cn(
+                                "absolute top-0 right-0 w-20 h-20 rounded-full -translate-y-10 translate-x-10",
+                                hasInactiveSliders
+                                    ? "bg-gradient-to-br from-orange-400/20 to-amber-500/20"
+                                    : "bg-gradient-to-br from-gray-400/20 to-slate-600/20"
+                            )}></div>
+                            <CardHeader className="relative">
+                                <CardTitle className="text-sm font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
+                                    <div className={cn(
+                                        "p-2 rounded-lg",
                                         hasInactiveSliders
-                                            ? "text-orange-600 dark:text-orange-400"
-                                            : "text-gray-600 dark:text-gray-400"
-                                    )} />
+                                            ? "bg-orange-100 dark:bg-orange-900/50"
+                                            : "bg-gray-200 dark:bg-gray-700"
+                                    )}>
+                                        <XCircle className={cn(
+                                            "h-4 w-4",
+                                            hasInactiveSliders
+                                                ? "text-orange-600 dark:text-orange-400"
+                                                : "text-gray-600 dark:text-gray-400"
+                                        )} />
+                                    </div>
+                                    {t('stats.inactive')}
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="relative">
+                                <div className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+                                    {inactiveSliders.length}
                                 </div>
-                                {t('stats.inactive')}
+                                <p className="text-xs text-gray-900 dark:text-gray-100">{t('stats.inactiveDesc')}</p>
+                            </CardContent>
+                        </Card>
+
+                        <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+                            <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-purple-400/20 to-violet-600/20 rounded-full -translate-y-10 translate-x-10"></div>
+                            <CardHeader className="relative">
+                                <CardTitle className="text-sm font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
+                                    <div className="p-2 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
+                                        <Languages className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                                    </div>
+                                    {t('stats.currentLanguage')}
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="relative">
+                                <div className="text-2xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
+                                    <FlagWrapper locale={locale} className="w-8 h-5 rounded-md object-cover shadow-md" />
+                                    <span>{locale.toUpperCase()}</span>
+                                </div>
+                                <p className="text-xs text-gray-900 dark:text-gray-100">{t('stats.currentLanguageDesc')}</p>
+                            </CardContent>
+                        </Card>
+                    </div>
+
+                    {/* Enhanced Slider List */}
+                    <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4">
+                        <CardHeader className="border-b border-gray-200 dark:border-gray-700">
+                            <CardTitle className="flex items-center gap-3 text-gray-900 dark:text-gray-100">
+                                <div className="p-2 bg-blue-600 rounded-xl shadow-lg">
+                                    <ArrowUpDown className="h-5 w-5 text-white" />
+                                </div>
+                                <div>
+                                    <span className="text-xl font-bold">{t('listTitle')}</span>
+                                    <Badge variant="outline" className="ml-3 border-indigo-300 dark:border-indigo-600 text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/50">
+                                        {sliders.length} {t('slider')}
+                                    </Badge>
+                                    <Badge variant="outline" className="ml-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-950/50 flex items-center gap-1.5">
+                                        <FlagWrapper locale={locale} className="w-4 h-2.5 rounded-sm object-cover" />
+                                        {locale === 'tr' ? t('languages.tr') : t('languages.en')}
+                                    </Badge>
+                                </div>
                             </CardTitle>
                         </CardHeader>
-                        <CardContent className="relative">
-                            <div className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-                                {inactiveSliders.length}
-                            </div>
-                            <p className="text-xs text-gray-900 dark:text-gray-100">{t('stats.inactiveDesc')}</p>
-                        </CardContent>
-                    </Card>
-
-                    <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
-                        <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-purple-400/20 to-violet-600/20 rounded-full -translate-y-10 translate-x-10"></div>
-                        <CardHeader className="relative">
-                            <CardTitle className="text-sm font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
-                                <div className="p-2 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
-                                    <Languages className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                        <CardContent className="p-0">
+                            {sliders.length > 0 ? (
+                                <div className="overflow-hidden">
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow className="bg-gradient-to-r from-gray-50 to-slate-50 dark:from-gray-800/50 dark:to-slate-800/50 border-b border-gray-200 dark:border-gray-700 hover:bg-gradient-to-r hover:from-gray-100 hover:to-slate-100 dark:hover:from-gray-700/50 dark:hover:to-slate-700/50">
+                                                <TableHead className="w-10 font-semibold text-gray-700 dark:text-gray-300"></TableHead>
+                                                <TableHead className="w-24 font-semibold text-gray-700 dark:text-gray-300">{t('table.image')}</TableHead>
+                                                <TableHead className="font-semibold text-gray-700 dark:text-gray-300">{t('table.titleContent')}</TableHead>
+                                                <TableHead className="font-semibold text-gray-700 dark:text-gray-300">{t('table.description')}</TableHead>
+                                                <TableHead className="text-center w-16 font-semibold text-gray-700 dark:text-gray-300">{t('table.order')}</TableHead>
+                                                <TableHead className="w-28 font-semibold text-gray-700 dark:text-gray-300">{t('table.status')}</TableHead>
+                                                <TableHead className="w-36 font-semibold text-gray-700 dark:text-gray-300">{t('table.creator')}</TableHead>
+                                                <TableHead className="w-12 font-semibold text-gray-700 dark:text-gray-300"></TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {sliders.map((slider, index) => (
+                                                <DraggableRow
+                                                    key={slider.id}
+                                                    slider={slider}
+                                                    index={index}
+                                                    moveSlider={moveSlider}
+                                                    onEdit={handleEditSlider}
+                                                    onDelete={handleDeleteSlider}
+                                                    onToggleActive={handleToggleActive}
+                                                    onImagePreview={handleImagePreview}
+                                                    locale={locale}
+                                                />
+                                            ))}
+                                        </TableBody>
+                                    </Table>
                                 </div>
-                                {t('stats.currentLanguage')}
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="relative">
-                            <div className="text-2xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
-                                <FlagWrapper locale={locale} className="w-8 h-5 rounded-md object-cover shadow-md" />
-                                <span>{locale.toUpperCase()}</span>
-                            </div>
-                            <p className="text-xs text-gray-900 dark:text-gray-100">{t('stats.currentLanguageDesc')}</p>
-                        </CardContent>
-                    </Card>
-                </div>
-
-                {/* Enhanced Slider List */}
-                <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4">
-                    <CardHeader className="border-b border-gray-200 dark:border-gray-700">
-                        <CardTitle className="flex items-center gap-3 text-gray-900 dark:text-gray-100">
-                            <div className="p-2 bg-blue-600 rounded-xl shadow-lg">
-                                <ArrowUpDown className="h-5 w-5 text-white" />
-                            </div>
-                            <div>
-                                <span className="text-xl font-bold">{t('listTitle')}</span>
-                                <Badge variant="outline" className="ml-3 border-indigo-300 dark:border-indigo-600 text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/50">
-                                    {sliders.length} {t('slider')}
-                                </Badge>
-                                <Badge variant="outline" className="ml-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-950/50 flex items-center gap-1.5">
-                                    <FlagWrapper locale={locale} className="w-4 h-2.5 rounded-sm object-cover" />
-                                    {locale === 'tr' ? t('languages.tr') : t('languages.en')}
-                                </Badge>
-                            </div>
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-0">
-                        {sliders.length > 0 ? (
-                            <div className="overflow-hidden">
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow className="bg-gradient-to-r from-gray-50 to-slate-50 dark:from-gray-800/50 dark:to-slate-800/50 border-b border-gray-200 dark:border-gray-700 hover:bg-gradient-to-r hover:from-gray-100 hover:to-slate-100 dark:hover:from-gray-700/50 dark:hover:to-slate-700/50">
-                                            <TableHead className="w-10 font-semibold text-gray-700 dark:text-gray-300"></TableHead>
-                                            <TableHead className="w-24 font-semibold text-gray-700 dark:text-gray-300">{t('table.image')}</TableHead>
-                                            <TableHead className="font-semibold text-gray-700 dark:text-gray-300">{t('table.titleContent')}</TableHead>
-                                            <TableHead className="font-semibold text-gray-700 dark:text-gray-300">{t('table.description')}</TableHead>
-                                            <TableHead className="text-center w-16 font-semibold text-gray-700 dark:text-gray-300">{t('table.order')}</TableHead>
-                                            <TableHead className="w-28 font-semibold text-gray-700 dark:text-gray-300">{t('table.status')}</TableHead>
-                                            <TableHead className="w-36 font-semibold text-gray-700 dark:text-gray-300">{t('table.creator')}</TableHead>
-                                            <TableHead className="w-12 font-semibold text-gray-700 dark:text-gray-300"></TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {sliders.map((slider, index) => (
-                                            <DraggableRow
-                                                key={slider.id}
-                                                slider={slider}
-                                                index={index}
-                                                moveSlider={moveSlider}
-                                                onEdit={handleEditSlider}
-                                                onDelete={handleDeleteSlider}
-                                                onToggleActive={handleToggleActive}
-                                                onImagePreview={handleImagePreview}
-                                                locale={locale}
-                                            />
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </div>
-                        ) : (
-                            <div className="text-center py-16">
-                                <div className="mx-auto w-24 h-24 bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-full flex items-center justify-center mb-6 shadow-lg">
-                                    <ImageIcon className="h-10 w-10 text-blue-600 dark:text-blue-400" />
-                                </div>
-                                <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                                    {t('noSliders')}
-                                </h3>
-                                <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
-                                    {t('noSlidersDescription')}
-                                </p>
-                                <Button
-                                    onClick={() => setCreateDialogOpen(true)}
-                                    className="shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4"
-                                >
-                                    <Plus className="h-5 w-5 mr-2" />
-                                    {t('createFirstSlider')}
-                                </Button>
-                            </div>
-                        )}
-                    </CardContent>
-                </Card>
-
-                {/* Dialogs */}
-                <CreateSliderDialog
-                    open={createDialogOpen}
-                    onOpenChange={setCreateDialogOpen}
-                    onSuccess={fetchSliders}
-                />
-
-                {selectedSlider && (
-                    <EditSliderDialog
-                        open={editDialogOpen}
-                        onOpenChange={setEditDialogOpen}
-                        slider={selectedSlider}
-                        onSuccess={fetchSliders}
-                    />
-                )}
-
-                {/* Enhanced Image Preview Dialog */}
-                <Dialog open={imagePreviewOpen} onOpenChange={setImagePreviewOpen}>
-                    <DialogContent className="max-w-5xl max-h-[90vh] p-0 overflow-hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-0 shadow-2xl">
-                        <DialogHeader className="p-6 pb-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50/80 to-slate-50/80 dark:from-gray-800/80 dark:to-slate-800/80">
-                            <DialogTitle className="flex items-center gap-3 text-gray-900 dark:text-gray-100">
-                                <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg shadow-lg">
-                                    <Eye className="h-5 w-5 text-white" />
-                                </div>
-                                <span className="text-xl font-bold">{t('actions.imagePreview')}</span>
-                            </DialogTitle>
-                        </DialogHeader>
-                        <div className="p-6 pt-4">
-                            {previewImageUrl && (
-                                <div className="relative w-full bg-gradient-to-br from-gray-50 to-slate-50 dark:from-gray-900 dark:to-slate-900 rounded-xl overflow-hidden shadow-inner">
-                                    <Image
-                                        src={previewImageUrl}
-                                        alt="Slider Preview"
-                                        width={1200}
-                                        height={600}
-                                        className="w-full h-auto max-h-[70vh] object-contain rounded-xl"
-                                        onError={() => console.error(t('messages.imageLoadError'))}
-                                    />
+                            ) : (
+                                <div className="text-center py-16">
+                                    <div className="mx-auto w-24 h-24 bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-full flex items-center justify-center mb-6 shadow-lg">
+                                        <ImageIcon className="h-10 w-10 text-blue-600 dark:text-blue-400" />
+                                    </div>
+                                    <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                                        {t('noSliders')}
+                                    </h3>
+                                    <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
+                                        {t('noSlidersDescription')}
+                                    </p>
+                                    <Button
+                                        onClick={() => setCreateDialogOpen(true)}
+                                        className="shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4"
+                                    >
+                                        <Plus className="h-5 w-5 mr-2" />
+                                        {t('createFirstSlider')}
+                                    </Button>
                                 </div>
                             )}
-                        </div>
-                    </DialogContent>
-                </Dialog>
-            </div>
-        </DndProvider>
+                        </CardContent>
+                    </Card>
+
+                    {/* Dialogs */}
+                    <CreateSliderDialog
+                        open={createDialogOpen}
+                        onOpenChange={setCreateDialogOpen}
+                        onSuccess={fetchSliders}
+                    />
+
+                    {selectedSlider && (
+                        <EditSliderDialog
+                            open={editDialogOpen}
+                            onOpenChange={setEditDialogOpen}
+                            slider={selectedSlider}
+                            onSuccess={fetchSliders}
+                        />
+                    )}
+
+                    {/* Enhanced Image Preview Dialog */}
+                    <Dialog open={imagePreviewOpen} onOpenChange={setImagePreviewOpen}>
+                        <DialogContent className="max-w-5xl max-h-[90vh] p-0 overflow-hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-0 shadow-2xl">
+                            <DialogHeader className="p-6 pb-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50/80 to-slate-50/80 dark:from-gray-800/80 dark:to-slate-800/80">
+                                <DialogTitle className="flex items-center gap-3 text-gray-900 dark:text-gray-100">
+                                    <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg shadow-lg">
+                                        <Eye className="h-5 w-5 text-white" />
+                                    </div>
+                                    <span className="text-xl font-bold">{t('actions.imagePreview')}</span>
+                                </DialogTitle>
+                            </DialogHeader>
+                            <div className="p-6 pt-4">
+                                {previewImageUrl && (
+                                    <div className="relative w-full bg-gradient-to-br from-gray-50 to-slate-50 dark:from-gray-900 dark:to-slate-900 rounded-xl overflow-hidden shadow-inner">
+                                        <Image
+                                            src={previewImageUrl}
+                                            alt="Slider Preview"
+                                            width={1200}
+                                            height={600}
+                                            className="w-full h-auto max-h-[70vh] object-contain rounded-xl"
+                                            onError={() => console.error(t('messages.imageLoadError'))}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        </DialogContent>
+                    </Dialog>
+                </div>
+            </DndProvider>
+        </AdminPageGuard>
     );
 } 

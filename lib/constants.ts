@@ -106,35 +106,80 @@ export const QUERY_KEYS = {
 // =============================================================================
 // PERMISSIONS (Yetki Adları)
 // =============================================================================
+// =============================================================================
+// ESKİ KARMAŞIK SİSTEM (Backward Compatibility için korunuyor)
+// =============================================================================
 export const PERMISSIONS = {
+  // Layout permissions (database ile uyumlu)
+  LAYOUT_ADMIN_ACCESS: "admin.layout",
+  LAYOUT_USER_ACCESS: "user.layout",
+
+  // View permissions (database ile uyumlu)
+  VIEW_ADMIN_DASHBOARD: "admin.dashboard.view",
+  VIEW_ADMIN_HERO_SLIDER: "admin.hero-slider.view",
+  VIEW_ADMIN_USERS: "admin.users.view",
+  VIEW_ADMIN_ROLES: "admin.roles.view",
+  VIEW_ADMIN_PERMISSIONS: "admin.permissions.view",
+  VIEW_ADMIN_PROFILE: "admin.profile.view",
+  VIEW_USER_DASHBOARD: "user.dashboard.view",
+  VIEW_USER_PROFILE: "user.profile.view",
+
+  // Function permissions (database ile uyumlu)
+  FUNCTION_USERS_CREATE: "users.create",
+  FUNCTION_USERS_UPDATE: "users.update",
+  FUNCTION_USERS_DELETE: "users.delete",
+  FUNCTION_USERS_ASSIGN_ROLE: "users.assign-role",
+
+  FUNCTION_ROLES_CREATE: "roles.create",
+  FUNCTION_ROLES_UPDATE: "roles.update",
+  FUNCTION_ROLES_DELETE: "roles.delete",
+  FUNCTION_ROLES_ASSIGN_PERMISSIONS: "roles.assign-permissions",
+
+  FUNCTION_PERMISSIONS_CREATE: "permissions.create",
+  FUNCTION_PERMISSIONS_UPDATE: "permissions.update",
+  FUNCTION_PERMISSIONS_DELETE: "permissions.delete",
+
+  FUNCTION_HERO_SLIDER_CREATE: "hero-slider.create",
+  FUNCTION_HERO_SLIDER_UPDATE: "hero-slider.update",
+  FUNCTION_HERO_SLIDER_DELETE: "hero-slider.delete",
+} as const;
+
+// =============================================================================
+// 🚀 YENİ BASIT SİSTEM (Database ile senkronize)
+// =============================================================================
+export const SIMPLE_PERMISSIONS = {
   // Layout permissions
-  LAYOUT_ADMIN_ACCESS: "layout.admin.access",
-  LAYOUT_USER_ACCESS: "layout.user.access",
+  ADMIN_ACCESS: "admin.layout",
+  USER_ACCESS: "user.layout",
 
-  // View permissions
-  VIEW_ADMIN_DASHBOARD: "view./admin/dashboard.view",
-  VIEW_ADMIN_USERS: "view./admin/users.view",
-  VIEW_ADMIN_ROLES: "view./admin/roles.view",
-  VIEW_ADMIN_PERMISSIONS: "view./admin/permissions.view",
-  VIEW_ADMIN_PROFILE: "view./admin/profile.view",
+  // View permissions (database'deki tam formatlar)
+  ADMIN_DASHBOARD: "admin.dashboard.view",
+  ADMIN_HERO_SLIDER: "admin.hero-slider.view",
+  ADMIN_USERS: "admin.users.view",
+  ADMIN_ROLES: "admin.roles.view",
+  ADMIN_PERMISSIONS: "admin.permissions.view",
+  ADMIN_PROFILE: "admin.profile.view",
+  USER_DASHBOARD: "user.dashboard.view",
+  USER_PROFILE: "user.profile.view",
 
-  // Function permissions - Users
-  FUNCTION_USERS_VIEW: "function.users.view",
-  FUNCTION_USERS_CREATE: "function.users.create",
-  FUNCTION_USERS_EDIT: "function.users.edit",
-  FUNCTION_USERS_DELETE: "function.users.delete",
+  // Function permissions (database'deki tam formatlar)
+  USERS_CREATE: "users.create",
+  USERS_UPDATE: "users.update",
+  USERS_DELETE: "users.delete",
+  USERS_ASSIGN_ROLE: "users.assign-role",
 
-  // Function permissions - Roles
-  FUNCTION_ROLES_VIEW: "function.roles.view",
-  FUNCTION_ROLES_CREATE: "function.roles.create",
-  FUNCTION_ROLES_EDIT: "function.roles.edit",
-  FUNCTION_ROLES_DELETE: "function.roles.delete",
+  ROLES_CREATE: "roles.create",
+  ROLES_UPDATE: "roles.update",
+  ROLES_DELETE: "roles.delete",
+  ROLES_ASSIGN_PERMISSIONS: "roles.assign-permissions",
 
-  // Function permissions - Permissions
-  FUNCTION_PERMISSIONS_VIEW: "function.permissions.view",
-  FUNCTION_PERMISSIONS_CREATE: "function.permissions.create",
-  FUNCTION_PERMISSIONS_EDIT: "function.permissions.edit",
-  FUNCTION_PERMISSIONS_DELETE: "function.permissions.delete",
+  PERMISSIONS_CREATE: "permissions.create",
+  PERMISSIONS_UPDATE: "permissions.update",
+  PERMISSIONS_DELETE: "permissions.delete",
+
+  HERO_SLIDER_CREATE: "hero-slider.create",
+  HERO_SLIDER_UPDATE: "hero-slider.update",
+  HERO_SLIDER_DELETE: "hero-slider.delete",
 } as const;
 
 // ============================================================================

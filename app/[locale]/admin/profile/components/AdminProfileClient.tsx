@@ -1,5 +1,6 @@
 "use client";
 
+import { AdminPageGuard } from '@/components/panel/AdminPageGuard';
 import { Suspense, useState } from 'react';
 import { useProfile } from '../hooks/useProfile';
 import ProfileTabs from './ProfileTabs';
@@ -43,15 +44,17 @@ export default function AdminProfileClient() {
     }
 
     return (
-        <div >
-            <div className="container mx-auto p-6 max-w-7xl">
-                <Suspense fallback={
-                    <div className="h-[700px] bg-white dark:bg-gray-800 rounded-xl animate-pulse border border-gray-200 dark:border-gray-700 shadow-sm" />
-                }>
-                    <ProfileTabs profile={profile} activeTab={activeTab} onTabChange={setActiveTab} />
-                </Suspense>
+        <AdminPageGuard requiredPermission="admin.profile.view">
+            <div >
+                <div className="container mx-auto p-6 max-w-7xl">
+                    <Suspense fallback={
+                        <div className="h-[700px] bg-white dark:bg-gray-800 rounded-xl animate-pulse border border-gray-200 dark:border-gray-700 shadow-sm" />
+                    }>
+                        <ProfileTabs profile={profile} activeTab={activeTab} onTabChange={setActiveTab} />
+                    </Suspense>
+                </div>
             </div>
-        </div>
+        </AdminPageGuard>
     );
 }
 

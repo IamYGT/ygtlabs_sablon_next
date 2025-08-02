@@ -1,14 +1,16 @@
 'use client';
 
+import { DebugAuth } from '@/components/debug/DebugAuth';
+import { AdminPageGuard } from '@/components/panel/AdminPageGuard';
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { type SimpleUser as AuthUser } from "@/lib";
+import { useAuth } from "@/lib/hooks/useAuth";
+import { Link } from '@/src/i18n/navigation';
+import { ArrowRight, BarChart3, Calendar, Clock, FileText, Shield, Users } from "lucide-react";
+import { useLocale, useTranslations } from 'next-intl';
 import React from 'react';
 import '../../styles/admin.css'; // Admin CSS'ini import ediyoruz
-import { Users, FileText, Shield, ArrowRight, BarChart3, Calendar, Clock } from "lucide-react";
-import { useAdminAuth } from "@/lib/hooks/useAuth";
-import { type SimpleUser as AuthUser } from "@/lib";
-import { useTranslations, useLocale } from 'next-intl';
-import { Link } from '@/src/i18n/navigation';
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";   
 import { DashboardSkeleton } from './../components/DashboardSkeleton';
 
 type TFunction = ReturnType<typeof useTranslations<"AdminDashboard">>;
@@ -193,7 +195,7 @@ function WelcomeSection({ admin, t }: { admin: AuthUser; t: TFunction }) {
 }
 
 export default function AdminDashboardClient() {
-    const admin = useAdminAuth();
+    const { user: admin } = useAuth();
     const t = useTranslations('AdminDashboard');
 
     if (!admin) {
@@ -202,25 +204,30 @@ export default function AdminDashboardClient() {
 
     return (
         <>
-                <WelcomeSection admin={admin} t={t} />
-                {/* Enhanced Management Center Section */}
-                <div className="space-y-8 mt-10">
-                    <div className="text-center">
-                        <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                            {t('managementCenter')}
-                        </h2>
-                        <p className="text-gray-600 dark:text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
-                            {t('managementCenterDesc')}
-                        </p>
-                        <div className="w-24 h-1 rounded-full mx-auto mt-6 bg-blue-300 dark:bg-white"></div>
-                    </div>
+            <AdminPageGuard requiredPermission="admin.dashboard.view">
+                <>
+                    <WelcomeSection admin={admin} t={t} />
+                    {/* Enhanced Management Center Section */}
+                    <div className="space-y-8 mt-10">
+                        <div className="text-center">
+                            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                                {t('managementCenter')}
+                            </h2>
+                            <p className="text-gray-600 dark:text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
+                                {t('managementCenterDesc')}
+                            </p>
+                            <div className="w-24 h-1 rounded-full mx-auto mt-6 bg-blue-300 dark:bg-white"></div>
+                        </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                        {getQuickActions(t).map((action) => (
-                            <QuickAction key={action.title} {...action} />
-                        ))}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                            {getQuickActions(t).map((action) => (
+                                <QuickAction key={action.title} {...action} />
+                            ))}
+                        </div>
                     </div>
-                </div>
+                </>
+            </AdminPageGuard>
+            <DebugAuth />
         </>
     );
 }

@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser, hasPermission } from "@/lib";
 import { prisma } from "@/lib/prisma";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(_request: NextRequest) {
   try {
@@ -13,7 +13,7 @@ export async function GET(_request: NextRequest) {
       );
     }
 
-    const isAdmin = await hasPermission(user, "system.status");
+    const isAdmin = await hasPermission(user, "admin.dashboard.view");
     if (!isAdmin) {
       return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 403 });
     }

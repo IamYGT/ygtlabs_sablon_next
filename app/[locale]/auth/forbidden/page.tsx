@@ -1,11 +1,11 @@
 "use client";
 
-import { ArrowLeft, Shield, Home, Mail } from "lucide-react";
-import Link from "next/link";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowLeft, Home, Mail, Shield } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function ForbiddenPage() {
     const [mounted, setMounted] = useState(false);
@@ -28,8 +28,13 @@ export default function ForbiddenPage() {
                     const user = data.user;
                     setUserRole(user?.role || null);
 
-                    // Eğer kullanıcı USER rolündeyse dashboard'a yönlendir
-                    if (user?.role === 'USER') {
+                    // Role-based redirection
+                    if (user?.primaryRole === 'super_admin' || user?.primaryRole === 'admin') {
+                        router.push('/admin/dashboard');
+                        return;
+                    }
+
+                    if (user?.primaryRole === 'user') {
                         router.push('/users/dashboard');
                         return;
                     }
@@ -121,11 +126,11 @@ export default function ForbiddenPage() {
                                 </Link>
                             ) : (
                                 <Link href="/auth/login" className="w-full">
-                                <Button variant="outline" className="w-full">
-                                    <ArrowLeft className="mr-2 h-4 w-4" />
-                                    Giriş Sayfasına Dön
-                                </Button>
-                            </Link>
+                                    <Button variant="outline" className="w-full">
+                                        <ArrowLeft className="mr-2 h-4 w-4" />
+                                        Giriş Sayfasına Dön
+                                    </Button>
+                                </Link>
                             )}
                         </div>
 

@@ -1,17 +1,17 @@
 "use client";
 
-import React, { useState, Suspense, useCallback, memo } from 'react';
-import { toast } from "sonner";
-import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { Loader2, Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
-import { motion } from "framer-motion";
 import { Link } from '@/src/i18n/navigation';
+import { motion } from "framer-motion";
+import { ArrowRight, Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
 import { useTranslations } from 'next-intl';
+import { useParams } from "next/navigation";
+import React, { Suspense, memo, useCallback, useState } from 'react';
+import { toast } from "sonner";
 
 // Optimized loading component
 const LoadingSpinner = memo(({ className, ...props }: React.SVGProps<SVGSVGElement>) => (

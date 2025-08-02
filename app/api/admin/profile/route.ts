@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/session-utils";
+import { NextRequest, NextResponse } from "next/server";
 
 // Admin profile API - Updated to use custom session utils
 export async function GET() {
@@ -8,6 +8,11 @@ export async function GET() {
     const user = await getCurrentUser();
     if (!user?.email) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Permission kontrolü - admin.profile yetkisi gerekli
+    if (!user.permissions?.includes("admin.profile")) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const userData = await prisma.user.findUnique({
@@ -43,6 +48,11 @@ export async function PUT(request: NextRequest) {
     const user = await getCurrentUser();
     if (!user?.email) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Permission kontrolü - admin.profile yetkisi gerekli
+    if (!user.permissions?.includes("admin.profile")) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const { name, email } = await request.json();

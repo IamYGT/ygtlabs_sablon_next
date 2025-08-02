@@ -1,83 +1,104 @@
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface Permission {
   id: string;
-  roleName?: string;
-  resourceType: string;
-  resourcePath: string;
-  action: string;
-  displayName?: string;
-  description?: string;
-  category?: string;
+  name: string; // Yeni sistem: temiz isimler (admin.dashboard, users.create)
+  category: string; // "layout", "view", "function"
+  resourcePath: string; // "admin", "users", "dashboard"
+  action: string; // "access", "view", "crud"
+  permissionType: string; // "admin", "user"
+  displayName?: { tr: string; en: string };
+  description?: { tr: string; en: string };
   isActive: boolean;
-  isSystemPermission: boolean;
-  role?: {
-    name: string;
-    displayName: string;
-    color?: string;
-  };
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+interface UserPermission {
+  permissionName: string;
+  roleName: string;
+  isAllowed: boolean;
+  isActive: boolean;
 }
 
 interface GroupedPermissions {
   [key: string]: Permission[];
 }
 
-// Özel gruplandırma - benzer işlevleri bir araya getir
-const functionalGroups = {
-  profile: {
-    name: "Profil Yetkileri",
-    keywords: ["profile", "profil"],
+// Yeni permission sistemi gruplandırma
+const categoryConfig = {
+  layout: {
+    name: "Layout Erişim",
+    description: "Temel panel erişim yetkileri",
+    icon: "🏠",
   },
-  roles: {
-    name: "Rol Yetkileri",
-    keywords: ["role", "rol"],
+  view: {
+    name: "Sayfa Görüntüleme",
+    description: "Sayfa görüntüleme yetkileri",
+    icon: "👁️",
   },
-  users: {
-    name: "Kullanıcı Yetkileri",
-    keywords: ["user", "kullanıcı"],
-  },
-  permissions: {
-    name: "Yetki Yetkileri",
-    keywords: ["permission", "yetki"],
+  function: {
+    name: "İşlevsel Yetkiler",
+    description: "CRUD ve özel işlem yetkileri",
+    icon: "⚙️",
   },
 };
 
-// ResourceType bazında gruplandırma
-const resourceTypeConfig = {
-  layout: { name: "Layout" },
-  page: { name: "Sayfa" },
-  function: { name: "Fonksiyon" },
+// Resource bazında gruplandırma
+const resourceGroups = {
+  admin: { name: "Admin Panel", color: "#dc2626" },
+  user: { name: "Kullanıcı Panel", color: "#2563eb" },
+  dashboard: { name: "Dashboard", color: "#059669" },
+  users: { name: "Kullanıcı Yönetimi", color: "#7c3aed" },
+  roles: { name: "Rol Yönetimi", color: "#ea580c" },
+  permissions: { name: "Yetki Yönetimi", color: "#be123c" },
+  profile: { name: "Profil", color: "#0891b2" },
+  "hero-slider": { name: "Hero Slider", color: "#9333ea" },
 };
 
 export function usePermissions() {
   const [permissions, setPermissions] = useState<Permission[]>([]);
+  const [userPermissions, setUserPermissions] = useState<string[]>([]);
   const [groupedPermissions, setGroupedPermissions] =
     useState<GroupedPermissions>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Yetkiyi hangi gruba ait olduğunu belirle
+  // Permission kontrolü - basit ve etkili
+  const hasPermission = useCallback(
+    (permissionName: string): boolean => {
+      return userPermissions.includes(permissionName);
+    },
+    [userPermissions]
+  );
+
+  // Layout erişim kontrolü
+  const hasLayoutAccess = useCallback(
+    (layoutType: "admin" | "user"): boolean => {
+      return hasPermission(`${layoutType}.layout`);
+    },
+    [hasPermission]
+  );
+
+  // View erişim kontrolü
+  const hasViewAccess = useCallback(
+    (viewName: string): boolean => {
+      return hasPermission(viewName);
+    },
+    [hasPermission]
+  );
+
+  // Function erişim kontrolü
+  const hasFunctionAccess = useCallback(
+    (functionName: string): boolean => {
+      return hasPermission(functionName);
+    },
+    [hasPermission]
+  );
+
+  // Permission'ı kategorisine göre grupla
   const getPermissionGroup = (permission: Permission): string => {
-    const path = permission.resourcePath.toLowerCase();
-    const displayName = (permission.displayName || "").toLowerCase();
-    const description = (permission.description || "").toLowerCase();
-
-    // Önce özel grupları kontrol et
-    for (const [groupKey, group] of Object.entries(functionalGroups)) {
-      if (
-        group.keywords.some(
-          (keyword) =>
-            path.includes(keyword) ||
-            displayName.includes(keyword) ||
-            description.includes(keyword)
-        )
-      ) {
-        return groupKey;
-      }
-    }
-
-    // Sonra resourceType'a göre grupla
-    return permission.resourceType;
+    return `${permission.category}_${permission.permissionType}`;
   };
 
   const fetchPermissions = useCallback(async () => {
@@ -85,16 +106,32 @@ export function usePermissions() {
       setLoading(true);
       setError(null);
 
-      const response = await fetch("/api/admin/permissions?limit=1000");
+      // Hem tüm permission'ları hem de kullanıcının permission'larını getir
+      const [permissionsResponse, userPermissionsResponse] = await Promise.all([
+        fetch("/api/admin/permissions?limit=1000"),
+        fetch("/api/auth/current-user"),
+      ]);
 
-      if (!response.ok) {
+      console.log("🔄 usePermissions fetch:", {
+        permissionsUrl: "/api/admin/permissions?limit=1000",
+        userUrl: "/api/auth/current-user",
+        permissionsOk: permissionsResponse.ok,
+        userOk: userPermissionsResponse.ok,
+      });
+
+      if (!permissionsResponse.ok) {
         throw new Error("Yetkiler getirilemedi");
       }
 
-      const data = await response.json();
+      if (!userPermissionsResponse.ok) {
+        throw new Error("Kullanıcı bilgileri getirilemedi");
+      }
 
-      // Client-side gruplandırma
-      const grouped = data.permissions.reduce(
+      const permissionsData = await permissionsResponse.json();
+      const userData = await userPermissionsResponse.json();
+
+      // Client-side gruplandırma - category ve type'a göre
+      const grouped = permissionsData.permissions.reduce(
         (acc: GroupedPermissions, perm: Permission) => {
           const group = getPermissionGroup(perm);
           if (!acc[group]) {
@@ -106,7 +143,8 @@ export function usePermissions() {
         {}
       );
 
-      setPermissions(data.permissions);
+      setPermissions(permissionsData.permissions);
+      setUserPermissions(userData.permissions || []);
       setGroupedPermissions(grouped);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Bir hata oluştu");
@@ -119,43 +157,74 @@ export function usePermissions() {
     fetchPermissions();
   }, [fetchPermissions]);
 
+  // Grup adını getir
   const getGroupName = (groupKey: string): string => {
+    const [category, type] = groupKey.split("_");
+    const categoryName =
+      categoryConfig[category as keyof typeof categoryConfig]?.name || category;
+    const typeName = type === "admin" ? "Admin" : "Kullanıcı";
+    return `${categoryName} (${typeName})`;
+  };
+
+  // Grup ikonunu getir
+  const getGroupIcon = (groupKey: string): string => {
+    const [category] = groupKey.split("_");
     return (
-      functionalGroups[groupKey as keyof typeof functionalGroups]?.name ||
-      resourceTypeConfig[groupKey as keyof typeof resourceTypeConfig]?.name ||
-      groupKey
+      categoryConfig[category as keyof typeof categoryConfig]?.icon || "📋"
     );
   };
 
-  const getPermissionsByRole = (roleName: string): Permission[] => {
-    return permissions.filter((perm) => perm.roleName === roleName);
+  // Kategori bazında permission'ları getir
+  const getPermissionsByCategory = (category: string): Permission[] => {
+    return permissions.filter((perm) => perm.category === category);
   };
 
-  const getGroupedPermissionsByRole = (
-    roleName: string
-  ): GroupedPermissions => {
-    const rolePermissions = getPermissionsByRole(roleName);
-    return rolePermissions.reduce(
-      (acc: GroupedPermissions, perm: Permission) => {
-        const group = getPermissionGroup(perm);
-        if (!acc[group]) {
-          acc[group] = [];
-        }
-        acc[group].push(perm);
-        return acc;
-      },
-      {}
-    );
+  // Permission type bazında permission'ları getir
+  const getPermissionsByType = (permissionType: string): Permission[] => {
+    return permissions.filter((perm) => perm.permissionType === permissionType);
+  };
+
+  // Resource bazında permission'ları getir
+  const getPermissionsByResource = (resourcePath: string): Permission[] => {
+    return permissions.filter((perm) => perm.resourcePath === resourcePath);
+  };
+
+  // Permission'ın display name'ini getir (Türkçe)
+  const getPermissionDisplayName = (permission: Permission): string => {
+    return permission.displayName?.tr || permission.name;
+  };
+
+  // Permission'ın açıklamasını getir (Türkçe)
+  const getPermissionDescription = (permission: Permission): string => {
+    return permission.description?.tr || "";
   };
 
   return {
+    // State
     permissions,
+    userPermissions,
     groupedPermissions,
     loading,
     error,
-    refetch: fetchPermissions,
+
+    // Permission kontrolleri
+    hasPermission,
+    hasLayoutAccess,
+    hasViewAccess,
+    hasFunctionAccess,
+
+    // Data filtreleme
+    getPermissionsByCategory,
+    getPermissionsByType,
+    getPermissionsByResource,
+
+    // UI helpers
     getGroupName,
-    getPermissionsByRole,
-    getGroupedPermissionsByRole,
+    getGroupIcon,
+    getPermissionDisplayName,
+    getPermissionDescription,
+
+    // Actions
+    refetch: fetchPermissions,
   };
 }

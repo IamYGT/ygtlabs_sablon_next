@@ -85,6 +85,20 @@ export async function getCurrentUserFromToken(
       });
 
       permissions = rolePermissions.map((rp) => rp.permission.name);
+
+      console.log(
+        `📋 Role "${session.user.role.name}" has ${rolePermissions.length} permissions from DB`
+      );
+      if (rolePermissions.length > 0) {
+        console.log("   Permissions found:");
+        rolePermissions.forEach((rp) => {
+          console.log(
+            `     • ${rp.permission.name} (${rp.permission.category})`
+          );
+        });
+      }
+    } else {
+      console.log("❌ User has no role assigned!");
     }
 
     // Update last active (fire and forget)
@@ -95,7 +109,7 @@ export async function getCurrentUserFromToken(
       })
       .catch(() => {});
 
-    return {
+    const simpleUser = {
       id: session.user.id,
       name: session.user.name,
       email: session.user.email,
@@ -109,6 +123,14 @@ export async function getCurrentUserFromToken(
       createdAt: session.user.createdAt,
       lastLoginAt: session.user.lastLoginAt,
     };
+
+    console.log("🔐 getCurrentUserFromToken returning:");
+    console.log(`   • Email: ${simpleUser.email}`);
+    console.log(`   • Primary Role: ${simpleUser.primaryRole}`);
+    console.log(`   • Permissions: ${simpleUser.permissions.length}`);
+    console.log(`   • User Roles: ${simpleUser.userRoles.join(", ")}`);
+
+    return simpleUser;
   } catch (error) {
     console.error("❌ getCurrentUserFromToken error:", error);
     return null;

@@ -9,55 +9,55 @@ export * from "./types";
 
 // 🔐 Modern Authentication - Selective exports to avoid conflicts
 export {
+  useAdminAuth,
+  useAuth,
   useCurrentUser,
-  useLogin,
-  useLogout,
-  useHasPermission,
   useHasAdminAccess,
+  useHasPermission,
   useHasUserAccess,
   useIsAdmin,
-  useAuth,
-  useAdminAuth,
+  useLogin,
+  useLogout,
   useUserAuth,
 } from "./hooks/useAuth";
 
 export {
-  useUsers,
-  useUser as useUserDetails,
-  useCreateUser,
-  useUpdateUser,
-  useDeleteUser,
-  useToggleUserStatus,
   useAssignRole,
-  useRemoveRole,
   useBulkDeleteUsers,
-  useUserCount,
-  useUserExists,
-  useUsersByRole,
-  useSearchUsers,
+  useCreateUser,
+  useDeleteUser,
   usePrefetchUser,
+  useRemoveRole,
+  useSearchUsers,
+  useToggleUserStatus,
+  useUpdateUser,
+  useUserCount,
+  useUser as useUserDetails,
+  useUserExists,
+  useUsers,
+  useUsersByRole,
 } from "./hooks/useUsers";
 
 // Store exports with aliases to prevent conflicts
 export {
-  useAuthStore,
-  useUser as useUserFromStore,
-  useIsAuthenticated as useIsAuthenticatedFromStore,
-  useAuthLoading as useAuthLoadingFromStore,
-  useAuthError,
-  useHasPermission as useHasPermissionFromStore,
-  useHasAnyPermission as useHasAnyPermissionFromStore,
-  useIsAdmin as useIsAdminFromStore,
-  useIsSuperAdmin,
-  useIsUser as useIsUserFromStore,
-  useSessionStatus,
   authActions,
   canAccessAdmin,
   canAccessUser,
-  getUserDashboardUrl,
   formatUserDisplayName,
+  getUserDashboardUrl,
   getUserInitials,
   getUserRoleDisplayName,
+  useAuthError,
+  useAuthLoading as useAuthLoadingFromStore,
+  useAuthStore,
+  useHasAnyPermission as useHasAnyPermissionFromStore,
+  useHasPermission as useHasPermissionFromStore,
+  useIsAdmin as useIsAdminFromStore,
+  useIsAuthenticated as useIsAuthenticatedFromStore,
+  useIsSuperAdmin,
+  useIsUser as useIsUserFromStore,
+  useSessionStatus,
+  useUser as useUserFromStore,
 } from "./stores/auth-store";
 
 export * from "./stores/ui-store";
@@ -69,25 +69,25 @@ export * from "./providers/query-provider";
 // 🛠️ Core Utilities
 export * from "./crypto";
 export * from "./prisma";
-export * from "./utils";
 export * from "./session-utils";
+export * from "./utils";
 
 // 🎨 Re-export UI Components for convenience
 export { cn } from "./utils";
 
 // 🔧 Query Client utilities
 export {
-  invalidateQueries,
-  prefetchQuery,
-  setQueryData,
-  getQueryData,
-  removeQueries,
   clearQueryCache,
-  invalidateUserQueries,
-  invalidateAuthQueries,
-  invalidateRoleQueries,
-  invalidatePermissionQueries,
   getQueryClient,
+  getQueryData,
+  invalidateAuthQueries,
+  invalidatePermissionQueries,
+  invalidateQueries,
+  invalidateRoleQueries,
+  invalidateUserQueries,
+  prefetchQuery,
+  removeQueries,
+  setQueryData,
 } from "./providers/query-provider";
 
 // ============================================================================
@@ -118,7 +118,7 @@ export async function hasPermission(
 export async function hasAdminAccess(
   user: SimpleUser | null
 ): Promise<boolean> {
-  return hasPermission(user, "layout.admin.access");
+  return hasPermission(user, "admin.layout");
 }
 
 export async function canEditUser(
@@ -127,13 +127,13 @@ export async function canEditUser(
 ): Promise<boolean> {
   if (!currentUser || !hasAdminAccess(currentUser)) return false;
   if (currentUser.id === targetUser?.id) return true; // Can edit self
-  return hasPermission(currentUser, "function.users.edit");
+  return hasPermission(currentUser, "users.update");
 }
 
 export async function canToggleUserStatus(
   currentUser: SimpleUser | null
 ): Promise<boolean> {
-  return hasPermission(currentUser, "function.users.edit");
+  return hasPermission(currentUser, "users.update");
 }
 
 // Session management compatibility

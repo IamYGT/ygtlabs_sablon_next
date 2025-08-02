@@ -5,12 +5,12 @@
 // =============================================================================
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRouter, useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { authAPI } from "../api-client";
-import { useAuthStore, authActions } from "../stores/auth-store";
-import { useUIStore } from "../stores/ui-store";
-import { clearAllCacheOnLogout } from "../providers/query-provider";
 import { QUERY_KEYS } from "../constants";
+import { clearAllCacheOnLogout } from "../providers/query-provider";
+import { authActions, useAuthStore } from "../stores/auth-store";
+import { useUIStore } from "../stores/ui-store";
 import type { LoginData, SimpleUser } from "../types";
 
 // =============================================================================
@@ -355,6 +355,48 @@ export function useAuthLoading() {
   const storeLoading = useAuthStore((state) => state.isLoading);
 
   return queryLoading || storeLoading;
+}
+
+/**
+ * Refresh user permissions - Role değişikliği sonrası kullan
+ */
+export function useRefreshPermissions() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async () => {
+      const response = await fetch("/api/auth/refresh-permissions", {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (!data.success) {
+        throw new Error(data.error || "Permission refresh failed");
+      }
+
+      return data.user;
+    },
+    onSuccess: (refreshedUser) => {
+      console.log("✅ Permissions refreshed successfully");
+
+      // Auth store'u güncelle
+      authActions.setUser(refreshedUser);
+
+      // Current user query'sini invalidate et
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.AUTH,
+      });
+    },
+    onError: (error) => {
+      console.error("❌ Permission refresh failed:", error);
+    },
+  });
 }
 
 // Enhanced auth refresh utility (outside of hook)

@@ -1,13 +1,13 @@
-import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser, hasPermission } from "@/lib";
 import { prisma } from "@/lib/prisma";
+import { NextRequest, NextResponse } from "next/server";
 
 // GET /api/admin/sessions - Session istatistikleri
 export async function GET(_request: NextRequest) {
   try {
     const user = await getCurrentUser();
 
-    if (!user || !(await hasPermission(user, "sessions.admin"))) {
+    if (!user || !(await hasPermission(user, "admin.dashboard.view"))) {
       return NextResponse.json(
         { error: "Admin yetkisi gerekli" },
         { status: 403 }
@@ -50,7 +50,10 @@ export async function GET(_request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     const currentUser = await getCurrentUser();
-    if (!currentUser || !(await hasPermission(currentUser, "sessions.admin"))) {
+    if (
+      !currentUser ||
+      !(await hasPermission(currentUser, "admin.dashboard.view"))
+    ) {
       return NextResponse.json(
         { error: "Bu işlem için admin yetkisi gereklidir" },
         { status: 403 }

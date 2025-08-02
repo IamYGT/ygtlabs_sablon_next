@@ -1,8 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getCurrentUser, hasPermission } from "@/lib";
+import { getCurrentUser, hasPermission, hashPasswordPbkdf2 } from "@/lib";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
-import { hashPasswordPbkdf2 } from "@/lib";
+import { NextRequest, NextResponse } from "next/server";
 
 // Tip güvenliği için beklenen istek gövdesi
 interface UpdateUserPayload {
@@ -19,7 +18,7 @@ export async function PATCH(
   const { userId: userIdToUpdate } = await params;
 
   // 1. Yetki Kontrolü: Sadece giriş yapmış adminler bu işlemi yapabilir
-  if (!user || !(await hasPermission(user, "users.edit"))) {
+  if (!user || !(await hasPermission(user, "users.update"))) {
     return NextResponse.json({ message: "Yetkisiz Erişim" }, { status: 403 });
   }
 

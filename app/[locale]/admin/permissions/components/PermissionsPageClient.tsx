@@ -1,11 +1,23 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { useTranslations } from "next-intl";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { AdminPageGuard } from '@/components/panel/AdminPageGuard';
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import {
     Table,
     TableBody,
@@ -15,27 +27,18 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { toast } from "sonner";
-import {
+    Edit,
+    Filter,
+    MoreHorizontal,
     Plus,
     Search,
-    MoreHorizontal,
-    Edit,
     Trash2,
-    Filter,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
+import { CreatePermissionDialog } from "./CreatePermissionDialog";
+import { EditPermissionDialog } from "./EditPermissionDialog";
 // Utility fonksiyonları
 interface LocalizedValue {
     tr?: string;
@@ -79,8 +82,6 @@ function formatPermissionDescription(permission: PermissionItem, locale: string 
 
     return `${permission.resourceType} ${permission.action} yetkisi`;
 }
-import { CreatePermissionDialog } from "./CreatePermissionDialog";
-import { EditPermissionDialog } from "./EditPermissionDialog";
 
 interface PermissionItem {
     id: string;
@@ -238,220 +239,222 @@ export function PermissionsPageClient() {
     }
 
     return (
-        <div className="space-y-6">
-            {/* Header */}
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-3xl font-bold">{t("title")}</h1>
-                    <p className="text-muted-foreground">
-                        {t("subtitle")}
-                    </p>
-                </div>
-                <Button onClick={() => setCreateDialogOpen(true)}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    {t("newPermission")}
-                </Button>
-            </div>
-
-            {/* İstatistikler */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <Card>
-                    <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium">{t("totalPermissions")}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">{stats.total}</div>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium">{t("activePermissions")}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold text-green-600">{stats.active}</div>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium">{t('layout')}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">{stats.byCategory.layout || 0}</div>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium">{t('function')}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">{stats.byCategory.function || 0}</div>
-                    </CardContent>
-                </Card>
-            </div>
-
-            {/* Filtreler */}
-            <Card>
-                <CardContent className="p-4">
-                    <div className="flex flex-col md:flex-row gap-4">
-                        <div className="flex-1">
-                            <div className="relative">
-                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input
-                                    placeholder={t("searchPermissions")}
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="pl-10"
-                                />
-                            </div>
-                        </div>
-
-                        <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                            <SelectTrigger className="w-48">
-                                <SelectValue placeholder={t("filterByCategory")} />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">{t("allCategories")}</SelectItem>
-                                {categories.map((category) => (
-                                    <SelectItem key={category} value={category}>
-                                        {category} ({stats.byCategory[category] || 0})
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-
-                        <Select value={selectedResourcePath} onValueChange={setSelectedResourcePath}>
-                            <SelectTrigger className="w-48">
-                                <SelectValue placeholder={t('resourcePathPlaceholder')} />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">{t('allResourcePaths')}</SelectItem>
-                                {resourcePaths.map((path) => (
-                                    <SelectItem key={path} value={path}>
-                                        {path} ({stats.byResourcePath[path] || 0})
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-
-                        <Button variant="outline" size="icon">
-                            <Filter className="h-4 w-4" />
-                        </Button>
+        <AdminPageGuard requiredPermission="admin.permissions.view">
+            <div className="space-y-6">
+                {/* Header */}
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-3xl font-bold">{t("title")}</h1>
+                        <p className="text-muted-foreground">
+                            {t("subtitle")}
+                        </p>
                     </div>
-                </CardContent>
-            </Card>
+                    <Button onClick={() => setCreateDialogOpen(true)}>
+                        <Plus className="h-4 w-4 mr-2" />
+                        {t("newPermission")}
+                    </Button>
+                </div>
 
-            {/* Tablo */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>{t("permissions")} ({filteredPermissions.length})</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>{t("permissionDetails")}</TableHead>
-                                <TableHead>{t("category")}</TableHead>
-                                <TableHead>{t('resourcePath')}</TableHead>
-                                <TableHead>{t('action')}</TableHead>
-                                <TableHead>{t('type')}</TableHead>
-                                <TableHead>{t('status')}</TableHead>
-                                <TableHead className="w-[50px]"></TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {filteredPermissions.map((permission) => (
-                                <TableRow key={permission.id}>
-                                    <TableCell>
-                                        <div>
-                                            <div className="font-medium">
-                                                {formatPermissionDisplayName(permission)}
-                                            </div>
-                                            {permission.description && (
-                                                <div className="text-sm text-muted-foreground">
-                                                    {formatPermissionDescription(permission)}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Badge variant="outline">
-                                            {permission.category || permission.resourceType}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell className="font-mono text-sm">
-                                        {permission.resourcePath}
-                                    </TableCell>
-                                    <TableCell>
-                                        <Badge variant="secondary">
-                                            {permission.action}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Badge
-                                            variant={permission.permissionType === 'admin' ? 'destructive' : 'default'}
-                                        >
-                                            {permission.permissionType === 'admin' ? t('admin') : t('user')}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Badge
-                                            variant={permission.isActive ? "default" : "secondary"}
-                                        >
-                                            {permission.isActive ? t("active") : t("inactive")}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell>
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button variant="ghost" size="sm">
-                                                    <MoreHorizontal className="h-4 w-4" />
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end">
-                                                <DropdownMenuItem onClick={() => handleEditPermission(permission)}>
-                                                    <Edit className="h-4 w-4 mr-2" />
-                                                    {t("edit")}
-                                                </DropdownMenuItem>
-                                                {!permission.isSystemPermission && (
-                                                    <DropdownMenuItem
-                                                        onClick={() => handleDeletePermission(permission.id)}
-                                                        className="text-destructive"
-                                                    >
-                                                        <Trash2 className="h-4 w-4 mr-2" />
-                                                        {t("delete")}
-                                                    </DropdownMenuItem>
-                                                )}
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                {/* İstatistikler */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <Card>
+                        <CardHeader className="pb-2">
+                            <CardTitle className="text-sm font-medium">{t("totalPermissions")}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">{stats.total}</div>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader className="pb-2">
+                            <CardTitle className="text-sm font-medium">{t("activePermissions")}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold text-green-600">{stats.active}</div>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader className="pb-2">
+                            <CardTitle className="text-sm font-medium">{t('layout')}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">{stats.byCategory.layout || 0}</div>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader className="pb-2">
+                            <CardTitle className="text-sm font-medium">{t('function')}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">{stats.byCategory.function || 0}</div>
+                        </CardContent>
+                    </Card>
+                </div>
 
-                    {filteredPermissions.length === 0 && (
-                        <div className="text-center py-8">
-                            <p className="text-muted-foreground">{t("noPermissionsFound")}</p>
+                {/* Filtreler */}
+                <Card>
+                    <CardContent className="p-4">
+                        <div className="flex flex-col md:flex-row gap-4">
+                            <div className="flex-1">
+                                <div className="relative">
+                                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                    <Input
+                                        placeholder={t("searchPermissions")}
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                        className="pl-10"
+                                    />
+                                </div>
+                            </div>
+
+                            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                                <SelectTrigger className="w-48">
+                                    <SelectValue placeholder={t("filterByCategory")} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">{t("allCategories")}</SelectItem>
+                                    {categories.map((category) => (
+                                        <SelectItem key={category} value={category}>
+                                            {category} ({stats.byCategory[category] || 0})
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+
+                            <Select value={selectedResourcePath} onValueChange={setSelectedResourcePath}>
+                                <SelectTrigger className="w-48">
+                                    <SelectValue placeholder={t('resourcePathPlaceholder')} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">{t('allResourcePaths')}</SelectItem>
+                                    {resourcePaths.map((path) => (
+                                        <SelectItem key={path} value={path}>
+                                            {path} ({stats.byResourcePath[path] || 0})
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+
+                            <Button variant="outline" size="icon">
+                                <Filter className="h-4 w-4" />
+                            </Button>
                         </div>
-                    )}
-                </CardContent>
-            </Card>
+                    </CardContent>
+                </Card>
 
-            {/* Dialogs */}
-            <CreatePermissionDialog
-                open={createDialogOpen}
-                onOpenChange={setCreateDialogOpen}
-                onSuccess={fetchPermissions}
-            />
+                {/* Tablo */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle>{t("permissions")} ({filteredPermissions.length})</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>{t("permissionDetails")}</TableHead>
+                                    <TableHead>{t("category")}</TableHead>
+                                    <TableHead>{t('resourcePath')}</TableHead>
+                                    <TableHead>{t('action')}</TableHead>
+                                    <TableHead>{t('type')}</TableHead>
+                                    <TableHead>{t('status')}</TableHead>
+                                    <TableHead className="w-[50px]"></TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {filteredPermissions.map((permission) => (
+                                    <TableRow key={permission.id}>
+                                        <TableCell>
+                                            <div>
+                                                <div className="font-medium">
+                                                    {formatPermissionDisplayName(permission)}
+                                                </div>
+                                                {permission.description && (
+                                                    <div className="text-sm text-muted-foreground">
+                                                        {formatPermissionDescription(permission)}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Badge variant="outline">
+                                                {permission.category || permission.resourceType}
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell className="font-mono text-sm">
+                                            {permission.resourcePath}
+                                        </TableCell>
+                                        <TableCell>
+                                            <Badge variant="secondary">
+                                                {permission.action}
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Badge
+                                                variant={permission.permissionType === 'admin' ? 'destructive' : 'default'}
+                                            >
+                                                {permission.permissionType === 'admin' ? t('admin') : t('user')}
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Badge
+                                                variant={permission.isActive ? "default" : "secondary"}
+                                            >
+                                                {permission.isActive ? t("active") : t("inactive")}
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell>
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" size="sm">
+                                                        <MoreHorizontal className="h-4 w-4" />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuItem onClick={() => handleEditPermission(permission)}>
+                                                        <Edit className="h-4 w-4 mr-2" />
+                                                        {t("edit")}
+                                                    </DropdownMenuItem>
+                                                    {!permission.isSystemPermission && (
+                                                        <DropdownMenuItem
+                                                            onClick={() => handleDeletePermission(permission.id)}
+                                                            className="text-destructive"
+                                                        >
+                                                            <Trash2 className="h-4 w-4 mr-2" />
+                                                            {t("delete")}
+                                                        </DropdownMenuItem>
+                                                    )}
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
 
-            {selectedPermission && (
-                <EditPermissionDialog
-                    open={editDialogOpen}
-                    onOpenChange={setEditDialogOpen}
-                    permission={selectedPermission}
+                        {filteredPermissions.length === 0 && (
+                            <div className="text-center py-8">
+                                <p className="text-muted-foreground">{t("noPermissionsFound")}</p>
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
+
+                {/* Dialogs */}
+                <CreatePermissionDialog
+                    open={createDialogOpen}
+                    onOpenChange={setCreateDialogOpen}
                     onSuccess={fetchPermissions}
                 />
-            )}
-        </div>
+
+                {selectedPermission && (
+                    <EditPermissionDialog
+                        open={editDialogOpen}
+                        onOpenChange={setEditDialogOpen}
+                        permission={selectedPermission}
+                        onSuccess={fetchPermissions}
+                    />
+                )}
+            </div>
+        </AdminPageGuard>
     );
 } 

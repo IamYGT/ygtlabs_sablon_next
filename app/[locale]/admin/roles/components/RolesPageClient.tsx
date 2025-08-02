@@ -1,10 +1,9 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { AdminPageGuard } from '@/components/panel/AdminPageGuard';
 import { Badge } from '@/components/ui/badge';
-import { Shield, Users, Plus, Search, Filter, Eye, Edit2, MoreHorizontal, Trash2, Settings, Crown, CheckCircle, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -20,14 +19,16 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import toast, { Toaster } from 'react-hot-toast';
+import { CheckCircle, Crown, Edit2, Eye, Filter, MoreHorizontal, Plus, Search, Settings, Shield, Trash2, Users, XCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useCallback, useEffect, useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
 import { useAuth } from '@/lib/hooks/useAuth';
 import CreateRoleDialog from './CreateRoleDialog';
-import RoleDetailsDialog from './RoleDetailsDialog';
-import EditRoleDialog from './EditRoleDialog';
 import DeleteRoleDialog from './DeleteRoleDialog';
+import EditRoleDialog from './EditRoleDialog';
+import RoleDetailsDialog from './RoleDetailsDialog';
 
 interface Role {
     id: string;
@@ -262,7 +263,7 @@ export default function RolesPageClient({
     };
 
     return (
-        <>
+        <AdminPageGuard requiredPermission="admin.roles.view">
             <Toaster position="top-right" />
             <div className="space-y-6">
 
@@ -555,6 +556,6 @@ export default function RolesPageClient({
                     onRoleDeleted={handleRefresh}
                 />
             </div>
-        </>
+        </AdminPageGuard>
     );
 } 

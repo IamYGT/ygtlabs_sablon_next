@@ -1,5 +1,5 @@
+import { AUTH_COOKIE_NAME, getCurrentUser } from "@/lib/session-utils";
 import { NextRequest, NextResponse } from "next/server";
-import { getCurrentUser, AUTH_COOKIE_NAME } from "@/lib/session-utils";
 
 export async function GET(request: NextRequest) {
   try {
@@ -49,6 +49,12 @@ export async function GET(request: NextRequest) {
     }
 
     console.log(`✅ Current user found: ${user.email} (${user.id})`);
+    console.log(
+      `🔐 User permissions: ${user.permissions?.length || 0} permissions`
+    );
+    console.log(`👑 Primary role: ${user.primaryRole || "None"}`);
+    console.log(`📋 User roles: ${user.userRoles?.join(", ") || "None"}`);
+
     return NextResponse.json({ user });
   } catch (error) {
     console.error("Current user API error:", error);
