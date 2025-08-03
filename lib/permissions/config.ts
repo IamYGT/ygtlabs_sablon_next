@@ -571,6 +571,31 @@ export const FUNCTION_PERMISSIONS: PermissionConfig[] = [
       "/api/admin/hero-slider/[sliderId] (DELETE)",
     ],
   },
+
+  // PROFILE MANAGEMENT FUNCTIONS
+  {
+    name: "admin.profile.update",
+    category: "function",
+    resourcePath: "profile",
+    action: "update",
+    permissionType: "admin",
+    displayName: {
+      tr: "Admin Profil Güncelleme",
+      en: "Update Admin Profile",
+    },
+    description: {
+      tr: "Kendi admin profil bilgilerini (isim, e-posta) güncelleme yetkisi.",
+      en: "Permission to update own admin profile information (name, email).",
+    },
+    devNotes:
+      "PUT /api/admin/profile endpoint'ini kapsar. Şifre değiştirme için ayrı permission gerekli.",
+    dependencies: ["admin.profile.view"],
+    usedIn: [
+      "AdminProfileClient",
+      "/api/admin/profile (PUT)",
+      "ProfileDetails",
+    ],
+  },
 ];
 
 /**

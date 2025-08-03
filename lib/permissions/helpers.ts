@@ -5,9 +5,9 @@
  * Tüm permission logic'i config.ts'den beslenir
  */
 
+import { getCurrentUser } from "@/lib/session-utils";
 import { NextRequest, NextResponse } from "next/server";
 import { ALL_PERMISSIONS, type PermissionName } from "./config";
-// Note: validateUserSession should be imported from your session management system
 
 // User interface for permission checking
 interface UserWithPermissions {
@@ -126,55 +126,52 @@ function _getRequiredPermissionForPath(path: string): PermissionName | null {
  * API route'lar için HOC permission guard
  */
 export function withPermission(
-  _requiredPermission: PermissionName,
-  _handler: (
+  requiredPermission: PermissionName,
+  handler: (
     request: NextRequest,
     user: UserWithPermissions
   ) => Promise<Response> | Response
 ) {
-  return async (_request: NextRequest): Promise<Response> => {
+  return async (request: NextRequest): Promise<Response> => {
     try {
-      // TODO: Implement session validation
-      // const sessionResult = await validateUserSession(request);
-      // For now, returning error - implement session validation
-      return NextResponse.json(
-        {
-          error: "Session validation not implemented",
-          code: "SESSION_VALIDATION_MISSING",
-          message:
-            "Please implement validateUserSession in your session management system",
-        },
-        { status: 501 }
+      // Session validation - getCurrentUser kullan
+      const currentUser = await getCurrentUser(request);
+
+      if (!currentUser || !currentUser.isActive) {
+        return NextResponse.json(
+          { error: "Unauthorized", code: "INVALID_SESSION" },
+          { status: 401 }
+        );
+      }
+
+      // UserWithPermissions formatına dönüştür
+      const user: UserWithPermissions = {
+        id: currentUser.id,
+        email: currentUser.email || "",
+        primaryRole: currentUser.primaryRole || "user",
+        permissions: currentUser.permissions || [],
+        isActive: currentUser.isActive,
+      };
+
+      // Permission kontrolü
+      const hasPermission = await createPermissionChecker(requiredPermission)(
+        user
       );
 
-      // Uncomment after implementing session validation:
-      // if (!sessionResult.isValid || !sessionResult.user) {
-      //   return NextResponse.json(
-      //     { error: "Unauthorized", code: "INVALID_SESSION" },
-      //     { status: 401 }
-      //   );
-      // }
-      // const user = sessionResult.user;
-
-      // Uncomment after implementing session validation:
-      // Permission kontrolü
-      // const hasPermission = await createPermissionChecker(requiredPermission)(
-      //   user
-      // );
-      // if (!hasPermission) {
-      //   return NextResponse.json(
-      //     {
-      //       error: "Forbidden",
-      //       code: "INSUFFICIENT_PERMISSIONS",
-      //       required: requiredPermission,
-      //       user_permissions: user.permissions,
-      //     },
-      //     { status: 403 }
-      //   );
-      // }
+      if (!hasPermission) {
+        return NextResponse.json(
+          {
+            error: "Forbidden",
+            code: "INSUFFICIENT_PERMISSIONS",
+            required: requiredPermission,
+            user_permissions: user.permissions,
+          },
+          { status: 403 }
+        );
+      }
 
       // Handler'ı çalıştır
-      // return await handler(request, user);
+      return await handler(request, user);
     } catch (error) {
       console.error("Permission guard error:", error);
       return NextResponse.json(

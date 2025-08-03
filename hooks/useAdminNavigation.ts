@@ -1,8 +1,7 @@
 "use client";
 
-import { ROLES } from "@/lib/constants";
-import { useAuth } from "@/lib/hooks/useAuth";
-import { type PermissionName } from "@/lib/permissions/config";
+import { usePermissions } from "@/hooks/usePermissions";
+import { type PermissionName } from "@/lib/permissions";
 import {
   Key,
   LayoutDashboard,
@@ -10,20 +9,17 @@ import {
   Shield,
   User,
   Users,
-  type LucideIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import React from "react";
 
-// Navigation config interface (moved from permissions system)
+// Navigation config interface
 interface NavigationConfig {
-  icon: string; // Lucide icon name
+  icon: keyof typeof LUCIDE_ICONS;
   translationKey: string;
   href: string;
   order: number;
-  isVisible?: boolean;
   requiredPermission: PermissionName;
-  children?: NavigationConfig[];
 }
 
 // Navigation item for UI
@@ -35,9 +31,8 @@ interface NavigationItem {
   order: number;
 }
 
-// 🧭 NAVIGATION CONFIGURATIONS (Moved from permission system)
-// Sidebar kendi navigation'ını yönetiyor, sadece permission kontrolü permission sisteminden
-const NAVIGATION_CONFIGURATIONS: Record<string, NavigationConfig> = {
+// Sidebar'ın tek gerçek kaynağı (Single Source of Truth)
+const NAVIGATION_CONFIG: Record<string, NavigationConfig> = {
   dashboard: {
     icon: "LayoutDashboard",
     translationKey: "dashboard",
@@ -83,48 +78,31 @@ const NAVIGATION_CONFIGURATIONS: Record<string, NavigationConfig> = {
 };
 
 // Lucide icon mapping
-const LUCIDE_ICONS: Record<string, LucideIcon> = {
+const LUCIDE_ICONS = {
   LayoutDashboard,
   Monitor,
   Users,
   Shield,
   Key,
   User,
-};
-
-// Helper function to get Lucide icon by name
-const getLucideIcon = (iconName: string): LucideIcon => {
-  return LUCIDE_ICONS[iconName] || Users; // Default fallback
-};
-
-// Navigation helper functions (moved from permission system)
-const getNavigationItems = (userPermissions: string[]): NavigationConfig[] => {
-  return Object.values(NAVIGATION_CONFIGURATIONS)
-    .filter((nav) => userPermissions.includes(nav.requiredPermission))
-    .sort((a, b) => a.order - b.order);
-};
+} as const;
 
 /**
- * 🚀 ADMIN NAVIGATION HOOK
- * Sidebar kendi navigation'ını yönetiyor!
- * Permission sisteminden sadece permission kontrolü alıyor.
+ * 🚀 ADMIN NAVIGATION HOOK - YENİ STANDART
+ *
+ * Sidebar navigasyonunu oluşturur.
+ * Tüm yetki kontrolleri için merkezi `usePermissions` hook'unu kullanır.
  */
 export function useAdminNavigation(): NavigationItem[] {
   const t = useTranslations("AdminNavigation");
-  const { user } = useAuth();
+  const { has } = usePermissions();
 
-  // User'ın permissions'larını al
-  const userPermissions = user?.permissions || [];
-
-  // super_admin için tüm navigation items'ları döndür
-  const isSuperAdmin = user?.primaryRole === ROLES.SUPER_ADMIN;
-
-  if (isSuperAdmin) {
-    // Super admin tüm navigation items'ları görebilir
-    return Object.entries(NAVIGATION_CONFIGURATIONS)
+  const navItems = React.useMemo(() => {
+    return Object.entries(NAVIGATION_CONFIG)
+      .filter(([, config]) => has(config.requiredPermission))
       .sort(([, a], [, b]) => a.order - b.order)
       .map(([key, config]) => {
-        const IconComponent = getLucideIcon(config.icon);
+        const IconComponent = LUCIDE_ICONS[config.icon] || Users;
         return {
           key,
           label: t(config.translationKey),
@@ -136,92 +114,33 @@ export function useAdminNavigation(): NavigationItem[] {
           }),
         };
       });
+  }, [has, t]);
+
+  return navItems;
+}
+
+/**
+ * 🎯 SAYFA YETKİSİ KONTROLÜ - YENİ STANDART
+ *
+ * Bir kullanıcının belirli bir sayfaya erişim yetkisi olup olmadığını kontrol eder.
+ * @param pageName - `NAVIGATION_CONFIG` içerisindeki sayfa anahtarı.
+ *
+ * @example
+ * const canAccess = useHasPageAccess('users');
+ * if (!canAccess) return <Forbidden />;
+ */
+export function useHasPageAccess(
+  pageName: keyof typeof NAVIGATION_CONFIG
+): boolean {
+  const { has } = usePermissions();
+  const requiredPermission = NAVIGATION_CONFIG[pageName]?.requiredPermission;
+
+  if (!requiredPermission) {
+    console.warn(
+      `[useHasPageAccess] No navigation config found for page: ${pageName}`
+    );
+    return false;
   }
 
-  // Normal kullanıcılar için permission-based navigation
-  const allowedNavigationItems = getNavigationItems(userPermissions);
-
-  return allowedNavigationItems.map((config) => {
-    const key =
-      Object.keys(NAVIGATION_CONFIGURATIONS).find(
-        (k) => NAVIGATION_CONFIGURATIONS[k] === config
-      ) || "";
-
-    const IconComponent = getLucideIcon(config.icon);
-
-    return {
-      key,
-      label: t(config.translationKey),
-      href: config.href,
-      order: config.order,
-      icon: React.createElement(IconComponent, {
-        className:
-          "text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0",
-      }),
-    };
-  });
+  return has(requiredPermission);
 }
-
-/**
- * 🎯 SAYFA YETKİSİ KONTROLÜ
- * Navigation config'den required permission'ı bulur ve permission kontrolü yapar
- */
-export function useHasPageAccess(pageName: string): boolean {
-  const { user } = useAuth();
-  const userPermissions = user?.permissions || [];
-
-  // Super admin her şeye erişebilir
-  const isSuperAdmin = user?.primaryRole === ROLES.SUPER_ADMIN;
-  if (isSuperAdmin) return true;
-
-  // Navigation config'den required permission'ı bul
-  const navigationConfig = NAVIGATION_CONFIGURATIONS[pageName];
-  if (!navigationConfig) return false;
-
-  return userPermissions.includes(navigationConfig.requiredPermission);
-}
-
-/**
- * 📋 USER'IN ERİŞEBİLDİĞİ SAYFALARI LİSTELE
- * Navigation config'den erişilebilir navigation items'larını filtreler
- */
-export function useUserAccessiblePages(): string[] {
-  const { user } = useAuth();
-  const userPermissions = user?.permissions || [];
-
-  // Super admin tüm sayfaları görebilir
-  const isSuperAdmin = user?.primaryRole === ROLES.SUPER_ADMIN;
-  if (isSuperAdmin) {
-    return Object.keys(NAVIGATION_CONFIGURATIONS);
-  }
-
-  // Permission'a göre erişilebilir sayfalar
-  return Object.entries(NAVIGATION_CONFIGURATIONS)
-    .filter(([, config]) => userPermissions.includes(config.requiredPermission))
-    .map(([key]) => key);
-}
-
-/**
- * 🔍 PERMISSION KONTROLÜ
- * Permission sisteminden permission name'lerini kullanarak kontrol yapar
- */
-export function useHasPermission(permissionName: PermissionName): boolean {
-  const { user } = useAuth();
-  const userPermissions = user?.permissions || [];
-
-  // Super admin her şeye erişebilir
-  const isSuperAdmin = user?.primaryRole === ROLES.SUPER_ADMIN;
-  if (isSuperAdmin) return true;
-
-  return userPermissions.includes(permissionName);
-}
-
-/**
- * 🚀 NAVIGATION HELPERS
- * Navigation sistemi kendi helper'larını sağlıyor
- */
-export const NavigationHelpers = {
-  NAVIGATION_CONFIGURATIONS,
-  getLucideIcon,
-  getNavigationItems,
-} as const;

@@ -21,6 +21,8 @@ export {
   useUserAuth,
 } from "./hooks/useAuth";
 
+export { usePermissions } from "./hooks/usePermissions";
+
 export {
   useAssignRole,
   useBulkDeleteUsers,
