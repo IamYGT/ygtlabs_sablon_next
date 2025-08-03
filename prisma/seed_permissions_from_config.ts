@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { ALL_PERMISSIONS, PERMISSION_STATS } from "../lib/permissions.config";
+import { ALL_PERMISSIONS, PERMISSION_STATS } from "../lib/permissions/config";
 
 const prisma = new PrismaClient();
 

@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser, prisma } from "@/lib";
+import { NextRequest, NextResponse } from "next/server";
 
 // Tek yetki getir
 export async function GET(
@@ -68,8 +68,8 @@ export async function PUT(
       return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 });
     }
 
-    // Yetki kontrolü - function.permissions.edit yetkisi gerekli
-    if (!currentUser.permissions.includes("function.permissions.edit")) {
+    // Yetki kontrolü - permissions.update yetkisi gerekli
+    if (!currentUser.permissions.includes("permissions.update")) {
       return NextResponse.json(
         { error: "Bu işlem için yetki düzenleme yetkisi gereklidir" },
         { status: 403 }
@@ -77,7 +77,15 @@ export async function PUT(
     }
 
     const body = await request.json();
-    const { displayName, description, category, resourcePath, action, permissionType, isActive } = body;
+    const {
+      displayName,
+      description,
+      category,
+      resourcePath,
+      action,
+      permissionType,
+      isActive,
+    } = body;
 
     const { permissionId } = await params;
 
@@ -90,15 +98,10 @@ export async function PUT(
       return NextResponse.json({ error: "Yetki bulunamadı" }, { status: 404 });
     }
 
-    // Permission type kontrolü - admin tipindeki yetkiler sadece admin permission type'ı olan kullanıcılar düzenleyebilir
+    // Permission type kontrolü - admin tipindeki yetkiler sadece admin layout'a sahip kullanıcılar düzenleyebilir
     if (existingPermission.permissionType === "admin") {
-      const hasAdminPermissions = currentUser.permissions.some(
-        (p) =>
-          p.startsWith("layout.admin.") ||
-          p.startsWith("function.") ||
-          p.startsWith("view./admin/")
-      );
-      if (!hasAdminPermissions) {
+      const hasAdminAccess = currentUser.permissions.includes("admin.layout");
+      if (!hasAdminAccess) {
         return NextResponse.json(
           {
             error:
@@ -165,8 +168,8 @@ export async function DELETE(
       return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 });
     }
 
-    // Yetki kontrolü - function.permissions.delete yetkisi gerekli
-    if (!currentUser.permissions.includes("function.permissions.delete")) {
+    // Yetki kontrolü - permissions.delete yetkisi gerekli
+    if (!currentUser.permissions.includes("permissions.delete")) {
       return NextResponse.json(
         { error: "Bu işlem için yetki silme yetkisi gereklidir" },
         { status: 403 }
@@ -187,10 +190,7 @@ export async function DELETE(
     // Permission type kontrolü - admin tipindeki yetkiler sadece admin permission type'ı olan kullanıcılar silebilir
     if (existingPermission.permissionType === "admin") {
       const hasAdminPermissions = currentUser.permissions.some(
-        (p) =>
-          p.startsWith("layout.admin.") ||
-          p.startsWith("function.") ||
-          p.startsWith("view./admin/")
+        (p) => p === "admin.layout"
       );
       if (!hasAdminPermissions) {
         return NextResponse.json(
@@ -223,4 +223,4 @@ export async function DELETE(
       { status: 500 }
     );
   }
-} 
+}

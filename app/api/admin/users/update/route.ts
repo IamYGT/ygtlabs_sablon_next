@@ -1,7 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
+import {
+  canEditUser,
+  getCurrentUser,
+  hasAdminAccess,
+  hashPasswordPbkdf2,
+} from "@/lib";
 import { prisma } from "@/lib/prisma";
-import { hashPasswordPbkdf2 } from "@/lib";
-import { getCurrentUser, canEditUser, hasAdminAccess } from "@/lib";
+import { NextRequest, NextResponse } from "next/server";
 
 // Kullanıcı güncelleme işlemi için PUT metodu
 export async function PUT(request: NextRequest) {
@@ -15,11 +19,9 @@ export async function PUT(request: NextRequest) {
     console.log("🔍 Current user permissions:", currentUser.permissions);
     console.log("🔍 Current user role:", currentUser.primaryRole);
 
-    // Yetki kontrolü - function.users.edit yetkisi gerekli
-    if (!currentUser.permissions.includes("function.users.edit")) {
-      console.log(
-        "🚫 Access denied. User needs function.users.edit permission"
-      );
+    // Yetki kontrolü - users.update yetkisi gerekli
+    if (!currentUser.permissions.includes("users.update")) {
+      console.log("🚫 Access denied. User needs users.update permission");
       return NextResponse.json(
         {
           error: "Bu işlem için gerekli yetkiye sahip değilsiniz",
@@ -126,7 +128,7 @@ export async function PUT(request: NextRequest) {
 
     // Tek rol sistemi: Rol güncelleme
     if (roleId !== undefined) {
-      // Rol atama zaten function.users.edit ile kontrol edildi
+      // Rol atama zaten users.update ile kontrol edildi
 
       if (roleId === null || roleId === "") {
         // Rolü kaldır
@@ -156,7 +158,7 @@ export async function PUT(request: NextRequest) {
         // Super admin rolünü sadece super admin atayabilir
         if (role.name === "super_admin") {
           const isSuperAdmin =
-            currentUser.permissions.includes("function.roles.assign") ||
+            currentUser.permissions.includes("users.assign-role") ||
             currentUser.primaryRole === "super_admin" ||
             (await hasAdminAccess(currentUser));
 

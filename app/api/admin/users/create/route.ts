@@ -1,16 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
+import { getCurrentUser, hashPasswordPbkdf2 } from "@/lib";
 import { prisma } from "@/lib/prisma";
-import { hashPasswordPbkdf2 } from "@/lib";
-import { getCurrentUser } from "@/lib";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
     // Yetki kontrolü - yeni permission sistemi
     const currentUser = await getCurrentUser(request);
-    if (
-      !currentUser ||
-      !currentUser.permissions.includes("function.users.create")
-    ) {
+    if (!currentUser || !currentUser.permissions.includes("users.create")) {
       return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 403 });
     }
 

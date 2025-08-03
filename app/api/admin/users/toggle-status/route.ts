@@ -1,15 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
+import { canToggleUserStatus, getCurrentUser } from "@/lib";
 import { prisma } from "@/lib/prisma";
-import { getCurrentUser, canToggleUserStatus } from "@/lib";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
     // Yetki kontrolü - yeni permission sistemi
     const currentUser = await getCurrentUser(request);
-    if (
-      !currentUser ||
-      !currentUser.permissions.includes("function.users.edit")
-    ) {
+    if (!currentUser || !currentUser.permissions.includes("users.update")) {
       return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 403 });
     }
 

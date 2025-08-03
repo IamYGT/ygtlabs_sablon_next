@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib";
+import { prisma } from "@/lib/prisma";
+import { NextRequest, NextResponse } from "next/server";
 
 interface BulkDeleteResponse {
   success: boolean;
@@ -13,10 +13,7 @@ export async function POST(request: NextRequest) {
   try {
     // Yetki kontrolü - yeni permission sistemi
     const currentUser = await getCurrentUser(request);
-    if (
-      !currentUser ||
-      !currentUser.permissions.includes("function.users.delete")
-    ) {
+    if (!currentUser || !currentUser.permissions.includes("users.delete")) {
       return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 403 });
     }
 

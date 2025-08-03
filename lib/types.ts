@@ -1,11 +1,9 @@
 // =============================================================================
-// BASIT TYPE TANIMLARI - Junior Developer İçin Kolay Anlaşılır
+// CORE APPLICATION TYPES
 // =============================================================================
-
-// =============================================================================
-// MODERN TYPE DEFINITIONS FOR ZUSTAND + TANSTACK QUERY
-// Simplified types for junior developers
-// =============================================================================
+// Bu dosya sadece temel application type'larını içerir
+// Permission system type'ları: lib/permissions/types.ts
+// Component-specific type'lar: ilgili component dosyalarında
 
 // =============================================================================
 // AUTH TYPES (Temel Kimlik Doğrulama)
@@ -66,86 +64,14 @@ export interface PaginatedResponse<T> {
 // USER MANAGEMENT TYPES (Kullanıcı Yönetimi)
 // =============================================================================
 
-export interface UserWithRole {
-  id: string;
-  name: string | null;
-  email: string | null;
-  isActive: boolean;
-  profileImage: string | null;
-  createdAt: Date;
-  lastLoginAt: Date | null;
-  roles: Array<{
-    id: string;
-    name: string;
-    displayName: string;
-  }>;
-}
-
-export interface CreateUserData {
-  name: string;
-  email: string;
-  password: string;
-  roleId?: string;
-  isActive?: boolean;
-  profileImage?: string;
-}
-
-export interface UpdateUserData {
-  id: string;
-  name?: string;
-  email?: string;
-  password?: string;
-  roleId?: string;
-  isActive?: boolean;
-  profileImage?: string;
-}
+// User management type'ları component'lerde spesifik olarak tanımlanıyor
+// SimpleUser interface'i auth işlemleri için yeterli
 
 // =============================================================================
-// ROLE & PERMISSION TYPES (Rol ve Yetki)
+// ROLE & PERMISSION TYPES MOVED TO lib/permissions/
 // =============================================================================
-
-export interface Role {
-  id: string;
-  name: string;
-  displayName: string;
-  description?: string;
-  color?: string;
-  isActive: boolean;
-  layoutType: string;
-  userCount?: number;
-  permissions?: Permission[];
-}
-
-export interface Permission {
-  id: string;
-  name: string;
-  displayName: string;
-  description?: string;
-  category: string;
-  resourcePath: string;
-  action: string;
-  permissionType: string;
-  isActive: boolean;
-}
-
-export interface CreateRoleData {
-  name: string;
-  displayName: string;
-  description?: string;
-  color?: string;
-  layoutType?: string;
-  permissionIds?: string[];
-}
-
-export interface UpdateRoleData {
-  id: string;
-  name?: string;
-  displayName?: string;
-  description?: string;
-  color?: string;
-  layoutType?: string;
-  permissionIds?: string[];
-}
+// Role ve Permission type'ları artık lib/permissions/types.ts'de yönetiliyor
+// import { type Role, type Permission } from '@/lib/permissions/types';
 
 // =============================================================================
 // UI STATE TYPES (Arayüz Durumları)
@@ -192,22 +118,8 @@ export interface ChangePasswordFormData {
   confirmPassword: string;
 }
 
-export interface UserFormData {
-  name: string;
-  email: string;
-  password?: string;
-  roleId?: string;
-  isActive: boolean;
-}
-
-export interface RoleFormData {
-  name: string;
-  displayName: string;
-  description?: string;
-  color?: string;
-  layoutType: string;
-  permissionIds: string[];
-}
+// Form type'ları component'lerde gerektiğinde tanımlanıyor
+// Bu genel type'lar yerine spesifik form validation şemaları kullanılıyor
 
 // =============================================================================
 // FILTER & SEARCH TYPES (Filtreleme ve Arama)
@@ -223,39 +135,10 @@ export interface UserFilters {
 }
 
 // =============================================================================
-// PERMISSION CHECK TYPES (Yetki Kontrolleri)
+// PERMISSION TYPES MOVED TO lib/permissions/
 // =============================================================================
-
-export const PERMISSION_NAMES = {
-  // Layout permissions
-  LAYOUT_ADMIN_ACCESS: "layout.admin.access",
-  LAYOUT_USER_ACCESS: "layout.user.access",
-
-  // View permissions
-  VIEW_ADMIN_DASHBOARD: "view./admin/dashboard.view",
-  VIEW_ADMIN_USERS: "view./admin/users.view",
-  VIEW_ADMIN_ROLES: "view./admin/roles.view",
-  VIEW_ADMIN_PERMISSIONS: "view./admin/permissions.view",
-
-  // Function permissions
-  FUNCTION_USERS_CREATE: "function.users.create",
-  FUNCTION_USERS_EDIT: "function.users.edit",
-  FUNCTION_USERS_DELETE: "function.users.delete",
-  FUNCTION_USERS_VIEW: "function.users.view",
-
-  FUNCTION_ROLES_CREATE: "function.roles.create",
-  FUNCTION_ROLES_EDIT: "function.roles.edit",
-  FUNCTION_ROLES_DELETE: "function.roles.delete",
-  FUNCTION_ROLES_VIEW: "function.roles.view",
-
-  FUNCTION_PERMISSIONS_CREATE: "function.permissions.create",
-  FUNCTION_PERMISSIONS_EDIT: "function.permissions.edit",
-  FUNCTION_PERMISSIONS_DELETE: "function.permissions.delete",
-  FUNCTION_PERMISSIONS_VIEW: "function.permissions.view",
-} as const;
-
-export type PermissionName =
-  (typeof PERMISSION_NAMES)[keyof typeof PERMISSION_NAMES];
+// Permission type'ları artık lib/permissions/types.ts'de yönetiliyor
+// import { type PermissionName } from '@/lib/permissions/types';
 
 // =============================================================================
 // ERROR TYPES

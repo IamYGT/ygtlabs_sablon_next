@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib";
+import { prisma } from "@/lib/prisma";
 import { getTranslations } from "next-intl/server";
+import { NextRequest, NextResponse } from "next/server";
 
 // Rolün yetkilerini getir
 export async function GET(
@@ -20,9 +20,7 @@ export async function GET(
     }
 
     // Yetki kontrolü - yeni permission sistemi
-    const hasPermission = currentUser.permissions.includes(
-      "function.roles.edit"
-    );
+    const hasPermission = currentUser.permissions.includes("roles.update");
 
     if (!hasPermission) {
       return NextResponse.json(
@@ -99,9 +97,7 @@ export async function PUT(
     }
 
     // Yetki kontrolü - yeni permission sistemi
-    const hasPermission = currentUser.permissions.includes(
-      "function.roles.edit"
-    );
+    const hasPermission = currentUser.permissions.includes("roles.update");
 
     if (!hasPermission) {
       return NextResponse.json(

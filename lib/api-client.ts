@@ -3,14 +3,58 @@
 // =============================================================================
 
 import { API_ENDPOINTS, ERROR_MESSAGES } from "./constants";
-import type {
-  ApiResponse,
-  CreateUserData,
-  UpdateUserData,
-  CreateRoleData,
-  UpdateRoleData,
-  Permission,
-} from "./types";
+import type { ApiResponse } from "./types";
+
+// API client için inline type tanımları
+interface CreateUserData {
+  name: string;
+  email: string;
+  password: string;
+  roleId?: string;
+  isActive?: boolean;
+  profileImage?: string;
+}
+
+interface UpdateUserData {
+  id: string;
+  name?: string;
+  email?: string;
+  password?: string;
+  roleId?: string;
+  isActive?: boolean;
+  profileImage?: string;
+}
+
+interface CreateRoleData {
+  name: string;
+  displayName: string;
+  description?: string;
+  color?: string;
+  layoutType?: string;
+  permissionIds?: string[];
+}
+
+interface UpdateRoleData {
+  id: string;
+  name?: string;
+  displayName?: string;
+  description?: string;
+  color?: string;
+  layoutType?: string;
+  permissionIds?: string[];
+}
+
+interface Permission {
+  id: string;
+  name: string;
+  displayName: string;
+  description?: string;
+  category: string;
+  resourcePath: string;
+  action: string;
+  permissionType: string;
+  isActive: boolean;
+}
 
 // =============================================================================
 // ENHANCED API CLIENT CLASS
@@ -45,7 +89,7 @@ class ModernAPIClient {
         data?.error ||
         data?.message ||
         this.getStatusErrorMessage(response.status);
-      
+
       // 401 hatalarını konsola yazmayalım - bu standart bir durum
       if (response.status !== 401) {
         console.error(`❌ API Error [${response.status}]:`, errorMessage);
@@ -209,10 +253,7 @@ class ModernAPIClient {
     }
   }
 
-  async upload<T>(
-    url: string,
-    formData: FormData
-  ): Promise<ApiResponse<T>> {
+  async upload<T>(url: string, formData: FormData): Promise<ApiResponse<T>> {
     try {
       const response = await fetch(`${this.baseURL}${url}`, {
         method: "POST",
@@ -378,7 +419,6 @@ export const profileAPI = {
   deleteProfileImage: () =>
     apiClient.delete(API_ENDPOINTS.UPLOAD_PROFILE_IMAGE),
 } as const;
-
 
 // =============================================================================
 // ENHANCED HELPER FUNCTIONS

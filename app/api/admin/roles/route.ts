@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib";
+import { prisma } from "@/lib/prisma";
 import { getTranslations } from "next-intl/server";
+import { NextRequest, NextResponse } from "next/server";
 
 // Tüm rolleri getir
 export async function GET(request: NextRequest) {
@@ -16,8 +16,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Yetki kontrolü - function.roles.view yetkisi gerekli
-    if (!currentUser.permissions.includes("function.roles.view")) {
+    // Yetki kontrolü - admin.roles.view yetkisi gerekli
+    if (!currentUser.permissions.includes("admin.roles.view")) {
       return NextResponse.json(
         { error: t("common.forbidden") },
         { status: 403 }

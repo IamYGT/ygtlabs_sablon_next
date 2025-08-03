@@ -104,88 +104,36 @@ export const QUERY_KEYS = {
 } as const;
 
 // =============================================================================
-// PERMISSIONS (Yetki Adları)
+// 🚀 MERKEZI PERMISSION SİSTEMİ
 // =============================================================================
+//
+// Tüm permission'lar artık merkezi olarak lib/permissions.config.ts'de yönetiliyor!
+//
+// Kullanım:
+// import { ALL_PERMISSIONS, type PermissionName } from "@/lib/permissions.config";
+// import { useHasPermission } from "@/hooks/useAdminNavigation";
+//
+// CLI Komutları:
+// npm run permissions:list     - Tüm permission'ları listele
+// npm run permissions:types    - TypeScript types generate et
+// npm run permissions:roles    - Role'leri listele
 // =============================================================================
-// ESKİ KARMAŞIK SİSTEM (Backward Compatibility için korunuyor)
-// =============================================================================
-export const PERMISSIONS = {
-  // Layout permissions (database ile uyumlu)
-  LAYOUT_ADMIN_ACCESS: "admin.layout",
-  LAYOUT_USER_ACCESS: "user.layout",
-
-  // View permissions (database ile uyumlu)
-  VIEW_ADMIN_DASHBOARD: "admin.dashboard.view",
-  VIEW_ADMIN_HERO_SLIDER: "admin.hero-slider.view",
-  VIEW_ADMIN_USERS: "admin.users.view",
-  VIEW_ADMIN_ROLES: "admin.roles.view",
-  VIEW_ADMIN_PERMISSIONS: "admin.permissions.view",
-  VIEW_ADMIN_PROFILE: "admin.profile.view",
-  VIEW_USER_DASHBOARD: "user.dashboard.view",
-  VIEW_USER_PROFILE: "user.profile.view",
-
-  // Function permissions (database ile uyumlu)
-  FUNCTION_USERS_CREATE: "users.create",
-  FUNCTION_USERS_UPDATE: "users.update",
-  FUNCTION_USERS_DELETE: "users.delete",
-  FUNCTION_USERS_ASSIGN_ROLE: "users.assign-role",
-
-  FUNCTION_ROLES_CREATE: "roles.create",
-  FUNCTION_ROLES_UPDATE: "roles.update",
-  FUNCTION_ROLES_DELETE: "roles.delete",
-  FUNCTION_ROLES_ASSIGN_PERMISSIONS: "roles.assign-permissions",
-
-  FUNCTION_PERMISSIONS_CREATE: "permissions.create",
-  FUNCTION_PERMISSIONS_UPDATE: "permissions.update",
-  FUNCTION_PERMISSIONS_DELETE: "permissions.delete",
-
-  FUNCTION_HERO_SLIDER_CREATE: "hero-slider.create",
-  FUNCTION_HERO_SLIDER_UPDATE: "hero-slider.update",
-  FUNCTION_HERO_SLIDER_DELETE: "hero-slider.delete",
-} as const;
-
-// =============================================================================
-// 🚀 YENİ BASIT SİSTEM (Database ile senkronize)
-// =============================================================================
-export const SIMPLE_PERMISSIONS = {
-  // Layout permissions
-  ADMIN_ACCESS: "admin.layout",
-  USER_ACCESS: "user.layout",
-
-  // View permissions (database'deki tam formatlar)
-  ADMIN_DASHBOARD: "admin.dashboard.view",
-  ADMIN_HERO_SLIDER: "admin.hero-slider.view",
-  ADMIN_USERS: "admin.users.view",
-  ADMIN_ROLES: "admin.roles.view",
-  ADMIN_PERMISSIONS: "admin.permissions.view",
-  ADMIN_PROFILE: "admin.profile.view",
-  USER_DASHBOARD: "user.dashboard.view",
-  USER_PROFILE: "user.profile.view",
-
-  // Function permissions (database'deki tam formatlar)
-  USERS_CREATE: "users.create",
-  USERS_UPDATE: "users.update",
-  USERS_DELETE: "users.delete",
-  USERS_ASSIGN_ROLE: "users.assign-role",
-
-  ROLES_CREATE: "roles.create",
-  ROLES_UPDATE: "roles.update",
-  ROLES_DELETE: "roles.delete",
-  ROLES_ASSIGN_PERMISSIONS: "roles.assign-permissions",
-
-  PERMISSIONS_CREATE: "permissions.create",
-  PERMISSIONS_UPDATE: "permissions.update",
-  PERMISSIONS_DELETE: "permissions.delete",
-
-  HERO_SLIDER_CREATE: "hero-slider.create",
-  HERO_SLIDER_UPDATE: "hero-slider.update",
-  HERO_SLIDER_DELETE: "hero-slider.delete",
-} as const;
 
 // ============================================================================
-// ROLE CONSTANTS
+// 🚀 MERKEZI ROLE SİSTEMİ
+// ============================================================================
+//
+// Tüm roller artık merkezi olarak lib/permissions.config.ts'de yönetiliyor!
+//
+// Kullanım:
+// import { ROLE_CONFIGURATIONS, type RoleName } from "@/lib/permissions.config";
+// import { getAllRoles, getSystemRoles } from "@/lib/permissions.config";
+//
+// CLI Komutları:
+// npm run permissions:roles    - Role'leri listele
 // ============================================================================
 
+// Backward compatibility için minimal ROLES constant (sadece useAuth için)
 export const ROLES = {
   SUPER_ADMIN: "super_admin",
   ADMIN: "admin",

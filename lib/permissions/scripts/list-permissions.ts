@@ -4,7 +4,7 @@ import {
   LAYOUT_PERMISSIONS,
   PERMISSION_STATS,
   VIEW_PERMISSIONS,
-} from "../lib/permissions.config";
+} from "../config";
 
 function main() {
   console.log("📋 Permission System Overview\n");
@@ -52,52 +52,58 @@ function main() {
     console.log("");
   });
 
-  // Function Permissions - Grouped by resource
+  // Function Permissions
   console.log("⚙️ FUNCTION PERMISSIONS");
   console.log("─".repeat(50));
 
-  const functionByResource = FUNCTION_PERMISSIONS.reduce((acc, p) => {
+  // Group by resource for better organization
+  const groupedFunctions = FUNCTION_PERMISSIONS.reduce((acc, p) => {
     if (!acc[p.resourcePath]) {
       acc[p.resourcePath] = [];
     }
     acc[p.resourcePath].push(p);
     return acc;
-  }, {} as { [key: string]: typeof FUNCTION_PERMISSIONS });
+  }, {} as Record<string, typeof FUNCTION_PERMISSIONS>);
 
-  Object.entries(functionByResource).forEach(([resource, permissions]) => {
-    console.log(
-      `🔧 ${resource.toUpperCase()} (${permissions.length} permissions)`
-    );
+  Object.entries(groupedFunctions).forEach(([resource, permissions]) => {
+    console.log(`\n🎯 ${resource.toUpperCase()} FUNCTIONS:`);
     permissions.forEach((p) => {
-      console.log(`   📌 ${p.name}`);
-      console.log(`      Action: ${p.action} | Type: ${p.permissionType}`);
-      console.log(`      TR: ${p.displayName.tr}`);
+      console.log(`📌 ${p.name}`);
+      console.log(`   Type: ${p.permissionType} | Action: ${p.action}`);
+      console.log(`   TR: ${p.displayName.tr}`);
       if (p.dependencies && p.dependencies.length > 0) {
-        console.log(`      Dependencies: ${p.dependencies.join(", ")}`);
+        console.log(`   Dependencies: ${p.dependencies.join(", ")}`);
       }
       if (p.usedIn) {
-        console.log(`      Used in: ${p.usedIn.join(", ")}`);
+        console.log(`   Used in: ${p.usedIn.join(", ")}`);
       }
       if (p.devNotes) {
-        console.log(`      Dev Notes: ${p.devNotes}`);
+        console.log(`   Dev Notes: ${p.devNotes}`);
       }
       console.log("");
     });
   });
 
-  // Quick Reference
-  console.log("🚀 QUICK REFERENCE");
+  // Permission dependency tree
+  console.log("🌳 DEPENDENCY TREE");
   console.log("─".repeat(50));
-  console.log("Permission isimleri (kopyalama için):");
-  ALL_PERMISSIONS.forEach((p) => {
-    console.log(`"${p.name}"`);
-  });
-  console.log("");
+  const withDependencies = ALL_PERMISSIONS.filter(
+    (p) => p.dependencies && p.dependencies.length > 0
+  );
 
-  console.log("📖 Daha fazla bilgi:");
-  console.log("   • Config dosyası: lib/permissions.config.ts");
-  console.log("   • Dokümantasyon: PERMISSION_SYSTEM.md");
-  console.log("   • Sync komutu: npm run permissions:sync");
+  if (withDependencies.length > 0) {
+    withDependencies.forEach((p) => {
+      console.log(`📌 ${p.name}`);
+      p.dependencies?.forEach((dep) => {
+        console.log(`   └── requires: ${dep}`);
+      });
+      console.log("");
+    });
+  } else {
+    console.log("No dependencies found");
+  }
+
+  console.log("✅ Permission listing completed!");
 }
 
 main();

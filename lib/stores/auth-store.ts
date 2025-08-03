@@ -6,7 +6,7 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { PERMISSIONS, ROLES, STORAGE_KEYS } from "../constants";
+import { ROLES, STORAGE_KEYS } from "../constants";
 import type { SimpleUser } from "../types";
 
 // ============================================================================
@@ -153,7 +153,7 @@ export const useAuthStore = create<AuthStore>()(
 
       isAdmin: () => {
         const { hasPermission } = get();
-        return hasPermission(PERMISSIONS.LAYOUT_ADMIN_ACCESS);
+        return hasPermission("admin.layout");
       },
 
       isSuperAdmin: () => {
@@ -167,7 +167,7 @@ export const useAuthStore = create<AuthStore>()(
 
       isUser: () => {
         const { hasPermission } = get();
-        return hasPermission(PERMISSIONS.LAYOUT_USER_ACCESS);
+        return hasPermission("user.layout");
       },
 
       // Enhanced Session management
@@ -309,12 +309,12 @@ export const authActions = {
 
 export const canAccessAdmin = (user: SimpleUser | null): boolean => {
   if (!user || !user.permissions) return false;
-  return user.permissions.includes(PERMISSIONS.LAYOUT_ADMIN_ACCESS);
+  return user.permissions.includes("admin.layout");
 };
 
 export const canAccessUser = (user: SimpleUser | null): boolean => {
   if (!user || !user.permissions) return false;
-  return user.permissions.includes(PERMISSIONS.LAYOUT_USER_ACCESS);
+  return user.permissions.includes("user.layout");
 };
 
 export const getUserDashboardUrl = (user: SimpleUser | null): string => {

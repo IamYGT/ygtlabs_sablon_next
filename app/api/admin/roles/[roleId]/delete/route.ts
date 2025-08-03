@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib";
+import { prisma } from "@/lib/prisma";
 import { getTranslations } from "next-intl/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(
   request: NextRequest,
@@ -20,8 +20,8 @@ export async function DELETE(
       );
     }
 
-    // Yetki kontrolü - function.roles.delete yetkisi gerekli
-    if (!currentUser.permissions.includes("function.roles.delete")) {
+    // Yetki kontrolü - roles.delete yetkisi gerekli
+    if (!currentUser.permissions.includes("roles.delete")) {
       return NextResponse.json(
         { error: t("common.forbidden") },
         { status: 403 }

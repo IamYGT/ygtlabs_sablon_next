@@ -1,5 +1,5 @@
 /**
- * 🔐 Permission Configuration System
+ * 🔐 Merkezi Permission Configuration System
  *
  * Bu dosya tüm sistem yetkilerini merkezi olarak yönetir.
  * Developer'lar buradan:
@@ -639,5 +639,67 @@ export const PERMISSION_STATS = {
   admin: ALL_PERMISSIONS.filter((p) => p.permissionType === "admin").length,
   user: ALL_PERMISSIONS.filter((p) => p.permissionType === "user").length,
 };
+
+// 🚨 NAVIGATION SYSTEM REMOVED
+// Navigation artık hooks/useAdminNavigation.ts'de yönetiliyor
+// Permission sistemi sadece permission kontrolü yapıyor!
+
+/**
+ * 👥 ROLE SYSTEM - DATABASE MANAGED
+ *
+ * ⚠️ IMPORTANT:
+ * Roller tamamen database üzerinden yönetiliyor! (AuthRole tablosu)
+ * - Kod üzerinden role tanımı YOK
+ * - Tüm role'ler AuthRole tablosundan gelir
+ * - isSystemDefault: true/false (sistem varsayılanı mı)
+ * - isActive: true/false (aktif mi)
+ * - layoutType: 'admin' | 'user' (hangi layout)
+ *
+ * Database Schema (AuthRole):
+ * - id, name, displayName, description, color
+ * - isSystemDefault, isActive, layoutType
+ * - createdAt, updatedAt, createdById, updatedById
+ */
+
+// 🚨 NAVIGATION HELPERS REMOVED
+// Navigation helper'lar artık hooks/useAdminNavigation.ts'de
+
+/**
+ * 🔍 PERMISSION VALIDATION
+ * Permission validation helpers
+ */
+export const validatePermissionExists = (permissionName: string): boolean => {
+  return ALL_PERMISSIONS.some((p) => p.name === permissionName);
+};
+
+export const validatePermissionDependencies = (
+  permissionName: string
+): { isValid: boolean; missingDependencies: string[] } => {
+  const permission = getPermissionByName(permissionName);
+  if (!permission?.dependencies) {
+    return { isValid: true, missingDependencies: [] };
+  }
+
+  const missingDependencies = permission.dependencies.filter(
+    (dep) => !validatePermissionExists(dep)
+  );
+
+  return {
+    isValid: missingDependencies.length === 0,
+    missingDependencies,
+  };
+};
+
+/**
+ * 🎯 MAIN EXPORTS
+ * Merkezi export'lar (sadece permission sistemi)
+ */
+export const SYSTEM_CONFIG = {
+  permissions: ALL_PERMISSIONS,
+  stats: PERMISSION_STATS,
+};
+
+// Auto-generated type'lar için hazırlık
+export type PermissionName = (typeof ALL_PERMISSIONS)[number]["name"];
 
 console.log("🔐 Permission System Loaded:", PERMISSION_STATS);

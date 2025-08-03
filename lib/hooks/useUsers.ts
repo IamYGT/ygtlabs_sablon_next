@@ -5,17 +5,46 @@
 // =============================================================================
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { usersAPI, queryKeys } from "../api-client";
-import { useUIStore } from "../stores/ui-store";
-import { SUCCESS_MESSAGES, DEFAULTS, CACHE_CONFIG } from "../constants";
-import type {
-  UserWithRole,
-  CreateUserData,
-  UpdateUserData,
-  UserFilters,
-  PaginatedResponse,
-} from "../types";
 import React from "react";
+import { queryKeys, usersAPI } from "../api-client";
+import { CACHE_CONFIG, DEFAULTS, SUCCESS_MESSAGES } from "../constants";
+import { useUIStore } from "../stores/ui-store";
+import type { PaginatedResponse, UserFilters } from "../types";
+
+// Hook için inline type tanımları
+interface UserWithRole {
+  id: string;
+  name: string | null;
+  email: string | null;
+  isActive: boolean;
+  profileImage: string | null;
+  createdAt: Date;
+  lastLoginAt: Date | null;
+  roles: Array<{
+    id: string;
+    name: string;
+    displayName: string;
+  }>;
+}
+
+interface CreateUserData {
+  name: string;
+  email: string;
+  password: string;
+  roleId?: string;
+  isActive?: boolean;
+  profileImage?: string;
+}
+
+interface UpdateUserData {
+  id: string;
+  name?: string;
+  email?: string;
+  password?: string;
+  roleId?: string;
+  isActive?: boolean;
+  profileImage?: string;
+}
 
 // =============================================================================
 // ENHANCED USER LIST QUERY

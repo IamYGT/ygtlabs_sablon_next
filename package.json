@@ -16,11 +16,12 @@
     "db:seed": "npx tsx prisma/seed.ts",
     "db:reset": "prisma migrate reset --force",
     "db:studio": "prisma studio",
-    "permissions:sync": "npx tsx prisma/seed_permissions_from_config.ts",
-    "permissions:check": "npx tsx scripts/check-permissions.ts",
-    "permissions:list": "npx tsx scripts/list-permissions.ts",
-    "permissions:validate": "npx tsx scripts/validate-permissions.ts",
-    "permissions": "node scripts/permissions.cjs"
+    "permissions": "node lib/permissions/scripts/permissions.cjs",
+    "permissions:sync": "node lib/permissions/scripts/permissions.cjs sync",
+    "permissions:check": "node lib/permissions/scripts/permissions.cjs check",
+    "permissions:list": "node lib/permissions/scripts/permissions.cjs list",
+    "permissions:validate": "node lib/permissions/scripts/permissions.cjs validate",
+    "permissions:dev": "node lib/permissions/scripts/permissions.cjs dev"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.9.0",

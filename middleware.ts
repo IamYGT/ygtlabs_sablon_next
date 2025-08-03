@@ -1,6 +1,8 @@
 import createMiddleware from "next-intl/middleware";
 import { NextRequest, NextResponse } from "next/server";
 import { routing } from "./src/i18n/routing";
+// Note: For edge compatibility, complex permission validation is handled client-side
+// This middleware focuses on basic auth and routing
 
 const handleI18nRouting = createMiddleware(routing);
 

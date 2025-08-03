@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib";
+import { prisma } from "@/lib/prisma";
 import { getTranslations } from "next-intl/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(
   request: NextRequest,
@@ -19,8 +19,8 @@ export async function PUT(
       );
     }
 
-    // Admin yetkisi kontrolü
-    if (!currentUser.permissions.includes("function.roles.edit")) {
+    // Admin yetkisi kontrolü - roles.update yetkisi gerekli
+    if (!currentUser.permissions.includes("roles.update")) {
       return NextResponse.json(
         { error: t("common.forbidden") },
         { status: 403 }

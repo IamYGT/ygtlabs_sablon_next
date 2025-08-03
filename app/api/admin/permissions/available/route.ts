@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib";
+import { NextRequest, NextResponse } from "next/server";
 
 // Mevcut tüm yetkileri getir - Dinamik sistem
 export async function GET(request: NextRequest) {
@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 });
     }
 
-    if (!currentUser.permissions.includes("function.roles.edit")) {
+    if (!currentUser.permissions.includes("roles.update")) {
       return NextResponse.json(
         { error: "Bu işlem için gerekli yetkiye sahip değilsiniz" },
         { status: 403 }

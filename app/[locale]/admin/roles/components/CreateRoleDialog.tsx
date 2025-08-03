@@ -176,7 +176,7 @@ export default function CreateRoleDialog({
             accessType: 'admin' as const,
             color: '#ef4444',
             icon: Crown,
-            permissions: ['function.users.edit', 'function.roles.edit', 'function.permissions.view']
+            permissions: ['users.update', 'roles.update', 'permissions.view']
         },
         moderator: {
             name: t('templates.moderator'),
@@ -184,7 +184,7 @@ export default function CreateRoleDialog({
             accessType: 'admin' as const,
             color: '#f59e0b',
             icon: Shield,
-            permissions: ['function.users.view', 'view.users.list']
+            permissions: ['users.view', 'users.list']
         },
         member: {
             name: t('templates.member'),
@@ -200,7 +200,7 @@ export default function CreateRoleDialog({
             accessType: 'user' as const,
             color: '#10b981',
             icon: Sparkles,
-            permissions: ['view.premium.access', 'function.premium.features']
+            permissions: ['premium.access', 'premium.features']
         }
     };
 
