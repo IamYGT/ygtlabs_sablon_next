@@ -18,6 +18,7 @@
     "db:studio": "prisma studio",
     "permissions": "node lib/permissions/scripts/permissions.cjs",
     "permissions:sync": "node lib/permissions/scripts/permissions.cjs sync",
+    "permissions:force-sync": "node lib/permissions/scripts/permissions.cjs force-sync",
     "permissions:check": "node lib/permissions/scripts/permissions.cjs check",
     "permissions:list": "node lib/permissions/scripts/permissions.cjs list",
     "permissions:validate": "node lib/permissions/scripts/permissions.cjs validate",

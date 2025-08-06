@@ -294,7 +294,7 @@ export function PermissionsPageClient() {
                 {/* Filtreler */}
                 <Card>
                     <CardContent className="p-4">
-                        <div className="flex flex-col md:flex-row gap-4">
+                        <div className="flex flex-col md:flex-row gap-4 flex-wrap">
                             <div className="flex-1">
                                 <div className="relative">
                                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -308,7 +308,7 @@ export function PermissionsPageClient() {
                             </div>
 
                             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                                <SelectTrigger className="w-48">
+                                <SelectTrigger className="w-full md:w-48">
                                     <SelectValue placeholder={t("filterByCategory")} />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -322,7 +322,7 @@ export function PermissionsPageClient() {
                             </Select>
 
                             <Select value={selectedResourcePath} onValueChange={setSelectedResourcePath}>
-                                <SelectTrigger className="w-48">
+                                <SelectTrigger className="w-full md:w-48">
                                     <SelectValue placeholder={t('resourcePathPlaceholder')} />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -347,8 +347,8 @@ export function PermissionsPageClient() {
                     <CardHeader>
                         <CardTitle>{t("permissions")} ({filteredPermissions.length})</CardTitle>
                     </CardHeader>
-                    <CardContent>
-                        <Table>
+                    <CardContent className="overflow-x-auto">
+                        <Table className="min-w-[800px]">
                             <TableHeader>
                                 <TableRow>
                                     <TableHead>{t("permissionDetails")}</TableHead>

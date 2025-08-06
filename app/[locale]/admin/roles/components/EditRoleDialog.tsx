@@ -14,6 +14,7 @@ import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import {
     Crown,
@@ -296,22 +297,22 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-[95vw] lg:max-w-6xl max-h-[95vh] bg-white dark:bg-gray-900 flex flex-col overflow-hidden">
-                <DialogHeader className="border-b pb-4">
-                    <DialogTitle className="flex items-center gap-3 text-xl font-bold">
-                        <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg"><Edit className="h-5 w-5 text-blue-600 dark:text-blue-400" /></div>
-                        <div>
-                            <span>{role.displayName} {t('title')}</span>
-                            <p className="text-sm font-normal text-gray-600 dark:text-gray-400 mt-1">{t('roleInfoDescription')}</p>
+            <DialogContent className="max-w-[98vw] sm:max-w-[95vw] lg:max-w-6xl max-h-[98vh] sm:max-h-[95vh] bg-white dark:bg-gray-900 flex flex-col overflow-hidden touch-pan-y touch-pan-x">
+                <DialogHeader className="border-b pb-3 md:pb-4">
+                    <DialogTitle className="flex items-center gap-2 md:gap-3 text-lg md:text-xl font-bold">
+                        <div className="p-2 md:p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg"><Edit className="h-4 w-4 md:h-5 md:w-5 text-blue-600 dark:text-blue-400" /></div>
+                        <div className="flex-1 min-w-0">
+                            <span className="truncate block">{role.displayName} {t('title')}</span>
+                            <p className="text-xs md:text-sm font-normal text-gray-600 dark:text-gray-400 mt-1 hidden md:block">{t('roleInfoDescription')}</p>
                         </div>
                         {isProtectedRole && (
-                            <Badge variant="outline" className="ml-auto text-orange-600 border-orange-600"><ShieldCheck className="w-3 h-3 mr-1" />{t('protectedRole')}</Badge>
+                            <Badge variant="outline" className="text-orange-600 border-orange-600 text-xs"><ShieldCheck className="w-3 h-3 mr-1" />{t('protectedRole')}</Badge>
                         )}
                     </DialogTitle>
                 </DialogHeader>
-                <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 p-6 overflow-hidden">
+                <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 p-3 md:p-6 overflow-auto md:overflow-hidden scroll-smooth">
                     {/* Sol Panel - Rol Bilgileri */}
-                    <div className="lg:col-span-1 space-y-6 overflow-y-auto pr-4">
+                    <div className="lg:col-span-1 space-y-4 md:space-y-6 overflow-y-auto md:pr-4 scroll-smooth">
                         <Card>
                             <CardHeader><CardTitle className="flex items-center gap-2 text-base"><Settings className="h-4 w-4" />{t('roleInfo')}</CardTitle></CardHeader>
                             <CardContent className="space-y-4">
@@ -360,39 +361,108 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
                                 <CardTitle className="flex items-center gap-2 text-base"><Shield className="h-4 w-4" />{t('permissionManagement')}</CardTitle>
                                 <Input placeholder={t('searchPermissions')} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="max-w-sm" />
                             </CardHeader>
-                            <CardContent className="flex-1 grid grid-cols-2 gap-4 overflow-hidden">
+                            <CardContent className="flex-1 overflow-hidden">
                                 {loadingPermissions ? (
-                                    <div className="col-span-2 flex items-center justify-center h-full"><div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>
+                                    <div className="flex items-center justify-center h-full">
+                                        <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                                    </div>
                                 ) : (
                                     <>
-                                        {/* Eklenebilir Yetkiler */}
-                                        <div className="flex flex-col gap-2">
-                                            <h4 className="font-semibold text-sm text-blue-700 dark:text-blue-400">{t('availablePermissions')} ({availablePermissions.length})</h4>
-                                            <ScrollArea className="flex-1 border rounded-lg p-2">
-                                                <div className="space-y-2">
-                                                    {availablePermissions.map((p: Permission) => (
-                                                        <div key={p.id} className="flex items-center justify-between p-2 bg-blue-50 dark:bg-blue-900/20 rounded-md">
-                                                            <span className="text-sm font-medium">{p.displayName}</span>
-                                                            <Button size="icon" variant="ghost" onClick={() => !isProtectedRole && addPermission(p.id)} disabled={isProtectedRole} className="w-6 h-6 text-green-600"><Plus className="h-4 w-4" /></Button>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </ScrollArea>
+                                        {/* Desktop: Grid Layout */}
+                                        <div className="hidden md:grid md:grid-cols-2 gap-4 h-full">
+                                            {/* Eklenebilir Yetkiler */}
+                                            <div className="flex flex-col gap-2 min-h-0">
+                                                <h4 className="font-semibold text-sm text-blue-700 dark:text-blue-400">{t('availablePermissions')} ({availablePermissions.length})</h4>
+                                                <ScrollArea className="flex-1 border rounded-lg p-2">
+                                                    <div className="space-y-2">
+                                                        {availablePermissions.map((p: Permission) => (
+                                                            <div key={p.id} className="flex items-center justify-between p-2 bg-blue-50 dark:bg-blue-900/20 rounded-md">
+                                                                <span className="text-sm font-medium">{p.displayName}</span>
+                                                                <Button size="icon" variant="ghost" onClick={() => !isProtectedRole && addPermission(p.id)} disabled={isProtectedRole} className="w-6 h-6 text-green-600"><Plus className="h-4 w-4" /></Button>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </ScrollArea>
+                                            </div>
+
+                                            {/* Mevcut Yetkiler */}
+                                            <div className="flex flex-col gap-2 min-h-0">
+                                                <h4 className="font-semibold text-sm text-green-700 dark:text-green-400">{t('currentPermissions')} ({currentPermissions.length})</h4>
+                                                <ScrollArea className="flex-1 border rounded-lg p-2">
+                                                    <div className="space-y-2">
+                                                        {currentPermissions.filter(p => p.displayName.toLowerCase().includes(searchTerm.toLowerCase())).map(p => (
+                                                            <div key={p.id} className="flex items-center justify-between p-2 bg-green-50 dark:bg-green-900/20 rounded-md">
+                                                                <span className="text-sm font-medium">{p.displayName}</span>
+                                                                <Button size="icon" variant="ghost" onClick={() => !isProtectedRole && removePermission(p.id)} disabled={isProtectedRole} className="w-6 h-6 text-red-600"><X className="h-4 w-4" /></Button>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </ScrollArea>
+                                            </div>
                                         </div>
 
-                                        {/* Mevcut Yetkiler */}
-                                        <div className="flex flex-col gap-2">
-                                            <h4 className="font-semibold text-sm text-green-700 dark:text-green-400">{t('currentPermissions')} ({currentPermissions.length})</h4>
-                                            <ScrollArea className="flex-1 border rounded-lg p-2">
-                                                <div className="space-y-2">
-                                                    {currentPermissions.filter(p => p.displayName.toLowerCase().includes(searchTerm.toLowerCase())).map(p => (
-                                                        <div key={p.id} className="flex items-center justify-between p-2 bg-green-50 dark:bg-green-900/20 rounded-md">
-                                                            <span className="text-sm font-medium">{p.displayName}</span>
-                                                            <Button size="icon" variant="ghost" onClick={() => !isProtectedRole && removePermission(p.id)} disabled={isProtectedRole} className="w-6 h-6 text-red-600"><X className="h-4 w-4" /></Button>
+                                        {/* Mobile: Tabs Layout */}
+                                        <div className="md:hidden h-full min-h-0 flex flex-col">
+                                            <Tabs defaultValue="current" className="flex flex-col h-full min-h-0">
+                                                <TabsList className="grid w-full grid-cols-2">
+                                                    <TabsTrigger value="current" className="flex items-center gap-1 text-xs sm:text-sm">
+                                                        <ShieldCheck className="h-4 w-4" />
+                                                        <span className="hidden sm:inline">{t('currentPermissions')}</span>
+                                                        <span className="sm:hidden">Mevcut</span>
+                                                        ({currentPermissions.length})
+                                                    </TabsTrigger>
+                                                    <TabsTrigger value="available" className="flex items-center gap-1 text-xs sm:text-sm">
+                                                        <Plus className="h-4 w-4" />
+                                                        <span className="hidden sm:inline">{t('available_permissions')}</span>
+                                                        <span className="sm:hidden">Ekle</span>
+                                                        ({availablePermissions.length})
+                                                    </TabsTrigger>
+                                                </TabsList>
+
+                                                <TabsContent value="current" className="flex-1 mt-4 min-h-0 data-[state=active]:flex data-[state=active]:flex-col">
+                                                    <div className="flex-1 min-h-0 border rounded-lg overflow-auto scroll-smooth overscroll-contain">
+                                                        <div className="p-2 space-y-2">
+                                                            {currentPermissions.filter(p => p.displayName.toLowerCase().includes(searchTerm.toLowerCase())).map(p => (
+                                                                <div key={p.id} className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-md min-w-[280px]">
+                                                                    <div className="flex-1 min-w-0 pr-2">
+                                                                        <div className="text-sm font-medium truncate">{p.displayName}</div>
+                                                                        <div className="text-xs text-muted-foreground truncate">{p.description}</div>
+                                                                    </div>
+                                                                    <Button size="icon" variant="ghost" onClick={() => !isProtectedRole && removePermission(p.id)} disabled={isProtectedRole} className="w-8 h-8 text-red-600 flex-shrink-0"><X className="h-4 w-4" /></Button>
+                                                                </div>
+                                                            ))}
+                                                            {currentPermissions.filter(p => p.displayName.toLowerCase().includes(searchTerm.toLowerCase())).length === 0 && (
+                                                                <div className="text-center py-8 text-gray-500">
+                                                                    <ShieldCheck className="h-8 w-8 mx-auto mb-2 text-gray-300" />
+                                                                    <p>Henüz yetki eklenmemiş</p>
+                                                                </div>
+                                                            )}
                                                         </div>
-                                                    ))}
-                                                </div>
-                                            </ScrollArea>
+                                                    </div>
+                                                </TabsContent>
+
+                                                <TabsContent value="available" className="flex-1 mt-4 min-h-0 data-[state=active]:flex data-[state=active]:flex-col">
+                                                    <div className="flex-1 min-h-0 border rounded-lg overflow-auto scroll-smooth overscroll-contain">
+                                                        <div className="p-2 space-y-2">
+                                                            {availablePermissions.map((p: Permission) => (
+                                                                <div key={p.id} className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-md min-w-[280px]">
+                                                                    <div className="flex-1 min-w-0 pr-2">
+                                                                        <div className="text-sm font-medium truncate">{p.displayName}</div>
+                                                                        <div className="text-xs text-muted-foreground truncate">{p.description}</div>
+                                                                    </div>
+                                                                    <Button size="icon" variant="ghost" onClick={() => !isProtectedRole && addPermission(p.id)} disabled={isProtectedRole} className="w-8 h-8 text-green-600 flex-shrink-0"><Plus className="h-4 w-4" /></Button>
+                                                                </div>
+                                                            ))}
+                                                            {availablePermissions.length === 0 && (
+                                                                <div className="text-center py-8 text-gray-500">
+                                                                    <Plus className="h-8 w-8 mx-auto mb-2 text-gray-300" />
+                                                                    <p>Eklenebilir yetki bulunamadı</p>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </TabsContent>
+                                            </Tabs>
                                         </div>
                                     </>
                                 )}
@@ -400,10 +470,24 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
                         </Card>
                     </div>
                 </div>
-                <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 border-t">
-                    <Button variant="outline" onClick={() => onOpenChange(false)} disabled={loading}>{tCommon('cancel')}</Button>
-                    <Button onClick={handleSubmit} disabled={loading || !formData.displayName.trim() || isProtectedRole}>
-                        {loading ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>{t('updating')}</> : <><Save className="w-4 h-4 mr-2" />{t('updateRole')}</>}
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 p-3 sm:p-4 bg-gray-50 dark:bg-gray-800 border-t">
+                    <Button variant="outline" onClick={() => onOpenChange(false)} disabled={loading} className="order-2 sm:order-1">
+                        {tCommon('cancel')}
+                    </Button>
+                    <Button onClick={handleSubmit} disabled={loading || !formData.displayName.trim() || isProtectedRole} className="order-1 sm:order-2">
+                        {loading ? (
+                            <>
+                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                                <span className="hidden sm:inline">{t('updating')}</span>
+                                <span className="sm:hidden">Güncelleniyor...</span>
+                            </>
+                        ) : (
+                            <>
+                                <Save className="w-4 h-4 mr-2" />
+                                <span className="hidden sm:inline">{t('updateRole')}</span>
+                                <span className="sm:hidden">Güncelle</span>
+                            </>
+                        )}
                     </Button>
                 </div>
             </DialogContent>
