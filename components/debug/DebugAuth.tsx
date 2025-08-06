@@ -21,7 +21,7 @@ export function DebugAuth() {
     } : null,
     isAuthenticated,
     isLoading,
-    userPermissions: userPermissions.length,
+    userPermissions: userPermissions.size,
     permissionsLoading,
     isSuperAdmin: user?.primaryRole === ROLES.SUPER_ADMIN
   });
@@ -54,7 +54,7 @@ export function DebugAuth() {
           <strong>Perms Loading:</strong> {permissionsLoading ? '⏳' : '✅'}
         </div>
         <div>
-          <strong>User Permissions:</strong> {userPermissions.length}
+          <strong>User Permissions:</strong> {userPermissions.size}
         </div>
         <div>
           <strong>Admin Layout Access:</strong> {hasAdminLayout ? '✅' : '❌'}
@@ -67,8 +67,8 @@ export function DebugAuth() {
       <details className="mt-2">
         <summary className="cursor-pointer">User Permissions</summary>
         <div className="mt-1 max-h-32 overflow-y-auto">
-          {userPermissions.length > 0 ? (
-            userPermissions.map(perm => (
+          {userPermissions.size > 0 ? (
+            Array.from(userPermissions).map(perm => (
               <div key={perm} className="text-green-400">• {perm}</div>
             ))
           ) : (

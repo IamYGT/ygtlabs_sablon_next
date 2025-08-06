@@ -10,7 +10,7 @@ export async function GET(
 ) {
   return withPermission(
     "admin.hero-slider.view",
-    async (_request: NextRequest, user: UserWithPermissions) => {
+    async (_request: NextRequest, _user: UserWithPermissions) => {
       try {
         const { sliderId } = await params;
 

@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { useTranslations } from 'next-intl';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Dialog,
     DialogContent,
@@ -9,32 +10,32 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
 import { Progress } from '@/components/ui/progress';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { toast } from 'react-hot-toast';
+import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
 import {
-    Crown,
-    Users,
-    Plus,
-    Shield,
-    Settings,
-    FileText,
     Activity,
-    ChevronRight,
-    ChevronLeft,
-    Sparkles,
-    Check,
     AlertCircle,
+    Check,
+    ChevronLeft,
+    ChevronRight,
+    Crown,
+    FileText,
+    Plus,
+    Settings,
+    Shield,
+    Sparkles,
+    Users,
     X
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast';
 // Utility fonksiyonları
 interface LocalizedValue {
     tr?: string;
@@ -46,7 +47,7 @@ function parseJSONField(value: string | LocalizedValue | null | undefined, local
     if (typeof value === 'string') {
         try {
             const parsed = JSON.parse(value) as LocalizedValue;
-            return parsed?.[locale] || value;
+            return parsed?.[locale] || parsed?.en || Object.values(parsed)[0] || value;
         } catch {
             return value;
         }
@@ -60,7 +61,7 @@ function parseJSONField(value: string | LocalizedValue | null | undefined, local
 }
 
 function formatPermissionDisplayName(permission: Permission, locale: string = 'tr'): string {
-    // Eğer displayName zaten string ise (API'den formatlanmış geliyorsa) direkt kullan
+    // API'den locale'e göre formatlanmış geliyorsa direkt kullan
     if (typeof permission.displayName === 'string' && permission.displayName !== permission.name) {
         return permission.displayName;
     }
@@ -167,6 +168,8 @@ export default function CreateRoleDialog({
 }: CreateRoleDialogProps) {
     const t = useTranslations('AdminRoles.createDialog');
     const tCommon = useTranslations('AdminCommon');
+    const params = useParams();
+    const locale = (params?.locale as string) || 'tr';
 
     // Önceden tanımlı rol şablonları
     const ROLE_TEMPLATES = {
@@ -176,7 +179,7 @@ export default function CreateRoleDialog({
             accessType: 'admin' as const,
             color: '#ef4444',
             icon: Crown,
-            permissions: ['users.update', 'roles.update', 'permissions.view']
+            permissions: ['admin.users.view', 'users.update', 'admin.roles.view', 'roles.update', 'admin.permissions.view']
         },
         moderator: {
             name: t('templates.moderator'),
@@ -184,7 +187,7 @@ export default function CreateRoleDialog({
             accessType: 'admin' as const,
             color: '#f59e0b',
             icon: Shield,
-            permissions: ['users.view', 'users.list']
+            permissions: ['admin.users.view', 'users.create', 'users.update', 'admin.dashboard.view']
         },
         member: {
             name: t('templates.member'),
@@ -192,7 +195,7 @@ export default function CreateRoleDialog({
             accessType: 'user' as const,
             color: '#06b6d4',
             icon: Users,
-            permissions: []
+            permissions: ['user.dashboard.view', 'user.profile.view']
         },
         vip: {
             name: t('templates.vipMember'),
@@ -200,7 +203,7 @@ export default function CreateRoleDialog({
             accessType: 'user' as const,
             color: '#10b981',
             icon: Sparkles,
-            permissions: ['premium.access', 'premium.features']
+            permissions: ['user.dashboard.view', 'user.profile.view']
         }
     };
 
@@ -250,13 +253,13 @@ export default function CreateRoleDialog({
         setLoadingPermissions(true);
         try {
             console.log('🔄 Loading permissions from API...');
-            const response = await fetch('/api/admin/permissions?limit=1000');
+            const response = await fetch(`/api/admin/permissions?limit=1000&locale=${locale}`);
             if (response.ok) {
                 const data = await response.json();
                 console.log('✅ Permissions loaded:', data.permissions?.length || 0);
 
                 // Permission verilerini formatla
-                const formattedPermissions = formatPermissionsList(data.permissions || []);
+                const formattedPermissions = formatPermissionsList(data.permissions || [], locale);
                 setAvailablePermissions(formattedPermissions);
             } else {
                 console.error('❌ Failed to load permissions:', response.status);
@@ -268,7 +271,7 @@ export default function CreateRoleDialog({
         } finally {
             setLoadingPermissions(false);
         }
-    }, [loadingPermissions, availablePermissions.length, t]);
+    }, [loadingPermissions, availablePermissions.length, t, locale]);
 
     // Dialog açıldığında sıfırla
     useEffect(() => {
@@ -330,11 +333,11 @@ export default function CreateRoleDialog({
 
         // Sadece template'e özel yetkileri ekle (layout hariç)
         template.permissions.forEach(permName => {
-            const permission = availablePermissions.find(p =>
-                `${p.category}.${p.resourcePath}.${p.action}` === permName
-            );
+            const permission = availablePermissions.find(p => p.name === permName);
             if (permission) {
                 templatePermissions.add(permission.id);
+            } else {
+                console.warn(`Template permission '${permName}' not found in available permissions`);
             }
         });
 
@@ -395,21 +398,30 @@ export default function CreateRoleDialog({
 
     // Form submit
     const handleSubmit = async () => {
-        if (!validateStep(1)) return;
+        // Son adımda bile olsa temel validasyonu yap
+        if (!formData.displayName.trim()) {
+            toast.error(t('roleNameRequired'));
+            setErrors({ displayName: t('roleNameRequired') });
+            setCurrentStep(1); // Kullanıcıyı düzeltmesi için ilgili adıma yönlendir
+            return;
+        }
 
         setLoading(true);
         try {
-            const permissions = Array.from(selectedPermissions);
+            // Permission ID'lerini permission name'lerine çevir (EditRoleDialog ile aynı mantık)
+            const permissionNames: string[] = [];
 
-            // Layout permission'ını otomatik ekle
-            const layoutPermission = availablePermissions.find(p =>
-                p.category === 'layout' &&
-                p.resourcePath === formData.accessType &&
-                p.action === 'access'
-            );
-            if (layoutPermission && !permissions.includes(layoutPermission.id)) {
-                permissions.push(layoutPermission.id);
-            }
+            selectedPermissions.forEach(permissionId => {
+                const permission = availablePermissions.find(p => p.id === permissionId);
+                if (permission) {
+                    // Permission name formatı: name field'ını direkt kullan (veritabanındaki format)
+                    permissionNames.push(permission.name);
+                } else {
+                    console.warn(`Permission not found for ID: ${permissionId}`);
+                }
+            });
+
+            console.log('Sending permission names to API:', permissionNames);
 
             const response = await fetch('/api/admin/roles/create', {
                 method: 'POST',
@@ -420,7 +432,7 @@ export default function CreateRoleDialog({
                     description: formData.description,
                     layoutType: formData.accessType,
                     color: formData.color,
-                    permissions,
+                    permissions: permissionNames,
                 }),
             });
 
@@ -439,6 +451,7 @@ export default function CreateRoleDialog({
             setLoading(false);
         }
     };
+
 
     const renderTemplateStep = () => (
         <div className="space-y-6">
@@ -584,17 +597,14 @@ export default function CreateRoleDialog({
                                     }
                                 });
 
-                                const layoutPermission = availablePermissions.find(p =>
-                                    p.category === 'layout' &&
-                                    p.resourcePath === value &&
-                                    p.action === 'access'
-                                );
+                                const layoutPermissionName = value === 'admin' ? 'admin.layout' : 'user.layout';
+                                const layoutPermission = availablePermissions.find(p => p.name === layoutPermissionName);
 
                                 if (layoutPermission) {
                                     newSelectedPermissions.add(layoutPermission.id);
-                                    console.log(`✅ Auto-added layout.${value}.access permission`);
+                                    console.log(`✅ Auto-added ${layoutPermissionName} permission`);
                                 } else {
-                                    console.warn(`⚠️ layout.${value}.access permission not found`);
+                                    console.warn(`⚠️ ${layoutPermissionName} permission not found`);
                                 }
 
                                 console.log(`🎯 ${value} permissions updated: ${keptCount} kept, ${removedCount} removed, layout access auto-added`);
@@ -747,10 +757,10 @@ export default function CreateRoleDialog({
                                         });
 
                                         // Otomatik layout access yetkisi ekle
-                                        const layoutPermission = availablePermissions.find(p => p.name === 'layout.user.access');
+                                        const layoutPermission = availablePermissions.find(p => p.name === 'user.layout');
                                         if (layoutPermission && !newSelectedPermissions.has(layoutPermission.id)) {
                                             newSelectedPermissions.add(layoutPermission.id);
-                                            console.log('✅ Auto-added layout.user.access');
+                                            console.log('✅ Auto-added user.layout');
                                         }
 
                                         setSelectedPermissions(newSelectedPermissions);
@@ -796,10 +806,10 @@ export default function CreateRoleDialog({
                                         });
 
                                         // Otomatik layout access yetkisi ekle
-                                        const layoutPermission = availablePermissions.find(p => p.name === 'layout.admin.access');
+                                        const layoutPermission = availablePermissions.find(p => p.name === 'admin.layout');
                                         if (layoutPermission && !newSelectedPermissions.has(layoutPermission.id)) {
                                             newSelectedPermissions.add(layoutPermission.id);
-                                            console.log('✅ Auto-added layout.admin.access');
+                                            console.log('✅ Auto-added admin.layout');
                                         }
 
                                         setSelectedPermissions(newSelectedPermissions);
@@ -1034,10 +1044,10 @@ export default function CreateRoleDialog({
                     <Separator className="my-6" />
 
                     {/* Step Content */}
-                        {currentStep === 0 && renderTemplateStep()}
-                        {currentStep === 1 && renderDetailsStep()}
-                        {currentStep === 2 && renderPermissionsStep()}
-                        {currentStep === 3 && renderReviewStep()}
+                    {currentStep === 0 && renderTemplateStep()}
+                    {currentStep === 1 && renderDetailsStep()}
+                    {currentStep === 2 && renderPermissionsStep()}
+                    {currentStep === 3 && renderReviewStep()}
                 </div>
 
 

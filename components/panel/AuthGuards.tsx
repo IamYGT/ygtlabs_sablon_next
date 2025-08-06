@@ -21,7 +21,7 @@ function LoadingSpinner() {
     );
 }
 
-// Admin Guard - layout.admin.access permission gerekli
+// Admin Guard
 export function AdminGuard({ children, fallback }: AuthGuardProps) {
     const { user, isAuthenticated, isLoading, hasAdminAccess } = useAuth();
     const { isLoading: queryLoading } = useCurrentUser();

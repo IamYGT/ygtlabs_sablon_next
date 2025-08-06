@@ -108,10 +108,10 @@ export async function PUT(
 
     const { roleId } = await params;
     const body = await request.json();
-    const { permissions } = body;
+    const { permissions: incomingPermissionNames = [] } = body;
 
     console.log("🔄 Updating permissions for role:", roleId);
-    console.log("📋 Received permissions:", permissions);
+    console.log("📋 Received permission names:", incomingPermissionNames);
 
     // Rolü bul
     const role = await prisma.authRole.findUnique({
@@ -141,20 +141,54 @@ export async function PUT(
       });
 
       // Yeni yetkileri ekle
-      if (permissions && permissions.length > 0) {
-        const rolePermissionData = permissions.map(
-          (permissionName: string) => ({
-            roleName: role.name,
-            permissionName: permissionName,
-            isAllowed: true,
-            isActive: true,
-            grantedById: currentUser.id,
-          })
+      if (incomingPermissionNames.length > 0) {
+        // 1. Gelen yetki isimlerinin veritabanında var olup olmadığını kontrol et
+        const existingPermissions = await tx.permission.findMany({
+          where: {
+            name: {
+              in: incomingPermissionNames,
+            },
+          },
+          select: {
+            name: true, // Sadece isimleri al, bu yeterli
+          },
+        });
+
+        const validPermissionNames = new Set(
+          existingPermissions.map((p) => p.name)
         );
 
-        await tx.roleHasPermission.createMany({
-          data: rolePermissionData,
-        });
+        // 2. Sadece geçerli (veritabanında var olan) yetkileri ekle
+        const permissionsToCreate = incomingPermissionNames.filter(
+          (name: string) => validPermissionNames.has(name)
+        );
+
+        if (incomingPermissionNames.length !== permissionsToCreate.length) {
+          const invalidPermissions = incomingPermissionNames.filter(
+            (name: string) => !validPermissionNames.has(name)
+          );
+          console.warn(
+            `[Role Update] DİKKAT: Aşağıdaki geçersiz yetkiler role eklenemedi çünkü veritabanında bulunmuyorlar: ${invalidPermissions.join(
+              ", "
+            )}`
+          );
+        }
+
+        if (permissionsToCreate.length > 0) {
+          const rolePermissionData = permissionsToCreate.map(
+            (permissionName: string) => ({
+              roleName: role.name,
+              permissionName: permissionName,
+              isAllowed: true,
+              isActive: true,
+              grantedById: currentUser.id,
+            })
+          );
+
+          await tx.roleHasPermission.createMany({
+            data: rolePermissionData,
+          });
+        }
       }
     });
 
@@ -162,7 +196,7 @@ export async function PUT(
       message: t("roles.permissions.updateSuccess", {
         roleName: role.displayName,
       }),
-      updatedPermissions: permissions.length,
+      updatedPermissions: incomingPermissionNames.length,
     });
   } catch (error) {
     console.error("Rol yetkileri güncelleme hatası:", error);

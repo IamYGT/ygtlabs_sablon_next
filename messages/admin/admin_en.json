@@ -440,7 +440,6 @@
             },
             "clearAll": "Clear All Filters"
         },
-        "user": "User",
         "activeUsersRatio": "Active Users Ratio",
         "roleAssignmentRatio": "Role Assignment Ratio",
         "usersActive": "users active",
@@ -585,6 +584,8 @@
             "superAdminProtectedDesc": "Super Admin role is protected for system security and cannot be edited.",
             "roleName": "Role Name",
             "roleNamePlaceholder": "Enter role name",
+            "displayName": "Display Name",
+            "displayNamePlaceholder": "Enter role display name",
             "description": "Description",
             "descriptionPlaceholder": "Role description",
             "accessType": "Access Type",
@@ -594,11 +595,22 @@
             "color": "Color",
             "roleActive": "Role Active",
             "roleActiveDesc": "Inactive roles cannot be assigned to users",
+            "isActive": "Active",
+            "currentPermissions": "Current Permissions",
             "permissionManagementTitle": "Permission Management",
             "permissionManagementDesc2": "Add/remove permissions and determine access type",
             "searchPermissions": "Search permissions...",
             "selectedPermissions": "Selected Permissions",
             "availablePermissions": "Available Permissions",
+            "available_permissions": "Available Permissions",
+            "assigned_permissions": "Assigned Permissions",
+            "select_permissions": "Select Permissions",
+            "no_permissions_available": "No permissions available",
+            "permission_added": "Permission added",
+            "permission_removed": "Permission removed",
+            "loading_permissions": "Loading permissions...",
+            "error_loading_permissions": "Error loading permissions",
+            "search_permissions": "Search permissions...",
             "noPermissionsSelected": "All permissions loaded",
             "noPermissionsDesc": "You can select permissions above",
             "reviewChangesTitle": "Review Changes",
@@ -620,7 +632,8 @@
                 "rolePermissionsLoadError": "Could not load role permissions",
                 "updateErrorWithMessage": "Could not update role: {message}",
                 "permissionsUpdateErrorWithMessage": "Could not update permissions: {message}",
-                "genericUpdateError": "An error occurred while updating the role"
+                "genericUpdateError": "An error occurred while updating the role",
+                "incompatiblePermissionsRemoved": "{count} incompatible permissions removed, {kept} permissions kept"
             },
             "info": {
                 "loadingPermissionsForRole": "🔄 Loading permissions for role: {roleId}",
@@ -965,7 +978,22 @@
         "accountActive": "Your account is active",
         "accountStats": "Account Statistics",
         "status": "Status",
-        "security": "Security",
+        "security": {
+            "changePasswordTitle": "Change Password",
+            "changePasswordDescription": "Update your password for better security. Choose a strong and unique password.",
+            "currentPassword": "Current Password",
+            "newPassword": "New Password",
+            "confirmNewPassword": "Confirm New Password",
+            "updatePasswordButton": "Update Password",
+            "updating": "Updating...",
+            "passwordUpdateSuccess": "Password updated successfully!",
+            "passwordUpdateError": "Failed to update password.",
+            "validation": {
+                "currentPasswordRequired": "Current password is required.",
+                "newPasswordMinLength": "New password must be at least 8 characters.",
+                "passwordsDoNotMatch": "Passwords do not match."
+            }
+        },
         "changePassword": "Change Password",
         "user": "User",
         "namePlaceholder": "Enter your full name",
@@ -1017,23 +1045,7 @@
         "timeAgo2Minutes": "2 minutes ago",
         "timeAgo1Hour": "1 hour ago",
         "timeAgo3Hours": "3 hours ago",
-        "timeAgo1Day": "1 day ago",
-        "security": {
-            "changePasswordTitle": "Change Password",
-            "changePasswordDescription": "Update your password for better security. Choose a strong and unique password.",
-            "currentPassword": "Current Password",
-            "newPassword": "New Password",
-            "confirmNewPassword": "Confirm New Password",
-            "updatePasswordButton": "Update Password",
-            "updating": "Updating...",
-            "passwordUpdateSuccess": "Password updated successfully!",
-            "passwordUpdateError": "Failed to update password.",
-            "validation": {
-                "currentPasswordRequired": "Current password is required.",
-                "newPasswordMinLength": "New password must be at least 8 characters.",
-                "passwordsDoNotMatch": "Passwords do not match."
-            }
-        }
+        "timeAgo1Day": "1 day ago"
     },
     "HeroSlider": {
         "title": "Hero Slider Management",

@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 
 interface Permission {
-  id: string;
-  name: string; // Yeni sistem: temiz isimler (admin.dashboard, users.create)
+  id: string; // Yeni sistem: temiz isimler (admin.dashboard, users.create)
+  name: string;
   category: string; // "layout", "view", "function"
   resourcePath: string; // "admin", "users", "dashboard"
   action: string; // "access", "view", "crud"
@@ -44,30 +44,20 @@ const categoryConfig = {
   },
 };
 
-// Resource bazında gruplandırma
-const resourceGroups = {
-  admin: { name: "Admin Panel", color: "#dc2626" },
-  user: { name: "Kullanıcı Panel", color: "#2563eb" },
-  dashboard: { name: "Dashboard", color: "#059669" },
-  users: { name: "Kullanıcı Yönetimi", color: "#7c3aed" },
-  roles: { name: "Rol Yönetimi", color: "#ea580c" },
-  permissions: { name: "Yetki Yönetimi", color: "#be123c" },
-  profile: { name: "Profil", color: "#0891b2" },
-  "hero-slider": { name: "Hero Slider", color: "#9333ea" },
-};
-
 export function usePermissions() {
   const [permissions, setPermissions] = useState<Permission[]>([]);
-  const [userPermissions, setUserPermissions] = useState<string[]>([]);
+  const [userPermissions, setUserPermissions] = useState<Set<string>>(
+    new Set()
+  );
   const [groupedPermissions, setGroupedPermissions] =
     useState<GroupedPermissions>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Permission kontrolü - basit ve etkili
-  const hasPermission = useCallback(
+  // Permission kontrolü - Set kullanarak O(1) karmaşıklığında
+  const has = useCallback(
     (permissionName: string): boolean => {
-      return userPermissions.includes(permissionName);
+      return userPermissions.has(permissionName);
     },
     [userPermissions]
   );
@@ -75,25 +65,25 @@ export function usePermissions() {
   // Layout erişim kontrolü
   const hasLayoutAccess = useCallback(
     (layoutType: "admin" | "user"): boolean => {
-      return hasPermission(`${layoutType}.layout`);
+      return has(`${layoutType}.layout`);
     },
-    [hasPermission]
+    [has]
   );
 
   // View erişim kontrolü
   const hasViewAccess = useCallback(
     (viewName: string): boolean => {
-      return hasPermission(viewName);
+      return has(viewName);
     },
-    [hasPermission]
+    [has]
   );
 
   // Function erişim kontrolü
   const hasFunctionAccess = useCallback(
     (functionName: string): boolean => {
-      return hasPermission(functionName);
+      return has(functionName);
     },
-    [hasPermission]
+    [has]
   );
 
   // Permission'ı kategorisine göre grupla
@@ -144,7 +134,8 @@ export function usePermissions() {
       );
 
       setPermissions(permissionsData.permissions);
-      setUserPermissions(userData.permissions || []);
+      // Gelen yanıt { user: { ... } } yapısında olduğu için userData.user.permissions kullanılır.
+      setUserPermissions(new Set(userData.user?.permissions || []));
       setGroupedPermissions(grouped);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Bir hata oluştu");
@@ -208,7 +199,7 @@ export function usePermissions() {
     error,
 
     // Permission kontrolleri
-    hasPermission,
+    has,
     hasLayoutAccess,
     hasViewAccess,
     hasFunctionAccess,

@@ -27,6 +27,7 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "1000");
     const search = searchParams.get("search");
+    const locale = searchParams.get("locale") || "tr";
 
     // Yeni Permission tablosundan yetkileri getir
     const permissions = await prisma.permission.findMany({
@@ -58,14 +59,42 @@ export async function GET(request: NextRequest) {
       permissionType: perm.permissionType,
       displayName: perm.displayName
         ? typeof perm.displayName === "string"
-          ? JSON.parse(perm.displayName)?.tr || perm.displayName
-          : (perm.displayName as Record<string, string>)?.tr ||
+          ? (() => {
+              try {
+                const parsed = JSON.parse(perm.displayName);
+                return (
+                  parsed?.[locale] ||
+                  parsed?.en ||
+                  parsed?.tr ||
+                  perm.displayName
+                );
+              } catch {
+                return perm.displayName;
+              }
+            })()
+          : (perm.displayName as Record<string, string>)?.[locale] ||
+            (perm.displayName as Record<string, string>)?.en ||
+            (perm.displayName as Record<string, string>)?.tr ||
             "Unknown Permission"
         : `${perm.category}:${perm.resourcePath}:${perm.action}`,
       description: perm.description
         ? typeof perm.description === "string"
-          ? JSON.parse(perm.description)?.tr || perm.description
-          : (perm.description as Record<string, string>)?.tr ||
+          ? (() => {
+              try {
+                const parsed = JSON.parse(perm.description);
+                return (
+                  parsed?.[locale] ||
+                  parsed?.en ||
+                  parsed?.tr ||
+                  perm.description
+                );
+              } catch {
+                return perm.description;
+              }
+            })()
+          : (perm.description as Record<string, string>)?.[locale] ||
+            (perm.description as Record<string, string>)?.en ||
+            (perm.description as Record<string, string>)?.tr ||
             "Unknown Description"
         : `${perm.category} ${perm.action} yetkisi`,
       isActive: perm.isActive,

@@ -97,13 +97,12 @@
         "rolesAssigned": "Rol Atanmış",
         "last30Days": "Son 30 Gün",
         "new": "Yeni",
-        "selected": "Seçili",
+        "selected": "seçili",
         "user": "Kullanıcı",
         "activeUsersRatio": "Aktif Kullanıcı Oranı",
         "roleAssignmentRatio": "Rol Ataması Oranı",
         "usersActive": "kullanıcı aktif",
         "usersRoleAssigned": "kullanıcıya rol atanmış",
-        "users": "Kullanıcılar",
         "search": {
             "placeholder": "Kullanıcı adı, email veya role göre ara...",
             "usersSelected": "{count} kullanıcı seçildi",
@@ -177,7 +176,6 @@
         "deactivate": "Devre Dışı Bırak",
         "export": "Dışa Aktar",
         "selectAll": "Tümünü Seç",
-        "selected": "seçili",
         "newUser": "Yeni Kullanıcı",
         "editUserDetails": "Kullanıcı Detaylarını Düzenle",
         "quickRoleAssign": {
@@ -587,15 +585,13 @@
             "reviewDescription": "Kaydetmeden önce değişikliklerinizi kontrol edin.",
             "roleNameRequired": "Rol adı gereklidir",
             "roleNameTooLong": "Rol adı 50 karakterden fazla olamaz",
-            "description": "Açıklama",
-            "descriptionPlaceholder": "Rol açıklaması",
-            "adminAccess": "Admin Erişimi",
-            "userAccess": "User Erişimi",
             "protectedRole": "Korumalı Rol",
             "protectedRoleDesc": "Bu rol sistem tarafından korunmaktadır ve düzenlenemez.",
             "superAdminProtectedDesc": "Super Admin rolü sistem güvenliği için korunmaktadır ve düzenlenemez.",
             "roleName": "Rol Adı",
             "roleNamePlaceholder": "Rol adını girin",
+            "displayName": "Görünen Ad",
+            "displayNamePlaceholder": "Rol görünen adını girin",
             "description": "Açıklama",
             "descriptionPlaceholder": "Rol açıklaması",
             "accessType": "Erişim Tipi",
@@ -605,6 +601,8 @@
             "color": "Renk",
             "roleActive": "Rol Aktif",
             "roleActiveDesc": "Pasif roller kullanıcılara atanamaz",
+            "isActive": "Aktif",
+            "currentPermissions": "Mevcut Yetkiler",
             "permissionManagementTitle": "Yetki Yönetimi",
             "permissionManagementDesc2": "Yetki ekleyin/çıkarın ve erişim tipini belirleyin",
             "searchPermissions": "Yetki ara...",
@@ -631,7 +629,8 @@
                 "rolePermissionsLoadError": "Rol yetkileri yüklenemedi",
                 "updateErrorWithMessage": "Rol güncellenemedi: {message}",
                 "permissionsUpdateErrorWithMessage": "Yetkiler güncellenemedi: {message}",
-                "genericUpdateError": "Rol güncellenirken bir hata oluştu"
+                "genericUpdateError": "Rol güncellenirken bir hata oluştu",
+                "incompatiblePermissionsRemoved": "{count} uyumsuz yetki kaldırıldı, {kept} yetki korundu"
             },
             "info": {
                 "loadingPermissionsForRole": "🔄 Rol için yetkiler yükleniyor: {roleId}",
@@ -662,7 +661,16 @@
                 "accessType": "- Erişim tipi: {accessType}",
                 "currentPermissions": "- Mevcut yetkiler: {count}",
                 "availablePermissions": "- Eklenebilir yetkiler: {count}"
-            }
+            },
+            "available_permissions": "Mevcut Yetkiler",
+            "assigned_permissions": "Atanmış Yetkiler",
+            "select_permissions": "Yetkileri Seçin",
+            "no_permissions_available": "Mevcut yetki yok",
+            "permission_added": "Yetki eklendi",
+            "permission_removed": "Yetki kaldırıldı",
+            "loading_permissions": "Yetkiler yükleniyor...",
+            "error_loading_permissions": "Yetkiler yüklenirken hata oluştu",
+            "search_permissions": "Yetkilerde ara..."
         },
         "deleteDialog": {
             "title": "Rolü Sil",
@@ -996,7 +1004,22 @@
         "accountActive": "Hesabınız aktif durumda",
         "accountStats": "Hesap İstatistikleri",
         "status": "Durum",
-        "security": "Güvenlik",
+        "security": {
+            "changePasswordTitle": "Şifre Değiştir",
+            "changePasswordDescription": "Daha iyi güvenlik için şifrenizi güncelleyin. Güçlü ve benzersiz bir şifre seçin.",
+            "currentPassword": "Mevcut Şifre",
+            "newPassword": "Yeni Şifre",
+            "confirmNewPassword": "Yeni Şifreyi Onayla",
+            "updatePasswordButton": "Şifreyi Güncelle",
+            "updating": "Güncelleniyor...",
+            "passwordUpdateSuccess": "Şifre başarıyla güncellendi!",
+            "passwordUpdateError": "Şifre güncellenirken bir hata oluştu.",
+            "validation": {
+                "currentPasswordRequired": "Mevcut şifre gereklidir.",
+                "newPasswordMinLength": "Yeni şifre en az 8 karakter olmalıdır.",
+                "passwordsDoNotMatch": "Şifreler eşleşmiyor."
+            }
+        },
         "changePassword": "Şifre Değiştir",
         "user": "Kullanıcı",
         "namePlaceholder": "Adınızı ve soyadınızı girin",
@@ -1048,23 +1071,7 @@
         "timeAgo2Minutes": "2 dakika önce",
         "timeAgo1Hour": "1 saat önce",
         "timeAgo3Hours": "3 saat önce",
-        "timeAgo1Day": "1 gün önce",
-        "security": {
-            "changePasswordTitle": "Şifre Değiştir",
-            "changePasswordDescription": "Daha iyi güvenlik için şifrenizi güncelleyin. Güçlü ve benzersiz bir şifre seçin.",
-            "currentPassword": "Mevcut Şifre",
-            "newPassword": "Yeni Şifre",
-            "confirmNewPassword": "Yeni Şifreyi Onayla",
-            "updatePasswordButton": "Şifreyi Güncelle",
-            "updating": "Güncelleniyor...",
-            "passwordUpdateSuccess": "Şifre başarıyla güncellendi!",
-            "passwordUpdateError": "Şifre güncellenirken bir hata oluştu.",
-            "validation": {
-                "currentPasswordRequired": "Mevcut şifre gereklidir.",
-                "newPasswordMinLength": "Yeni şifre en az 8 karakter olmalıdır.",
-                "passwordsDoNotMatch": "Şifreler eşleşmiyor."
-            }
-        }
+        "timeAgo1Day": "1 gün önce"
     },
     "HeroSlider": {
         "title": "Hero Slider Yönetimi",
@@ -1247,7 +1254,12 @@
         },
         "unreadBadge": "{count} yeni",
         "defaultUserName": "Kullanıcı",
-        "viewNotification": "Bildirimi Görüntüle"
+        "viewNotification": "Bildirimi Görüntüle",
+        "language": "Dil",
+        "theme": "Tema",
+        "light": "Açık",
+        "dark": "Koyu",
+        "system": "Sistem"
     },
     "LogoutModal": {
         "title": "Çıkış yapmak istediğinizden emin misiniz?",
@@ -1361,13 +1373,12 @@
         "rolesAssigned": "Rol Atanmış",
         "last30Days": "Son 30 Gün",
         "new": "Yeni",
-        "selected": "Seçili",
+        "selected": "seçili",
         "user": "Kullanıcı",
         "activeUsersRatio": "Aktif Kullanıcı Oranı",
         "roleAssignmentRatio": "Rol Ataması Oranı",
         "usersActive": "kullanıcı aktif",
         "usersRoleAssigned": "kullanıcıya rol atanmış",
-        "users": "Kullanıcılar",
         "search": {
             "placeholder": "Kullanıcı adı, email veya role göre ara...",
             "usersSelected": "{count} kullanıcı seçildi",
@@ -1441,7 +1452,6 @@
         "deactivate": "Devre Dışı Bırak",
         "export": "Dışa Aktar",
         "selectAll": "Tümünü Seç",
-        "selected": "seçili",
         "newUser": "Yeni Kullanıcı",
         "editUserDetails": "Kullanıcı Detaylarını Düzenle",
         "quickRoleAssign": {

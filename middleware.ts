@@ -44,20 +44,13 @@ export async function middleware(request: NextRequest) {
 
   if (path.startsWith("/auth")) return i18nResponse;
 
+  // Ana sayfa için otomatik yönlendirme kaldırıldı - kullanıcı hangi yetkiye sahipse ona uygun sayfa gösterilir
   if (path === "/") {
-    return isAuthenticated
-      ? NextResponse.redirect(
-          new URL(`/${locale}/admin/dashboard`, request.url)
-        )
-      : i18nResponse;
+    return i18nResponse;
   }
 
-  // /admin yoluna erişim durumunda session varsa dashboard'a yönlendir
-  if (path === "/admin" && isAuthenticated) {
-    return NextResponse.redirect(
-      new URL(`/${locale}/admin/dashboard`, request.url)
-    );
-  }
+  // /admin yoluna erişim için otomatik yönlendirme kaldırıldı - AdminPageGuard kontrol edecek
+  // Bu yönlendirme yetkisiz kullanıcılar için döngü yaratıyordu
 
   if (
     (path.startsWith("/admin") || path.startsWith("/users")) &&

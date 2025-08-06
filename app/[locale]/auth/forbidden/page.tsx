@@ -28,16 +28,8 @@ export default function ForbiddenPage() {
                     const user = data.user;
                     setUserRole(user?.role || null);
 
-                    // Role-based redirection
-                    if (user?.primaryRole === 'super_admin' || user?.primaryRole === 'admin') {
-                        router.push('/admin/dashboard');
-                        return;
-                    }
-
-                    if (user?.primaryRole === 'user') {
-                        router.push('/users/dashboard');
-                        return;
-                    }
+                    // Rol bilgisini sadece göster, yönlendirme yapma
+                    console.log('User role on forbidden page:', user?.primaryRole);
                 } else {
                     setUserRole(null);
                 }

@@ -84,11 +84,10 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Seçilen yetkileri veritabanından al (ID'ler UUID formatında)
-    const permissionsToAdd: string[] = [];
+    // Seçilen yetkileri ve potansiyel layout yetkilerini topla
+    const permissionsToAdd = new Set<string>();
 
     if (permissions.length > 0) {
-      // Permission ID'lerini kullanarak veritabanından permission name'lerini al
       const permissionRecords = await prisma.permission.findMany({
         where: {
           id: {
@@ -96,43 +95,41 @@ export async function POST(request: NextRequest) {
           },
         },
         select: {
-          category: true,
-          resourcePath: true,
-          action: true,
+          name: true,
         },
       });
-
-      // Permission name'lerini oluştur
-      for (const permission of permissionRecords) {
-        const permissionName = `${permission.category}.${permission.resourcePath}.${permission.action}`;
-        permissionsToAdd.push(permissionName);
-      }
+      permissionRecords.forEach((p) => permissionsToAdd.add(p.name));
     }
 
-    // Layout tipine göre otomatik yetki ekleme
-    if (layoutType === "admin") {
-      // Admin layout seçilmişse layout.admin.access yetkisini otomatik ekle (eğer zaten seçilmemişse)
-      const adminAccessPermission = "layout.admin.access";
-      if (!permissionsToAdd.includes(adminAccessPermission)) {
-        permissionsToAdd.push(adminAccessPermission);
-      }
-    } else if (layoutType === "user") {
-      // User layout seçilmişse layout.user.access yetkisini otomatik ekle (eğer zaten seçilmemişse)
-      const userAccessPermission = "layout.user.access";
-      if (!permissionsToAdd.includes(userAccessPermission)) {
-        permissionsToAdd.push(userAccessPermission);
-      }
+    // Layout tipine göre otomatik yetki ekleme (VERİTABANI KONTROLÜ İLE)
+    const layoutPermissionName =
+      layoutType === "admin" ? "admin.layout" : "user.layout";
+
+    // Layout yetkisinin veritabanında var olup olmadığını kontrol et
+    const layoutPermissionExists = await prisma.permission.findUnique({
+      where: { name: layoutPermissionName },
+    });
+
+    if (layoutPermissionExists) {
+      permissionsToAdd.add(layoutPermissionName);
+    } else {
+      // Bu kritik bir konfigürasyon hatasıdır. Loglanmalı.
+      console.warn(
+        `[Role Create] DİKKAT: Otomatik eklenmesi gereken '${layoutPermissionName}' yetkisi veritabanında bulunamadı ve role eklenemedi.`
+      );
     }
 
     // Yetkileri toplu olarak ekle
-    if (permissionsToAdd.length > 0) {
+    const permissionsArray = Array.from(permissionsToAdd);
+    if (permissionsArray.length > 0) {
       await prisma.roleHasPermission.createMany({
-        data: permissionsToAdd.map((permissionName: string) => ({
+        data: permissionsArray.map((permissionName: string) => ({
           roleName: name,
           permissionName: permissionName,
           isAllowed: true,
           grantedById: currentUser.id,
         })),
+        skipDuplicates: true, // Olası çakışmaları önle
       });
     }
 

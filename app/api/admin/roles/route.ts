@@ -57,6 +57,7 @@ export async function GET(request: NextRequest) {
       displayName: role.displayName,
       description: role.description,
       color: role.color,
+      layoutType: role.layoutType,
       isActive: role.isActive,
       isSystemDefault: role.isSystemDefault,
       createdAt: role.createdAt,

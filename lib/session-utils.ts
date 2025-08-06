@@ -60,7 +60,16 @@ export async function getCurrentUserFromToken(
       include: {
         user: {
           include: {
-            role: true,
+            role: {
+              include: {
+                rolePermissions: {
+                  where: { isAllowed: true, isActive: true },
+                  include: {
+                    permission: true,
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -70,35 +79,22 @@ export async function getCurrentUserFromToken(
       return null;
     }
 
-    // Get user permissions
-    let permissions: string[] = [];
-    if (session.user.role) {
-      const rolePermissions = await prisma.roleHasPermission.findMany({
-        where: {
-          roleName: session.user.role.name,
-          isAllowed: true,
-          isActive: true,
-        },
-        include: {
-          permission: true,
-        },
+    // Get user permissions from the single optimized query
+    const permissions =
+      session.user.role?.rolePermissions.map((rp) => rp.permission.name) ?? [];
+
+    console.log(
+      `📋 Role "${session.user.role?.name}" has ${permissions.length} permissions from DB`
+    );
+    if (permissions.length > 0) {
+      console.log("   Permissions found:");
+      permissions.forEach((pName) => {
+        console.log(`     • ${pName}`);
       });
-
-      permissions = rolePermissions.map((rp) => rp.permission.name);
-
-      console.log(
-        `📋 Role "${session.user.role.name}" has ${rolePermissions.length} permissions from DB`
-      );
-      if (rolePermissions.length > 0) {
-        console.log("   Permissions found:");
-        rolePermissions.forEach((rp) => {
-          console.log(
-            `     • ${rp.permission.name} (${rp.permission.category})`
-          );
-        });
-      }
     } else {
-      console.log("❌ User has no role assigned!");
+      console.log(
+        `❌ User role "${session.user.role?.name}" has no active permissions!`
+      );
     }
 
     // Update last active (fire and forget)
