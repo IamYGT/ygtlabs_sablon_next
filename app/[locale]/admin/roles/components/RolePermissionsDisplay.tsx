@@ -1,17 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
-    Layout,
+    AlertCircle,
     FileText,
-    Zap,
+    Layout,
     Shield,
-    AlertCircle
+    Zap
 } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
 // Utility fonksiyonları
 interface LocalizedValue {
     tr?: string;

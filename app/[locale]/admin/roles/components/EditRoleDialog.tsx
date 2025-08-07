@@ -145,6 +145,7 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
 
     const [permissions, setPermissions] = useState<Permission[]>([]);
     const [selectedPermissions, setSelectedPermissions] = useState<Set<string>>(new Set());
+    const [expandedMobileItems, setExpandedMobileItems] = useState<Set<string>>(new Set());
 
     const isProtectedRole = role.name === 'super_admin' || role.name === 'user';
     const loadingRef = useRef(false);
@@ -284,6 +285,18 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
         });
     };
 
+    const toggleMobileItem = (permissionId: string) => {
+        setExpandedMobileItems(prev => {
+            const next = new Set(prev);
+            if (next.has(permissionId)) {
+                next.delete(permissionId);
+            } else {
+                next.add(permissionId);
+            }
+            return next;
+        });
+    };
+
     const availablePermissions = permissions.filter(p =>
         !selectedPermissions.has(p.id) &&
         p.permissionType === formData.layoutType &&
@@ -297,7 +310,7 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-[98vw] sm:max-w-[95vw] lg:max-w-6xl max-h-[98vh] sm:max-h-[95vh] bg-white dark:bg-gray-900 flex flex-col overflow-hidden touch-pan-y touch-pan-x">
+            <DialogContent className="max-w-[94vw] sm:max-w-[95vw] lg:max-w-6xl max-h-[92vh] sm:max-h-[95vh] bg-white dark:bg-gray-900 flex flex-col overflow-y-auto md:overflow-hidden touch-pan-y touch-pan-x">
                 <DialogHeader className="border-b pb-3 md:pb-4">
                     <DialogTitle className="flex items-center gap-2 md:gap-3 text-lg md:text-xl font-bold">
                         <div className="p-2 md:p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg"><Edit className="h-4 w-4 md:h-5 md:w-5 text-blue-600 dark:text-blue-400" /></div>
@@ -310,7 +323,7 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
                         )}
                     </DialogTitle>
                 </DialogHeader>
-                <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 p-3 md:p-6 overflow-auto md:overflow-hidden scroll-smooth">
+                <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-6 p-2 md:p-6 md:overflow-hidden scroll-smooth">
                     {/* Sol Panel - Rol Bilgileri */}
                     <div className="lg:col-span-1 space-y-4 md:space-y-6 overflow-y-auto md:pr-4 scroll-smooth">
                         <Card>
@@ -358,10 +371,10 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
                     <div className="lg:col-span-2 flex flex-col h-full overflow-hidden">
                         <Card className="flex-1 flex flex-col">
                             <CardHeader>
-                                <CardTitle className="flex items-center gap-2 text-base"><Shield className="h-4 w-4" />{t('permissionManagement')}</CardTitle>
+                                <CardTitle className="flex items-center gap-2 text-sm md:text-base"><Shield className="h-4 w-4" />{t('permissionManagement')}</CardTitle>
                                 <Input placeholder={t('searchPermissions')} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="max-w-sm" />
                             </CardHeader>
-                            <CardContent className="flex-1 overflow-hidden">
+                            <CardContent className="flex-1 flex flex-col min-h-0">
                                 {loadingPermissions ? (
                                     <div className="flex items-center justify-center h-full">
                                         <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
@@ -369,16 +382,16 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
                                 ) : (
                                     <>
                                         {/* Desktop: Grid Layout */}
-                                        <div className="hidden md:grid md:grid-cols-2 gap-4 h-full">
+                                        <div className="hidden md:grid md:grid-cols-2 gap-4 flex-1 min-h-0">
                                             {/* Eklenebilir Yetkiler */}
                                             <div className="flex flex-col gap-2 min-h-0">
                                                 <h4 className="font-semibold text-sm text-blue-700 dark:text-blue-400">{t('availablePermissions')} ({availablePermissions.length})</h4>
-                                                <ScrollArea className="flex-1 border rounded-lg p-2">
-                                                    <div className="space-y-2">
+                                                <ScrollArea className="flex-1 max-h-[60vh] border rounded-lg p-2">
+                                                    <div className="space-y-1.5">
                                                         {availablePermissions.map((p: Permission) => (
-                                                            <div key={p.id} className="flex items-center justify-between p-2 bg-blue-50 dark:bg-blue-900/20 rounded-md">
+                                                            <div key={p.id} className="flex items-center justify-between p-1.5 bg-blue-50 dark:bg-blue-900/20 rounded-md">
                                                                 <span className="text-sm font-medium">{p.displayName}</span>
-                                                                <Button size="icon" variant="ghost" onClick={() => !isProtectedRole && addPermission(p.id)} disabled={isProtectedRole} className="w-6 h-6 text-green-600"><Plus className="h-4 w-4" /></Button>
+                                                                <Button size="icon" variant="ghost" onClick={() => !isProtectedRole && addPermission(p.id)} disabled={isProtectedRole} className="w-5 h-5 text-green-600"><Plus className="h-4 w-4" /></Button>
                                                             </div>
                                                         ))}
                                                     </div>
@@ -388,12 +401,12 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
                                             {/* Mevcut Yetkiler */}
                                             <div className="flex flex-col gap-2 min-h-0">
                                                 <h4 className="font-semibold text-sm text-green-700 dark:text-green-400">{t('currentPermissions')} ({currentPermissions.length})</h4>
-                                                <ScrollArea className="flex-1 border rounded-lg p-2">
-                                                    <div className="space-y-2">
+                                                <ScrollArea className="flex-1 max-h-[60vh] border rounded-lg p-2">
+                                                    <div className="space-y-1.5">
                                                         {currentPermissions.filter(p => p.displayName.toLowerCase().includes(searchTerm.toLowerCase())).map(p => (
-                                                            <div key={p.id} className="flex items-center justify-between p-2 bg-green-50 dark:bg-green-900/20 rounded-md">
+                                                            <div key={p.id} className="flex items-center justify-between p-1.5 bg-green-50 dark:bg-green-900/20 rounded-md">
                                                                 <span className="text-sm font-medium">{p.displayName}</span>
-                                                                <Button size="icon" variant="ghost" onClick={() => !isProtectedRole && removePermission(p.id)} disabled={isProtectedRole} className="w-6 h-6 text-red-600"><X className="h-4 w-4" /></Button>
+                                                                <Button size="icon" variant="ghost" onClick={() => !isProtectedRole && removePermission(p.id)} disabled={isProtectedRole} className="w-5 h-5 text-red-600"><X className="h-4 w-4" /></Button>
                                                             </div>
                                                         ))}
                                                     </div>
@@ -402,7 +415,7 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
                                         </div>
 
                                         {/* Mobile: Tabs Layout */}
-                                        <div className="md:hidden h-full min-h-0 flex flex-col">
+                                        <div className="md:hidden min-h-0 flex flex-col flex-1">
                                             <Tabs defaultValue="current" className="flex flex-col h-full min-h-0">
                                                 <TabsList className="grid w-full grid-cols-2">
                                                     <TabsTrigger value="current" className="flex items-center gap-1 text-xs sm:text-sm">
@@ -419,16 +432,18 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
                                                     </TabsTrigger>
                                                 </TabsList>
 
-                                                <TabsContent value="current" className="flex-1 mt-4 min-h-0 data-[state=active]:flex data-[state=active]:flex-col">
-                                                    <div className="flex-1 min-h-0 border rounded-lg overflow-auto scroll-smooth overscroll-contain">
-                                                        <div className="p-2 space-y-2">
+                                                <TabsContent value="current" className="flex-1 mt-3 min-h-0 data-[state=active]:flex data-[state=active]:flex-col">
+                                                    <ScrollArea className="max-h-[60vh] border rounded-lg p-2">
+                                                        <div className="space-y-1.5">
                                                             {currentPermissions.filter(p => p.displayName.toLowerCase().includes(searchTerm.toLowerCase())).map(p => (
-                                                                <div key={p.id} className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-md min-w-[280px]">
+                                                                <div key={p.id} className="flex items-start justify-between p-1.5 bg-green-50 dark:bg-green-900/20 rounded-md min-w-[280px] cursor-pointer" onClick={() => toggleMobileItem(p.id)}>
                                                                     <div className="flex-1 min-w-0 pr-2">
-                                                                        <div className="text-sm font-medium truncate">{p.displayName}</div>
-                                                                        <div className="text-xs text-muted-foreground truncate">{p.description}</div>
+                                                                        <div className="text-xs sm:text-sm font-medium break-words">{p.displayName}</div>
+                                                                        {expandedMobileItems.has(p.id) && (
+                                                                            <div className="mt-1 text-[11px] sm:text-xs text-muted-foreground break-words">{p.description}</div>
+                                                                        )}
                                                                     </div>
-                                                                    <Button size="icon" variant="ghost" onClick={() => !isProtectedRole && removePermission(p.id)} disabled={isProtectedRole} className="w-8 h-8 text-red-600 flex-shrink-0"><X className="h-4 w-4" /></Button>
+                                                                    <Button size="icon" variant="ghost" onClick={(e) => { e.stopPropagation(); !isProtectedRole && removePermission(p.id); }} disabled={isProtectedRole} className="w-6 h-6 text-red-600 flex-shrink-0"><X className="h-4 w-4" /></Button>
                                                                 </div>
                                                             ))}
                                                             {currentPermissions.filter(p => p.displayName.toLowerCase().includes(searchTerm.toLowerCase())).length === 0 && (
@@ -438,19 +453,21 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
                                                                 </div>
                                                             )}
                                                         </div>
-                                                    </div>
+                                                    </ScrollArea>
                                                 </TabsContent>
 
-                                                <TabsContent value="available" className="flex-1 mt-4 min-h-0 data-[state=active]:flex data-[state=active]:flex-col">
-                                                    <div className="flex-1 min-h-0 border rounded-lg overflow-auto scroll-smooth overscroll-contain">
-                                                        <div className="p-2 space-y-2">
+                                                <TabsContent value="available" className="flex-1 mt-3 min-h-0 data-[state=active]:flex data-[state=active]:flex-col">
+                                                    <ScrollArea className="max-h-[60vh] border rounded-lg p-2">
+                                                        <div className="space-y-1.5">
                                                             {availablePermissions.map((p: Permission) => (
-                                                                <div key={p.id} className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-md min-w-[280px]">
+                                                                <div key={p.id} className="flex items-start justify-between p-1.5 bg-blue-50 dark:bg-blue-900/20 rounded-md min-w-[280px] cursor-pointer" onClick={() => toggleMobileItem(p.id)}>
                                                                     <div className="flex-1 min-w-0 pr-2">
-                                                                        <div className="text-sm font-medium truncate">{p.displayName}</div>
-                                                                        <div className="text-xs text-muted-foreground truncate">{p.description}</div>
+                                                                        <div className="text-xs sm:text-sm font-medium break-words">{p.displayName}</div>
+                                                                        {expandedMobileItems.has(p.id) && (
+                                                                            <div className="mt-1 text-[11px] sm:text-xs text-muted-foreground break-words">{p.description}</div>
+                                                                        )}
                                                                     </div>
-                                                                    <Button size="icon" variant="ghost" onClick={() => !isProtectedRole && addPermission(p.id)} disabled={isProtectedRole} className="w-8 h-8 text-green-600 flex-shrink-0"><Plus className="h-4 w-4" /></Button>
+                                                                    <Button size="icon" variant="ghost" onClick={(e) => { e.stopPropagation(); !isProtectedRole && addPermission(p.id); }} disabled={isProtectedRole} className="w-6 h-6 text-green-600 flex-shrink-0"><Plus className="h-4 w-4" /></Button>
                                                                 </div>
                                                             ))}
                                                             {availablePermissions.length === 0 && (
@@ -460,7 +477,7 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
                                                                 </div>
                                                             )}
                                                         </div>
-                                                    </div>
+                                                    </ScrollArea>
                                                 </TabsContent>
                                             </Tabs>
                                         </div>
@@ -470,7 +487,7 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
                         </Card>
                     </div>
                 </div>
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 p-3 sm:p-4 bg-gray-50 dark:bg-gray-800 border-t">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 p-0">
                     <Button variant="outline" onClick={() => onOpenChange(false)} disabled={loading} className="order-2 sm:order-1">
                         {tCommon('cancel')}
                     </Button>

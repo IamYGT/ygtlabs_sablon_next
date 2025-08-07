@@ -1,39 +1,39 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
-import { useTranslations } from 'next-intl';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Dialog,
     DialogContent,
     DialogDescription,
+    DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogFooter,
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useTranslations } from 'next-intl';
+import React, { useCallback, useState } from 'react';
 
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Progress } from '@/components/ui/progress';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
-    Shield,
-    Users,
-    Crown,
-    Layout,
-    FileText,
-    Settings,
-    Zap,
-    User,
     Activity,
-    Eye,
-    ChevronLeft,
-    ChevronRight,
     Calendar,
     CheckCircle,
-    XCircle,
+    ChevronLeft,
+    ChevronRight,
+    Crown,
+    Eye,
+    FileText,
+    Info,
+    Layout,
+    Settings,
+    Shield,
+    User,
     UserCheck,
-    Info
+    Users,
+    XCircle,
+    Zap
 } from 'lucide-react';
 // Utility fonksiyonları
 interface LocalizedValue {
