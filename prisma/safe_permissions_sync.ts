@@ -172,31 +172,38 @@ async function main() {
     );
   }
 
-  // 4. Config'de olmayan permission'ları deaktive et (silme!)
-  console.log("🔍 Artık kullanılmayan permission'lar kontrol ediliyor...");
+  // 4. Config'de olmayan permission'ları sil (prune)
+  console.log("🔍 Artık kullanılmayan permission'lar temizleniyor (prune)...");
   const configPermissionNames = new Set(ALL_PERMISSIONS.map((p) => p.name));
-  const orphanedPermissions = await prisma.permission.findMany({
+  const permissionsToRemove = await prisma.permission.findMany({
     where: {
       name: {
         notIn: Array.from(configPermissionNames),
       },
-      isActive: true,
     },
+    select: { name: true },
   });
 
-  if (orphanedPermissions.length > 0) {
+  if (permissionsToRemove.length > 0) {
     console.log(
-      `⚠️  Config'de olmayan ${orphanedPermissions.length} permission bulundu:`
+      `🧹 Config'de olmayan ${permissionsToRemove.length} permission silinecek:`
     );
-    for (const orphan of orphanedPermissions) {
-      console.log(`   • ${orphan.name}`);
+    for (const p of permissionsToRemove) {
+      console.log(`   • ${p.name}`);
     }
 
-    // Kullanıcı onayı olmadan deaktive etme, sadece uyar
-    console.log("   ℹ️  Bu permission'ları manuel olarak kontrol edin.");
+    // İlişkiler (RoleHasPermission) Prisma şemasında onDelete: Cascade ile bağlı, otomatik temizlenecek
+    await prisma.permission.deleteMany({
+      where: {
+        name: { in: permissionsToRemove.map((p) => p.name) },
+      },
+    });
+
     console.log(
-      "   ℹ️  Eğer gerçekten kullanılmıyorsa isActive=false yapabilirsiniz."
+      "   ✅ Gereksiz permission'lar silindi. İlişkiler otomatik temizlendi."
     );
+  } else {
+    console.log("   ✅ Temizlenecek gereksiz permission bulunamadı.");
   }
 
   // 5. Final istatistikler
