@@ -1097,7 +1097,31 @@
         "timeAgo2Minutes": "2 minutes ago",
         "timeAgo1Hour": "1 hour ago",
         "timeAgo3Hours": "3 hours ago",
-        "timeAgo1Day": "1 day ago"
+        "timeAgo1Day": "1 day ago",
+        "preferences": {
+            "themePreference": {
+                "title": "Theme Preference",
+                "description": "Choose your preferred theme for the application",
+                "options": {
+                    "light": { "label": "Light", "description": "Always use light theme" },
+                    "dark": { "label": "Dark", "description": "Always use dark theme" },
+                    "system": { "label": "System", "description": "Follow system preference" }
+                }
+            },
+            "languagePreference": {
+                "title": "Language Preference",
+                "description": "Select your preferred language for the application",
+                "placeholder": "Select language"
+            },
+            "actions": {
+                "savePreferences": "Save Preferences",
+                "savingPreferences": "Saving Preferences..."
+            },
+            "notifications": {
+                "saveSuccess": "Preferences saved successfully",
+                "saveError": "Failed to save preferences"
+            }
+        }
     },
     "HeroSlider": {
         "title": "Hero Slider Management",

@@ -1,6 +1,5 @@
 'use client';
 
-import { routing } from '@/src/i18n/routing';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
     ArrowRight,
@@ -25,6 +24,7 @@ export default function Header() {
     const router = useRouter();
     const pathname = usePathname();
     const t = useTranslations('Header');
+    const tLang = useTranslations('Language');
 
     // Home page kontrolü: route key '/landing' için mevcut locale'e karşılık gelen gerçek yol
     const homePath = getPathname({ href: '/landing', locale });
@@ -84,11 +84,18 @@ export default function Header() {
         setIsMenuOpen(false);
     };
 
-    const languages = (routing.locales as readonly string[]).map((code) => ({
-        code,
-        name: code.toUpperCase(),
-        flag: code === 'tr' ? 'https://flagcdn.com/w160/tr.png' : code === 'en' ? 'https://flagcdn.com/w160/gb.png' : 'https://flagcdn.com/w160/un.png'
-    }));
+    const languages = [
+        {
+            code: 'en',
+            name: tLang('english'),
+            flag: 'https://flagcdn.com/w160/gb.png'
+        },
+        {
+            code: 'tr',
+            name: tLang('turkish'),
+            flag: 'https://flagcdn.com/w160/tr.png'
+        }
+    ];
 
     const currentLang = languages.find(lang => lang.code === locale) || languages[0];
 

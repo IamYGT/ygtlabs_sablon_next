@@ -906,7 +906,8 @@
             "reviews": "Değerlendirmeler",
             "faq": "Sık Sorulan Sorular"
         },
-        "experience": "Yıllık Deneyim"
+        "experience": "Yıllık Deneyim",
+        "imageAlt": "Araba Tuning Hizmeti"
     },
     "ServiceIcons": {
         "ecuTuning": "ECU Yazılım",
@@ -1085,6 +1086,15 @@
         },
         "status": {
             "loading": "Yükleniyor..."
+        }
+    },
+    "SEO": {
+        "landing": {
+            "title": "RevvTuned - ECU Chip Tuning Hizmetleri",
+            "description": "Profesyonel ECU chip tuning hizmetleri ile aracınızın performansını artırın. Uzman ekibimiz ve son teknoloji ile güvenli tuning çözümleri.",
+            "keywords": "ecu tuning, chip tuning, performans artırma, motor tuning, araç modifikasyonu",
+            "ogTitle": "RevvTuned - ECU Chip Tuning Hizmetleri",
+            "ogDescription": "Profesyonel ECU chip tuning hizmetleri ile aracınızın performansını artırın."
         }
     }
 }

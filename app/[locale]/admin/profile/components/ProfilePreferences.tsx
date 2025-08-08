@@ -9,8 +9,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Palette, Globe, Save, Sun, Moon, Monitor, Check } from 'lucide-react';
 import { toast } from 'sonner';
 import type { ProfilePreferences as ProfilePreferencesType } from '../types/profile.types';
+import { useTranslations } from 'next-intl';
 
 export default function ProfilePreferences() {
+    const t = useTranslations('AdminProfile.preferences');
+    const tLang = useTranslations('Language');
+
     const [preferences, setPreferences] = useState<ProfilePreferencesType>({
         theme: 'system',
         language: 'tr',
@@ -40,23 +44,23 @@ export default function ProfilePreferences() {
                 document.documentElement.classList.toggle('dark', prefersDark);
             }
 
-            toast.success('Preferences saved successfully');
+            toast.success(t('notifications.saveSuccess'));
         } catch (_error) {
-            toast.error('Failed to save preferences');
+            toast.error(t('notifications.saveError'));
         } finally {
             setIsLoading(false);
         }
     };
 
     const themeOptions = [
-        { value: 'light', label: 'Light', icon: Sun, description: 'Always use light theme' },
-        { value: 'dark', label: 'Dark', icon: Moon, description: 'Always use dark theme' },
-        { value: 'system', label: 'System', icon: Monitor, description: 'Follow system preference' }
+        { value: 'light', label: t('themePreference.options.light.label'), icon: Sun, description: t('themePreference.options.light.description') },
+        { value: 'dark', label: t('themePreference.options.dark.label'), icon: Moon, description: t('themePreference.options.dark.description') },
+        { value: 'system', label: t('themePreference.options.system.label'), icon: Monitor, description: t('themePreference.options.system.description') }
     ];
 
     const languageOptions = [
-        { value: 'tr', label: 'Türkçe', flag: '🇹🇷' },
-        { value: 'en', label: 'English', flag: '🇺🇸' }
+        { value: 'tr', label: tLang('turkish'), flag: '🇹🇷' },
+        { value: 'en', label: tLang('english'), flag: '🇺🇸' }
     ];
 
     return (
@@ -68,10 +72,10 @@ export default function ProfilePreferences() {
                         <div className="p-2.5 bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-lg shadow-sm">
                             <Palette className="h-4 w-4" />
                         </div>
-                        Theme Preference
+                        {t('themePreference.title')}
                     </CardTitle>
                     <CardDescription className="text-gray-500 dark:text-gray-400 ml-11">
-                        Choose your preferred theme for the application
+                        {t('themePreference.description')}
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-2">
@@ -132,10 +136,10 @@ export default function ProfilePreferences() {
                         <div className="p-2.5 bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-lg shadow-sm">
                             <Globe className="h-4 w-4" />
                         </div>
-                        Language Preference
+                        {t('languagePreference.title')}
                     </CardTitle>
                     <CardDescription className="text-gray-500 dark:text-gray-400 ml-11">
-                        Select your preferred language for the application
+                        {t('languagePreference.description')}
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-2">
@@ -144,7 +148,7 @@ export default function ProfilePreferences() {
                         onValueChange={(value) => setPreferences({ ...preferences, language: value as 'tr' | 'en' })}
                     >
                         <SelectTrigger className="w-full border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200 focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                            <SelectValue placeholder="Select language" />
+                            <SelectValue placeholder={t('languagePreference.placeholder')} />
                         </SelectTrigger>
                         <SelectContent className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
                             {languageOptions.map((option) => (
@@ -173,7 +177,7 @@ export default function ProfilePreferences() {
                         className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 shadow-sm hover:shadow transition-all duration-200 disabled:opacity-50 text-white"
                     >
                         <Save className="h-4 w-4 mr-2" />
-                        {isLoading ? 'Saving Preferences...' : 'Save Preferences'}
+                        {isLoading ? t('actions.savingPreferences') : t('actions.savePreferences')}
                     </Button>
                 </CardContent>
             </Card>
