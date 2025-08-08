@@ -12,6 +12,7 @@ import {
 import { LogOut, ChevronDown, Monitor, Smartphone } from "lucide-react";
 import { useSidebar } from "@/components/ui/sidebar";
 import { useLogoutModal } from "./LogoutModalProvider";
+import { useTranslations } from "next-intl";
 
 interface LogoutButtonProps {
     className?: string;
@@ -36,6 +37,8 @@ export default function LogoutButton({
     const { setOpen: setSidebarOpen, locked } = useSidebar();
     const { showLogoutModal } = useLogoutModal();
     const containerRef = useRef<HTMLDivElement>(null);
+    const t = useTranslations('AdminHeader');
+    const tLogout = useTranslations('LogoutModal');
 
     // Mouse pozisyonunu takip et (useRef ile)
     useEffect(() => {
@@ -103,10 +106,10 @@ export default function LogoutButton({
                 size={iconOnly ? "icon" : (isMenuMode ? "sm" : size)}
                 onClick={handleSimpleLogout}
                 className={`${className} ${iconOnly ? 'min-w-[40px] h-10 p-0' : ''}`}
-                title={iconOnly ? "Çıkış Yap" : undefined}
+                title={iconOnly ? t('logout') : undefined}
             >
                 <LogOut className={`h-4 w-4 ${!iconOnly ? 'mr-2' : 'flex-shrink-0'}`} />
-                {!iconOnly && (isMenuMode ? "Çıkış Yap" : "Çıkış Yap")}
+                {!iconOnly && (isMenuMode ? t('logout') : t('logout'))}
             </Button>
         );
     }
@@ -121,12 +124,12 @@ export default function LogoutButton({
                         variant={isMenuMode ? "ghost" : variant}
                         size={iconOnly ? "icon" : (isMenuMode ? "sm" : size)}
                         className={`${className} ${iconOnly ? 'min-w-[40px] h-10 p-0' : ''}`}
-                        title={iconOnly ? "Çıkış Yap Seçenekleri" : undefined}
+                        title={iconOnly ? t('logoutOptions') : undefined}
                     >
                         <LogOut className={`h-4 w-4 ${!iconOnly ? 'mr-2' : 'flex-shrink-0'}`} />
                         {!iconOnly && (
                             <>
-                                {isMenuMode ? "Çıkış Yap" : "Çıkış Yap"}
+                                {isMenuMode ? t('logout') : t('logout')}
                                 <ChevronDown className="h-3 w-3 ml-1 opacity-60" />
                             </>
                         )}
@@ -138,7 +141,7 @@ export default function LogoutButton({
                         className="cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 focus:bg-slate-50 dark:focus:bg-slate-800"
                     >
                         <Monitor className="h-4 w-4 mr-2 text-slate-600 dark:text-slate-400" />
-                        <span className="text-slate-700 dark:text-slate-300">Bu cihazdan çıkış yap</span>
+                        <span className="text-slate-700 dark:text-slate-300">{tLogout('confirmCurrent')}</span>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator className="bg-slate-200 dark:bg-slate-700" />
                     <DropdownMenuItem
@@ -146,7 +149,7 @@ export default function LogoutButton({
                         className="cursor-pointer text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950 focus:bg-red-50 dark:focus:bg-red-950 focus:text-red-600 dark:focus:text-red-400"
                     >
                         <Smartphone className="h-4 w-4 mr-2" />
-                        <span>Tüm cihazlardan çıkış yap</span>
+                        <span>{tLogout('confirmAll')}</span>
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>

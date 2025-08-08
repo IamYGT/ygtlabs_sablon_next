@@ -51,6 +51,8 @@ export function AdminHeader({ title = "Dashboard", subtitle: _subtitle, setOpen 
     const pathname = usePathname();
     const { theme, setTheme } = useTheme();
 
+    const resolvedTitle = title || t('adminPanel');
+
     const getLanguageFlag = (loc: string) => {
         switch (loc) {
             case 'tr':
@@ -138,7 +140,7 @@ export function AdminHeader({ title = "Dashboard", subtitle: _subtitle, setOpen 
                     {/* Başlık */}
                     <div className="min-w-0">
                         <h1 className="hidden md:block text-lg md:text-xl lg:text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent truncate transition-all duration-300">
-                            {title}
+                            {resolvedTitle}
                         </h1>
                     </div>
                 </div>
