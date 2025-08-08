@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { Link } from '@/src/i18n/navigation';
+import { routing } from '@/src/i18n/routing';
 import { motion } from "framer-motion";
 import { ArrowRight, Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
 import { useTranslations } from 'next-intl';
@@ -26,7 +27,7 @@ const UnifiedAuthLoginForm = memo(() => {
     const [formData, setFormData] = useState({ email: "", password: "" });
     const [showPassword, setShowPassword] = useState(false);
     const params = useParams();
-    const locale = (params.locale as string) || 'en';
+    const locale = (params.locale as string) || routing.defaultLocale;
 
     // URL'den logout parametresini kontrol et ve form state'ini temizle
     React.useEffect(() => {
@@ -85,7 +86,7 @@ const UnifiedAuthLoginForm = memo(() => {
 
                 // Redirect to appropriate dashboard with proper i18n routing
                 const dashboardPath = hasAdminAccess ? '/admin/dashboard' : '/users/dashboard';
-                const dashboardUrl = locale === 'en' ? dashboardPath : `/${locale}${dashboardPath}`;
+                const dashboardUrl = locale === routing.defaultLocale ? dashboardPath : `/${locale}${dashboardPath}`;
 
                 // Hard redirect ile tam geçiş
                 window.location.replace(dashboardUrl);

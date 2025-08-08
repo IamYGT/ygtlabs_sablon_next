@@ -1,4 +1,5 @@
 import { GuestGuard } from '@/components/panel/AuthGuards';
+import { routing } from '@/src/i18n/routing';
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from 'next-intl';
 import React from 'react';
@@ -24,12 +25,13 @@ interface AuthLayoutProps {
 export default async function AuthLayout({ children, params }: AuthLayoutProps) {
     const { locale } = await params;
 
-    // Validate locale and fallback to 'en' if invalid
-    const validLocales = ['en', 'tr'];
-    const validLocale = validLocales.includes(locale) ? locale : 'en';
+    // Validate locale using dynamic routing locales
+    const validLocale = (routing.locales as readonly string[]).includes(locale) ? locale : routing.defaultLocale;
 
     // Auth sayfaları için normal mesajları yükle (admin mesajları değil)
-    const messages = (await import(`../../../messages/${validLocale}.json`)).default;
+    const messages = (await import(`../../../messages/${validLocale}.json`).catch(async () => (
+        await import(`../../../messages/${routing.defaultLocale}.json`)
+    ))).default;
 
     return (
         <NextIntlClientProvider messages={messages}>

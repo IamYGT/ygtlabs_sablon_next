@@ -365,23 +365,634 @@
             "close": "Close",
             "more": "More"
         },
-        "pagination": {
-            "aria": {
-                "label": "pagination",
-                "prev": "Go to previous page",
-                "next": "Go to next page",
-                "morePages": "More pages"
+        "Contact": {
+            "badge": "# CONTACT",
+            "title": "Get in Touch",
+            "description": "Contact us for your questions or make an appointment. Our professional team is happy to help.",
+            "form": {
+                "title": "Appointment Form",
+                "name": "Full Name",
+                "email": "Email",
+                "phone": "Phone",
+                "vehicle": "Vehicle Info",
+                "service": "Service Type",
+                "selectService": "Select a service",
+                "message": "Your Message",
+                "submit": "Send Message",
+                "success": "Your message has been sent successfully! We will get back to you as soon as possible."
             },
-            "prev": "Previous",
-            "next": "Next"
+            "placeholders": {
+                "name": "Your name and surname",
+                "email": "example@email.com",
+                "phone": "0555 123 45 67",
+                "vehicle": "Make, Model, Year",
+                "message": "You can write the details here..."
+            },
+            "info": {
+                "title": "Contact Information",
+                "phone": "Phone",
+                "phoneValue": "+90 555 123 45 67",
+                "email": "Email",
+                "emailValue": "info@ataperformance.com",
+                "address": "Address",
+                "addressValue": "Ataturk Ave. No:123 Cankaya/Ankara",
+                "hours": "Working Hours",
+                "hoursValue": "Mon-Sat: 09:00 - 18:00"
+            },
+            "services": [
+                "Stage 1 Chiptuning",
+                "Stage 2 Chiptuning",
+                "ECU Remapping",
+                "DPF/EGR Delete",
+                "Performance Test",
+                "Launch Control",
+                "Other"
+            ],
+            "map": {
+                "title": "Location",
+                "comingSoon": "Map will be added soon"
+            },
+            "emergency": {
+                "title": "Emergency",
+                "description": "For emergencies, you can reach our 24/7 hotline:"
+            },
+            "faq": {
+                "title": "Frequently Asked Questions",
+                "items": [
+                    {
+                        "q": "Is appointment required?",
+                        "a": "We recommend making an appointment for better service."
+                    },
+                    {
+                        "q": "How long does chiptuning take?",
+                        "a": "It varies between 2-5 hours depending on the service."
+                    },
+                    {
+                        "q": "Do you provide warranty?",
+                        "a": "Yes, we provide service with a 1-year warranty."
+                    },
+                    {
+                        "q": "Which vehicles do you service?",
+                        "a": "We provide service for all makes and models."
+                    }
+                ]
+            }
         },
-        "carousel": {
-            "prevSlide": "Previous slide",
-            "nextSlide": "Next slide"
+        "Dealership": {
+            "badge": "# DEALERSHIP OPPORTUNITY",
+            "title": "Join the Revv Tuned Family",
+            "description": "Grow your business with Turkey's leading chiptuning brand and invest in the future.",
+            "stats": [
+                {
+                    "number": "25+",
+                    "label": "Dealers"
+                },
+                {
+                    "number": "50+",
+                    "label": "Cities"
+                },
+                {
+                    "number": "15+",
+                    "label": "Years of Experience"
+                },
+                {
+                    "number": "95%",
+                    "label": "Satisfaction"
+                }
+            ],
+            "benefits": {
+                "title": "Dealership Advantages",
+                "brandPower": {
+                    "title": "Brand Power",
+                    "description": "Opportunity to establish a strong partnership with the industry's leading brand"
+                },
+                "continuousSupport": {
+                    "title": "Continuous Support",
+                    "description": "Full support in technical, marketing and operational matters"
+                },
+                "highProfit": {
+                    "title": "High Profitability",
+                    "description": "Profitable business model with competitive prices and high profit margins"
+                },
+                "training": {
+                    "title": "Training Program",
+                    "description": "Comprehensive training and certification programs"
+                }
+            },
+            "requirements": {
+                "title": "Dealership Requirements",
+                "physicalSpace": {
+                    "title": "Physical Space",
+                    "description": "Minimum 100m² indoor area and suitable location"
+                },
+                "investment": {
+                    "title": "Investment Capacity",
+                    "description": "Sufficient capital for initial investment"
+                },
+                "experience": {
+                    "title": "Experience",
+                    "description": "At least 2 years of experience in the automotive industry"
+                },
+                "target": {
+                    "title": "Goal-Oriented",
+                    "description": "Determination to achieve sales targets"
+                }
+            },
+            "support": {
+                "title": "Support We Offer"
+            },
+            "supportServices": [
+                "Comprehensive technical training program",
+                "Marketing and advertising support",
+                "Continuous technical support line",
+                "Product and service updates",
+                "Sales and customer management training",
+                "Guidance in operational processes",
+                "Regional meetings and events",
+                "Access to online training platform"
+            ],
+            "form": {
+                "title": "Dealership Application Form",
+                "name": "Full Name",
+                "phone": "Phone",
+                "email": "Email",
+                "city": "City",
+                "experience": "Work Experience",
+                "select": "Select",
+                "years0to2": "0-2 years",
+                "years2to5": "2-5 years",
+                "years5to10": "5-10 years",
+                "years10plus": "10+ years",
+                "message": "Your Message",
+                "submit": "Submit Application",
+                "success": "Your application has been received. We will contact you as soon as possible."
+            },
+            "placeholders": {
+                "name": "Your Name Surname",
+                "phone": "0(5XX) XXX XX XX",
+                "email": "example@mail.com",
+                "city": "In which city do you want to open a dealership?",
+                "message": "Provide information about your current work experience, dealership plans and investment capacity..."
+            },
+            "moreInfo": {
+                "title": "For More Information",
+                "description": "Contact us for more information about dealership requirements and details.",
+                "callNow": "Call Now",
+                "sendEmail": "Send Email"
+            }
         },
-        "command": {
-            "paletteTitle": "Command Palette",
-            "paletteDescription": "Search for a command to run..."
+        "LandingBlog": {
+            "badge": "# BLOG",
+            "title": "Blog & News",
+            "description": "Up-to-date articles, tips and news about chiptuning, automotive technologies and performance.",
+            "categories": [
+                "All",
+                "Chiptuning",
+                "Performance",
+                "Technical",
+                "Fuel",
+                "Turbo",
+                "ECU"
+            ],
+            "featured": "Featured",
+            "readMore": "Read More",
+            "read": "Read",
+            "newsletter": {
+                "title": "Stay Updated",
+                "description": "Join our mailing list to be informed about new blog posts, chiptuning tips and special offers.",
+                "placeholder": "Your email address",
+                "subscribe": "Subscribe"
+            }
+        },
+        "LandingServices": {
+            "badge": "# SERVICES",
+            "title": "Our Professional Services",
+            "description": "We offer all the services you need to increase your vehicle's performance under one roof.",
+            "durationLabel": "Duration:",
+            "buttons": {
+                "appointment": "Make an Appointment",
+                "callNow": "Call Now"
+            },
+            "cards": [
+                {
+                    "title": "Stage 1 Chiptuning",
+                    "description": "Basic performance increase and fuel optimization",
+                    "features": [
+                        "Power increase: +25-30%",
+                        "Torque increase: +20-25%",
+                        "Fuel saving: -10%",
+                        "Original hardware preserved"
+                    ],
+                    "price": "₺1,500",
+                    "duration": "2-3 hours"
+                },
+                {
+                    "title": "Stage 2 Chiptuning",
+                    "description": "Advanced performance and hardware upgrades",
+                    "features": [
+                        "Power increase: +35-40%",
+                        "Torque increase: +30-35%",
+                        "Performance oriented",
+                        "Hardware upgrade"
+                    ],
+                    "price": "₺2,500",
+                    "duration": "4-5 hours"
+                },
+                {
+                    "title": "ECU Remapping",
+                    "description": "Engine control unit software optimization",
+                    "features": [
+                        "Custom software development",
+                        "Engine characteristics tuning",
+                        "Emission optimization",
+                        "Safety limits"
+                    ],
+                    "price": "₺2,000",
+                    "duration": "3-4 hours"
+                },
+                {
+                    "title": "DPF/EGR Delete",
+                    "description": "DPF and EGR solutions",
+                    "features": [
+                        "Solves DPF cleaning issue",
+                        "Fixes EGR valve failures",
+                        "Extends engine life",
+                        "Reduces maintenance cost"
+                    ],
+                    "price": "₺1,200",
+                    "duration": "2-3 hours"
+                },
+                {
+                    "title": "Performance Test",
+                    "description": "Dyno test and detailed performance analysis",
+                    "features": [
+                        "Power and torque measurement",
+                        "Air/fuel ratio analysis",
+                        "Exhaust gas analysis",
+                        "Detailed report"
+                    ],
+                    "price": "₺500",
+                    "duration": "1 hour"
+                },
+                {
+                    "title": "Launch Control",
+                    "description": "Launch control setup",
+                    "features": [
+                        "Perfect start performance",
+                        "Adjustable RPM limit",
+                        "Anti-lag system",
+                        "Professional calibration"
+                    ],
+                    "price": "₺1,800",
+                    "duration": "3-4 hours"
+                }
+            ],
+            "advantages": {
+                "title": "Why Revv Tuned",
+                "items": [
+                    {
+                        "title": "Professional Team",
+                        "description": "Safe service with expert technicians"
+                    },
+                    {
+                        "title": "Fast Service",
+                        "description": "Same-day delivery guarantee"
+                    },
+                    {
+                        "title": "Quality Guarantee",
+                        "description": "We provide service with a 1-year warranty"
+                    },
+                    {
+                        "title": "10,000+ Customers",
+                        "description": "Our satisfied customer portfolio"
+                    }
+                ]
+            },
+            "process": {
+                "title": "Our Service Process",
+                "steps": [
+                    {
+                        "step": "01",
+                        "title": "Appointment",
+                        "description": "Make an appointment online or by phone"
+                    },
+                    {
+                        "step": "02",
+                        "title": "Analysis",
+                        "description": "We analyze your vehicle in detail"
+                    },
+                    {
+                        "step": "03",
+                        "title": "Application",
+                        "description": "We perform the selected service professionally"
+                    },
+                    {
+                        "step": "04",
+                        "title": "Test & Delivery",
+                        "description": "We test and deliver your vehicle"
+                    }
+                ]
+            },
+            "faq": {
+                "title": "Frequently Asked Questions",
+                "items": [
+                    {
+                        "q": "Is chiptuning guaranteed?",
+                        "a": "Yes, all our services are provided with a 1-year warranty."
+                    },
+                    {
+                        "q": "Will my vehicle's warranty be void?",
+                        "a": "With professional chiptuning, your warranty remains intact. We can revert to the original software if needed."
+                    },
+                    {
+                        "q": "Which vehicles do you service?",
+                        "a": "We serve all makes and models. We have solutions for gasoline, diesel and hybrid vehicles."
+                    },
+                    {
+                        "q": "Is appointment required?",
+                        "a": "We recommend making an appointment for better service. Call us for urgent situations."
+                    }
+                ]
+            },
+            "cta": {
+                "title": "More Information About Our Services",
+                "description": "Contact us to get detailed information from our expert team and make an appointment."
+            }
+        },
+        "LandingDealers": {
+            "badge": "# DEALERS",
+            "title": "Our Dealer Network",
+            "description": "Discover Revv Tuned dealers across Turkey. Contact the dealer closest to you.",
+            "stats": [
+                {
+                    "value": "25+",
+                    "label": "Dealer Points"
+                }
+            ],
+            "services": {
+                "title": "Services:"
+            },
+            "buttons": {
+                "call": "Call",
+                "appointment": "Appointment"
+            },
+            "become": {
+                "title": "Would You Like to Become a Dealer",
+                "description": "Join the Revv Tuned dealer network and offer professional chiptuning services in your region.",
+                "cards": [
+                    {
+                        "title": "Business Opportunity",
+                        "description": "Be part of the growing automotive industry"
+                    },
+                    {
+                        "title": "Training",
+                        "description": "Comprehensive technical training programs"
+                    },
+                    {
+                        "title": "Support",
+                        "description": "24/7 technical and marketing support"
+                    }
+                ],
+                "apply": "Apply for Dealership"
+            },
+            "map": {
+                "title": "Dealer Locations",
+                "comingSoon": "Interactive map coming soon",
+                "helpText": "For now, you can reach our dealers via the list above"
+            }
+        },
+        "LandingCorporate": {
+            "badge": "# CORPORATE",
+            "title": "Revv Tuned",
+            "subtitle": "Since 2018, we have been providing professional chiptuning and performance services in the automotive industry.",
+            "about": {
+                "title": "About Us",
+                "p1": "As Revv Tuned, our goal is to maximize our customers' vehicle performance with a quality and reliable service approach.",
+                "p2": "With our expert team and state-of-the-art equipment, we develop tailored solutions for all makes and models. With our customer-oriented approach, we continue to be a reliable partner in the industry.",
+                "stats": [
+                    {
+                        "value": "10,000+",
+                        "label": "Satisfied Customers"
+                    },
+                    {
+                        "value": "5+",
+                        "label": "Years of Experience"
+                    }
+                ]
+            },
+            "mission": {
+                "title": "Our Mission",
+                "description": "To provide the highest quality chiptuning and performance services and ensure our customers get maximum efficiency from their vehicles. To lead the industry with a reliable, transparent and customer-focused approach."
+            },
+            "vision": {
+                "title": "Our Vision",
+                "description": "To be Turkey's most reliable and preferred automotive performance center. To exceed expectations with continuous improvement and an innovative approach."
+            },
+            "values": {
+                "title": "Our Values",
+                "items": [
+                    {
+                        "title": "Quality",
+                        "description": "Providing services at the highest quality standards"
+                    },
+                    {
+                        "title": "Customer Focus",
+                        "description": "We put customer satisfaction above all"
+                    },
+                    {
+                        "title": "Reliability",
+                        "description": "Reliable and transparent business understanding"
+                    },
+                    {
+                        "title": "Innovation",
+                        "description": "We embrace continuous improvement and innovation"
+                    }
+                ]
+            },
+            "timeline": {
+                "title": "Our History",
+                "items": [
+                    {
+                        "title": "Company Establishment",
+                        "description": "We started our operations as Revv Tuned"
+                    },
+                    {
+                        "title": "First Major Project",
+                        "description": "Mass chiptuning project for 500+ vehicles"
+                    },
+                    {
+                        "title": "Technology Investment",
+                        "description": "Equipped with state-of-the-art equipment"
+                    },
+                    {
+                        "title": "International Certificate",
+                        "description": "Certification at European standards"
+                    },
+                    {
+                        "title": "Dealer Network",
+                        "description": "We expanded our dealer network across Turkey"
+                    },
+                    {
+                        "title": "10,000+ Customers",
+                        "description": "Reached 10,000+ satisfied customers"
+                    }
+                ]
+            },
+            "team": {
+                "title": "Our Team",
+                "items": [
+                    {
+                        "position": "Founder & CEO",
+                        "description": "15 years of automotive industry experience"
+                    },
+                    {
+                        "position": "Technical Director",
+                        "description": "Chiptuning expert, 12 years of experience"
+                    },
+                    {
+                        "position": "Operations Manager",
+                        "description": "Operational excellence expert"
+                    }
+                ]
+            },
+            "cta": {
+                "title": "Ready to Work With Us?",
+                "description": "We are here to increase your vehicle's performance with our professional team and quality service.",
+                "button": "Contact Us"
+            }
+        },
+        "LandingOnsite": {
+            "badge": "# ON-SITE SERVICE",
+            "title": "We Are Just One Click Away",
+            "subtitle": "We offer chiptuning service wherever you want with our professional team and mobile service vehicles.",
+            "features": {
+                "items": [
+                    {
+                        "title": "24/7 Service",
+                        "description": "Get service anytime, anywhere"
+                    },
+                    {
+                        "title": "Professional Equipment",
+                        "description": "On-site intervention with the latest technology equipment"
+                    },
+                    {
+                        "title": "Safe Operation",
+                        "description": "Fully secure and guaranteed service"
+                    },
+                    {
+                        "title": "Expert Team",
+                        "description": "Professional service with our experienced technicians"
+                    }
+                ]
+            },
+            "services": {
+                "title": "Our On-Site Services",
+                "items": [
+                    {
+                        "title": "Chiptuning",
+                        "description": "We optimize your vehicle's performance at your location",
+                        "items": [
+                            "Engine software update",
+                            "DPF-EGR solutions",
+                            "Performance increase",
+                            "Fuel optimization"
+                        ]
+                    },
+                    {
+                        "title": "Fault Solution",
+                        "description": "On-site fault detection and solution service",
+                        "items": [
+                            "Electronic fault detection",
+                            "Reading error codes",
+                            "Sensor check",
+                            "System optimization"
+                        ]
+                    },
+                    {
+                        "title": "Maintenance Service",
+                        "description": "Periodic maintenance and control operations",
+                        "items": [
+                            "Software check",
+                            "System update",
+                            "Performance test",
+                            "General check"
+                        ]
+                    }
+                ]
+            },
+            "process": {
+                "title": "How It Works",
+                "steps": [
+                    {
+                        "step": "01",
+                        "title": "Make an Appointment",
+                        "description": "Choose the day and time that suits you"
+                    },
+                    {
+                        "step": "02",
+                        "title": "Provide Location",
+                        "description": "Share the location of your vehicle"
+                    },
+                    {
+                        "step": "03",
+                        "title": "Get the Service",
+                        "description": "Our expert team will come to you"
+                    }
+                ]
+            },
+            "advantages": {
+                "title": "Advantages of On-Site Service",
+                "items": [
+                    "Save time - No need to bring your vehicle",
+                    "Flexible appointment system - Service at a time that suits you",
+                    "Safe location - Operation in your own area",
+                    "Quick intervention - Same day service available",
+                    "Professional equipment - Fully equipped service vehicle",
+                    "Under warranty - All operations are guaranteed"
+                ]
+            },
+            "pricing": {
+                "title": "On-Site Service Prices",
+                "popular": "Most Popular",
+                "plans": [
+                    {
+                        "title": "In-City",
+                        "price": "+₺200",
+                        "description": "City center and nearby areas",
+                        "features": [
+                            "Same-day service",
+                            "Quick access",
+                            "Standard equipment"
+                        ]
+                    },
+                    {
+                        "title": "Out-of-City",
+                        "price": "+₺350",
+                        "description": "Regions within a 50km radius",
+                        "features": [
+                            "Appointment 1-2 days in advance",
+                            "Fully equipped team",
+                            "Wide service area"
+                        ]
+                    },
+                    {
+                        "title": "Long Distance",
+                        "price": "Special Price",
+                        "description": "Regions farther than 50km",
+                        "features": [
+                            "Special planning",
+                            "Comprehensive service",
+                            "Accommodation included"
+                        ]
+                    }
+                ]
+            },
+            "cta": {
+                "title": "Make an Appointment Now",
+                "description": "Our nearest expert team is ready to serve you as soon as possible.",
+                "appointment": "Create Appointment",
+                "callNow": "Call Now"
+            }
         }
     },
     "ImageUpload": {

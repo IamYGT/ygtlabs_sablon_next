@@ -1,11 +1,10 @@
 'use client';
 
-import React from 'react';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ChartLine, Fuel, Cog, Shield, Wrench, Car } from 'lucide-react';
-import Header from '../../components/Header';
+import { Car, ChartLine, Cog, Fuel, Shield, Wrench } from 'lucide-react';
+import { Link } from '../../../../../src/i18n/navigation';
 import Footer from '../../components/Footer';
+import Header from '../../components/Header';
 
 export default function ChiptuningClient() {
   const stages = [
@@ -93,7 +92,7 @@ export default function ChiptuningClient() {
   return (
     <div className="min-h-screen bg-light">
       <Header />
-      
+
       <div className="pt-32 pb-24">
         <div className="container mx-auto px-4">
           {/* Header Section */}

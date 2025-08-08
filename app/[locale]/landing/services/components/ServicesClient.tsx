@@ -1,132 +1,103 @@
 'use client';
 
-import React from 'react';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { 
-  Zap, 
-  Gauge, 
-  Settings, 
-  Shield, 
-  Wrench, 
-  Car, 
+import {
+  Award,
+  Car,
   CheckCircle,
   Clock,
-  Award,
-  Users
+  Gauge,
+  Settings,
+  Shield,
+  Users,
+  Wrench,
+  Zap
 } from 'lucide-react';
-import Header from '../../components/Header';
+import { useTranslations } from 'next-intl';
+import { Link } from '../../../../../src/i18n/navigation';
 import Footer from '../../components/Footer';
+import Header from '../../components/Header';
 
 export default function ServicesClient() {
+  const t = useTranslations('LandingServices');
   const services = [
     {
       icon: <Zap className="w-12 h-12" />,
-      title: 'Stage 1 Chiptuning',
-      description: 'Temel performans artışı ve yakıt optimizasyonu',
-      features: [
-        'Güç artışı: +25-30%',
-        'Tork artışı: +20-25%',
-        'Yakıt tasarrufu: -10%',
-        'Orijinal donanım korunur'
-      ],
-      price: '1.500₺',
-      duration: '2-3 saat'
+      title: '',
+      description: '',
+      features: [],
+      price: '',
+      duration: ''
     },
     {
       icon: <Gauge className="w-12 h-12" />,
-      title: 'Stage 2 Chiptuning',
-      description: 'Gelişmiş performans ve donanım güncellemeleri',
-      features: [
-        'Güç artışı: +35-40%',
-        'Tork artışı: +30-35%',
-        'Performans odaklı',
-        'Donanım güncellemesi'
-      ],
-      price: '2.500₺',
-      duration: '4-5 saat'
+      title: '',
+      description: '',
+      features: [],
+      price: '',
+      duration: ''
     },
     {
       icon: <Settings className="w-12 h-12" />,
-      title: 'ECU Remapping',
-      description: 'Motor kontrol ünitesi yazılım optimizasyonu',
-      features: [
-        'Özel yazılım geliştirme',
-        'Motor karakteristik ayarı',
-        'Emisyon optimizasyonu',
-        'Güvenlik sınırları'
-      ],
-      price: '2.000₺',
-      duration: '3-4 saat'
+      title: '',
+      description: '',
+      features: [],
+      price: '',
+      duration: ''
     },
     {
       icon: <Shield className="w-12 h-12" />,
-      title: 'DPF/EGR İptali',
-      description: 'Dizel partikül filtresi ve EGR valf iptali',
-      features: [
-        'DPF temizlik sorunu çözümü',
-        'EGR valf arızası giderme',
-        'Motor ömrü uzatma',
-        'Bakım maliyeti azaltma'
-      ],
-      price: '1.200₺',
-      duration: '2-3 saat'
+      title: '',
+      description: '',
+      features: [],
+      price: '',
+      duration: ''
     },
     {
       icon: <Wrench className="w-12 h-12" />,
-      title: 'Performans Testi',
-      description: 'Dyno test ve detaylı performans analizi',
-      features: [
-        'Güç ve tork ölçümü',
-        'Hava/yakıt oranı analizi',
-        'Egzoz gazı analizi',
-        'Detaylı rapor'
-      ],
-      price: '500₺',
-      duration: '1 saat'
+      title: '',
+      description: '',
+      features: [],
+      price: '',
+      duration: ''
     },
     {
       icon: <Car className="w-12 h-12" />,
-      title: 'Launch Control',
-      description: 'Yarış start sistemi kurulumu',
-      features: [
-        'Mükemmel start performansı',
-        'Ayarlanabilir rpm limiti',
-        'Anti-lag sistemi',
-        'Profesyonel kalibrasyon'
-      ],
-      price: '1.800₺',
-      duration: '3-4 saat'
+      title: '',
+      description: '',
+      features: [],
+      price: '',
+      duration: ''
     }
   ];
 
   const advantages = [
     {
       icon: <CheckCircle className="w-8 h-8" />,
-      title: 'Profesyonel Ekip',
-      description: 'Uzman teknisyenlerimizle güvenli hizmet'
+      title: '',
+      description: ''
     },
     {
       icon: <Clock className="w-8 h-8" />,
-      title: 'Hızlı Servis',
-      description: 'Aynı gün teslim garantisi'
+      title: '',
+      description: ''
     },
     {
       icon: <Award className="w-8 h-8" />,
-      title: 'Kalite Garantisi',
-      description: '1 yıl garanti ile hizmet veriyoruz'
+      title: '',
+      description: ''
     },
     {
       icon: <Users className="w-8 h-8" />,
-      title: '10.000+ Müşteri',
-      description: 'Memnun müşteri portföyümüz'
+      title: '',
+      description: ''
     }
   ];
 
   return (
     <div className="min-h-screen bg-light">
       <Header />
-      
+
       <div className="pt-32 pb-24">
         <div className="container mx-auto px-4">
           {/* Header Section */}
@@ -136,14 +107,12 @@ export default function ServicesClient() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <span className="text-primary font-medium inline-block px-6 py-3 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 mb-4">
-              # HİZMETLER
-            </span>
+            <span className="text-primary font-medium inline-block px-6 py-3 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 mb-4">{t('badge')}</span>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Profesyonel Hizmetlerimiz<span className="text-primary">.</span>
+              {t('title')}<span className="text-primary">.</span>
             </h1>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Aracınızın performansını artırmak için ihtiyacınız olan tüm hizmetleri tek çatı altında sunuyoruz.
+              {t('description')}
             </p>
           </motion.div>
 
@@ -160,28 +129,28 @@ export default function ServicesClient() {
                 <div className="w-20 h-20 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-6 group-hover:bg-primary group-hover:text-white transition-all duration-300">
                   {service.icon}
                 </div>
-                <h3 className="text-xl font-bold mb-4">{service.title}</h3>
-                <p className="text-gray-600 mb-6">{service.description}</p>
-                
+                <h3 className="text-xl font-bold mb-4">{t(`cards.${index}.title`)}</h3>
+                <p className="text-gray-600 mb-6">{t(`cards.${index}.description`)}</p>
+
                 <ul className="space-y-3 mb-6">
-                  {service.features.map((feature, i) => (
+                  {[0, 1, 2, 3].map((i) => (
                     <li key={i} className="flex items-center gap-3 text-gray-700">
                       <CheckCircle className="w-4 h-4 text-primary flex-shrink-0" />
-                      {feature}
+                      {t(`cards.${index}.features.${i}`)}
                     </li>
                   ))}
                 </ul>
 
                 <div className="border-t pt-6 flex items-center justify-between">
                   <div>
-                    <div className="text-2xl font-bold text-primary">{service.price}</div>
-                    <div className="text-sm text-gray-500">Süre: {service.duration}</div>
+                    <div className="text-2xl font-bold text-primary">{t(`cards.${index}.price`)}</div>
+                    <div className="text-sm text-gray-500">{t('durationLabel')} {t(`cards.${index}.duration`)}</div>
                   </div>
                   <Link
                     href="/landing/contact"
                     className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-dark transition-all duration-300 transform hover:scale-105"
                   >
-                    Randevu Al
+                    {t('buttons.appointment')}
                   </Link>
                 </div>
               </motion.div>
@@ -195,9 +164,7 @@ export default function ServicesClient() {
             transition={{ duration: 0.6 }}
             className="mb-24"
           >
-            <h2 className="text-3xl font-bold text-center mb-12">
-              Neden Revv Tuned<span className="text-primary">?</span>
-            </h2>
+            <h2 className="text-3xl font-bold text-center mb-12">{t('advantages.title')}<span className="text-primary">?</span></h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {advantages.map((advantage, index) => (
                 <motion.div
@@ -210,8 +177,8 @@ export default function ServicesClient() {
                   <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center text-primary text-2xl mb-6 mx-auto">
                     {advantage.icon}
                   </div>
-                  <h3 className="text-xl font-bold mb-4">{advantage.title}</h3>
-                  <p className="text-gray-600">{advantage.description}</p>
+                  <h3 className="text-xl font-bold mb-4">{t(`advantages.items.${index}.title`)}</h3>
+                  <p className="text-gray-600">{t(`advantages.items.${index}.description`)}</p>
                 </motion.div>
               ))}
             </div>
@@ -224,32 +191,9 @@ export default function ServicesClient() {
             transition={{ duration: 0.6 }}
             className="mb-24"
           >
-            <h2 className="text-3xl font-bold text-center mb-12">
-              Hizmet Sürecimiz<span className="text-primary">.</span>
-            </h2>
+            <h2 className="text-3xl font-bold text-center mb-12">{t('process.title')}<span className="text-primary">.</span></h2>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              {[
-                {
-                  step: '01',
-                  title: 'Randevu',
-                  description: 'Online veya telefon ile randevu alın'
-                },
-                {
-                  step: '02',
-                  title: 'Analiz',
-                  description: 'Aracınızı detaylı olarak analiz ediyoruz'
-                },
-                {
-                  step: '03',
-                  title: 'Uygulama',
-                  description: 'Seçilen hizmeti profesyonelce uyguluyoruz'
-                },
-                {
-                  step: '04',
-                  title: 'Test & Teslim',
-                  description: 'Test edip aracınızı teslim ediyoruz'
-                }
-              ].map((item, index) => (
+              {[0, 1, 2, 3].map((i) => ({ step: t(`process.steps.${i}.step`), title: t(`process.steps.${i}.title`), description: t(`process.steps.${i}.description`) })).map((item, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
@@ -257,9 +201,7 @@ export default function ServicesClient() {
                   transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
                   className="text-center relative"
                 >
-                  <div className="w-16 h-16 bg-primary rounded-xl flex items-center justify-center text-white text-xl font-bold mb-6 mx-auto">
-                    {item.step}
-                  </div>
+                  <div className="w-16 h-16 bg-primary rounded-xl flex items-center justify-center text-white text-xl font-bold mb-6 mx-auto">{item.step}</div>
                   <h3 className="text-xl font-bold mb-4">{item.title}</h3>
                   <p className="text-gray-600">{item.description}</p>
                   {index < 3 && (
@@ -277,28 +219,9 @@ export default function ServicesClient() {
             transition={{ duration: 0.6 }}
             className="mb-24"
           >
-            <h2 className="text-3xl font-bold text-center mb-12">
-              Sık Sorulan Sorular<span className="text-primary">.</span>
-            </h2>
+            <h2 className="text-3xl font-bold text-center mb-12">{t('faq.title')}<span className="text-primary">.</span></h2>
             <div className="max-w-3xl mx-auto space-y-6">
-              {[
-                {
-                  question: 'Chiptuning garantili mi?',
-                  answer: 'Evet, tüm chiptuning hizmetlerimiz 1 yıl garanti ile sunulmaktadır.'
-                },
-                {
-                  question: 'Aracımın garantisi bozulur mu?',
-                  answer: 'Profesyonel chiptuning ile aracınızın garantisi bozulmaz. Gerektiğinde orijinal yazılıma geri dönülebilir.'
-                },
-                {
-                  question: 'Hangi araçlara hizmet veriyorsunuz?',
-                  answer: 'Tüm marka ve modellere hizmet veriyoruz. Benzinli, dizel ve hibrit araçlar için özel çözümlerimiz vardır.'
-                },
-                {
-                  question: 'Randevu almak zorunlu mu?',
-                  answer: 'Daha iyi hizmet verebilmek için randevu almanızı öneriyoruz. Acil durumlar için arayabilirsiniz.'
-                }
-              ].map((faq, index) => (
+              {[0, 1, 2, 3].map((i) => ({ question: t(`faq.items.${i}.q`), answer: t(`faq.items.${i}.a`) })).map((faq, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
@@ -322,24 +245,20 @@ export default function ServicesClient() {
           >
             <div className="absolute inset-0 bg-[url('/images/pattern.png')] opacity-5"></div>
             <div className="relative z-10">
-              <h2 className="text-3xl font-bold text-white mb-6">
-                Hizmetlerimiz Hakkında Daha Fazla Bilgi
-              </h2>
-              <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
-                Uzman ekibimizden detaylı bilgi almak ve randevu oluşturmak için iletişime geçin.
-              </p>
+              <h2 className="text-3xl font-bold text-white mb-6">{t('cta.title')}</h2>
+              <p className="text-gray-400 mb-8 max-w-2xl mx-auto">{t('cta.description')}</p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   href="/landing/contact"
                   className="inline-block bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary-dark transition-all duration-300 transform hover:scale-105"
                 >
-                  Randevu Al
+                  {t('buttons.appointment')}
                 </Link>
                 <a
                   href="tel:+905551234567"
                   className="inline-block border border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-dark transition-all duration-300"
                 >
-                  Hemen Ara
+                  {t('buttons.callNow')}
                 </a>
               </div>
             </div>

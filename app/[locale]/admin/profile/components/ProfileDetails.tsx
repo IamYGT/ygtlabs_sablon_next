@@ -1,15 +1,17 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import ProfileImageUpload from '@/components/panel/ProfileImageUpload';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Save, Camera, Calendar, Clock, Edit3 } from 'lucide-react';
+import { Calendar, Camera, Clock, Edit3, Save } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import React, { useState } from 'react';
 import { useProfile } from '../hooks/useProfile';
-import ProfileImageUpload from '@/components/panel/ProfileImageUpload';
 
 export default function ProfileDetails() {
+    const t = useTranslations('AdminProfile');
     const { profile, updateProfile, isLoading } = useProfile();
     const [profileImage, setProfileImage] = useState(profile?.profileImage || null);
     const [formData, setFormData] = useState({
@@ -59,10 +61,10 @@ export default function ProfileDetails() {
                             <div className="p-2.5 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-lg shadow-sm">
                                 <Camera className="h-4 w-4" />
                             </div>
-                            Profile Image
+                            {t('profileImage')}
                         </CardTitle>
                         <CardDescription className="text-gray-500 dark:text-gray-400 ml-11">
-                            Upload or change your profile picture
+                            {t('profileImageDescription')}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="pt-2">
@@ -88,10 +90,10 @@ export default function ProfileDetails() {
                                 <div className="p-2.5 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-lg shadow-sm">
                                     <Edit3 className="h-4 w-4" />
                                 </div>
-                                Profile Details
+                                {t('profileDetails')}
                             </CardTitle>
                             <CardDescription className="text-gray-500 dark:text-gray-400 ml-11">
-                                Update your profile information
+                                {t('profileDetailsDescription')}
                             </CardDescription>
                         </div>
                     </CardHeader>
@@ -99,26 +101,26 @@ export default function ProfileDetails() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                                 <Label htmlFor="name" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    Full Name *
+                                    {t('name')} *
                                 </Label>
                                 <Input
                                     id="name"
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    placeholder="Enter your full name"
+                                    placeholder={t('namePlaceholder')}
                                     className="border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                 />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="email" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    Email Address *
+                                    {t('email')} *
                                 </Label>
                                 <Input
                                     id="email"
                                     type="email"
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    placeholder="Enter your email address"
+                                    placeholder={t('emailPlaceholder')}
                                     className="border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                 />
                             </div>
@@ -127,7 +129,7 @@ export default function ProfileDetails() {
                         {profile && (
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-gray-200 dark:border-gray-700">
                                 <div className="group">
-                                    <Label className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">Account Created</Label>
+                                    <Label className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">{t('createdAt')}</Label>
                                     <div className="flex items-center gap-2">
                                         <Calendar className="h-4 w-4 text-gray-400" />
                                         <p className="font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
@@ -140,7 +142,7 @@ export default function ProfileDetails() {
                                     </div>
                                 </div>
                                 <div className="group">
-                                    <Label className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">Last Login</Label>
+                                    <Label className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1.5 block">{t('lastLogin')}</Label>
                                     <div className="flex items-center gap-2">
                                         <Clock className="h-4 w-4 text-gray-400" />
                                         <p className="font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
@@ -150,7 +152,7 @@ export default function ProfileDetails() {
                                                     month: 'long',
                                                     day: 'numeric'
                                                 })
-                                                : 'Never'
+                                                : t('notSpecified')
                                             }
                                         </p>
                                     </div>
@@ -165,7 +167,7 @@ export default function ProfileDetails() {
                                 className="bg-blue-600 hover:bg-blue-700 shadow-sm hover:shadow transition-all duration-200"
                             >
                                 <Save className="h-4 w-4 mr-2" />
-                                {updateProfile.isPending ? 'Saving...' : 'Save Changes'}
+                                {updateProfile.isPending ? t('saving') : t('saveChanges')}
                             </Button>
                         </div>
                     </CardContent>

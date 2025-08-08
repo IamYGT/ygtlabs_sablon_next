@@ -1,117 +1,96 @@
 'use client';
 
-import React from 'react';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { 
-  Clock, 
-  MapPin, 
-  Shield, 
-  Car, 
-  CheckCircle, 
+import {
+  Car,
+  CheckCircle,
+  Clock,
+  MapPin,
   Phone,
-  Wrench,
-  Zap,
   Settings,
-  Users
+  Shield,
+  Users,
+  Wrench,
+  Zap
 } from 'lucide-react';
-import Header from '../../components/Header';
+import { useTranslations } from 'next-intl';
+import { Link } from '../../../../../src/i18n/navigation';
 import Footer from '../../components/Footer';
+import Header from '../../components/Header';
 
 export default function OnsiteServiceClient() {
+  const t = useTranslations('LandingOnsite');
   const features = [
     {
       icon: <Clock className="w-12 h-12" />,
-      title: '7/24 Hizmet',
-      description: 'Dilediğiniz zaman ve yerde hizmet alın'
+      title: t('features.items.0.title'),
+      description: t('features.items.0.description')
     },
     {
       icon: <Wrench className="w-12 h-12" />,
-      title: 'Profesyonel Ekipman',
-      description: 'En son teknoloji ekipmanlarla yerinde müdahale'
+      title: t('features.items.1.title'),
+      description: t('features.items.1.description')
     },
     {
       icon: <Shield className="w-12 h-12" />,
-      title: 'Güvenli İşlem',
-      description: 'Tam güvenlikli ve garantili hizmet'
+      title: t('features.items.2.title'),
+      description: t('features.items.2.description')
     },
     {
       icon: <Users className="w-12 h-12" />,
-      title: 'Uzman Ekip',
-      description: 'Deneyimli teknisyenlerimizle profesyonel hizmet'
+      title: t('features.items.3.title'),
+      description: t('features.items.3.description')
     }
   ];
 
   const services = [
     {
-      title: 'Chiptuning',
-      description: 'Aracınızın performansını bulunduğunuz yerde optimize ediyoruz',
+      title: t('services.items.0.title'),
+      description: t('services.items.0.description'),
       icon: <Zap className="w-8 h-8" />,
-      items: [
-        'Motor yazılımı güncellemesi',
-        'DPF-EGR çözümleri',
-        'Performans artırımı',
-        'Yakıt optimizasyonu'
-      ]
+      items: [0, 1, 2, 3].map((i) => t(`services.items.0.items.${i}`))
     },
     {
-      title: 'Arıza Çözümü',
-      description: 'Yerinde arıza tespiti ve çözüm hizmeti',
+      title: t('services.items.1.title'),
+      description: t('services.items.1.description'),
       icon: <Settings className="w-8 h-8" />,
-      items: [
-        'Elektronik arıza tespiti',
-        'Hata kodu okuma',
-        'Sensör kontrolü',
-        'Sistem optimizasyonu'
-      ]
+      items: [0, 1, 2, 3].map((i) => t(`services.items.1.items.${i}`))
     },
     {
-      title: 'Bakım Hizmeti',
-      description: 'Periyodik bakım ve kontrol işlemleri',
+      title: t('services.items.2.title'),
+      description: t('services.items.2.description'),
       icon: <Car className="w-8 h-8" />,
-      items: [
-        'Yazılım kontrolü',
-        'Sistem güncellemesi',
-        'Performans testi',
-        'Genel kontrol'
-      ]
+      items: [0, 1, 2, 3].map((i) => t(`services.items.2.items.${i}`))
     }
   ];
 
   const process = [
     {
-      step: '01',
-      title: 'Randevu Alın',
-      description: 'Size uygun gün ve saati belirleyin',
+      step: t('process.steps.0.step'),
+      title: t('process.steps.0.title'),
+      description: t('process.steps.0.description'),
       icon: <Phone className="w-8 h-8" />
     },
     {
-      step: '02',
-      title: 'Lokasyon Bildirin',
-      description: 'Aracınızın bulunduğu konumu paylaşın',
+      step: t('process.steps.1.step'),
+      title: t('process.steps.1.title'),
+      description: t('process.steps.1.description'),
       icon: <MapPin className="w-8 h-8" />
     },
     {
-      step: '03',
-      title: 'Hizmeti Alın',
-      description: 'Uzman ekibimiz yanınıza gelsin',
+      step: t('process.steps.2.step'),
+      title: t('process.steps.2.title'),
+      description: t('process.steps.2.description'),
       icon: <Wrench className="w-8 h-8" />
     }
   ];
 
-  const advantages = [
-    'Zaman tasarrufu - Aracınızı getirmenize gerek yok',
-    'Esnek randevu sistemi - Size uygun saatte hizmet',
-    'Güvenli lokasyon - Kendi alanınızda işlem',
-    'Hızlı müdahale - Aynı gün hizmet imkanı',
-    'Profesyonel ekipman - Tam donanımlı servis aracı',
-    'Garanti kapsamı - Tüm işlemler garantili'
-  ];
+  const advantages = [0, 1, 2, 3, 4, 5].map((i) => t(`advantages.items.${i}`));
 
   return (
     <div className="min-h-screen bg-light">
       <Header />
-      
+
       <div className="pt-32 pb-24">
         <div className="container mx-auto px-4">
           {/* Hero Section */}
@@ -121,14 +100,12 @@ export default function OnsiteServiceClient() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <span className="text-primary font-medium inline-block px-6 py-3 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 mb-4">
-              # YERİNDE HİZMET
-            </span>
+            <span className="text-primary font-medium inline-block px-6 py-3 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 mb-4">{t('badge')}</span>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Size Bir Tık Kadar Yakınız<span className="text-primary">.</span>
+              {t('title')}<span className="text-primary">.</span>
             </h1>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Profesyonel ekibimiz ve mobil servis araçlarımızla dilediğiniz yerde chiptuning hizmeti sunuyoruz.
+              {t('subtitle')}
             </p>
           </motion.div>
 
@@ -158,9 +135,7 @@ export default function OnsiteServiceClient() {
             transition={{ duration: 0.6 }}
             className="mb-24"
           >
-            <h2 className="text-3xl font-bold text-center mb-12">
-              Yerinde Hizmetlerimiz<span className="text-primary">.</span>
-            </h2>
+            <h2 className="text-3xl font-bold text-center mb-12">{t('services.title')}<span className="text-primary">.</span></h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {services.map((service, index) => (
                 <motion.div
@@ -195,9 +170,7 @@ export default function OnsiteServiceClient() {
             transition={{ duration: 0.6 }}
             className="mb-24"
           >
-            <h2 className="text-3xl font-bold text-center mb-12">
-              Nasıl Çalışır<span className="text-primary">?</span>
-            </h2>
+            <h2 className="text-3xl font-bold text-center mb-12">{t('process.title')}<span className="text-primary">?</span></h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {process.map((step, index) => (
                 <motion.div
@@ -230,9 +203,7 @@ export default function OnsiteServiceClient() {
             transition={{ duration: 0.6 }}
             className="mb-24"
           >
-            <h2 className="text-3xl font-bold text-center mb-12">
-              Yerinde Hizmetin Avantajları<span className="text-primary">.</span>
-            </h2>
+            <h2 className="text-3xl font-bold text-center mb-12">{t('advantages.title')}<span className="text-primary">.</span></h2>
             <div className="bg-white rounded-xl shadow-xl p-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {advantages.map((advantage, index) => (
@@ -258,9 +229,7 @@ export default function OnsiteServiceClient() {
             transition={{ duration: 0.6 }}
             className="mb-24"
           >
-            <h2 className="text-3xl font-bold text-center mb-12">
-              Yerinde Hizmet Fiyatları<span className="text-primary">.</span>
-            </h2>
+            <h2 className="text-3xl font-bold text-center mb-12">{t('pricing.title')}<span className="text-primary">.</span></h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 {
@@ -288,25 +257,22 @@ export default function OnsiteServiceClient() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className={`bg-white p-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-500 ${
-                    plan.featured ? 'border-2 border-primary relative' : ''
-                  }`}
+                  className={`bg-white p-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-500 ${plan.featured ? 'border-2 border-primary relative' : ''
+                    }`}
                 >
                   {plan.featured && (
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                      <span className="bg-primary text-white px-4 py-2 rounded-full text-sm font-medium">
-                        En Popüler
-                      </span>
+                      <span className="bg-primary text-white px-4 py-2 rounded-full text-sm font-medium">{t('pricing.popular')}</span>
                     </div>
                   )}
-                  <h3 className="text-xl font-bold mb-4">{plan.title}</h3>
-                  <div className="text-3xl font-bold text-primary mb-2">{plan.price}</div>
-                  <p className="text-gray-600 mb-6">{plan.description}</p>
+                  <h3 className="text-xl font-bold mb-4">{t(`pricing.plans.${index}.title`)}</h3>
+                  <div className="text-3xl font-bold text-primary mb-2">{t(`pricing.plans.${index}.price`)}</div>
+                  <p className="text-gray-600 mb-6">{t(`pricing.plans.${index}.description`)}</p>
                   <ul className="space-y-3">
-                    {plan.features.map((feature, i) => (
+                    {plan.features.map((_, i) => (
                       <li key={i} className="flex items-center gap-3 text-gray-700">
                         <CheckCircle className="w-4 h-4 text-primary flex-shrink-0" />
-                        {feature}
+                        {t(`pricing.plans.${index}.features.${i}`)}
                       </li>
                     ))}
                   </ul>
@@ -324,24 +290,20 @@ export default function OnsiteServiceClient() {
           >
             <div className="absolute inset-0 bg-[url('/images/pattern.png')] opacity-5"></div>
             <div className="relative z-10">
-              <h2 className="text-3xl font-bold text-white mb-6">
-                Hemen Randevu Alın
-              </h2>
-              <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
-                Size en yakın uzman ekibimiz, en kısa sürede hizmet vermek için hazır.
-              </p>
+              <h2 className="text-3xl font-bold text-white mb-6">{t('cta.title')}</h2>
+              <p className="text-gray-400 mb-8 max-w-2xl mx-auto">{t('cta.description')}</p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   href="/landing/contact"
                   className="inline-block bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary-dark transition-all duration-300 transform hover:scale-105"
                 >
-                  Randevu Oluştur
+                  {t('cta.appointment')}
                 </Link>
                 <a
                   href="tel:+905551234567"
                   className="inline-block border border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-dark transition-all duration-300"
                 >
-                  Hemen Ara
+                  {t('cta.callNow')}
                 </a>
               </div>
             </div>

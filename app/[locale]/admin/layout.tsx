@@ -2,6 +2,7 @@ import { AdminHeader } from '@/components/panel/AdminHeader';
 import { AdminSidebar } from '@/components/panel/AdminSidebar';
 import { AdminGuard } from '@/components/panel/AuthGuards';
 import { LogoutModalProvider } from '@/components/panel/LogoutModalProvider';
+import { routing } from '@/src/i18n/routing';
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from 'next-intl';
 import { getTranslations } from "next-intl/server";
@@ -34,12 +35,13 @@ interface AdminLayoutProps {
 export default async function AdminLayout({ children, params }: AdminLayoutProps) {
     const { locale } = await params;
 
-    // Validate locale and fallback to 'en' if invalid
-    const validLocales = ['en', 'tr'];
-    const validLocale = validLocales.includes(locale) ? locale : 'en';
+    // Validate locale using dynamic routing locales
+    const validLocale = (routing.locales as readonly string[]).includes(locale) ? locale : routing.defaultLocale;
 
     // Admin için özel mesajları yükle
-    const adminMessages = (await import(`../../../messages/admin/admin_${validLocale}.json`)).default;
+    const adminMessages = (await import(`../../../messages/admin/admin_${validLocale}.json`).catch(async () => (
+        await import(`../../../messages/admin/admin_${routing.defaultLocale}.json`)
+    ))).default;
     const t = await getTranslations({ locale: validLocale, namespace: "AdminDashboard" });
 
     return (

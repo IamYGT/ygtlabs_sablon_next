@@ -1,5 +1,5 @@
-import { getRequestConfig } from "next-intl/server";
 import { hasLocale } from "next-intl";
+import { getRequestConfig } from "next-intl/server";
 import { routing } from "./routing";
 
 export default getRequestConfig(async ({ requestLocale }) => {
@@ -9,10 +9,24 @@ export default getRequestConfig(async ({ requestLocale }) => {
     ? requested
     : routing.defaultLocale;
 
-  const baseMessages = (await import(`../../messages/${locale}.json`)).default;
-  const adminMessages = (
-    await import(`../../messages/admin/admin_${locale}.json`)
-  ).default;
+  const baseMessages = await (async () => {
+    try {
+      return (await import(`../../messages/${locale}.json`)).default;
+    } catch {
+      return (await import(`../../messages/${routing.defaultLocale}.json`))
+        .default;
+    }
+  })();
+  const adminMessages = await (async () => {
+    try {
+      return (await import(`../../messages/admin/admin_${locale}.json`))
+        .default;
+    } catch {
+      return (
+        await import(`../../messages/admin/admin_${routing.defaultLocale}.json`)
+      ).default;
+    }
+  })();
 
   return {
     locale,

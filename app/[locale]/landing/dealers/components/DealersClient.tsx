@@ -1,20 +1,21 @@
 'use client';
 
-import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { 
-  MapPin, 
-  Phone, 
-  Mail, 
-  Clock, 
+import {
+  Clock,
+  Mail,
+  MapPin,
+  Phone,
   Star
 } from 'lucide-react';
-import Header from '../../components/Header';
+import { useTranslations } from 'next-intl';
+import Image from 'next/image';
+import { Link } from '../../../../../src/i18n/navigation';
 import Footer from '../../components/Footer';
+import Header from '../../components/Header';
 
 export default function DealersClient() {
+  const t = useTranslations('LandingDealers');
   const dealers = [
     {
       id: 1,
@@ -87,7 +88,7 @@ export default function DealersClient() {
   return (
     <div className="min-h-screen bg-light">
       <Header />
-      
+
       <div className="pt-32 pb-24">
         <div className="container mx-auto px-4">
           {/* Header Section */}
@@ -97,14 +98,12 @@ export default function DealersClient() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <span className="text-primary font-medium inline-block px-6 py-3 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 mb-4">
-              # BAYİLER
-            </span>
+            <span className="text-primary font-medium inline-block px-6 py-3 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 mb-4">{t('badge')}</span>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Bayi Ağımız<span className="text-primary">.</span>
+              {t('title')}<span className="text-primary">.</span>
             </h1>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Türkiye genelindeki Revv Tuned bayilerimizi keşfedin. Size en yakın bayi ile iletişime geçin.
+              {t('description')}
             </p>
           </motion.div>
 
@@ -115,18 +114,12 @@ export default function DealersClient() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16"
           >
-            <div className="text-center p-6 bg-white rounded-xl shadow-lg">
-              <div className="text-3xl font-bold text-primary mb-2">25+</div>
-              <div className="text-gray-600">Bayi Noktası</div>
-            </div>
-            <div className="text-center p-6 bg-white rounded-xl shadow-lg">
-              <div className="text-3xl font-bold text-primary mb-2">50+</div>
-              <div className="text-gray-600">Şehir</div>
-            </div>
-            <div className="text-center p-6 bg-white rounded-xl shadow-lg">
-              <div className="text-3xl font-bold text-primary mb-2">4.7</div>
-              <div className="text-gray-600">Ortalama Puan</div>
-            </div>
+            {[0, 1, 2].map((i) => (
+              <div key={i} className="text-center p-6 bg-white rounded-xl shadow-lg">
+                <div className="text-3xl font-bold text-primary mb-2">{t(`stats.${i}.value`)}</div>
+                <div className="text-gray-600">{t(`stats.${i}.label`)}</div>
+              </div>
+            ))}
           </motion.div>
 
           {/* Dealers Grid */}
@@ -149,16 +142,16 @@ export default function DealersClient() {
                     }}
                   />
                   <div className="absolute top-4 right-4 bg-white/90 px-2 py-1 rounded-full flex items-center gap-1">
-                    <Star className="w-4 h-4 text-yellow-500 fill-current" /> 
+                    <Star className="w-4 h-4 text-yellow-500 fill-current" />
                     <span className="text-sm font-medium">{dealer.rating}</span>
                   </div>
                 </div>
-                
+
                 <div className="p-6">
                   <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors duration-300">
                     {dealer.name}
                   </h3>
-                  
+
                   <div className="space-y-3 mb-6">
                     <div className="flex items-start gap-3 text-gray-600">
                       <MapPin className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
@@ -183,7 +176,7 @@ export default function DealersClient() {
                   </div>
 
                   <div className="mb-6">
-                    <h4 className="font-semibold text-gray-800 mb-2">Hizmetler:</h4>
+                    <h4 className="font-semibold text-gray-800 mb-2">{t('services.title')}</h4>
                     <div className="flex flex-wrap gap-2">
                       {dealer.services.map((service, i) => (
                         <span
@@ -201,13 +194,13 @@ export default function DealersClient() {
                       href={`tel:${dealer.phone}`}
                       className="flex-1 bg-primary text-white text-center py-2 rounded-lg text-sm font-medium hover:bg-primary-dark transition-all duration-300"
                     >
-                      Ara
+                      {t('buttons.call')}
                     </a>
                     <Link
                       href="/landing/contact"
                       className="flex-1 border border-primary text-primary text-center py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition-all duration-300"
                     >
-                      Randevu
+                      {t('buttons.appointment')}
                     </Link>
                   </div>
                 </div>
@@ -222,40 +215,38 @@ export default function DealersClient() {
             transition={{ duration: 0.6, delay: 0.8 }}
             className="bg-white rounded-2xl p-12 text-center shadow-xl mb-16"
           >
-            <h2 className="text-3xl font-bold mb-6">
-              Bayi Olmak İster misiniz<span className="text-primary">?</span>
-            </h2>
+            <h2 className="text-3xl font-bold mb-6">{t('become.title')}<span className="text-primary">?</span></h2>
             <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-              Revv Tuned bayi ağına katılın ve bölgenizdeki müşterilere profesyonel chiptuning hizmetleri sunun.
+              {t('become.description')}
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
               <div className="text-center">
                 <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center text-primary text-2xl mb-4 mx-auto">
                   💼
                 </div>
-                <h3 className="font-bold mb-2">İş Fırsatı</h3>
-                <p className="text-gray-600 text-sm">Büyüyen otomotiv sektöründe yer alın</p>
+                <h3 className="font-bold mb-2">{t('become.cards.0.title')}</h3>
+                <p className="text-gray-600 text-sm">{t('become.cards.0.description')}</p>
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center text-primary text-2xl mb-4 mx-auto">
                   🎓
                 </div>
-                <h3 className="font-bold mb-2">Eğitim</h3>
-                <p className="text-gray-600 text-sm">Kapsamlı teknik eğitim programları</p>
+                <h3 className="font-bold mb-2">{t('become.cards.1.title')}</h3>
+                <p className="text-gray-600 text-sm">{t('become.cards.1.description')}</p>
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center text-primary text-2xl mb-4 mx-auto">
                   🤝
                 </div>
-                <h3 className="font-bold mb-2">Destek</h3>
-                <p className="text-gray-600 text-sm">7/24 teknik ve pazarlama desteği</p>
+                <h3 className="font-bold mb-2">{t('become.cards.2.title')}</h3>
+                <p className="text-gray-600 text-sm">{t('become.cards.2.description')}</p>
               </div>
             </div>
             <Link
               href="/landing/dealership"
               className="inline-block bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary-dark transition-all duration-300 transform hover:scale-105"
             >
-              Bayilik Başvurusu Yap
+              {t('become.apply')}
             </Link>
           </motion.div>
 
@@ -266,16 +257,12 @@ export default function DealersClient() {
             transition={{ duration: 0.6, delay: 1 }}
             className="bg-white rounded-2xl p-8 shadow-xl"
           >
-            <h2 className="text-2xl font-bold mb-6 text-center">
-              Bayi Konumları<span className="text-primary">.</span>
-            </h2>
+            <h2 className="text-2xl font-bold mb-6 text-center">{t('map.title')}<span className="text-primary">.</span></h2>
             <div className="w-full h-96 bg-gray-200 rounded-xl flex items-center justify-center">
               <div className="text-center">
                 <MapPin className="w-16 h-16 text-primary mx-auto mb-4" />
-                <p className="text-gray-600">İnteraktif harita yakında eklenecek</p>
-                <p className="text-gray-500 text-sm mt-2">
-                  Şimdilik yukarıdaki liste üzerinden bayilerimize ulaşabilirsiniz
-                </p>
+                <p className="text-gray-600">{t('map.comingSoon')}</p>
+                <p className="text-gray-500 text-sm mt-2">{t('map.helpText')}</p>
               </div>
             </div>
           </motion.div>

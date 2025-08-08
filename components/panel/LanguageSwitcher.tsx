@@ -1,21 +1,22 @@
 "use client";
 
-import { useLocale, useTranslations } from 'next-intl';
-import { useRouter, usePathname } from '@/src/i18n/navigation';
-import { routing } from '@/src/i18n/routing';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger,
     DropdownMenuLabel,
     DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Languages, Check } from 'lucide-react';
+import { usePathname, useRouter } from '@/src/i18n/navigation';
+import { routing } from '@/src/i18n/routing';
+import { Check, Languages } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
 // Bayrak ikonları için SVG importları
 import TR from 'country-flag-icons/react/3x2/TR';
 import US from 'country-flag-icons/react/3x2/US';
+import useSWR from 'swr';
 
 interface LanguageSwitcherProps {
     isAdmin?: boolean;
@@ -26,6 +27,7 @@ export default function LanguageSwitcher({ isAdmin: _isAdmin = false }: Language
     const locale = useLocale();
     const router = useRouter();
     const pathname = usePathname();
+    const { data } = useSWR('/api/admin/i18n/languages', (url: string) => fetch(url).then(r => r.json()));
 
     const handleLanguageChange = (newLocale: string) => {
         router.push(pathname, { locale: newLocale });
@@ -60,11 +62,11 @@ export default function LanguageSwitcher({ isAdmin: _isAdmin = false }: Language
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button 
-                    variant="ghost" 
-                    size="icon" 
+                <Button
+                    variant="ghost"
+                    size="icon"
                     className="relative transition-all duration-200 hover:scale-105 hover:bg-accent/50 rounded-lg h-9 w-9 group"
-                    title={t('changeLanguage') || 'Dil Değiştir'}
+                    title={t('changeLanguage')}
                 >
                     <div className="flex items-center justify-center transition-transform duration-200 group-hover:scale-110">
                         {getCurrentFlag()}
@@ -79,27 +81,28 @@ export default function LanguageSwitcher({ isAdmin: _isAdmin = false }: Language
                     {t('selectLanguage')}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                {routing.locales.map((loc) => (
-                    <DropdownMenuItem
-                        key={loc}
-                        onClick={() => handleLanguageChange(loc)}
-                        className={`transition-all duration-200 cursor-pointer flex items-center justify-between px-3 py-2.5 ${
-                            locale === loc 
-                                ? 'bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300' 
+                {(routing.locales as readonly string[])
+                    .filter((loc) => (data?.languages ?? []).some((l: { code: string; isActive?: boolean }) => l.code === loc))
+                    .map((loc) => (
+                        <DropdownMenuItem
+                            key={loc}
+                            onClick={() => handleLanguageChange(loc)}
+                            className={`transition-all duration-200 cursor-pointer flex items-center justify-between px-3 py-2.5 ${locale === loc
+                                ? 'bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300'
                                 : 'hover:bg-accent/50'
-                        }`}
-                    >
-                        <div className="flex items-center gap-3">
-                            {getLanguageFlag(loc)}
-                            <span className="font-medium">
-                                {getLanguageName(loc)}
-                            </span>
-                        </div>
-                        {locale === loc && (
-                            <Check className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                        )}
-                    </DropdownMenuItem>
-                ))}
+                                }`}
+                        >
+                            <div className="flex items-center gap-3">
+                                {getLanguageFlag(loc)}
+                                <span className="font-medium">
+                                    {getLanguageName(loc)}
+                                </span>
+                            </div>
+                            {locale === loc && (
+                                <Check className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                            )}
+                        </DropdownMenuItem>
+                    ))}
             </DropdownMenuContent>
         </DropdownMenu>
     );

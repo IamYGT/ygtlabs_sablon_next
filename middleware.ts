@@ -29,8 +29,8 @@ export async function middleware(request: NextRequest) {
 
   const segments = pathname.split("/").filter(Boolean);
   const hasLocale =
-    segments.length > 0 && routing.locales.includes(segments[0] as "en" | "tr");
-  const locale = hasLocale ? segments[0] : "en";
+    segments.length > 0 && routing.locales.includes(segments[0] as any);
+  const locale = hasLocale ? segments[0] : routing.defaultLocale;
   const path = hasLocale ? "/" + segments.slice(1).join("/") || "/" : pathname;
 
   const token = request.cookies.get("ecu_session")?.value;

@@ -350,7 +350,7 @@ export function SuperAdminGuard({
           <p className="text-gray-600 mb-4">{t('superAdminRequiredDesc')}</p>
           <div className="bg-gray-50 p-4 rounded-lg mb-4">
             <p className="text-sm text-gray-600">
-              <strong>{t('currentRole')}</strong> {user?.primaryRole || 'Unknown'}
+              <strong>{t('currentRole')}</strong> {user?.primaryRole || t('unknown')}
             </p>
             <p className="text-sm text-gray-600 mt-1">
               <strong>{t('requiredRole')}</strong> {t('superAdmin')}

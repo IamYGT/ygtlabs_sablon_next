@@ -1,0 +1,18 @@
+{
+  "admin.i18n.view": {
+    "displayName": {
+      "en": "I18n Management Access",
+      "tr": "I18n Yönetimi Erişimi"
+    },
+    "description": {
+      "en": "Access to i18n languages and messages management",
+      "tr": "Dil ve mesaj yönetimine erişim"
+    },
+    "category": "view",
+    "resourcePath": "admin/i18n",
+    "action": "view",
+    "permissionType": "admin",
+    "isActive": true
+  }
+}
+

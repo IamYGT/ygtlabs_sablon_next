@@ -1,21 +1,23 @@
 'use client';
 
-import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Phone, 
-  Mail, 
-  MapPin, 
-  Clock, 
-  Send,
-  User,
+import {
+  Car,
+  Clock,
+  Mail,
+  MapPin,
   MessageSquare,
-  Car
+  Phone,
+  Send,
+  User
 } from 'lucide-react';
-import Header from '../../components/Header';
+import { useTranslations } from 'next-intl';
+import React, { useState } from 'react';
 import Footer from '../../components/Footer';
+import Header from '../../components/Header';
 
 export default function ContactClient() {
+  const t = useTranslations('Contact');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -29,7 +31,7 @@ export default function ContactClient() {
     e.preventDefault();
     // Form submission logic here
     console.log('Form submitted:', formData);
-    alert('Mesajınız başarıyla gönderildi! En kısa sürede size dönüş yapacağız.');
+    alert(t('form.success'));
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -42,44 +44,44 @@ export default function ContactClient() {
   const contactInfo = [
     {
       icon: <Phone className="w-6 h-6" />,
-      title: 'Telefon',
-      info: '+90 555 123 45 67',
+      title: t('info.phone'),
+      info: t('info.phoneValue'),
       link: 'tel:+905551234567'
     },
     {
       icon: <Mail className="w-6 h-6" />,
-      title: 'E-posta',
-      info: 'info@ataperformance.com',
+      title: t('info.email'),
+      info: t('info.emailValue'),
       link: 'mailto:info@ataperformance.com'
     },
     {
       icon: <MapPin className="w-6 h-6" />,
-      title: 'Adres',
-      info: 'Atatürk Cad. No:123 Çankaya/Ankara',
+      title: t('info.address'),
+      info: t('info.addressValue'),
       link: 'https://maps.google.com'
     },
     {
       icon: <Clock className="w-6 h-6" />,
-      title: 'Çalışma Saatleri',
-      info: 'Pzt-Cmt: 09:00 - 18:00',
+      title: t('info.hours'),
+      info: t('info.hoursValue'),
       link: null
     }
   ];
 
-  const services = [
-    'Stage 1 Chiptuning',
-    'Stage 2 Chiptuning',
-    'ECU Remapping',
-    'DPF/EGR İptali',
-    'Performans Testi',
-    'Launch Control',
-    'Diğer'
+  const services: string[] = [
+    t('services.0'),
+    t('services.1'),
+    t('services.2'),
+    t('services.3'),
+    t('services.4'),
+    t('services.5'),
+    t('services.6'),
   ];
 
   return (
     <div className="min-h-screen bg-light">
       <Header />
-      
+
       <div className="pt-32 pb-24">
         <div className="container mx-auto px-4">
           {/* Header Section */}
@@ -89,15 +91,9 @@ export default function ContactClient() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <span className="text-primary font-medium inline-block px-6 py-3 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 mb-4">
-              # İLETİŞİM
-            </span>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Bizimle İletişime Geçin<span className="text-primary">.</span>
-            </h1>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Sorularınız için bize ulaşın, randevu alın. Profesyonel ekibimiz size yardımcı olmaktan mutluluk duyar.
-            </p>
+            <span className="text-primary font-medium inline-block px-6 py-3 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 mb-4">{t('badge')}</span>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">{t('title')}<span className="text-primary">.</span></h1>
+            <p className="text-gray-600 max-w-2xl mx-auto">{t('description')}</p>
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-24">
@@ -108,15 +104,13 @@ export default function ContactClient() {
               transition={{ duration: 0.6 }}
               className="bg-white p-8 rounded-xl shadow-xl"
             >
-              <h2 className="text-2xl font-bold mb-6">
-                Randevu Formu<span className="text-primary">.</span>
-              </h2>
+              <h2 className="text-2xl font-bold mb-6">{t('form.title')}<span className="text-primary">.</span></h2>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-gray-700 font-medium mb-2">
                       <User className="w-4 h-4 inline mr-2" />
-                      Ad Soyad *
+                      {t('form.name')} *
                     </label>
                     <input
                       type="text"
@@ -125,13 +119,13 @@ export default function ContactClient() {
                       onChange={handleChange}
                       required
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
-                      placeholder="Adınız ve soyadınız"
+                      placeholder={t('placeholders.name')}
                     />
                   </div>
                   <div>
                     <label className="block text-gray-700 font-medium mb-2">
                       <Mail className="w-4 h-4 inline mr-2" />
-                      E-posta *
+                      {t('form.email')} *
                     </label>
                     <input
                       type="email"
@@ -140,7 +134,7 @@ export default function ContactClient() {
                       onChange={handleChange}
                       required
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
-                      placeholder="ornek@email.com"
+                      placeholder={t('placeholders.email')}
                     />
                   </div>
                 </div>
@@ -149,7 +143,7 @@ export default function ContactClient() {
                   <div>
                     <label className="block text-gray-700 font-medium mb-2">
                       <Phone className="w-4 h-4 inline mr-2" />
-                      Telefon *
+                      {t('form.phone')} *
                     </label>
                     <input
                       type="tel"
@@ -158,13 +152,13 @@ export default function ContactClient() {
                       onChange={handleChange}
                       required
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
-                      placeholder="0555 123 45 67"
+                      placeholder={t('placeholders.phone')}
                     />
                   </div>
                   <div>
                     <label className="block text-gray-700 font-medium mb-2">
                       <Car className="w-4 h-4 inline mr-2" />
-                      Araç Bilgisi
+                      {t('form.vehicle')}
                     </label>
                     <input
                       type="text"
@@ -172,14 +166,14 @@ export default function ContactClient() {
                       value={formData.vehicle}
                       onChange={handleChange}
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
-                      placeholder="Marka, Model, Yıl"
+                      placeholder={t('placeholders.vehicle')}
                     />
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-gray-700 font-medium mb-2">
-                    Hizmet Türü
+                    {t('form.service')}
                   </label>
                   <select
                     name="service"
@@ -187,7 +181,7 @@ export default function ContactClient() {
                     onChange={handleChange}
                     className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
                   >
-                    <option value="">Hizmet seçiniz</option>
+                    <option value="">{t('form.selectService')}</option>
                     {services.map((service, index) => (
                       <option key={index} value={service}>{service}</option>
                     ))}
@@ -197,7 +191,7 @@ export default function ContactClient() {
                 <div>
                   <label className="block text-gray-700 font-medium mb-2">
                     <MessageSquare className="w-4 h-4 inline mr-2" />
-                    Mesajınız
+                    {t('form.message')}
                   </label>
                   <textarea
                     name="message"
@@ -205,7 +199,7 @@ export default function ContactClient() {
                     onChange={handleChange}
                     rows={4}
                     className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
-                    placeholder="Detayları buraya yazabilirsiniz..."
+                    placeholder={t('placeholders.message')}
                   ></textarea>
                 </div>
 
@@ -214,7 +208,7 @@ export default function ContactClient() {
                   className="w-full bg-primary text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary-dark transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
                 >
                   <Send className="w-4 h-4" />
-                  Mesaj Gönder
+                  {t('form.submit')}
                 </button>
               </form>
             </motion.div>
@@ -228,7 +222,7 @@ export default function ContactClient() {
             >
               <div>
                 <h2 className="text-2xl font-bold mb-6">
-                  İletişim Bilgileri<span className="text-primary">.</span>
+                  {t('info.title')}<span className="text-primary">.</span>
                 </h2>
                 <div className="space-y-6">
                   {contactInfo.map((item, index) => (
@@ -267,11 +261,11 @@ export default function ContactClient() {
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="bg-white p-6 rounded-xl shadow-xl"
               >
-                <h3 className="text-xl font-bold mb-4">Konum</h3>
+                <h3 className="text-xl font-bold mb-4">{t('map.title')}</h3>
                 <div className="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center">
                   <div className="text-center">
                     <MapPin className="w-12 h-12 text-primary mx-auto mb-2" />
-                    <p className="text-gray-600">Harita yakında eklenecek</p>
+                    <p className="text-gray-600">{t('map.comingSoon')}</p>
                   </div>
                 </div>
               </motion.div>
@@ -283,9 +277,9 @@ export default function ContactClient() {
                 transition={{ duration: 0.6, delay: 0.6 }}
                 className="bg-primary rounded-xl p-6 text-white"
               >
-                <h3 className="text-xl font-bold mb-4">Acil Durum</h3>
+                <h3 className="text-xl font-bold mb-4">{t('emergency.title')}</h3>
                 <p className="text-white/80 mb-4">
-                  Acil durumlar için 7/24 ulaşabileceğiniz hattımız:
+                  {t('emergency.description')}
                 </p>
                 <a
                   href="tel:+905551234567"
@@ -305,28 +299,9 @@ export default function ContactClient() {
             transition={{ duration: 0.6 }}
             className="mb-24"
           >
-            <h2 className="text-3xl font-bold text-center mb-12">
-              Sık Sorulan Sorular<span className="text-primary">.</span>
-            </h2>
+            <h2 className="text-3xl font-bold text-center mb-12">{t('faq.title')}<span className="text-primary">.</span></h2>
             <div className="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-              {[
-                {
-                  question: 'Randevu almak zorunlu mu?',
-                  answer: 'Daha iyi hizmet için randevu almanızı öneriyoruz.'
-                },
-                {
-                  question: 'Chiptuning ne kadar sürer?',
-                  answer: 'Hizmet türüne göre 2-5 saat arası değişmektedir.'
-                },
-                {
-                  question: 'Garanti veriliyor mu?',
-                  answer: 'Evet, 1 yıl garanti ile hizmet veriyoruz.'
-                },
-                {
-                  question: 'Hangi araçlara hizmet veriyorsunuz?',
-                  answer: 'Tüm marka ve modellere hizmet vermekteyiz.'
-                }
-              ].map((faq, index) => (
+              {[0, 1, 2, 3].map((i) => ({ question: t(`faq.items.${i}.q`), answer: t(`faq.items.${i}.a`) })).map((faq, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 20 }}

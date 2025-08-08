@@ -1,23 +1,25 @@
 'use client';
 
-import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Store, 
-  Handshake, 
-  TrendingUp, 
-  Users, 
-  Phone,
-  Mail,
-  Building,
+import {
   Award,
+  Building,
+  DollarSign,
+  Handshake,
+  Mail,
+  Phone,
+  Store,
   Target,
-  DollarSign
+  TrendingUp,
+  Users
 } from 'lucide-react';
-import Header from '../../components/Header';
+import { useTranslations } from 'next-intl';
+import React, { useState } from 'react';
 import Footer from '../../components/Footer';
+import Header from '../../components/Header';
 
 export default function DealershipClient() {
+  const t = useTranslations('Dealership');
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -30,58 +32,58 @@ export default function DealershipClient() {
   const benefits = [
     {
       icon: <Store className="w-12 h-12" />,
-      title: 'Marka Gücü',
-      description: 'Sektörün lider markası ile güçlü bir iş ortaklığı kurma fırsatı'
+      title: t('benefits.brandPower.title'),
+      description: t('benefits.brandPower.description')
     },
     {
       icon: <Handshake className="w-12 h-12" />,
-      title: 'Sürekli Destek',
-      description: 'Teknik, pazarlama ve operasyonel konularda tam destek'
+      title: t('benefits.continuousSupport.title'),
+      description: t('benefits.continuousSupport.description')
     },
     {
       icon: <TrendingUp className="w-12 h-12" />,
-      title: 'Yüksek Karlılık',
-      description: 'Rekabetçi fiyatlar ve yüksek kar marjı ile karlı iş modeli'
+      title: t('benefits.highProfit.title'),
+      description: t('benefits.highProfit.description')
     },
     {
       icon: <Users className="w-12 h-12" />,
-      title: 'Eğitim Programı',
-      description: 'Kapsamlı eğitim ve sertifikasyon programları'
+      title: t('benefits.training.title'),
+      description: t('benefits.training.description')
     }
   ];
 
   const requirements = [
     {
       icon: <Building className="w-8 h-8" />,
-      title: 'Fiziksel Mekan',
-      description: 'Minimum 100m² kapalı alan ve uygun lokasyon'
+      title: t('requirements.physicalSpace.title'),
+      description: t('requirements.physicalSpace.description')
     },
     {
       icon: <DollarSign className="w-8 h-8" />,
-      title: 'Yatırım Kapasitesi',
-      description: 'Başlangıç yatırımı için yeterli sermaye'
+      title: t('requirements.investment.title'),
+      description: t('requirements.investment.description')
     },
     {
       icon: <Award className="w-8 h-8" />,
-      title: 'Deneyim',
-      description: 'Otomotiv sektöründe minimum 2 yıl deneyim'
+      title: t('requirements.experience.title'),
+      description: t('requirements.experience.description')
     },
     {
       icon: <Target className="w-8 h-8" />,
-      title: 'Hedef Odaklılık',
-      description: 'Satış hedeflerine ulaşma kararlılığı'
+      title: t('requirements.target.title'),
+      description: t('requirements.target.description')
     }
   ];
 
-  const supportServices = [
-    'Kapsamlı teknik eğitim programı',
-    'Pazarlama ve reklam desteği',
-    'Sürekli teknik destek hattı',
-    'Ürün ve hizmet güncellemeleri',
-    'Satış ve müşteri yönetimi eğitimi',
-    'Operasyonel süreçlerde rehberlik',
-    'Bölgesel toplantı ve etkinlikler',
-    'Online eğitim platformu erişimi'
+  const supportServices: string[] = [
+    t('supportServices.0'),
+    t('supportServices.1'),
+    t('supportServices.2'),
+    t('supportServices.3'),
+    t('supportServices.4'),
+    t('supportServices.5'),
+    t('supportServices.6'),
+    t('supportServices.7'),
   ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -96,13 +98,13 @@ export default function DealershipClient() {
     e.preventDefault();
     // Form submission logic here
     console.log('Form submitted:', formData);
-    alert('Başvurunuz alınmıştır. En kısa sürede sizinle iletişime geçeceğiz.');
+    alert(t('form.success'));
   };
 
   return (
     <div className="min-h-screen bg-light">
       <Header />
-      
+
       <div className="pt-32 pb-24">
         <div className="container mx-auto px-4">
           {/* Header Section */}
@@ -112,15 +114,9 @@ export default function DealershipClient() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <span className="text-primary font-medium inline-block px-6 py-3 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 mb-4">
-              # BAYİLİK FIRSATI
-            </span>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Revv Tuned Ailesine Katılın<span className="text-primary">.</span>
-            </h1>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Türkiye&apos;nin lider chiptuning markası ile işinizi büyütün ve geleceğe yatırım yapın.
-            </p>
+            <span className="text-primary font-medium inline-block px-6 py-3 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 mb-4">{t('badge')}</span>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">{t('title')}<span className="text-primary">.</span></h1>
+            <p className="text-gray-600 max-w-2xl mx-auto">{t('description')}</p>
           </motion.div>
 
           {/* Statistics */}
@@ -130,12 +126,7 @@ export default function DealershipClient() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-24"
           >
-            {[
-              { number: '25+', label: 'Bayi Sayısı' },
-              { number: '50+', label: 'Şehir' },
-              { number: '15+', label: 'Yıllık Deneyim' },
-              { number: '95%', label: 'Memnuniyet' }
-            ].map((stat, index) => (
+            {[0, 1, 2, 3].map((i) => ({ number: t(`stats.${i}.number`), label: t(`stats.${i}.label`) })).map((stat, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -156,9 +147,7 @@ export default function DealershipClient() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="mb-24"
           >
-            <h2 className="text-3xl font-bold text-center mb-12">
-              Bayilik Avantajları<span className="text-primary">.</span>
-            </h2>
+            <h2 className="text-3xl font-bold text-center mb-12">{t('benefits.title')}<span className="text-primary">.</span></h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {benefits.map((benefit, index) => (
                 <motion.div
@@ -185,9 +174,7 @@ export default function DealershipClient() {
             transition={{ duration: 0.6, delay: 0.8 }}
             className="mb-24"
           >
-            <h2 className="text-3xl font-bold text-center mb-12">
-              Bayilik Şartları<span className="text-primary">.</span>
-            </h2>
+            <h2 className="text-3xl font-bold text-center mb-12">{t('requirements.title')}<span className="text-primary">.</span></h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {requirements.map((req, index) => (
                 <motion.div
@@ -214,9 +201,7 @@ export default function DealershipClient() {
             transition={{ duration: 0.6, delay: 1.2 }}
             className="mb-24"
           >
-            <h2 className="text-3xl font-bold text-center mb-12">
-              Size Sunduğumuz Destekler<span className="text-primary">.</span>
-            </h2>
+            <h2 className="text-3xl font-bold text-center mb-12">{t('support.title')}<span className="text-primary">.</span></h2>
             <div className="bg-white rounded-xl shadow-xl p-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {supportServices.map((service, index) => (
@@ -242,14 +227,12 @@ export default function DealershipClient() {
             transition={{ duration: 0.6, delay: 1.4 }}
             className="max-w-4xl mx-auto bg-white rounded-xl shadow-xl p-8"
           >
-            <h2 className="text-3xl font-bold text-center mb-8">
-              Bayilik Başvuru Formu<span className="text-primary">.</span>
-            </h2>
+            <h2 className="text-3xl font-bold text-center mb-8">{t('form.title')}<span className="text-primary">.</span></h2>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-gray-700 font-medium mb-2">
-                    Ad Soyad <span className="text-primary">*</span>
+                    {t('form.name')} <span className="text-primary">*</span>
                   </label>
                   <input
                     type="text"
@@ -258,12 +241,12 @@ export default function DealershipClient() {
                     onChange={handleInputChange}
                     required
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300"
-                    placeholder="Adınız Soyadınız"
+                    placeholder={t('placeholders.name')}
                   />
                 </div>
                 <div>
                   <label className="block text-gray-700 font-medium mb-2">
-                    Telefon <span className="text-primary">*</span>
+                    {t('form.phone')} <span className="text-primary">*</span>
                   </label>
                   <input
                     type="tel"
@@ -272,12 +255,12 @@ export default function DealershipClient() {
                     onChange={handleInputChange}
                     required
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300"
-                    placeholder="0(5XX) XXX XX XX"
+                    placeholder={t('placeholders.phone')}
                   />
                 </div>
                 <div>
                   <label className="block text-gray-700 font-medium mb-2">
-                    E-posta <span className="text-primary">*</span>
+                    {t('form.email')} <span className="text-primary">*</span>
                   </label>
                   <input
                     type="email"
@@ -286,12 +269,12 @@ export default function DealershipClient() {
                     onChange={handleInputChange}
                     required
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300"
-                    placeholder="ornek@mail.com"
+                    placeholder={t('placeholders.email')}
                   />
                 </div>
                 <div>
                   <label className="block text-gray-700 font-medium mb-2">
-                    Şehir <span className="text-primary">*</span>
+                    {t('form.city')} <span className="text-primary">*</span>
                   </label>
                   <input
                     type="text"
@@ -300,12 +283,12 @@ export default function DealershipClient() {
                     onChange={handleInputChange}
                     required
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300"
-                    placeholder="Hangi şehirde bayilik yapmak istiyorsunuz?"
+                    placeholder={t('placeholders.city')}
                   />
                 </div>
                 <div className="md:col-span-2">
                   <label className="block text-gray-700 font-medium mb-2">
-                    İş Deneyimi <span className="text-primary">*</span>
+                    {t('form.experience')} <span className="text-primary">*</span>
                   </label>
                   <select
                     name="experience"
@@ -314,17 +297,17 @@ export default function DealershipClient() {
                     required
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300"
                   >
-                    <option value="">Seçiniz</option>
-                    <option value="0-2">0-2 yıl</option>
-                    <option value="2-5">2-5 yıl</option>
-                    <option value="5-10">5-10 yıl</option>
-                    <option value="10+">10+ yıl</option>
+                    <option value="">{t('form.select')}</option>
+                    <option value="0-2">{t('form.years0to2')}</option>
+                    <option value="2-5">{t('form.years2to5')}</option>
+                    <option value="5-10">{t('form.years5to10')}</option>
+                    <option value="10+">{t('form.years10plus')}</option>
                   </select>
                 </div>
               </div>
               <div>
                 <label className="block text-gray-700 font-medium mb-2">
-                  Mesajınız
+                  {t('form.message')}
                 </label>
                 <textarea
                   name="message"
@@ -332,7 +315,7 @@ export default function DealershipClient() {
                   onChange={handleInputChange}
                   rows={6}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300"
-                  placeholder="Mevcut iş deneyiminiz, bayilik planlarınız ve yatırım kapasiteleriniz hakkında bilgi veriniz..."
+                  placeholder={t('placeholders.message')}
                 ></textarea>
               </div>
               <div className="text-center">
@@ -340,7 +323,7 @@ export default function DealershipClient() {
                   type="submit"
                   className="bg-primary text-white px-12 py-4 rounded-lg font-semibold hover:bg-primary-dark transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/50"
                 >
-                  Başvuruyu Gönder
+                  {t('form.submit')}
                 </button>
               </div>
             </form>
@@ -355,26 +338,22 @@ export default function DealershipClient() {
           >
             <div className="absolute inset-0 bg-[url('/images/pattern.png')] opacity-5"></div>
             <div className="relative z-10">
-              <h2 className="text-3xl font-bold text-white mb-6">
-                Daha Fazla Bilgi İçin
-              </h2>
-              <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
-                Bayilik şartları ve detayları hakkında daha fazla bilgi almak için bizimle iletişime geçin.
-              </p>
+              <h2 className="text-3xl font-bold text-white mb-6">{t('moreInfo.title')}</h2>
+              <p className="text-gray-400 mb-8 max-w-2xl mx-auto">{t('moreInfo.description')}</p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
                   href="tel:+905551234567"
                   className="inline-flex items-center gap-3 bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary-dark transition-all duration-300 transform hover:scale-105"
                 >
                   <Phone className="w-5 h-5" />
-                  Hemen Ara
+                  {t('moreInfo.callNow')}
                 </a>
                 <a
                   href="mailto:bayilik@ataperformance.com"
                   className="inline-flex items-center gap-3 border border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-dark transition-all duration-300"
                 >
                   <Mail className="w-5 h-5" />
-                  E-posta Gönder
+                  {t('moreInfo.sendEmail')}
                 </a>
               </div>
             </div>

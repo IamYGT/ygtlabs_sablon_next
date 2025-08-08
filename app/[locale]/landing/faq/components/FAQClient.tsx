@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
-import Header from '../../components/Header';
+import { useState } from 'react';
+import { Link } from '../../../../../src/i18n/navigation';
 import Footer from '../../components/Footer';
+import Header from '../../components/Header';
 
 export default function FAQClient() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -105,7 +105,7 @@ export default function FAQClient() {
   return (
     <div className="min-h-screen bg-light">
       <Header />
-      
+
       <div className="pt-32 pb-24">
         <div className="container mx-auto px-4">
           {/* Header Section */}

@@ -1,13 +1,14 @@
 'use client';
 
-import React from 'react';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Calendar, User, Tag, ArrowRight } from 'lucide-react';
-import Header from '../../components/Header';
+import { ArrowRight, Calendar, Tag, User } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 import Footer from '../../components/Footer';
+import Header from '../../components/Header';
 
 export default function BlogClient() {
+  const t = useTranslations('LandingBlog');
   const blogPosts = [
     {
       id: 1,
@@ -71,20 +72,13 @@ export default function BlogClient() {
     }
   ];
 
-  const categories = [
-    'Tümü',
-    'Chiptuning',
-    'Performans',
-    'Teknik',
-    'Yakıt',
-    'Turbo',
-    'ECU'
-  ];
+  const categoriesAny = t('categories', { returnObjects: true } as unknown as Record<string, string | number | Date>) as unknown;
+  const categories = Array.isArray(categoriesAny) ? (categoriesAny as string[]) : [];
 
   return (
     <div className="min-h-screen bg-light">
       <Header />
-      
+
       <div className="pt-32 pb-24">
         <div className="container mx-auto px-4">
           {/* Header Section */}
@@ -94,15 +88,9 @@ export default function BlogClient() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <span className="text-primary font-medium inline-block px-6 py-3 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 mb-4">
-              # BLOG
-            </span>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Blog & Haberler<span className="text-primary">.</span>
-            </h1>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Chiptuning, otomotiv teknolojileri ve performans hakkında güncel yazılar, ipuçları ve haberler.
-            </p>
+            <span className="text-primary font-medium inline-block px-6 py-3 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 mb-4">{t('badge')}</span>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">{t('title')}<span className="text-primary">.</span></h1>
+            <p className="text-gray-600 max-w-2xl mx-auto">{t('description')}</p>
           </motion.div>
 
           {/* Categories */}
@@ -115,11 +103,10 @@ export default function BlogClient() {
             {categories.map((category, index) => (
               <button
                 key={index}
-                className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                  index === 0
-                    ? 'bg-primary text-white shadow-lg'
-                    : 'bg-white text-gray-600 hover:bg-primary hover:text-white shadow-md'
-                }`}
+                className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${index === 0
+                  ? 'bg-primary text-white shadow-lg'
+                  : 'bg-white text-gray-600 hover:bg-primary hover:text-white shadow-md'
+                  }`}
               >
                 {category}
               </button>
@@ -147,9 +134,7 @@ export default function BlogClient() {
                     }}
                   />
                   <div className="absolute top-4 left-4">
-                    <span className="bg-primary text-white px-3 py-1 rounded-full text-sm font-medium">
-                      Öne Çıkan
-                    </span>
+                    <span className="bg-primary text-white px-3 py-1 rounded-full text-sm font-medium">{t('featured')}</span>
                   </div>
                 </div>
                 <div className="p-8 lg:p-12">
@@ -176,7 +161,7 @@ export default function BlogClient() {
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500">{blogPosts[0].readTime}</span>
                     <button className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-dark transition-all duration-300 transform hover:scale-105">
-                      Devamını Oku
+                      {t('readMore')}
                       <ArrowRight className="w-4 h-4" />
                     </button>
                   </div>
@@ -232,7 +217,7 @@ export default function BlogClient() {
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-gray-500">{post.readTime}</span>
                     <button className="text-primary font-medium text-sm hover:underline flex items-center gap-1">
-                      Oku
+                      {t('read')}
                       <ArrowRight className="w-3 h-3" />
                     </button>
                   </div>
@@ -250,21 +235,15 @@ export default function BlogClient() {
           >
             <div className="absolute inset-0 bg-[url('/images/pattern.png')] opacity-5"></div>
             <div className="relative z-10">
-              <h2 className="text-3xl font-bold text-white mb-6">
-                Güncel Kalın
-              </h2>
-              <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
-                Yeni blog yazıları, chiptuning ipuçları ve özel tekliflerden haberdar olmak için e-posta listemize katılın.
-              </p>
+              <h2 className="text-3xl font-bold text-white mb-6">{t('newsletter.title')}</h2>
+              <p className="text-gray-400 mb-8 max-w-2xl mx-auto">{t('newsletter.description')}</p>
               <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
                 <input
                   type="email"
-                  placeholder="E-posta adresiniz"
+                  placeholder={t('newsletter.placeholder')}
                   className="flex-1 px-4 py-3 rounded-lg border-none outline-none"
                 />
-                <button className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-all duration-300 transform hover:scale-105">
-                  Abone Ol
-                </button>
+                <button className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-all duration-300 transform hover:scale-105">{t('newsletter.subscribe')}</button>
               </div>
             </div>
           </motion.div>

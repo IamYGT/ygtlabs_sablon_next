@@ -319,3 +319,47 @@ model HeroSlider {
   @@unique([order])
   @@schema("public")
 }
+
+// Uygulama genelinde aktif dilleri yöneten tablo
+model Language {
+  id          String   @id @default(uuid())
+  code        String   @unique // BCP-47 dil kodu, ör: "en", "tr", "me" veya "cnr"
+  name        String            // İngilizce ad: "Turkish", "English", "Montenegrin"
+  nativeName  String?           // Yerel ad: "Türkçe", "Crnogorski"
+  isActive    Boolean  @default(true)
+  isDefault   Boolean  @default(false)
+  direction   String?           // "ltr" | "rtl"
+  urlPrefix   String?           // Örn: "/tr" - boş ise as-needed kuralı uygulanır
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isActive])
+  @@index([code])
+  @@schema("public")
+}
+
+// DB merkezli pathname çevirileri
+model I18nRoute {
+  id          String   @id @default(uuid())
+  name        String   @unique // Örn: "/landing/contact"
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  translations I18nRouteTranslation[]
+
+  @@schema("public")
+}
+
+model I18nRouteTranslation {
+  id         String   @id @default(uuid())
+  routeName  String
+  localeCode String
+  path       String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  route I18nRoute @relation(fields: [routeName], references: [name], onDelete: Cascade)
+
+  @@unique([routeName, localeCode])
+  @@schema("public")
+}

@@ -1,20 +1,20 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from '../../../../src/i18n/navigation';
-import { useLocale, useTranslations } from 'next-intl';
-import { useRouter, usePathname } from '../../../../src/i18n/navigation';
-import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+import { routing } from '@/src/i18n/routing';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
+    ArrowRight,
+    ChevronDown,
     Facebook,
     Instagram,
     Menu,
-    X,
-    ArrowRight,
     Star,
-    ChevronDown
+    X
 } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
+import Image from 'next/image';
+import { useCallback, useEffect, useState } from 'react';
+import { Link, getPathname, usePathname, useRouter } from '../../../../src/i18n/navigation';
 
 export default function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -26,9 +26,10 @@ export default function Header() {
     const pathname = usePathname();
     const t = useTranslations('Header');
 
-    // Home page kontrolü
-    const isHomePage = pathname === '/landing';
-    
+    // Home page kontrolü: route key '/landing' için mevcut locale'e karşılık gelen gerçek yol
+    const homePath = getPathname({ href: '/landing', locale });
+    const isHomePage = pathname === homePath;
+
     const handleScroll = useCallback(() => {
         // Sadece home page'de scroll efekti aktif
         if (isHomePage) {
@@ -45,7 +46,7 @@ export default function Header() {
         } else {
             setIsScrolled(window.scrollY > 0);
         }
-        
+
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
     }, [handleScroll, isHomePage]);
@@ -83,18 +84,11 @@ export default function Header() {
         setIsMenuOpen(false);
     };
 
-    const languages = [
-        {
-            code: 'en',
-            name: 'English',
-            flag: 'https://flagcdn.com/w160/gb.png'
-        },
-        {
-            code: 'tr',
-            name: 'Türkçe',
-            flag: 'https://flagcdn.com/w160/tr.png'
-        }
-    ];
+    const languages = (routing.locales as readonly string[]).map((code) => ({
+        code,
+        name: code.toUpperCase(),
+        flag: code === 'tr' ? 'https://flagcdn.com/w160/tr.png' : code === 'en' ? 'https://flagcdn.com/w160/gb.png' : 'https://flagcdn.com/w160/un.png'
+    }));
 
     const currentLang = languages.find(lang => lang.code === locale) || languages[0];
 

@@ -1,100 +1,101 @@
 'use client';
 
-import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { 
-  Users, 
-  Target, 
-  Award, 
-  TrendingUp
+import {
+  Award,
+  Target,
+  TrendingUp,
+  Users
 } from 'lucide-react';
-import Header from '../../components/Header';
+import { useTranslations } from 'next-intl';
+import Image from 'next/image';
+import { Link } from '../../../../../src/i18n/navigation';
 import Footer from '../../components/Footer';
+import Header from '../../components/Header';
 
 export default function CorporateClient() {
+  const t = useTranslations('LandingCorporate');
   const values = [
     {
       icon: <Target className="w-8 h-8" />,
-      title: 'Kalite',
-      description: 'En yüksek kalite standartlarında hizmet sunmak'
+      title: t('values.items.0.title'),
+      description: t('values.items.0.description')
     },
     {
       icon: <Users className="w-8 h-8" />,
-      title: 'Müşteri Odaklılık',
-      description: 'Müşteri memnuniyetini her şeyin üstünde tutarız'
+      title: t('values.items.1.title'),
+      description: t('values.items.1.description')
     },
     {
       icon: <Award className="w-8 h-8" />,
-      title: 'Güvenilirlik',
-      description: 'Güvenilir ve şeffaf iş anlayışı'
+      title: t('values.items.2.title'),
+      description: t('values.items.2.description')
     },
     {
       icon: <TrendingUp className="w-8 h-8" />,
-      title: 'İnovasyon',
-      description: 'Sürekli gelişim ve yeniliği benimseriz'
+      title: t('values.items.3.title'),
+      description: t('values.items.3.description')
     }
   ];
 
   const team = [
     {
       name: 'Ahmet Taş',
-      position: 'Kurucu & CEO',
+      position: t('team.items.0.position'),
       image: '/images/team/ceo.jpg',
-      description: '15 yıllık otomotiv sektörü deneyimi'
+      description: t('team.items.0.description')
     },
     {
       name: 'Mehmet Yılmaz',
-      position: 'Teknik Direktör',
+      position: t('team.items.1.position'),
       image: '/images/team/tech-director.jpg',
-      description: 'Chiptuning uzmanı, 12 yıllık deneyim'
+      description: t('team.items.1.description')
     },
     {
       name: 'Ayşe Kaya',
-      position: 'Operasyon Müdürü',
+      position: t('team.items.2.position'),
       image: '/images/team/operations.jpg',
-      description: 'Operasyonel mükemmellik uzmanı'
+      description: t('team.items.2.description')
     }
   ];
 
   const milestones = [
     {
       year: '2018',
-      title: 'Şirket Kuruluşu',
-      description: 'Revv Tuned olarak faaliyetlerimize başladık'
+      title: t('timeline.items.0.title'),
+      description: t('timeline.items.0.description')
     },
     {
       year: '2019',
-      title: 'İlk Büyük Proje',
-      description: '500+ araç için toplu chiptuning projesi'
+      title: t('timeline.items.1.title'),
+      description: t('timeline.items.1.description')
     },
     {
       year: '2020',
-      title: 'Teknoloji Yatırımı',
-      description: 'Son teknoloji ekipmanlarla donatıldık'
+      title: t('timeline.items.2.title'),
+      description: t('timeline.items.2.description')
     },
     {
       year: '2021',
-      title: 'Uluslararası Sertifika',
-      description: 'Avrupa standartlarında sertifikasyon'
+      title: t('timeline.items.3.title'),
+      description: t('timeline.items.3.description')
     },
     {
       year: '2022',
-      title: 'Bayi Ağı',
-      description: 'Türkiye genelinde bayi ağımızı genişlettik'
+      title: t('timeline.items.4.title'),
+      description: t('timeline.items.4.description')
     },
     {
       year: '2023',
-      title: '10.000+ Müşteri',
-      description: '10.000+ memnun müşteriye ulaştık'
+      title: t('timeline.items.5.title'),
+      description: t('timeline.items.5.description')
     }
   ];
 
   return (
     <div className="min-h-screen bg-light">
       <Header />
-      
+
       <div className="pt-32 pb-24">
         <div className="container mx-auto px-4">
           {/* Header Section */}
@@ -104,14 +105,12 @@ export default function CorporateClient() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <span className="text-primary font-medium inline-block px-6 py-3 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 mb-4">
-              # KURUMSAL
-            </span>
+            <span className="text-primary font-medium inline-block px-6 py-3 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 mb-4">{t('badge')}</span>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Revv Tuned<span className="text-primary">.</span>
+              {t('title')}<span className="text-primary">.</span>
             </h1>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              2018 yılından beri otomotiv sektöründe profesyonel chiptuning ve performans hizmetleri sunuyoruz.
+              {t('subtitle')}
             </p>
           </motion.div>
 
@@ -123,26 +122,21 @@ export default function CorporateClient() {
             className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-24"
           >
             <div>
-              <h2 className="text-3xl font-bold mb-6">
-                Hakkımızda<span className="text-primary">.</span>
-              </h2>
+              <h2 className="text-3xl font-bold mb-6">{t('about.title')}<span className="text-primary">.</span></h2>
               <p className="text-gray-600 mb-6">
-                Revv Tuned olarak, otomotiv sektöründe kaliteli ve güvenilir hizmet anlayışıyla 
-                müşterilerimizin araçlarının performansını en üst düzeye çıkarmayı hedefliyoruz.
+                {t('about.p1')}
               </p>
               <p className="text-gray-600 mb-6">
-                Uzman ekibimiz ve son teknoloji ekipmanlarımızla, her marka ve model araç için 
-                özel çözümler geliştiriyoruz. Müşteri memnuniyeti odaklı yaklaşımımızla sektörde 
-                güvenilir bir partner olmayı sürdürüyoruz.
+                {t('about.p2')}
               </p>
               <div className="grid grid-cols-2 gap-6">
                 <div className="text-center p-4 bg-white rounded-lg shadow-lg">
-                  <div className="text-2xl font-bold text-primary mb-2">10,000+</div>
-                  <div className="text-gray-600">Memnun Müşteri</div>
+                  <div className="text-2xl font-bold text-primary mb-2">{t('about.stats.0.value')}</div>
+                  <div className="text-gray-600">{t('about.stats.0.label')}</div>
                 </div>
                 <div className="text-center p-4 bg-white rounded-lg shadow-lg">
-                  <div className="text-2xl font-bold text-primary mb-2">5+</div>
-                  <div className="text-gray-600">Yıllık Deneyim</div>
+                  <div className="text-2xl font-bold text-primary mb-2">{t('about.stats.1.value')}</div>
+                  <div className="text-gray-600">{t('about.stats.1.label')}</div>
                 </div>
               </div>
             </div>
@@ -169,11 +163,9 @@ export default function CorporateClient() {
               <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center text-primary text-2xl mb-6">
                 <Target className="w-8 h-8" />
               </div>
-              <h3 className="text-2xl font-bold mb-4">Misyonumuz</h3>
+              <h3 className="text-2xl font-bold mb-4">{t('mission.title')}</h3>
               <p className="text-gray-600">
-                Otomotiv sektöründe en kaliteli chiptuning ve performans hizmetlerini sunarak, 
-                müşterilerimizin araçlarından maksimum verim almalarını sağlamak. Güvenilir, 
-                şeffaf ve müşteri odaklı hizmet anlayışımızla sektörde öncü olmak.
+                {t('mission.description')}
               </p>
             </motion.div>
 
@@ -186,11 +178,9 @@ export default function CorporateClient() {
               <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center text-primary text-2xl mb-6">
                 <TrendingUp className="w-8 h-8" />
               </div>
-              <h3 className="text-2xl font-bold mb-4">Vizyonumuz</h3>
+              <h3 className="text-2xl font-bold mb-4">{t('vision.title')}</h3>
               <p className="text-gray-600">
-                Türkiye&apos;nin en güvenilir ve tercih edilen otomotiv performans merkezi olmak. 
-                Sürekli gelişim ve yenilikçi yaklaşımımızla uluslararası standartlarda hizmet 
-                vererek, müşterilerimizin beklentilerini aşmak.
+                {t('vision.description')}
               </p>
             </motion.div>
           </div>
@@ -202,9 +192,7 @@ export default function CorporateClient() {
             transition={{ duration: 0.6 }}
             className="mb-24"
           >
-            <h2 className="text-3xl font-bold text-center mb-12">
-              Değerlerimiz<span className="text-primary">.</span>
-            </h2>
+            <h2 className="text-3xl font-bold text-center mb-12">{t('values.title')}<span className="text-primary">.</span></h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {values.map((value, index) => (
                 <motion.div
@@ -231,9 +219,7 @@ export default function CorporateClient() {
             transition={{ duration: 0.6 }}
             className="mb-24"
           >
-            <h2 className="text-3xl font-bold text-center mb-12">
-              Tarihçemiz<span className="text-primary">.</span>
-            </h2>
+            <h2 className="text-3xl font-bold text-center mb-12">{t('timeline.title')}<span className="text-primary">.</span></h2>
             <div className="relative">
               <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-primary/20"></div>
               <div className="space-y-12">
@@ -269,9 +255,7 @@ export default function CorporateClient() {
             transition={{ duration: 0.6 }}
             className="mb-24"
           >
-            <h2 className="text-3xl font-bold text-center mb-12">
-              Ekibimiz<span className="text-primary">.</span>
-            </h2>
+            <h2 className="text-3xl font-bold text-center mb-12">{t('team.title')}<span className="text-primary">.</span></h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {team.map((member, index) => (
                 <motion.div
@@ -308,17 +292,13 @@ export default function CorporateClient() {
           >
             <div className="absolute inset-0 bg-[url('/images/pattern.png')] opacity-5"></div>
             <div className="relative z-10">
-              <h2 className="text-3xl font-bold text-white mb-6">
-                Bizimle Çalışmaya Hazır mısınız?
-              </h2>
-              <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
-                Profesyonel ekibimiz ve kaliteli hizmetimizle aracınızın performansını artırmak için buradayız.
-              </p>
+              <h2 className="text-3xl font-bold text-white mb-6">{t('cta.title')}</h2>
+              <p className="text-gray-400 mb-8 max-w-2xl mx-auto">{t('cta.description')}</p>
               <Link
                 href="/landing/contact"
                 className="inline-block bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary-dark transition-all duration-300 transform hover:scale-105"
               >
-                İletişime Geçin
+                {t('cta.button')}
               </Link>
             </div>
           </motion.div>
