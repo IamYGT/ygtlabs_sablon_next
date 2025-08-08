@@ -269,6 +269,8 @@ export default function CorporateClient() {
                     <Image
                       src={member.image}
                       alt={member.name}
+                      width={96}
+                      height={96}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                       onError={(e) => {
                         e.currentTarget.src = '/images/team/default-avatar.jpg';
