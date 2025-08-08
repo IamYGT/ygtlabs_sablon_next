@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
-import Image from 'next/image';
-import { Link } from '../../../../src/i18n/navigation';
+import { ArrowRight, Clock, Facebook, Instagram, Mail, MapPin, Phone, Send } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { Facebook, Instagram, Mail, Phone, MapPin, Clock, Send, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
+import React, { useState } from 'react';
+import { Link } from '../../../../src/i18n/navigation';
 
 export default function Footer() {
   const [email, setEmail] = useState('');

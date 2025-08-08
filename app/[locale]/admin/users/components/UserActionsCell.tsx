@@ -1,23 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-    MoreHorizontal,
-    Eye,
-    Shield,
-    UserMinus,
-    UserPlus,
-    Trash2
-} from 'lucide-react';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogContent,
@@ -26,16 +10,33 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { toast } from 'react-hot-toast';
-import { useTranslations, useLocale } from 'next-intl';
+import type { Locale } from 'date-fns';
 import { format } from 'date-fns';
-import { tr, enUS } from 'date-fns/locale';
+import * as dfLocales from 'date-fns/locale';
+import {
+    Eye,
+    MoreHorizontal,
+    Shield,
+    Trash2,
+    UserMinus,
+    UserPlus
+} from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
+import { useState } from 'react';
+import { toast } from 'react-hot-toast';
 
 interface UserWithRoles {
     id: string;
@@ -75,7 +76,7 @@ interface UserActionsCellProps {
 export default function UserActionsCell({ user, availableRoles, onUserUpdate }: UserActionsCellProps) {
     const t = useTranslations('AdminUsers.actionsCell');
     const locale = useLocale();
-    const dateLocale = locale === 'tr' ? tr : enUS;
+    const dateLocale: Locale = (dfLocales as unknown as Record<string, Locale>)[locale] ?? dfLocales.enUS;
 
     const [showDetails, setShowDetails] = useState(false);
     const [showRoleManagement, setShowRoleManagement] = useState(false);

@@ -31,8 +31,9 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { useAdminAuth } from '@/lib/hooks/useAuth';
+import type { Locale } from 'date-fns';
 import { format } from 'date-fns';
-import { enUS, tr } from 'date-fns/locale';
+import * as dfLocales from 'date-fns/locale';
 import {
     Activity,
     Calendar,
@@ -108,7 +109,7 @@ export default function UsersPageClient({ users, roles }: UsersPageClientProps) 
     const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
     const admin = useAdminAuth();
 
-    const dateLocale = locale === 'tr' ? tr : enUS;
+    const dateLocale: Locale = (dfLocales as unknown as Record<string, Locale>)[locale] ?? dfLocales.enUS;
 
     // Modal states
     const [roleAssignModalOpen, setRoleAssignModalOpen] = useState(false);

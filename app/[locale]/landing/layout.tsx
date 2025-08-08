@@ -1,6 +1,6 @@
 import { Metadata } from "next";
-import "./styles/landing.css"; // Landing page'e özel stil dosyası
 import { getTranslations } from "next-intl/server";
+import "./styles/landing.css"; // Landing page'e özel stil dosyası
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -18,7 +18,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
             title: t('ogTitle'),
             description: t('ogDescription'),
             type: 'website',
-            locale: locale === 'tr' ? 'tr_TR' : 'en_US',
+            // OG locale'ü dinamik: DB'den gelen locale kodunu kullan
+            locale: locale,
         },
     };
 }

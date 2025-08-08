@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from 'react';
 import { TR, US } from 'country-flag-icons/react/3x2';
+import { useEffect, useState } from 'react';
 
 interface FlagWrapperProps {
-    locale: 'tr' | 'en';
+    locale: string;
     className?: string;
 }
 
@@ -18,7 +18,7 @@ export function FlagWrapper({ locale, className = "w-5 h-3 rounded-sm object-cov
     if (!mounted) {
         // Server-side placeholder
         return (
-            <div 
+            <div
                 className={`${className} bg-gray-200 dark:bg-gray-700 animate-pulse`}
                 aria-label={locale === 'tr' ? 'Türkiye bayrağı' : 'ABD bayrağı'}
             />

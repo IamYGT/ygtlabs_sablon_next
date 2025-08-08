@@ -663,7 +663,7 @@ export function HeroSliderPageClient() {
                                     </Badge>
                                     <Badge variant="outline" className="ml-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-950/50 flex items-center gap-1.5">
                                         <FlagWrapper locale={locale} className="w-4 h-2.5 rounded-sm object-cover" />
-                                        {locale === 'tr' ? t('languages.tr') : t('languages.en')}
+                                        {t(`languages.${locale}`)}
                                     </Badge>
                                 </div>
                             </CardTitle>
