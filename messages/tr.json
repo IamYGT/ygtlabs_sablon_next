@@ -359,5 +359,64 @@
                 "date": "22 Temmuz 2024"
             }
         ]
+    },
+    "UI": {
+        "common": {
+            "close": "Kapat",
+            "more": "Daha fazla"
+        },
+        "pagination": {
+            "aria": {
+                "label": "sayfalama",
+                "prev": "Önceki sayfaya git",
+                "next": "Sonraki sayfaya git",
+                "morePages": "Daha fazla sayfa"
+            },
+            "prev": "Önceki",
+            "next": "Sonraki"
+        },
+        "carousel": {
+            "prevSlide": "Önceki slayt",
+            "nextSlide": "Sonraki slayt"
+        },
+        "command": {
+            "paletteTitle": "Komut Paleti",
+            "paletteDescription": "Çalıştırılacak bir komut arayın..."
+        }
+    },
+    "ImageUpload": {
+        "label": "Görsel",
+        "description": "Görsel yükleyin veya URL girin",
+        "errors": {
+            "onlyImages": "Sadece görsel dosyaları desteklenir",
+            "maxSize": "Dosya boyutu {maxSize}MB'dan küçük olmalıdır",
+            "uploadFailed": "Yükleme başarısız",
+            "loadError": "Görsel yüklenirken hata oluştu"
+        },
+        "uploading": "Yükleniyor...",
+        "dragDrop": {
+            "title": "Dosyayı sürükleyip bırakın",
+            "subtitle": "veya dosya seçmek için tıklayın"
+        },
+        "buttons": {
+            "selectFile": "Dosya Seç",
+            "url": "URL",
+            "cancel": "İptal",
+            "add": "Ekle",
+            "change": "Değiştir",
+            "replaceWithUrl": "URL ile Değiştir"
+        },
+        "maxSizeHint": "Maksimum {maxSize}MB, JPG, PNG, WebP",
+        "dialog": {
+            "enterImageUrl": "Görsel URL'si Girin",
+            "previewTitle": "Görsel Önizleme"
+        },
+        "alt": {
+            "preview": "Önizleme",
+            "fullSizePreview": "Tam boy önizleme"
+        },
+        "status": {
+            "loading": "Yükleniyor..."
+        }
     }
 }

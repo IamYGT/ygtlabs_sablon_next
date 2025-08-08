@@ -1217,6 +1217,7 @@
         "profile": "Profile",
         "settings": "Settings",
         "logout": "Logout",
+        "logoutOptions": "Logout Options",
         "userRoles": {
             "admin": "Administrator",
             "user": "User",
@@ -1232,7 +1233,10 @@
         "language": "Language",
         "theme": "Theme",
         "light": "Light",
-        "dark": "Dark"
+        "dark": "Dark",
+        "switchToLight": "Switch to light theme",
+        "switchToDark": "Switch to dark theme",
+        "system": "System"
     },
     "ApiMessages": {
         "common": {
@@ -1325,6 +1329,48 @@
         "notifications": {
             "success": "Password changed successfully (demo mode)",
             "error": "An error occurred while changing the password"
+        }
+    },
+    "AdminGuard": {
+        "loginRequiredTitle": "Login Required",
+        "loginRequiredDesc": "You must be logged in to access this page.",
+        "loginButton": "Sign In",
+        "loading": "Loading...",
+        "redirectingUserPanel": "Redirecting to user panel...",
+        "accessDeniedTitle": "Access Denied",
+        "accessDeniedDesc": "You do not have permission to access this panel type.",
+        "requiredPermission": "Required permission:",
+        "adminPanel": "Admin Panel",
+        "userPanel": "User Panel",
+        "goToUserPanel": "Go to User Panel",
+        "backToHome": "Back to Home",
+        "contactAdmin": "Contact your system administrator to obtain permission.",
+        "pageAccessRestrictedTitle": "Page Access Restricted",
+        "pageAccessRestrictedDesc": "You do not have permission to view this page.",
+        "superAdminRequiredTitle": "Super Admin Required",
+        "superAdminRequiredDesc": "Only super admins can access this area.",
+        "currentRole": "Your current role:",
+        "requiredRole": "Required role:",
+        "superAdmin": "Super Admin",
+        "noPermissionForFunction": "You do not have permission for this function.",
+        "permissionCode": "({permission})"
+    },
+    "AdminStatusWidget": {
+        "title": "System Status",
+        "healthy": "Healthy",
+        "warning": "Warning",
+        "critical": "Critical",
+        "cpu": "CPU",
+        "memory": "Memory",
+        "storage": "Storage",
+        "uptime": "Uptime",
+        "activeUsers": "Active Users",
+        "quickActions": "Quick Actions",
+        "actions": {
+            "users": "User Management",
+            "settings": "System Settings",
+            "analytics": "Analytics",
+            "backup": "Backup"
         }
     }
 }

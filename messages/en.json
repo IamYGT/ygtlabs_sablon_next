@@ -359,5 +359,64 @@
         "powerDyno": "Power & Dyno Test",
         "ecuRemap": "ECU Remap",
         "turboBoost": "Turbo Boost"
+    },
+    "UI": {
+        "common": {
+            "close": "Close",
+            "more": "More"
+        },
+        "pagination": {
+            "aria": {
+                "label": "pagination",
+                "prev": "Go to previous page",
+                "next": "Go to next page",
+                "morePages": "More pages"
+            },
+            "prev": "Previous",
+            "next": "Next"
+        },
+        "carousel": {
+            "prevSlide": "Previous slide",
+            "nextSlide": "Next slide"
+        },
+        "command": {
+            "paletteTitle": "Command Palette",
+            "paletteDescription": "Search for a command to run..."
+        }
+    },
+    "ImageUpload": {
+        "label": "Image",
+        "description": "Upload an image or enter a URL",
+        "errors": {
+            "onlyImages": "Only image files are supported",
+            "maxSize": "File size must be less than {maxSize}MB",
+            "uploadFailed": "Upload failed",
+            "loadError": "An error occurred while loading the image"
+        },
+        "uploading": "Uploading...",
+        "dragDrop": {
+            "title": "Drag and drop the file",
+            "subtitle": "or click to select a file"
+        },
+        "buttons": {
+            "selectFile": "Select File",
+            "url": "URL",
+            "cancel": "Cancel",
+            "add": "Add",
+            "change": "Change",
+            "replaceWithUrl": "Replace with URL"
+        },
+        "maxSizeHint": "Maximum {maxSize}MB, JPG, PNG, WebP",
+        "dialog": {
+            "enterImageUrl": "Enter Image URL",
+            "previewTitle": "Image Preview"
+        },
+        "alt": {
+            "preview": "Preview",
+            "fullSizePreview": "Full size preview"
+        },
+        "status": {
+            "loading": "Loading..."
+        }
     }
 }
