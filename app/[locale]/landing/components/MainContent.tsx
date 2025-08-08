@@ -71,7 +71,7 @@ export default function MainContent() {
                         <div className="aspect-w-4 aspect-h-3 rounded-2xl overflow-hidden shadow-2xl">
                             <Image
                                 src="/images/car-tuning.jpg"
-                                alt="Car Tuning Service"
+                                alt={t('imageAlt')}
                                 width={600}
                                 height={450}
                                 className="object-cover w-full h-full"

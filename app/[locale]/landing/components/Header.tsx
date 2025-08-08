@@ -25,6 +25,7 @@ export default function Header() {
     const router = useRouter();
     const pathname = usePathname();
     const t = useTranslations('Header');
+    const tLang = useTranslations('Language');
 
     // Home page kontrolü
     const isHomePage = pathname === '/landing';
@@ -86,12 +87,12 @@ export default function Header() {
     const languages = [
         {
             code: 'en',
-            name: 'English',
+            name: tLang('english'),
             flag: 'https://flagcdn.com/w160/gb.png'
         },
         {
             code: 'tr',
-            name: 'Türkçe',
+            name: tLang('turkish'),
             flag: 'https://flagcdn.com/w160/tr.png'
         }
     ];

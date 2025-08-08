@@ -7,9 +7,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { queryKeys, usersAPI } from "../api-client";
-import { CACHE_CONFIG, DEFAULTS, SUCCESS_MESSAGES } from "../constants";
+import { CACHE_CONFIG, DEFAULTS } from "../constants";
 import { useUIStore } from "../stores/ui-store";
 import type { PaginatedResponse, UserFilters } from "../types";
+import { useTranslations } from "next-intl";
 
 // Hook için inline type tanımları
 interface UserWithRole {
@@ -103,6 +104,7 @@ export function useUser(userId: string, enabled = true) {
 export function useCreateUser() {
   const queryClient = useQueryClient();
   const { showSuccess, showError } = useUIStore();
+  const t = useTranslations('AdminUsers');
 
   return useMutation({
     mutationFn: async (data: CreateUserData) => {
@@ -140,7 +142,7 @@ export function useCreateUser() {
       // Set individual user cache
       queryClient.setQueryData(queryKeys.users.detail(newUser.id), newUser);
 
-      showSuccess(SUCCESS_MESSAGES.USER_CREATED);
+      showSuccess(t('createUser.successMessage'));
     },
     onError: (error: Error) => {
       console.error("❌ Create user error:", error);
@@ -155,6 +157,7 @@ export function useCreateUser() {
 export function useUpdateUser() {
   const queryClient = useQueryClient();
   const { showSuccess, showError } = useUIStore();
+  const t = useTranslations('AdminUsers');
 
   return useMutation({
     mutationFn: async ({ id, data }: { id: string; data: UpdateUserData }) => {
@@ -187,7 +190,7 @@ export function useUpdateUser() {
         }
       );
 
-      showSuccess(SUCCESS_MESSAGES.USER_UPDATED);
+      showSuccess(t('messages.updateSuccess'));
     },
     onError: (error: Error) => {
       console.error("❌ Update user error:", error);
@@ -202,6 +205,7 @@ export function useUpdateUser() {
 export function useDeleteUser() {
   const queryClient = useQueryClient();
   const { showSuccess, showError } = useUIStore();
+  const t = useTranslations('AdminUsers');
 
   return useMutation({
     mutationFn: async (userId: string) => {
@@ -240,7 +244,7 @@ export function useDeleteUser() {
         }
       );
 
-      showSuccess(SUCCESS_MESSAGES.USER_DELETED);
+      showSuccess(t('messages.deleteSuccess'));
     },
     onError: (error: Error) => {
       console.error("❌ Delete user error:", error);
@@ -255,6 +259,7 @@ export function useDeleteUser() {
 export function useToggleUserStatus() {
   const queryClient = useQueryClient();
   const { showSuccess, showError } = useUIStore();
+  const t = useTranslations('AdminUsers');
 
   return useMutation({
     mutationFn: async (userId: string) => {
@@ -293,7 +298,7 @@ export function useToggleUserStatus() {
       const statusText = updatedUser.isActive
         ? "aktifleştirildi"
         : "devre dışı bırakıldı";
-      showSuccess(`Kullanıcı başarıyla ${statusText}`);
+      showSuccess(t('messages.statusUpdateSuccess'));
     },
     onError: (error: Error) => {
       console.error("❌ Toggle user status error:", error);
@@ -308,6 +313,7 @@ export function useToggleUserStatus() {
 export function useAssignRole() {
   const queryClient = useQueryClient();
   const { showSuccess, showError } = useUIStore();
+  const t = useTranslations('AdminUsers');
 
   return useMutation({
     mutationFn: async ({
@@ -348,7 +354,7 @@ export function useAssignRole() {
         }
       );
 
-      showSuccess("Rol başarıyla atandı");
+      showSuccess(t('actionsCell.roleAssignSuccess'));
     },
     onError: (error: Error) => {
       console.error("❌ Assign role error:", error);
@@ -360,6 +366,7 @@ export function useAssignRole() {
 export function useRemoveRole() {
   const queryClient = useQueryClient();
   const { showSuccess, showError } = useUIStore();
+  const t = useTranslations('AdminUsers');
 
   return useMutation({
     mutationFn: async (userId: string) => {
@@ -394,7 +401,7 @@ export function useRemoveRole() {
         }
       );
 
-      showSuccess("Rol başarıyla kaldırıldı");
+      showSuccess(t('actionsCell.roleRemoveSuccess'));
     },
     onError: (error: Error) => {
       console.error("❌ Remove role error:", error);
@@ -409,6 +416,7 @@ export function useRemoveRole() {
 export function useBulkDeleteUsers() {
   const queryClient = useQueryClient();
   const { showSuccess, showError } = useUIStore();
+  const t = useTranslations('AdminUsers');
 
   return useMutation({
     mutationFn: async (userIds: string[]) => {
@@ -456,9 +464,7 @@ export function useBulkDeleteUsers() {
         }
       );
 
-      showSuccess(
-        `${result.successful}/${result.total} kullanıcı başarıyla silindi`
-      );
+      showSuccess(t('messages.bulkDeleteSuccess', { count: result.successful }));
     },
     onError: (error: Error) => {
       console.error("❌ Bulk delete users error:", error);
