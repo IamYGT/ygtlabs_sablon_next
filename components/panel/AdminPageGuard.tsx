@@ -4,6 +4,7 @@ import { usePermissions } from "@/hooks/usePermissions";
 import { ROLES } from "@/lib/constants";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { useParams, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 
 interface AdminPageGuardProps {
@@ -27,7 +28,8 @@ export function AdminPageGuard({
   const { hasLayoutAccess, hasViewAccess, loading: permissionsLoading } = usePermissions();
   const router = useRouter();
   const params = useParams();
-  const locale = params?.locale || 'tr';
+  const locale = (params?.locale as string) || 'en';
+  const t = useTranslations('AdminGuard');
 
   // super_admin için tüm kısıtlamaları kaldır
   const isSuperAdmin = user?.primaryRole === ROLES.SUPER_ADMIN;
@@ -126,13 +128,13 @@ export function AdminPageGuard({
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-blue-600 mb-4">Giriş Gerekli</h1>
-          <p className="text-gray-600 mb-4">Bu sayfaya erişmek için giriş yapmalısınız.</p>
+          <h1 className="text-2xl font-bold text-blue-600 mb-4">{t('loginRequiredTitle')}</h1>
+          <p className="text-gray-600 mb-4">{t('loginRequiredDesc')}</p>
           <a
-            href={`/${locale}/auth/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`}
+            href={`/${locale}/auth/login?callbackUrl=${encodeURIComponent(typeof window !== 'undefined' ? window.location.pathname : '/')}`}
             className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
           >
-            Giriş Yap
+            {t('loginButton')}
           </a>
         </div>
       </div>
@@ -145,7 +147,7 @@ export function AdminPageGuard({
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Yükleniyor...</p>
+          <p className="text-gray-600">{t('loading')}</p>
         </div>
       </div>
     );
@@ -165,7 +167,7 @@ export function AdminPageGuard({
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Kullanıcı paneline yönlendiriliyor...</p>
+            <p className="text-gray-600">{t('redirectingUserPanel')}</p>
           </div>
         </div>
       );
@@ -179,11 +181,11 @@ export function AdminPageGuard({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-red-600 mb-4">Erişim Reddedildi</h1>
-          <p className="text-gray-600 mb-4">Bu panel türüne erişim yetkiniz bulunmamaktadır.</p>
+          <h1 className="text-2xl font-bold text-red-600 mb-4">{t('accessDeniedTitle')}</h1>
+          <p className="text-gray-600 mb-4">{t('accessDeniedDesc')}</p>
           <div className="bg-gray-50 p-4 rounded-lg mb-4">
             <p className="text-sm text-gray-600">
-              <strong>Gerekli yetki:</strong> {requireLayout === 'admin' ? 'Admin Panel' : 'Kullanıcı Panel'} erişimi
+              <strong>{t('requiredPermission')}</strong> {requireLayout === 'admin' ? t('adminPanel') : t('userPanel')} erişimi
             </p>
           </div>
           <div className="space-y-2">
@@ -192,18 +194,18 @@ export function AdminPageGuard({
                 onClick={() => router.push(`/${locale}/users/dashboard`)}
                 className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
               >
-                Kullanıcı Paneline Git
+                {t('goToUserPanel')}
               </button>
             )}
             <button
               onClick={() => router.push(`/${locale}`)}
               className="w-full bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
             >
-              Ana Sayfaya Dön
+              {t('backToHome')}
             </button>
           </div>
           <p className="text-sm text-gray-500 mt-4">
-            Yetki almak için sistem yöneticinizle iletişime geçin.
+            {t('contactAdmin')}
           </p>
         </div>
       </div>
@@ -220,15 +222,15 @@ export function AdminPageGuard({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L8.464 8.464m1.414 1.414L12 12l2.122-2.121m0 0l1.415-1.414M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-orange-600 mb-4">Sayfa Erişim Kısıtlı</h1>
-          <p className="text-gray-600 mb-4">Bu sayfayı görüntüleme yetkiniz bulunmamaktadır.</p>
+          <h1 className="text-2xl font-bold text-orange-600 mb-4">{t('pageAccessRestrictedTitle')}</h1>
+          <p className="text-gray-600 mb-4">{t('pageAccessRestrictedDesc')}</p>
           <div className="bg-gray-50 p-4 rounded-lg mb-4">
             <p className="text-sm text-gray-600">
-              <strong>Gerekli yetki:</strong> <code className="bg-gray-200 px-1 rounded text-xs">{requiredPermission}</code>
+              <strong>{t('requiredPermission')}</strong> <code className="bg-gray-200 px-1 rounded text-xs">{requiredPermission}</code>
             </p>
           </div>
           <p className="text-sm text-gray-500">
-            Bu sayfaya erişim için gerekli yetkileri almak üzere yöneticinizle iletişime geçin.
+            {t('contactAdmin')}
           </p>
         </div>
       </div>
@@ -254,6 +256,7 @@ export function FunctionGuard({
 }) {
   const { user } = useAuth();
   const { hasFunctionAccess } = usePermissions();
+  const t = useTranslations('AdminGuard');
 
   const isSuperAdmin = user?.primaryRole === ROLES.SUPER_ADMIN;
   const hasAccess = isSuperAdmin || hasFunctionAccess(requiredPermission);
@@ -270,8 +273,7 @@ export function FunctionGuard({
     return (
       <div className="p-4 border border-red-200 rounded-lg bg-red-50">
         <p className="text-red-600 text-sm">
-          Bu işlev için yetkiniz bulunmuyor.
-          <span className="font-mono text-xs ml-1">({requiredPermission})</span>
+          {t('noPermissionForFunction')} <span className="font-mono text-xs ml-1">{t('permissionCode', { permission: requiredPermission })}</span>
         </p>
       </div>
     );
@@ -292,7 +294,8 @@ export function SuperAdminGuard({
 }) {
   const { user, isAuthenticated } = useAuth();
   const params = useParams();
-  const locale = params?.locale || 'tr';
+  const locale = (params?.locale as string) || 'en';
+  const t = useTranslations('AdminGuard');
 
   const isSuperAdmin = user?.primaryRole === ROLES.SUPER_ADMIN;
 
@@ -309,13 +312,13 @@ export function SuperAdminGuard({
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-blue-600 mb-4">Giriş Gerekli</h1>
-          <p className="text-gray-600 mb-4">Bu alana erişmek için giriş yapmalısınız.</p>
+          <h1 className="text-2xl font-bold text-blue-600 mb-4">{t('loginRequiredTitle')}</h1>
+          <p className="text-gray-600 mb-4">{t('loginRequiredDesc')}</p>
           <a
-            href={`/${locale}/auth/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`}
+            href={`/${locale}/auth/login?callbackUrl=${encodeURIComponent(typeof window !== 'undefined' ? window.location.pathname : '/')}`}
             className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
           >
-            Giriş Yap
+            {t('loginButton')}
           </a>
         </div>
       </div>
@@ -328,7 +331,7 @@ export function SuperAdminGuard({
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Yükleniyor...</p>
+          <p className="text-gray-600">{t('loading')}</p>
         </div>
       </div>
     );
@@ -343,18 +346,18 @@ export function SuperAdminGuard({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-red-600 mb-4">Süper Admin Gerekli</h1>
-          <p className="text-gray-600 mb-4">Bu alana sadece süper adminler erişebilir.</p>
+          <h1 className="text-2xl font-bold text-red-600 mb-4">{t('superAdminRequiredTitle')}</h1>
+          <p className="text-gray-600 mb-4">{t('superAdminRequiredDesc')}</p>
           <div className="bg-gray-50 p-4 rounded-lg mb-4">
             <p className="text-sm text-gray-600">
-              <strong>Mevcut rolünüz:</strong> {user?.primaryRole || 'Belirsiz'}
+              <strong>{t('currentRole')}</strong> {user?.primaryRole || 'Unknown'}
             </p>
             <p className="text-sm text-gray-600 mt-1">
-              <strong>Gerekli rol:</strong> Super Admin
+              <strong>{t('requiredRole')}</strong> {t('superAdmin')}
             </p>
           </div>
           <p className="text-sm text-gray-500">
-            Süper admin yetkisi almak için sistem yöneticisi ile iletişime geçin.
+            {t('contactAdmin')}
           </p>
         </div>
       </div>

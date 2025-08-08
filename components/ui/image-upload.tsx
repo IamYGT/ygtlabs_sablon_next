@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Loader2, Upload, Eye, Trash2, Link } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 interface ImageUploadProps {
     value?: string;
@@ -23,13 +24,14 @@ interface ImageUploadProps {
 export function ImageUpload({
     value,
     onChange,
-    label = "Görsel",
-    description = "Görsel yükleyin veya URL girin",
+    label,
+    description,
     className,
     accept = "image/*",
     maxSize = 5,
     uploadEndpoint = "/api/upload/hero-slider"
 }: ImageUploadProps) {
+    const t = useTranslations('ImageUpload');
     const [isDragging, setIsDragging] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
@@ -66,16 +68,16 @@ export function ImageUpload({
 
     const validateFile = useCallback((file: File): string | null => {
         if (!file.type.startsWith('image/')) {
-            return "Sadece görsel dosyaları desteklenir";
+            return t('errors.onlyImages');
         }
 
         const maxSizeBytes = maxSize * 1024 * 1024;
         if (file.size > maxSizeBytes) {
-            return `Dosya boyutu ${maxSize}MB&apos;dan küçük olmalıdır`;
+            return t('errors.maxSize', { maxSize });
         }
 
         return null;
-    }, [maxSize]);
+    }, [maxSize, t]);
 
     const uploadFile = useCallback(async (file: File) => {
         const validationError = validateFile(file);
@@ -107,7 +109,7 @@ export function ImageUpload({
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.error || "Upload failed");
+                throw new Error(errorData.error || t('errors.uploadFailed'));
             }
 
             const data = await response.json();
@@ -120,11 +122,11 @@ export function ImageUpload({
 
         } catch (error) {
             console.error("Upload error:", error);
-            setError(error instanceof Error ? error.message : "Upload failed");
+            setError(error instanceof Error ? error.message : t('errors.uploadFailed'));
             setUploadProgress(0);
             setIsUploading(false);
         }
-    }, [uploadEndpoint, onChange, validateFile]);
+    }, [uploadEndpoint, onChange, validateFile, t]);
 
     const handleDrop = useCallback((e: React.DragEvent) => {
         e.preventDefault();
@@ -160,9 +162,9 @@ export function ImageUpload({
 
     return (
         <div className={cn("space-y-4", className)}>
-            {label && <Label>{label}</Label>}
-            {description && (
-                <p className="text-sm text-muted-foreground">{description}</p>
+            {(label ?? t('label')) && <Label>{label ?? t('label')}</Label>}
+            {(description ?? t('description')) && (
+                <p className="text-sm text-muted-foreground">{description ?? t('description')}</p>
             )}
 
             {/* Current Image Preview */}
@@ -171,12 +173,12 @@ export function ImageUpload({
                     <div className="relative w-full h-48 rounded-lg border-2 border-gray-300 overflow-hidden bg-gray-50">
                         <Image
                             src={value}
-                            alt="Preview"
+                            alt={t('alt.preview')}
                             fill
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             className="object-cover"
                             onLoad={() => setError(null)}
-                            onError={() => setError('Görsel yüklenirken hata oluştu')}
+                            onError={() => setError(t('errors.loadError'))}
                         />
                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-200 flex items-center justify-center">
                             <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-2">
@@ -219,7 +221,7 @@ export function ImageUpload({
                         {isUploading ? (
                             <>
                                 <Loader2 className="w-8 h-8 animate-spin text-primary mb-2" />
-                                <p className="text-sm font-medium">Yükleniyor...</p>
+                                <p className="text-sm font-medium">{t('uploading')}</p>
                                 <div className="w-full max-w-xs mt-2">
                                     <div className="bg-gray-200 rounded-full h-2">
                                         <div
@@ -234,10 +236,10 @@ export function ImageUpload({
                             <>
                                 <Upload className="w-8 h-8 text-gray-400 mb-2" />
                                 <p className="text-sm font-medium text-gray-700 mb-1">
-                                    Dosyayı sürükleyip bırakın
+                                    {t('dragDrop.title')}
                                 </p>
                                 <p className="text-xs text-gray-500 mb-4">
-                                    veya dosya seçmek için tıklayın
+                                    {t('dragDrop.subtitle')}
                                 </p>
                                 <div className="flex gap-2">
                                     <Button
@@ -246,7 +248,7 @@ export function ImageUpload({
                                         size="sm"
                                         onClick={() => fileInputRef.current?.click()}
                                     >
-                                        Dosya Seç
+                                        {t('buttons.selectFile')}
                                     </Button>
                                     <Button
                                         type="button"
@@ -255,11 +257,11 @@ export function ImageUpload({
                                         onClick={() => setShowUrlInput(true)}
                                     >
                                         <Link className="w-4 h-4 mr-1" />
-                                        URL
+                                        {t('buttons.url')}
                                     </Button>
                                 </div>
                                 <p className="text-xs text-gray-400 mt-2">
-                                    Maksimum {maxSize}MB, JPG, PNG, WebP
+                                    {t('maxSizeHint', { maxSize })}
                                 </p>
                             </>
                         )}
@@ -280,7 +282,7 @@ export function ImageUpload({
             <Dialog open={showUrlInput} onOpenChange={setShowUrlInput}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Görsel URL&apos;si Girin</DialogTitle>
+                        <DialogTitle>{t('dialog.enterImageUrl')}</DialogTitle>
                     </DialogHeader>
                     <div className="space-y-4">
                         <Input
@@ -291,10 +293,10 @@ export function ImageUpload({
                         />
                         <div className="flex gap-2 justify-end">
                             <Button variant="outline" onClick={() => setShowUrlInput(false)}>
-                                İptal
+                                {t('buttons.cancel')}
                             </Button>
                             <Button onClick={handleUrlSubmit} disabled={!urlInput.trim()}>
-                                Ekle
+                                {t('buttons.add')}
                             </Button>
                         </div>
                     </div>
@@ -305,14 +307,14 @@ export function ImageUpload({
             <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
                 <DialogContent className="max-w-4xl max-h-[90vh] p-0 overflow-hidden">
                     <DialogHeader className="p-6 pb-0">
-                        <DialogTitle>Görsel Önizleme</DialogTitle>
+                        <DialogTitle>{t('dialog.previewTitle')}</DialogTitle>
                     </DialogHeader>
                     <div className="p-6 pt-0">
                         {value && (
                             <div className="relative w-full">
                                 <Image
                                     src={value}
-                                    alt="Full size preview"
+                                    alt={t('alt.fullSizePreview')}
                                     width={800}
                                     height={600}
                                     className="w-full h-auto max-h-[70vh] rounded-lg"
@@ -325,7 +327,7 @@ export function ImageUpload({
                                     placeholder="blur"
                                     blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
                                     onLoad={() => setError('')}
-                                    onError={() => setError('Görsel yüklenirken hata oluştu')}
+                                    onError={() => setError(t('errors.loadError'))}
                                 />
                             </div>
                         )}
@@ -350,7 +352,7 @@ export function ImageUpload({
                         onClick={() => fileInputRef.current?.click()}
                     >
                         <Upload className="w-4 h-4 mr-1" />
-                        Değiştir
+                        {t('buttons.change')}
                     </Button>
                     <Button
                         type="button"
@@ -359,7 +361,7 @@ export function ImageUpload({
                         onClick={() => setShowUrlInput(true)}
                     >
                         <Link className="w-4 h-4 mr-1" />
-                        URL ile Değiştir
+                        {t('buttons.replaceWithUrl')}
                     </Button>
                 </div>
             )}

@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { useTranslations } from "next-intl";
 
 interface SystemStatus {
     cpu: number;
@@ -44,6 +45,7 @@ interface QuickAction {
 }
 
 export function AdminStatusWidget() {
+    const t = useTranslations('AdminStatusWidget');
     const [systemStatus, setSystemStatus] = useState<SystemStatus>({
         cpu: 45,
         memory: 62,
@@ -84,25 +86,25 @@ export function AdminStatusWidget() {
     const quickActions: QuickAction[] = [
         {
             id: 'users',
-            label: 'Kullanıcı Yönetimi',
+            label: t('actions.users'),
             icon: <Users className="h-4 w-4" />,
             action: () => window.location.href = `/${window.location.pathname.split('/')[1]}/admin/users`
         },
         {
             id: 'settings',
-            label: 'Sistem Ayarları',
+            label: t('actions.settings'),
             icon: <Settings className="h-4 w-4" />,
             action: () => window.location.href = `/${window.location.pathname.split('/')[1]}/admin/settings`
         },
         {
             id: 'analytics',
-            label: 'Analitik',
+            label: t('actions.analytics'),
             icon: <BarChart3 className="h-4 w-4" />,
             action: () => window.location.href = `/${window.location.pathname.split('/')[1]}/admin/analytics`
         },
         {
             id: 'backup',
-            label: 'Yedekleme',
+            label: t('actions.backup'),
             icon: <Database className="h-4 w-4" />,
             action: () => console.log('Backup initiated'),
             variant: 'secondary' as const
@@ -133,6 +135,15 @@ export function AdminStatusWidget() {
         return 'bg-green-500';
     };
 
+    const healthText = (health: SystemStatus['systemHealth']) => {
+        switch (health) {
+            case 'healthy': return t('healthy');
+            case 'warning': return t('warning');
+            case 'critical': return t('critical');
+            default: return t('healthy');
+        }
+    };
+
     return (
         <DropdownMenu open={isExpanded} onOpenChange={setIsExpanded}>
             <DropdownMenuTrigger asChild>
@@ -153,14 +164,13 @@ export function AdminStatusWidget() {
                 <DropdownMenuLabel className="flex items-center justify-between p-4 pb-2">
                     <div className="flex items-center gap-2">
                         <Activity className="h-5 w-5" />
-                        <span className="font-semibold">Sistem Durumu</span>
+                        <span className="font-semibold">{t('title')}</span>
                     </div>
                     <Badge 
                         variant={systemStatus.systemHealth === 'healthy' ? 'default' : 'destructive'}
                         className="text-xs"
                     >
-                        {systemStatus.systemHealth === 'healthy' ? 'Sağlıklı' : 
-                         systemStatus.systemHealth === 'warning' ? 'Uyarı' : 'Kritik'}
+                        {healthText(systemStatus.systemHealth)}
                     </Badge>
                 </DropdownMenuLabel>
                 
@@ -172,7 +182,7 @@ export function AdminStatusWidget() {
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                     <Zap className="h-4 w-4 text-blue-500" />
-                                    <span className="text-sm font-medium">CPU</span>
+                                    <span className="text-sm font-medium">{t('cpu')}</span>
                                 </div>
                                 <span className="text-sm text-muted-foreground">{systemStatus.cpu.toFixed(0)}%</span>
                             </div>
@@ -187,7 +197,7 @@ export function AdminStatusWidget() {
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                     <Database className="h-4 w-4 text-purple-500" />
-                                    <span className="text-sm font-medium">Bellek</span>
+                                    <span className="text-sm font-medium">{t('memory')}</span>
                                 </div>
                                 <span className="text-sm text-muted-foreground">{systemStatus.memory.toFixed(0)}%</span>
                             </div>
@@ -202,7 +212,7 @@ export function AdminStatusWidget() {
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                     <Shield className="h-4 w-4 text-green-500" />
-                                    <span className="text-sm font-medium">Depolama</span>
+                                    <span className="text-sm font-medium">{t('storage')}</span>
                                 </div>
                                 <span className="text-sm text-muted-foreground">{systemStatus.storage}%</span>
                             </div>
@@ -221,7 +231,7 @@ export function AdminStatusWidget() {
                             <CardContent className="p-3 text-center">
                                 <div className="flex items-center justify-center gap-1 mb-1">
                                     <Clock className="h-4 w-4 text-blue-500" />
-                                    <span className="text-xs text-muted-foreground">Çalışma Süresi</span>
+                                    <span className="text-xs text-muted-foreground">{t('uptime')}</span>
                                 </div>
                                 <p className="text-sm font-semibold">{systemStatus.uptime}</p>
                             </CardContent>
@@ -230,7 +240,7 @@ export function AdminStatusWidget() {
                             <CardContent className="p-3 text-center">
                                 <div className="flex items-center justify-center gap-1 mb-1">
                                     <Users className="h-4 w-4 text-green-500" />
-                                    <span className="text-xs text-muted-foreground">Aktif Kullanıcı</span>
+                                    <span className="text-xs text-muted-foreground">{t('activeUsers')}</span>
                                 </div>
                                 <p className="text-sm font-semibold">{systemStatus.activeUsers}/{systemStatus.totalUsers}</p>
                             </CardContent>
@@ -243,7 +253,7 @@ export function AdminStatusWidget() {
                     <div className="mt-4">
                         <p className="text-xs font-medium text-muted-foreground mb-3 flex items-center gap-2">
                             <TrendingUp className="h-3 w-3" />
-                            Hızlı Eylemler
+                            {t('quickActions')}
                         </p>
                         <div className="grid grid-cols-2 gap-2">
                             {quickActions.map((action) => (
