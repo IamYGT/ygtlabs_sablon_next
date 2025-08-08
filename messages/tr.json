@@ -937,7 +937,8 @@
                 "description": "Son teknoloji Dyno makinemiz ile aracınızın gücünü ve torkunu ölçüyoruz.",
                 "link": "/hizmetler/dyno"
             }
-        ]
+        ],
+        "learnMore": "Detayları Gör"
     },
     "CorporateSection": {
         "badge": "Kurumsal",
