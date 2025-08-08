@@ -99,7 +99,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/postcss": "^4.1.11",
     "@tanstack/react-query-devtools": "^5.66.1",
     "@types/dotenv": "^6.1.1",
     "@types/node": "^20",

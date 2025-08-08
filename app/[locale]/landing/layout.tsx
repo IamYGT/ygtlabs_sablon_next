@@ -23,5 +23,5 @@ export default function LandingLayout({
 }: {
     children: React.ReactNode;
 }) {
-    return <>{children}</>;
+    return <div data-scope="landing">{children}</div>;
 } 

@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
-import React from 'react';
-import { NextIntlClientProvider } from 'next-intl';
 import { GuestGuard } from '@/components/panel/AuthGuards';
+import type { Metadata } from "next";
+import { NextIntlClientProvider } from 'next-intl';
+import React from 'react';
 import { AuthLayoutClient } from './AuthLayoutClient';
 import "./styles/auth.css"; // Auth pages'e özel stil dosyası
 
@@ -34,9 +34,11 @@ export default async function AuthLayout({ children, params }: AuthLayoutProps) 
     return (
         <NextIntlClientProvider messages={messages}>
             <GuestGuard>
-                <AuthLayoutClient>
-                    {children}
-                </AuthLayoutClient>
+                <div data-scope="auth">
+                    <AuthLayoutClient>
+                        {children}
+                    </AuthLayoutClient>
+                </div>
             </GuestGuard>
         </NextIntlClientProvider>
     );

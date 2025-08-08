@@ -1,6 +1,6 @@
+import { UserGuard } from '@/components/panel/AuthGuards';
 import type { Metadata } from "next";
 import React from 'react';
-import { UserGuard } from '@/components/panel/AuthGuards';
 import "./styles/user.css"; // User panel'e özel stil dosyası
 
 export const metadata: Metadata = {
@@ -21,7 +21,9 @@ interface UserLayoutProps {
 export default function UserLayout({ children }: UserLayoutProps) {
     return (
         <UserGuard>
-            {children}
+            <div data-scope="user">
+                {children}
+            </div>
         </UserGuard>
     );
 }

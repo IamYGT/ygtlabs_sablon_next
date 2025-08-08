@@ -1,12 +1,12 @@
-import type { Metadata } from "next";
-import React from 'react';
-import { getTranslations } from "next-intl/server";
-import { AdminSidebar } from '@/components/panel/AdminSidebar';
 import { AdminHeader } from '@/components/panel/AdminHeader';
-import { Toaster } from 'sonner';
-import { LogoutModalProvider } from '@/components/panel/LogoutModalProvider';
-import { NextIntlClientProvider } from 'next-intl';
+import { AdminSidebar } from '@/components/panel/AdminSidebar';
 import { AdminGuard } from '@/components/panel/AuthGuards';
+import { LogoutModalProvider } from '@/components/panel/LogoutModalProvider';
+import type { Metadata } from "next";
+import { NextIntlClientProvider } from 'next-intl';
+import { getTranslations } from "next-intl/server";
+import React from 'react';
+import { Toaster } from 'sonner';
 import './styles/admin.css';
 
 
@@ -47,7 +47,7 @@ export default async function AdminLayout({ children, params }: AdminLayoutProps
             <AdminGuard>
                 <LogoutModalProvider>
                     {/* Z-Index Hierarchy: Sidebar(9999) < Toaster(10000) < Modal(99999) */}
-                    <div className="relative z-0">
+                    <div className="relative z-0" data-scope="admin">
                         {/* Corporate Professional Layout - Banking/Finance Style */}
                         <div className="flex h-screen bg-blue-100 dark:bg-slate-800">
                             {/* Sidebar - Desktop: Fixed, Mobile: Overlay */}
