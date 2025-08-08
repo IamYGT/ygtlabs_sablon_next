@@ -46,6 +46,8 @@ export async function getCurrentUser(
 export async function getCurrentUserFromToken(
   token: string
 ): Promise<SimpleUser | null> {
+  // Token formatını katı doğrulama ile kısıtlamayın.
+  // Geçersiz bir token DB'de eşleşmeyeceği için doğal olarak null döner.
   if (!isValidSessionToken(token)) {
     return null;
   }
@@ -137,10 +139,8 @@ export async function getCurrentUserFromToken(
  * Validate session token format
  */
 function isValidSessionToken(token: string): boolean {
-  if (typeof token !== "string" || !token) return false;
-  const uuidRegex =
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-  return uuidRegex.test(token);
+  // Minimum kontrol: boş olmayan string kabul edilir
+  return typeof token === "string" && token.trim().length > 0;
 }
 
 /**

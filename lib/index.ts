@@ -101,7 +101,7 @@ export async function verifyAdminAuth(_req: Request) {
   const { getCurrentUser } = await import("./session-utils");
   const user = await getCurrentUser();
 
-  if (!user || !user.permissions?.includes("layout.admin.access")) {
+  if (!user || !user.permissions?.includes("admin.layout")) {
     throw new Error("Admin access required");
   }
 
@@ -196,8 +196,8 @@ export async function getUserLayoutInfo(_userId: string) {
   const user = await getCurrentUser();
 
   return {
-    hasAdminAccess: user?.permissions?.includes("layout.admin.access") || false,
-    hasUserAccess: user?.permissions?.includes("layout.user.access") || false,
+    hasAdminAccess: user?.permissions?.includes("admin.layout") || false,
+    hasUserAccess: user?.permissions?.includes("user.layout") || false,
     permissions: user?.permissions || [],
   };
 }

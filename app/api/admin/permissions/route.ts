@@ -1,5 +1,9 @@
 import { getCurrentUser, prisma } from "@/lib";
-import { Permission } from "@prisma/client";
+import {
+  Permission,
+  PermissionAction,
+  PermissionCategory,
+} from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 // Tüm yetkileri getir
@@ -30,15 +34,37 @@ export async function GET(request: NextRequest) {
     const locale = searchParams.get("locale") || "tr";
 
     // Yeni Permission tablosundan yetkileri getir
+    // Normalize filters for enums
+    const categoryEnum: PermissionCategory | undefined =
+      category && ["layout", "view", "function"].includes(category)
+        ? (category as PermissionCategory)
+        : undefined;
+
+    const searchValue = search?.toLowerCase().trim();
+    const actionEnum: PermissionAction | undefined =
+      searchValue &&
+      [
+        "access",
+        "view",
+        "create",
+        "read",
+        "update",
+        "delete",
+        "manage",
+        "edit",
+      ].includes(searchValue)
+        ? (searchValue as PermissionAction)
+        : undefined;
+
     const permissions = await prisma.permission.findMany({
       where: {
         isActive: true,
-        ...(category && { category }),
+        ...(categoryEnum && { category: categoryEnum }),
         ...(search && {
           OR: [
             { name: { contains: search, mode: "insensitive" } },
             { resourcePath: { contains: search, mode: "insensitive" } },
-            { action: { contains: search, mode: "insensitive" } },
+            ...(actionEnum ? ([{ action: actionEnum }] as const) : []),
           ],
         }),
       },

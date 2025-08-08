@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/session-utils";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(_request: NextRequest) {
   try {
@@ -11,9 +11,8 @@ export async function GET(_request: NextRequest) {
 
     const layoutInfo = {
       hasAdminAccess:
-        currentUser.permissions?.includes("layout.admin.access") || false,
-      hasUserAccess:
-        currentUser.permissions?.includes("layout.user.access") || false,
+        currentUser.permissions?.includes("admin.layout") || false,
+      hasUserAccess: currentUser.permissions?.includes("user.layout") || false,
       permissions: currentUser.permissions || [],
     };
 

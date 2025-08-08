@@ -148,7 +148,7 @@ export function useLogin() {
       showSuccess("Giriş başarılı!");
 
       // Redirect to appropriate dashboard
-      const hasAdminAccess = user.permissions?.includes("layout.admin.access");
+      const hasAdminAccess = user.permissions?.includes("admin.layout");
       const dashboardPath = hasAdminAccess
         ? "/admin/dashboard"
         : "/users/dashboard";

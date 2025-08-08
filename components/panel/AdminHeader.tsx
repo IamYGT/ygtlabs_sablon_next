@@ -91,7 +91,7 @@ export function AdminHeader({ title = "Dashboard", subtitle: _subtitle, setOpen 
     const getUserRoleDescription = (user: { permissions?: string[] } | null) => {
         if (!user?.permissions) return t('userRoles.user');
 
-        if (user.permissions.includes("layout.admin.access")) {
+        if (user.permissions.includes("admin.layout")) {
             return t('userRoles.admin');
         } else if (user.permissions.includes("dashboard.view")) {
             return t('userRoles.user');

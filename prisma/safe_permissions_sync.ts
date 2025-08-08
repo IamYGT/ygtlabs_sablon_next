@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { LayoutType, PrismaClient } from "@prisma/client";
 import { ALL_PERMISSIONS, PERMISSION_STATS } from "../lib/permissions/config";
 
 const prisma = new PrismaClient();
@@ -102,14 +102,14 @@ async function main() {
       update: {
         displayName: roleConfig.displayName,
         description: roleConfig.description,
-        layoutType: roleConfig.layoutType,
+        layoutType: roleConfig.layoutType as LayoutType,
         isActive: true,
       },
       create: {
         name: roleName,
         displayName: roleConfig.displayName,
         description: roleConfig.description,
-        layoutType: roleConfig.layoutType,
+        layoutType: roleConfig.layoutType as LayoutType,
         isSystemDefault: true,
         isActive: true,
       },

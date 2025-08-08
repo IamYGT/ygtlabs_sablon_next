@@ -79,7 +79,8 @@ const UnifiedAuthLoginForm = memo(() => {
                 setLoading(false);
 
                 // Check if user has admin access permission
-                const hasAdminAccess = result.user.permissions?.includes('layout.admin.access') ||
+                const hasAdminAccess =
+                    result.user.permissions?.includes('admin.layout') ||
                     result.user.userRoles?.includes('super_admin');
 
                 // Redirect to appropriate dashboard with proper i18n routing

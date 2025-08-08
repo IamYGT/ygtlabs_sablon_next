@@ -1,0 +1,18 @@
+---
+alwaysApply: true
+---
+
+# Commit Mesaj Kuralları
+
+- Commit mesajlarını her zaman Türkçe yaz.
+- Mesajlar, "Conventional Commits" formatına uygun olmalı (ör. `feat: yeni özellik eklendi`, `fix: hata düzeltildi`).
+- Sadece commit mesajının kendisini çıktı olarak ver, ek bir açıklama veya yorum ekleme.
+
+
+# Commit Mesaj Kuralları
+
+- Commit mesajlarını her zaman Türkçe yaz.
+- Mesajlar, "Conventional Commits" formatına uygun olmalı (ör. `feat: yeni özellik eklendi`, `fix: hata düzeltildi`).
+- Sadece commit mesajının kendisini çıktı olarak ver, ek bir açıklama veya yorum ekleme.
+
+

@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
 import { useAuth, useCurrentUser } from '@/lib/hooks/useAuth';
+import { useParams, useRouter } from 'next/navigation';
+import React, { useEffect } from 'react';
 
 interface AuthGuardProps {
     children: React.ReactNode;
@@ -58,7 +58,7 @@ export function AdminGuard({ children, fallback }: AuthGuardProps) {
         return fallback || <LoadingSpinner />;
     }
 
-    // layout.admin.access permission kontrolü
+    // admin layout erişim kontrolü (geriye dönük uyum dahil)
     if (!hasAdminAccess()) {
         return fallback || <LoadingSpinner />;
     }
@@ -67,7 +67,7 @@ export function AdminGuard({ children, fallback }: AuthGuardProps) {
     return <>{children}</>;
 }
 
-// User Guard - layout.user.access veya layout.admin.access permission gerekli
+// User Guard - user.layout veya admin.layout (geriye dönük: layout.user.access/layout.admin.access)
 export function UserGuard({ children, fallback }: AuthGuardProps) {
     const { user, isAuthenticated, isLoading, hasUserAccess } = useAuth();
     const { isLoading: queryLoading } = useCurrentUser();

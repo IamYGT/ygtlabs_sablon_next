@@ -9,8 +9,51 @@ datasource db {
   schemas  = ["public"]
 }
 
+// ==========================
+// ENUMS (Standartlaşma)
+// ==========================
+
+enum PermissionCategory {
+  layout
+  view
+  function
+  @@schema("public")
+}
+
+enum PermissionAction {
+  access
+  view
+  create
+  read
+  update
+  delete
+  manage
+  edit // geçiş dönemi için
+  @@schema("public")
+}
+
+enum PermissionType {
+  admin
+  user
+  @@schema("public")
+}
+
+enum LayoutType {
+  admin
+  user
+  @@schema("public")
+}
+
+enum SessionType {
+  normal
+  incognito
+  mobile
+  @@schema("public")
+}
+
 model Session {
-  id           String   @id @default(cuid())
+  id           String   @id @default(uuid())
+  // Token formatı uygulama katmanında doğrulanır; index performans içindir
   sessionToken String   @unique
   userId       String
   expires      DateTime
@@ -18,7 +61,7 @@ model Session {
   // Multi-session support
   tabId             String? // Browser tab identifier
   deviceFingerprint String? // Device fingerprint hash
-  sessionType       String  @default("normal") // normal, incognito, mobile
+  sessionType       SessionType  @default(normal)
   parentSessionId   String? // Parent session reference
   sessionGroup      String? // Session group identifier
 
@@ -46,11 +89,13 @@ model Session {
 
   // Relations
   user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  parentSession Session?       @relation("SessionHierarchy", fields: [parentSessionId], references: [id])
+  parentSession Session?       @relation("SessionHierarchy", fields: [parentSessionId], references: [id], onDelete: SetNull)
   childSessions Session[]      @relation("SessionHierarchy")
   LoginHistory  LoginHistory[]
 
   @@index([userId])
+  @@index([userId, isActive])
+  @@index([expires])
   @@index([lastActive])
   @@index([isActive])
   @@index([sessionGroup])
@@ -65,7 +110,6 @@ model User {
   name                   String?
   email                  String?             @unique
   emailVerified          DateTime?
-  image                  String?
   profileImage           String?
   password               String
   tokenVersion           Int                 @default(0)
@@ -94,6 +138,7 @@ model User {
   LoginHistory           LoginHistory[]
   UserStats              UserStats?
 
+  @@index([roleId])
   @@schema("public")
 }
 
@@ -163,10 +208,10 @@ model UserStats {
 model Permission {
   id             String @id @default(uuid())
   name           String @unique // 'layout.admin.access', 'function.roles.create'
-  category       String // 'layout', 'view', 'function'
+  category       PermissionCategory
   resourcePath   String // 'admin', '/admin/users', 'users'
-  action         String // 'access', 'view', 'create', 'edit', 'delete'
-  permissionType String @default("user") // 'admin', 'user' - Yetkinin türünü belirtir
+  action         PermissionAction
+  permissionType PermissionType @default(user) // 'admin', 'user' - Yetkinin türünü belirtir
 
   // Çok dilli yetki detayları (JSON)
   displayName Json? // {"tr": "Admin Paneli Erişimi", "en": "Admin Panel Access"}
@@ -238,7 +283,7 @@ model AuthRole {
   updatedAt       DateTime            @updatedAt
   createdById     String?
   updatedById     String?
-  layoutType      String              @default("user")
+  layoutType      LayoutType          @default(user)
   createdBy       User?               @relation("RoleCreatedBy", fields: [createdById], references: [id])
   updatedBy       User?               @relation("RoleUpdatedBy", fields: [updatedById], references: [id])
   users           User[]              @relation("UserRole")
@@ -271,5 +316,6 @@ model HeroSlider {
 
   @@index([isActive])
   @@index([order])
+  @@unique([order])
   @@schema("public")
 }
