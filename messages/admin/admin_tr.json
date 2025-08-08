@@ -1071,7 +1071,31 @@
         "timeAgo2Minutes": "2 dakika önce",
         "timeAgo1Hour": "1 saat önce",
         "timeAgo3Hours": "3 saat önce",
-        "timeAgo1Day": "1 gün önce"
+        "timeAgo1Day": "1 gün önce",
+        "preferences": {
+            "themePreference": {
+                "title": "Tema Tercihi",
+                "description": "Uygulama için tercih ettiğiniz temayı seçin",
+                "options": {
+                    "light": { "label": "Açık", "description": "Her zaman açık tema kullan" },
+                    "dark": { "label": "Koyu", "description": "Her zaman koyu tema kullan" },
+                    "system": { "label": "Sistem", "description": "Sistem tercihlerini takip et" }
+                }
+            },
+            "languagePreference": {
+                "title": "Dil Tercihi",
+                "description": "Uygulama için tercih ettiğiniz dili seçin",
+                "placeholder": "Dil seçin"
+            },
+            "actions": {
+                "savePreferences": "Tercihleri Kaydet",
+                "savingPreferences": "Tercihler Kaydediliyor..."
+            },
+            "notifications": {
+                "saveSuccess": "Tercihler başarıyla kaydedildi",
+                "saveError": "Tercihler kaydedilemedi"
+            }
+        }
     },
     "HeroSlider": {
         "title": "Hero Slider Yönetimi",

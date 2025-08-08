@@ -12,6 +12,7 @@ import { clearAllCacheOnLogout } from "../providers/query-provider";
 import { authActions, useAuthStore } from "../stores/auth-store";
 import { useUIStore } from "../stores/ui-store";
 import type { LoginData, SimpleUser } from "../types";
+import { useTranslations } from "next-intl";
 
 // =============================================================================
 // MODERN CLIENT-SIDE AUTH HOOKS
@@ -113,6 +114,7 @@ export function useLogin() {
   const params = useParams();
   const locale = (params.locale as string) || "en";
   const router = useRouter();
+  const t = useTranslations('Auth');
 
   return useMutation({
     mutationFn: async (data: LoginData): Promise<SimpleUser> => {
@@ -145,7 +147,7 @@ export function useLogin() {
       }
     },
     onSuccess: (user: SimpleUser) => {
-      showSuccess("Giriş başarılı!");
+      showSuccess(t('loginSuccess'));
 
       // Redirect to appropriate dashboard
       const hasAdminAccess = user.permissions?.includes("admin.layout");
@@ -158,7 +160,7 @@ export function useLogin() {
       const errorMessage =
         error instanceof Error
           ? error.message
-          : "Giriş sırasında bir hata oluştu";
+          : t('loginError');
       authActions.setError(errorMessage);
       showError(errorMessage);
     },
@@ -172,6 +174,7 @@ export function useLogout() {
   const { showSuccess } = useUIStore();
   const params = useParams();
   const locale = (params.locale as string) || "en";
+  const t = useTranslations('Auth');
 
   return useMutation<void, Error, boolean>({
     mutationFn: async (logoutAllSessions = false): Promise<void> => {
@@ -209,8 +212,8 @@ export function useLogout() {
     },
     onSuccess: (_, logoutAllSessions) => {
       const message = logoutAllSessions
-        ? "Tüm cihazlardan çıkış yapıldı"
-        : "Çıkış yapıldı";
+        ? t('logoutSuccess')
+        : t('logoutSuccess');
       showSuccess(message);
 
       // Hard redirect to login page to ensure clean state

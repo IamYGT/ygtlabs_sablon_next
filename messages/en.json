@@ -237,7 +237,8 @@
             "reviews": "Reviews",
             "faq": "Frequently Asked Questions"
         },
-        "experience": "Years of Experience"
+        "experience": "Years of Experience",
+        "imageAlt": "Car Tuning Service"
     },
     "ServiceCards": {
         "title": "Our Services",
@@ -417,6 +418,15 @@
         },
         "status": {
             "loading": "Loading..."
+        }
+    },
+    "SEO": {
+        "landing": {
+            "title": "RevvTuned - ECU Chip Tuning Services",
+            "description": "Increase your vehicle's performance with professional ECU chip tuning services. Safe tuning solutions with our expert team and cutting-edge technology.",
+            "keywords": "ecu tuning, chip tuning, performance increase, engine tuning, car modification",
+            "ogTitle": "RevvTuned - ECU Chip Tuning Services",
+            "ogDescription": "Increase your vehicle's performance with professional ECU chip tuning services."
         }
     }
 }
