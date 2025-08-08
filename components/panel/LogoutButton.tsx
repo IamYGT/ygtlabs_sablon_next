@@ -1,18 +1,18 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger,
     DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut, ChevronDown, Monitor, Smartphone } from "lucide-react";
 import { useSidebar } from "@/components/ui/sidebar";
-import { useLogoutModal } from "./LogoutModalProvider";
+import { ChevronDown, LogOut, Monitor, Smartphone } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useLogoutModal } from "./LogoutModalProvider";
 
 interface LogoutButtonProps {
     className?: string;

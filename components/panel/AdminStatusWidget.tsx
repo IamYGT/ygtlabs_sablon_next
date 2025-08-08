@@ -1,20 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { 
-    Activity, 
-    Users, 
-    Database, 
-    Shield, 
-    TrendingUp, 
-    AlertTriangle,
-    CheckCircle,
-    Clock,
-    Settings,
-    BarChart3,
-    Zap
-} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -22,9 +10,21 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+    Activity,
+    AlertTriangle,
+    BarChart3,
+    CheckCircle,
+    Clock,
+    Database,
+    Settings,
+    Shield,
+    TrendingUp,
+    Users,
+    Zap
+} from "lucide-react";
 import { useTranslations } from "next-intl";
+import React, { useEffect, useState } from "react";
 
 interface SystemStatus {
     cpu: number;
@@ -76,10 +76,10 @@ export function AdminStatusWidget() {
     useEffect(() => {
         const avgLoad = (systemStatus.cpu + systemStatus.memory + systemStatus.storage) / 3;
         let health: SystemStatus['systemHealth'] = 'healthy';
-        
+
         if (avgLoad > 80) health = 'critical';
         else if (avgLoad > 65) health = 'warning';
-        
+
         setSystemStatus(prev => ({ ...prev, systemHealth: health }));
     }, [systemStatus.cpu, systemStatus.memory, systemStatus.storage]);
 
@@ -166,14 +166,14 @@ export function AdminStatusWidget() {
                         <Activity className="h-5 w-5" />
                         <span className="font-semibold">{t('title')}</span>
                     </div>
-                    <Badge 
+                    <Badge
                         variant={systemStatus.systemHealth === 'healthy' ? 'default' : 'destructive'}
                         className="text-xs"
                     >
                         {healthText(systemStatus.systemHealth)}
                     </Badge>
                 </DropdownMenuLabel>
-                
+
                 <div className="px-4 pb-4">
                     {/* Sistem Metrikleri */}
                     <Card className="mb-4">
@@ -187,7 +187,7 @@ export function AdminStatusWidget() {
                                 <span className="text-sm text-muted-foreground">{systemStatus.cpu.toFixed(0)}%</span>
                             </div>
                             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                                <div 
+                                <div
                                     className={`h-2 rounded-full transition-all duration-500 ${getProgressColor(systemStatus.cpu)}`}
                                     style={{ width: `${systemStatus.cpu}%` }}
                                 />
@@ -202,7 +202,7 @@ export function AdminStatusWidget() {
                                 <span className="text-sm text-muted-foreground">{systemStatus.memory.toFixed(0)}%</span>
                             </div>
                             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                                <div 
+                                <div
                                     className={`h-2 rounded-full transition-all duration-500 ${getProgressColor(systemStatus.memory)}`}
                                     style={{ width: `${systemStatus.memory}%` }}
                                 />
@@ -217,7 +217,7 @@ export function AdminStatusWidget() {
                                 <span className="text-sm text-muted-foreground">{systemStatus.storage}%</span>
                             </div>
                             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                                <div 
+                                <div
                                     className={`h-2 rounded-full transition-all duration-500 ${getProgressColor(systemStatus.storage)}`}
                                     style={{ width: `${systemStatus.storage}%` }}
                                 />
@@ -248,7 +248,7 @@ export function AdminStatusWidget() {
                     </div>
 
                     <DropdownMenuSeparator />
-                    
+
                     {/* Hızlı Eylemler */}
                     <div className="mt-4">
                         <p className="text-xs font-medium text-muted-foreground mb-3 flex items-center gap-2">

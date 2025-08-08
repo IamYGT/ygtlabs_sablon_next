@@ -3,8 +3,8 @@
 import { usePermissions } from "@/hooks/usePermissions";
 import { ROLES } from "@/lib/constants";
 import { useAuth } from "@/lib/hooks/useAuth";
-import { useParams, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 interface AdminPageGuardProps {

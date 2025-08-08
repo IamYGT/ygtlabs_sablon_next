@@ -1,11 +1,11 @@
 "use client";
 
-import * as React from "react";
-import { Moon, Sun } from "lucide-react";
-import { useTheme as useNextTheme } from "next-themes";
-import { useSidebar } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
+import { useSidebar } from "@/components/ui/sidebar";
+import { Moon, Sun } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useTheme as useNextTheme } from "next-themes";
+import * as React from "react";
 
 export { useTheme } from "next-themes";
 
