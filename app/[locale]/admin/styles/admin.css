@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -131,11 +130,8 @@
 }
 
 /* Tema geçişleri için smooth transitions */
-html {
-  transition: color-scheme 0.3s ease-in-out;
-}
-
-html * {
+[data-scope="admin"],
+[data-scope="admin"] * {
   transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out,
     color 0.3s ease-in-out, fill 0.3s ease-in-out, stroke 0.3s ease-in-out,
     box-shadow 0.3s ease-in-out;
@@ -143,8 +139,8 @@ html * {
 
 /* Animasyonları devre dışı bırakmak isteyenler için */
 @media (prefers-reduced-motion: reduce) {
-  html *,
-  html {
+  [data-scope="admin"] *,
+  [data-scope="admin"] {
     transition: none !important;
     animation: none !important;
   }
@@ -152,28 +148,28 @@ html * {
 
 /* Custom Scrollbar Styles */
 /* Works on Firefox */
-* {
+[data-scope="admin"] * {
   scrollbar-width: thin;
   scrollbar-color: var(--scrollbar-thumb-bg) var(--scrollbar-track-bg);
 }
 
 /* Works on Chrome, Edge, and Safari */
-::-webkit-scrollbar {
+[data-scope="admin"] ::-webkit-scrollbar {
   width: 12px;
   height: 12px;
 }
 
-::-webkit-scrollbar-track {
+[data-scope="admin"] ::-webkit-scrollbar-track {
   background: var(--scrollbar-track-bg);
   border-radius: 6px;
 }
 
-::-webkit-scrollbar-thumb {
+[data-scope="admin"] ::-webkit-scrollbar-thumb {
   background-color: var(--scrollbar-thumb-bg);
   border-radius: 10px;
   border: 3px solid var(--scrollbar-track-bg);
 }
 
-::-webkit-scrollbar-thumb:hover {
+[data-scope="admin"] ::-webkit-scrollbar-thumb:hover {
   background-color: var(--scrollbar-thumb-hover-bg);
 }
