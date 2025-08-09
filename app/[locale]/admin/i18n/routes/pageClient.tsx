@@ -1,8 +1,9 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { Globe } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -18,17 +19,26 @@ interface RoutesClientProps {
 export default function RoutesClient({ title }: RoutesClientProps) {
   const t = useTranslations("AdminI18n");
   const { data, mutate, isLoading } = useSWR(`/api/admin/i18n/routes`, fetcher);
+  const { data: langs } = useSWR(`/api/admin/i18n/languages`, fetcher);
 
   type Route = {
     name: string;
     translations: { localeCode: string; path: string }[];
   };
 
-  type EditableTranslation = { localeCode: string; base: string; suffix: string };
+  type EditableTranslation = {
+    localeCode: string;
+    base: string;
+    suffix: string;
+  };
   const [openRouteName, setOpenRouteName] = useState<string | null>(null);
   const [editedByRoute, setEditedByRoute] = useState<
     Record<string, EditableTranslation[]>
   >({});
+
+  const localeOptions: string[] = (langs?.languages ?? []).map(
+    (l: { code: string }) => l.code
+  );
 
   const splitPath = (path: string): { base: string; suffix: string } => {
     if (!path || path === "/") return { base: "/", suffix: "" };
@@ -150,11 +160,16 @@ export default function RoutesClient({ title }: RoutesClientProps) {
                   >
                     <div className="font-mono text-sm">{r.name}</div>
                     <div className="text-xs text-muted-foreground flex flex-wrap gap-2 mt-1">
-                      {r.translations.map((t: { localeCode: string; path: string }) => (
-                        <span key={t.localeCode} className="px-2 py-0.5 rounded bg-muted">
-                          {t.localeCode}: {t.path}
-                        </span>
-                      ))}
+                      {r.translations.map(
+                        (t: { localeCode: string; path: string }) => (
+                          <span
+                            key={t.localeCode}
+                            className="px-2 py-0.5 rounded bg-muted"
+                          >
+                            {t.localeCode}: {t.path}
+                          </span>
+                        )
+                      )}
                     </div>
 
                     <CollapsibleContent
@@ -167,14 +182,40 @@ export default function RoutesClient({ title }: RoutesClientProps) {
                             key={`${tr.localeCode}-${idx}`}
                             className="grid grid-cols-1 md:grid-cols-5 gap-2 items-center"
                           >
-                            <div className="md:col-span-2 text-xs font-medium">
-                              {tr.localeCode}
+                            <div className="md:col-span-2">
+                              <Select
+                                value={tr.localeCode}
+                                onValueChange={(val) => {
+                                  setEditedByRoute((prev) => {
+                                    const current = prev[r.name] ?? [];
+                                    const next = current.map((item, i) =>
+                                      i === idx ? { ...item, localeCode: val } : item
+                                    );
+                                    return { ...prev, [r.name]: next };
+                                  });
+                                }}
+                              >
+                                <SelectTrigger className="w-full">
+                                  <SelectValue placeholder={t("form.locale")} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {localeOptions.map((l) => (
+                                    <SelectItem key={l} value={l}>
+                                      {l}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
                             </div>
                             <div className="md:col-span-3">
                               <Input
                                 value={tr.suffix}
                                 onChange={(e) =>
-                                  handleChangeSuffix(r.name, idx, e.target.value)
+                                  handleChangeSuffix(
+                                    r.name,
+                                    idx,
+                                    e.target.value
+                                  )
                                 }
                                 placeholder="slug"
                               />
@@ -183,10 +224,15 @@ export default function RoutesClient({ title }: RoutesClientProps) {
                         ))}
                       </div>
                       <div className="flex items-center justify-end gap-2 pt-1">
-                        <Button variant="outline" onClick={() => setOpenRouteName(null)}>
+                        <Button
+                          variant="outline"
+                          onClick={() => setOpenRouteName(null)}
+                        >
                           {t("cancel")}
                         </Button>
-                        <Button onClick={() => handleSave(r.name)}>{t("save")}</Button>
+                        <Button onClick={() => handleSave(r.name)}>
+                          {t("save")}
+                        </Button>
                       </div>
                     </CollapsibleContent>
                   </div>
