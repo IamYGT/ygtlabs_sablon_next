@@ -3,12 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Globe } from "lucide-react";
+import { Globe, Filter } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import useSWR from "swr";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
@@ -19,7 +24,6 @@ interface RoutesClientProps {
 export default function RoutesClient({ title }: RoutesClientProps) {
   const t = useTranslations("AdminI18n");
   const { data, mutate, isLoading } = useSWR(`/api/admin/i18n/routes`, fetcher);
-  const { data: langs } = useSWR(`/api/admin/i18n/languages`, fetcher);
 
   type Route = {
     name: string;
@@ -36,9 +40,6 @@ export default function RoutesClient({ title }: RoutesClientProps) {
     Record<string, EditableTranslation[]>
   >({});
 
-  const localeOptions: string[] = (langs?.languages ?? []).map(
-    (l: { code: string }) => l.code
-  );
 
   const splitPath = (path: string): { base: string; suffix: string } => {
     if (!path || path === "/") return { base: "/", suffix: "" };
@@ -76,19 +77,6 @@ export default function RoutesClient({ title }: RoutesClientProps) {
     });
   };
 
-  const handleChangeLocale = (
-    routeName: string,
-    index: number,
-    newLocale: string
-  ) => {
-    setEditedByRoute((prev) => {
-      const current = prev[routeName] ?? [];
-      const next = current.map((item, i) =>
-        i === index ? { ...item, localeCode: newLocale } : item
-      );
-      return { ...prev, [routeName]: next };
-    });
-  };
 
   const handleSave = async (routeName: string) => {
     const items = editedByRoute[routeName] ?? [];
@@ -115,6 +103,32 @@ export default function RoutesClient({ title }: RoutesClientProps) {
       toast.error(message);
     }
   };
+
+  // Search & Filter
+  const [search, setSearch] = useState("");
+  const [selectedLocales, setSelectedLocales] = useState<string[]>([]);
+  const availableLocales = useMemo(() => {
+    const set = new Set<string>();
+    for (const r of (data?.routes ?? []) as Route[]) {
+      for (const tr of r.translations) set.add(tr.localeCode);
+    }
+    return Array.from(set).sort();
+  }, [data]);
+  const filteredRoutes: Route[] = useMemo(() => {
+    const routes: Route[] = (data?.routes ?? []) as Route[];
+    return routes.filter((r) => {
+      const matchesSearch = search
+        ? r.name.toLowerCase().includes(search.toLowerCase()) ||
+          r.translations.some((tr) =>
+            tr.path.toLowerCase().includes(search.toLowerCase())
+          )
+        : true;
+      const matchesLocale = selectedLocales.length
+        ? r.translations.some((tr) => selectedLocales.includes(tr.localeCode))
+        : true;
+      return matchesSearch && matchesLocale;
+    });
+  }, [data, search, selectedLocales]);
 
   return (
     <div className="space-y-6">
@@ -144,29 +158,64 @@ export default function RoutesClient({ title }: RoutesClientProps) {
 
       {/* Var olan rotalar */}
       <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700">
-        <CardHeader className="pb-2 flex-row items-center justify-between">
-          <CardTitle className="text-base md:text-lg">
-            {t("existingRoutes")}
-          </CardTitle>
-          <Button
-            variant="outline"
-            onClick={() =>
-              fetch(`/api/admin/i18n/routing`, { method: "POST" }).then(() => {
-                toast.success(t("routingGenerated"));
-                mutate();
-              })
-            }
-            className="md:hidden"
-          >
-            {t("generateRouting")}
-          </Button>
+        <CardHeader className="pb-2">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+            <CardTitle className="text-base md:text-lg">
+              {t("existingRoutes")}
+            </CardTitle>
+            <div className="flex items-center gap-2 w-full md:w-auto">
+              <Input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder={t("search")}
+                className="h-9 w-full md:w-64"
+              />
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="h-9">
+                    <Filter className="h-4 w-4 mr-2" /> {t("filter")}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  {availableLocales.map((lc) => {
+                    const checked = selectedLocales.includes(lc);
+                    return (
+                      <DropdownMenuCheckboxItem
+                        key={lc}
+                        checked={checked}
+                        onCheckedChange={(val) => {
+                          setSelectedLocales((prev) =>
+                            val ? [...prev, lc] : prev.filter((x) => x !== lc)
+                          );
+                        }}
+                      >
+                        {lc}
+                      </DropdownMenuCheckboxItem>
+                    );
+                  })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Button
+                variant="outline"
+                onClick={() =>
+                  fetch(`/api/admin/i18n/routing`, { method: "POST" }).then(() => {
+                    toast.success(t("routingGenerated"));
+                    mutate();
+                  })
+                }
+                className="md:hidden"
+              >
+                {t("generateRouting")}
+              </Button>
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
           {isLoading ? (
             <div className="text-sm text-muted-foreground">{t("loading")}</div>
           ) : (
             <div className="space-y-2">
-              {(data?.routes ?? []).map((r: Route) => (
+              {filteredRoutes.map((r: Route) => (
                 <Collapsible key={r.name} open={openRouteName === r.name}>
                   <div
                     onClick={() => toggleOpen(r)}
@@ -196,33 +245,8 @@ export default function RoutesClient({ title }: RoutesClientProps) {
                             key={`${tr.localeCode}-${idx}`}
                             className="flex items-center gap-2"
                           >
-                            <div className="w-24">
-                              <Select
-                                value={tr.localeCode}
-                                onValueChange={(val) =>
-                                  handleChangeLocale(r.name, idx, val)
-                                }
-                              >
-                                <SelectTrigger className="h-8 w-24 text-xs">
-                                  <SelectValue placeholder={t("form.locale")} />
-                                </SelectTrigger>
-                                <SelectContent className="text-xs">
-                                  {localeOptions.map((l) => (
-                                    <SelectItem
-                                      key={l}
-                                      value={l}
-                                      className="text-xs"
-                                      disabled={
-                                        (editedByRoute[r.name] ?? []).some(
-                                          (it, i2) => i2 !== idx && it.localeCode === l
-                                        )
-                                      }
-                                    >
-                                      {l}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
+                            <div className="w-20 text-xs font-medium">
+                              {tr.localeCode}
                             </div>
                             <Input
                               className="flex-1 h-8"
