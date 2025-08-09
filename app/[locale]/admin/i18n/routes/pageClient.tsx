@@ -2,13 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import { Globe } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -30,40 +24,68 @@ export default function RoutesClient({ title }: RoutesClientProps) {
     translations: { localeCode: string; path: string }[];
   };
 
-  const [editOpen, setEditOpen] = useState(false);
-  const [editingRoute, setEditingRoute] = useState<Route | null>(null);
-  const [editedTranslations, setEditedTranslations] = useState<
-    { localeCode: string; path: string }[]
-  >([]);
+  type EditableTranslation = { localeCode: string; base: string; suffix: string };
+  const [openRouteName, setOpenRouteName] = useState<string | null>(null);
+  const [editedByRoute, setEditedByRoute] = useState<
+    Record<string, EditableTranslation[]>
+  >({});
 
-  const handleEditClick = (route: Route) => {
-    setEditingRoute(route);
-    setEditedTranslations(route.translations.map((t) => ({ ...t })));
-    setEditOpen(true);
+  const splitPath = (path: string): { base: string; suffix: string } => {
+    if (!path || path === "/") return { base: "/", suffix: "" };
+    const lastSlash = path.lastIndexOf("/");
+    if (lastSlash <= 0) return { base: "/", suffix: path.replace(/^\//, "") };
+    return {
+      base: path.slice(0, lastSlash) || "/",
+      suffix: path.slice(lastSlash + 1),
+    };
   };
 
-  const handleChangePath = (idx: number, newPath: string) => {
-    setEditedTranslations((prev) =>
-      prev.map((item, i) => (i === idx ? { ...item, path: newPath } : item))
-    );
+  const toggleOpen = (route: Route) => {
+    const isOpening = openRouteName !== route.name;
+    setOpenRouteName(isOpening ? route.name : null);
+    if (isOpening && !editedByRoute[route.name]) {
+      const prepared: EditableTranslation[] = route.translations.map((tr) => {
+        const { base, suffix } = splitPath(tr.path);
+        return { localeCode: tr.localeCode, base, suffix };
+      });
+      setEditedByRoute((prev) => ({ ...prev, [route.name]: prepared }));
+    }
   };
 
-  const handleSave = async () => {
-    if (!editingRoute) return;
+  const handleChangeSuffix = (
+    routeName: string,
+    index: number,
+    newSuffix: string
+  ) => {
+    setEditedByRoute((prev) => {
+      const current = prev[routeName] ?? [];
+      const next = current.map((item, i) =>
+        i === index ? { ...item, suffix: newSuffix.replace(/^\//, "") } : item
+      );
+      return { ...prev, [routeName]: next };
+    });
+  };
+
+  const handleSave = async (routeName: string) => {
+    const items = editedByRoute[routeName] ?? [];
+    const translations = items
+      .map((it) => {
+        const base = it.base === "/" ? "" : it.base;
+        const suffix = it.suffix.replace(/^\//, "");
+        const path = `${base}/${suffix}`.replace(/\/+/g, "/");
+        return { localeCode: it.localeCode, path };
+      })
+      .filter((x) => x.path && x.localeCode);
     try {
       const res = await fetch(`/api/admin/i18n/routes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: editingRoute.name,
-          translations: editedTranslations.filter((t) => t.path && t.localeCode),
-        }),
+        body: JSON.stringify({ name: routeName, translations }),
       });
       if (!res.ok) throw new Error(await res.text());
       toast.success(t("saved"));
-      setEditOpen(false);
-      setEditingRoute(null);
-      mutate();
+      setOpenRouteName(null);
+      await mutate();
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : t("failed");
       toast.error(message);
@@ -121,71 +143,59 @@ export default function RoutesClient({ title }: RoutesClientProps) {
           ) : (
             <div className="space-y-2">
               {(data?.routes ?? []).map((r: Route) => (
-                <div
-                  key={r.name}
-                  className="border rounded-md p-3 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
-                >
-                  <div className="flex items-center justify-between">
+                <Collapsible key={r.name} open={openRouteName === r.name}>
+                  <div
+                    onClick={() => toggleOpen(r)}
+                    className="border rounded-md p-3 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/60"
+                  >
                     <div className="font-mono text-sm">{r.name}</div>
-                    <Button size="sm" variant="outline" onClick={() => handleEditClick(r)}>
-                      {t("edit")}
-                    </Button>
-                  </div>
-                  <div className="text-xs text-muted-foreground flex flex-wrap gap-2 mt-2">
-                    {r.translations.map(
-                      (t: { localeCode: string; path: string }) => (
-                        <span
-                          key={t.localeCode}
-                          className="px-2 py-0.5 rounded bg-muted"
-                        >
+                    <div className="text-xs text-muted-foreground flex flex-wrap gap-2 mt-1">
+                      {r.translations.map((t: { localeCode: string; path: string }) => (
+                        <span key={t.localeCode} className="px-2 py-0.5 rounded bg-muted">
                           {t.localeCode}: {t.path}
                         </span>
-                      )
-                    )}
+                      ))}
+                    </div>
+
+                    <CollapsibleContent
+                      onClick={(e) => e.stopPropagation()}
+                      className="mt-3 space-y-3"
+                    >
+                      <div className="space-y-2">
+                        {(editedByRoute[r.name] ?? []).map((tr, idx) => (
+                          <div
+                            key={`${tr.localeCode}-${idx}`}
+                            className="grid grid-cols-1 md:grid-cols-5 gap-2 items-center"
+                          >
+                            <div className="md:col-span-2 text-xs font-medium">
+                              {tr.localeCode}
+                            </div>
+                            <div className="md:col-span-3">
+                              <Input
+                                value={tr.suffix}
+                                onChange={(e) =>
+                                  handleChangeSuffix(r.name, idx, e.target.value)
+                                }
+                                placeholder="slug"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex items-center justify-end gap-2 pt-1">
+                        <Button variant="outline" onClick={() => setOpenRouteName(null)}>
+                          {t("cancel")}
+                        </Button>
+                        <Button onClick={() => handleSave(r.name)}>{t("save")}</Button>
+                      </div>
+                    </CollapsibleContent>
                   </div>
-                </div>
+                </Collapsible>
               ))}
             </div>
           )}
         </CardContent>
       </Card>
-
-      <Dialog open={editOpen} onOpenChange={setEditOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>
-              {t("edit")} – {editingRoute?.name}
-            </DialogTitle>
-          </DialogHeader>
-
-          <div className="space-y-3">
-            {editedTranslations.map((tr, idx) => (
-              <div key={tr.localeCode} className="grid grid-cols-1 md:grid-cols-5 gap-2 items-center">
-                <div className="md:col-span-2 text-xs font-medium">
-                  {tr.localeCode}
-                </div>
-                <div className="md:col-span-3">
-                  <Input
-                    value={tr.path}
-                    onChange={(e) => handleChangePath(idx, e.target.value)}
-                    placeholder="/some-path"
-                  />
-                </div>
-              </div>
-            ))}
-            {editedTranslations.length === 0 && (
-              <div className="text-sm text-muted-foreground">{t("noData")}</div>
-            )}
-          </div>
-
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setEditOpen(false)}>
-              {t("cancel")}
-            </Button>
-            <Button onClick={handleSave}>{t("save")}</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
