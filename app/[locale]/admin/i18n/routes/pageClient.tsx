@@ -3,13 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Globe } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -77,6 +71,20 @@ export default function RoutesClient({ title }: RoutesClientProps) {
       const current = prev[routeName] ?? [];
       const next = current.map((item, i) =>
         i === index ? { ...item, suffix: newSuffix.replace(/^\//, "") } : item
+      );
+      return { ...prev, [routeName]: next };
+    });
+  };
+
+  const handleChangeLocale = (
+    routeName: string,
+    index: number,
+    newLocale: string
+  ) => {
+    setEditedByRoute((prev) => {
+      const current = prev[routeName] ?? [];
+      const next = current.map((item, i) =>
+        i === index ? { ...item, localeCode: newLocale } : item
       );
       return { ...prev, [routeName]: next };
     });
@@ -186,48 +194,44 @@ export default function RoutesClient({ title }: RoutesClientProps) {
                         {(editedByRoute[r.name] ?? []).map((tr, idx) => (
                           <div
                             key={`${tr.localeCode}-${idx}`}
-                            className="grid grid-cols-1 md:grid-cols-5 gap-2 items-center"
+                            className="flex items-center gap-2"
                           >
-                            <div className="md:col-span-2">
+                            <div className="w-24">
                               <Select
                                 value={tr.localeCode}
-                                onValueChange={(val) => {
-                                  setEditedByRoute((prev) => {
-                                    const current = prev[r.name] ?? [];
-                                    const next = current.map((item, i) =>
-                                      i === idx
-                                        ? { ...item, localeCode: val }
-                                        : item
-                                    );
-                                    return { ...prev, [r.name]: next };
-                                  });
-                                }}
+                                onValueChange={(val) =>
+                                  handleChangeLocale(r.name, idx, val)
+                                }
                               >
-                                <SelectTrigger className="h-8 w-full text-xs">
+                                <SelectTrigger className="h-8 w-24 text-xs">
                                   <SelectValue placeholder={t("form.locale")} />
                                 </SelectTrigger>
                                 <SelectContent className="text-xs">
                                   {localeOptions.map((l) => (
-                                    <SelectItem key={l} value={l} className="text-xs">
+                                    <SelectItem
+                                      key={l}
+                                      value={l}
+                                      className="text-xs"
+                                      disabled={
+                                        (editedByRoute[r.name] ?? []).some(
+                                          (it, i2) => i2 !== idx && it.localeCode === l
+                                        )
+                                      }
+                                    >
                                       {l}
                                     </SelectItem>
                                   ))}
                                 </SelectContent>
                               </Select>
                             </div>
-                            <div className="md:col-span-3">
-                              <Input
-                                value={tr.suffix}
-                                onChange={(e) =>
-                                  handleChangeSuffix(
-                                    r.name,
-                                    idx,
-                                    e.target.value
-                                  )
-                                }
-                                placeholder="slug"
-                              />
-                            </div>
+                            <Input
+                              className="flex-1 h-8"
+                              value={tr.suffix}
+                              onChange={(e) =>
+                                handleChangeSuffix(r.name, idx, e.target.value)
+                              }
+                              placeholder="slug"
+                            />
                           </div>
                         ))}
                       </div>
