@@ -1,4 +1,5 @@
 "use client";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
@@ -8,9 +9,8 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { FlagWrapper } from "@/components/ui/flag-wrapper";
+import { Input } from "@/components/ui/input";
 import { ChevronDown, Filter, Globe } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
@@ -175,14 +175,20 @@ export default function RoutesClient({ title }: RoutesClientProps) {
                   <Button variant="outline" size="sm" className="h-9">
                     <Filter className="h-4 w-4 mr-2" /> {t("filter")}
                     {selectedLocales.length > 0 && (
-                      <Badge variant="secondary" className="ml-2 h-5 w-5 rounded-full p-0 text-xs">
+                      <Badge
+                        variant="secondary"
+                        className="ml-2 h-5 w-5 rounded-full p-0 text-xs"
+                      >
                         {selectedLocales.length}
                       </Badge>
                     )}
                     <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
+                  </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuContent
+                  align="end"
+                  className="w-56 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 p-2"
+                >
                   {availableLocales.map((lc) => {
                     const checked = selectedLocales.includes(lc);
                     return (
@@ -201,8 +207,8 @@ export default function RoutesClient({ title }: RoutesClientProps) {
                   })}
                 </DropdownMenuContent>
               </DropdownMenu>
-          <Button
-            variant="outline"
+              <Button
+                variant="outline"
                 onClick={() =>
                   fetch(`/api/admin/i18n/routing`, { method: "POST" }).then(
                     () => {
@@ -211,10 +217,10 @@ export default function RoutesClient({ title }: RoutesClientProps) {
                     }
                   )
                 }
-            className="md:hidden"
-          >
-            {t("generateRouting")}
-          </Button>
+                className="md:hidden"
+              >
+                {t("generateRouting")}
+              </Button>
             </div>
           </div>
         </CardHeader>
@@ -229,8 +235,8 @@ export default function RoutesClient({ title }: RoutesClientProps) {
                     onClick={() => toggleOpen(r)}
                     className="border rounded-md p-3 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/60"
                   >
-                  <div className="font-mono text-sm">{r.name}</div>
-                  <div className="text-xs text-muted-foreground flex flex-wrap gap-2 mt-1">
+                    <div className="font-mono text-sm">{r.name}</div>
+                    <div className="text-xs text-muted-foreground flex flex-wrap gap-2 mt-1">
                       {r.translations.map(
                         (t: { localeCode: string; path: string }) => (
                           <span
@@ -265,7 +271,7 @@ export default function RoutesClient({ title }: RoutesClientProps) {
                                 className="w-4 h-3 rounded-[2px]"
                               />
                               <span>{tr.localeCode}</span>
-                  </div>
+                            </div>
                             <Input
                               className="flex-1 h-8"
                               value={tr.suffix}
@@ -274,7 +280,7 @@ export default function RoutesClient({ title }: RoutesClientProps) {
                               }
                               placeholder="slug"
                             />
-                </div>
+                          </div>
                         ))}
                       </div>
                       <div className="flex items-center justify-end gap-2 pt-1">
