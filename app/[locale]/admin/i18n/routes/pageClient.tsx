@@ -9,8 +9,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { FlagWrapper } from "@/components/ui/flag-wrapper";
-import { Filter, Globe } from "lucide-react";
+import { ChevronDown, Filter, Globe } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -173,9 +174,15 @@ export default function RoutesClient({ title }: RoutesClientProps) {
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="sm" className="h-9">
                     <Filter className="h-4 w-4 mr-2" /> {t("filter")}
+                    {selectedLocales.length > 0 && (
+                      <Badge variant="secondary" className="ml-2 h-5 w-5 rounded-full p-0 text-xs">
+                        {selectedLocales.length}
+                      </Badge>
+                    )}
+                    <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuContent align="end" className="w-56">
                   {availableLocales.map((lc) => {
                     const checked = selectedLocales.includes(lc);
                     return (
@@ -228,13 +235,13 @@ export default function RoutesClient({ title }: RoutesClientProps) {
                         (t: { localeCode: string; path: string }) => (
                           <span
                             key={t.localeCode}
-                            className="px-2 py-0.5 rounded bg-muted inline-flex items-center gap-1 leading-none align-middle"
+                            className="px-2 py-0.5 rounded bg-muted inline-flex items-center gap-1"
                           >
                             <FlagWrapper
                               locale={t.localeCode}
-                              className="w-4 h-3 rounded-[2px] shrink-0"
+                              className="w-4 h-3 rounded-[2px]"
                             />
-                            <span className="align-middle">
+                            <span>
                               {t.localeCode}: {t.path}
                             </span>
                           </span>
@@ -252,12 +259,12 @@ export default function RoutesClient({ title }: RoutesClientProps) {
                             key={`${tr.localeCode}-${idx}`}
                             className="flex items-center gap-2"
                           >
-                            <div className="w-24 h-8 text-xs font-medium inline-flex items-center gap-2 leading-none">
+                            <div className="w-24 text-xs font-medium inline-flex items-center gap-2">
                               <FlagWrapper
                                 locale={tr.localeCode}
-                                className="w-4 h-3 rounded-[2px] shrink-0"
+                                className="w-4 h-3 rounded-[2px]"
                               />
-                              <span className="align-middle">{tr.localeCode}</span>
+                              <span>{tr.localeCode}</span>
                   </div>
                             <Input
                               className="flex-1 h-8"
