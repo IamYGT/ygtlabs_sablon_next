@@ -2,8 +2,14 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Globe } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -189,18 +195,20 @@ export default function RoutesClient({ title }: RoutesClientProps) {
                                   setEditedByRoute((prev) => {
                                     const current = prev[r.name] ?? [];
                                     const next = current.map((item, i) =>
-                                      i === idx ? { ...item, localeCode: val } : item
+                                      i === idx
+                                        ? { ...item, localeCode: val }
+                                        : item
                                     );
                                     return { ...prev, [r.name]: next };
                                   });
                                 }}
                               >
-                                <SelectTrigger className="w-full">
+                                <SelectTrigger className="h-8 w-full text-xs">
                                   <SelectValue placeholder={t("form.locale")} />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="text-xs">
                                   {localeOptions.map((l) => (
-                                    <SelectItem key={l} value={l}>
+                                    <SelectItem key={l} value={l} className="text-xs">
                                       {l}
                                     </SelectItem>
                                   ))}
