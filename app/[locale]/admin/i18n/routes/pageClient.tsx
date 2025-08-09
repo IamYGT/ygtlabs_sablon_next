@@ -2,18 +2,19 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
-import { Input } from "@/components/ui/input";
-import { Globe, Filter } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { useMemo, useState } from "react";
-import { toast } from "sonner";
-import useSWR from "swr";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { FlagWrapper } from "@/components/ui/flag-wrapper";
+import { Filter, Globe } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useMemo, useState } from "react";
+import { toast } from "sonner";
+import useSWR from "swr";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
@@ -39,7 +40,6 @@ export default function RoutesClient({ title }: RoutesClientProps) {
   const [editedByRoute, setEditedByRoute] = useState<
     Record<string, EditableTranslation[]>
   >({});
-
 
   const splitPath = (path: string): { base: string; suffix: string } => {
     if (!path || path === "/") return { base: "/", suffix: "" };
@@ -76,7 +76,6 @@ export default function RoutesClient({ title }: RoutesClientProps) {
       return { ...prev, [routeName]: next };
     });
   };
-
 
   const handleSave = async (routeName: string) => {
     const items = editedByRoute[routeName] ?? [];
@@ -174,7 +173,7 @@ export default function RoutesClient({ title }: RoutesClientProps) {
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="sm" className="h-9">
                     <Filter className="h-4 w-4 mr-2" /> {t("filter")}
-                  </Button>
+            </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
                   {availableLocales.map((lc) => {
@@ -195,18 +194,20 @@ export default function RoutesClient({ title }: RoutesClientProps) {
                   })}
                 </DropdownMenuContent>
               </DropdownMenu>
-              <Button
-                variant="outline"
+          <Button
+            variant="outline"
                 onClick={() =>
-                  fetch(`/api/admin/i18n/routing`, { method: "POST" }).then(() => {
-                    toast.success(t("routingGenerated"));
-                    mutate();
-                  })
+                  fetch(`/api/admin/i18n/routing`, { method: "POST" }).then(
+                    () => {
+                      toast.success(t("routingGenerated"));
+                      mutate();
+                    }
+                  )
                 }
-                className="md:hidden"
-              >
-                {t("generateRouting")}
-              </Button>
+            className="md:hidden"
+          >
+            {t("generateRouting")}
+          </Button>
             </div>
           </div>
         </CardHeader>
@@ -221,15 +222,21 @@ export default function RoutesClient({ title }: RoutesClientProps) {
                     onClick={() => toggleOpen(r)}
                     className="border rounded-md p-3 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/60"
                   >
-                    <div className="font-mono text-sm">{r.name}</div>
-                    <div className="text-xs text-muted-foreground flex flex-wrap gap-2 mt-1">
+                  <div className="font-mono text-sm">{r.name}</div>
+                  <div className="text-xs text-muted-foreground flex flex-wrap gap-2 mt-1">
                       {r.translations.map(
                         (t: { localeCode: string; path: string }) => (
                           <span
                             key={t.localeCode}
-                            className="px-2 py-0.5 rounded bg-muted"
+                            className="px-2 py-0.5 rounded bg-muted inline-flex items-center gap-1 leading-none align-middle"
                           >
-                            {t.localeCode}: {t.path}
+                            <FlagWrapper
+                              locale={t.localeCode}
+                              className="w-4 h-3 rounded-[2px] shrink-0"
+                            />
+                            <span className="align-middle">
+                              {t.localeCode}: {t.path}
+                            </span>
                           </span>
                         )
                       )}
@@ -245,9 +252,13 @@ export default function RoutesClient({ title }: RoutesClientProps) {
                             key={`${tr.localeCode}-${idx}`}
                             className="flex items-center gap-2"
                           >
-                            <div className="w-20 text-xs font-medium">
-                              {tr.localeCode}
-                            </div>
+                            <div className="w-24 h-8 text-xs font-medium inline-flex items-center gap-2 leading-none">
+                              <FlagWrapper
+                                locale={tr.localeCode}
+                                className="w-4 h-3 rounded-[2px] shrink-0"
+                              />
+                              <span className="align-middle">{tr.localeCode}</span>
+                  </div>
                             <Input
                               className="flex-1 h-8"
                               value={tr.suffix}
@@ -256,7 +267,7 @@ export default function RoutesClient({ title }: RoutesClientProps) {
                               }
                               placeholder="slug"
                             />
-                          </div>
+                </div>
                         ))}
                       </div>
                       <div className="flex items-center justify-end gap-2 pt-1">
