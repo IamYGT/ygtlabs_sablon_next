@@ -770,11 +770,11 @@ export default function EditRoleDialog({
                                   .toLowerCase()
                                   .includes(searchTerm.toLowerCase())
                               ).length === 0 && (
-                                  <div className="text-center py-8 text-gray-500">
-                                    <ShieldCheck className="h-8 w-8 mx-auto mb-2 text-gray-300" />
-                                    <p>Henüz yetki eklenmemiş</p>
-                                  </div>
-                                )}
+                                <div className="text-center py-8 text-gray-500">
+                                  <ShieldCheck className="h-8 w-8 mx-auto mb-2 text-gray-300" />
+                                  <p>Henüz yetki eklenmemiş</p>
+                                </div>
+                              )}
                             </div>
                           </ScrollArea>
                         </TabsContent>
@@ -869,4 +869,3 @@ export default function EditRoleDialog({
     </Dialog>
   );
 }
-
