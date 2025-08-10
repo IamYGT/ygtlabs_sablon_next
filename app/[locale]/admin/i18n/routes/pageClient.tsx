@@ -201,7 +201,13 @@ export default function RoutesClient({ title }: RoutesClientProps) {
                           );
                         }}
                       >
-                        {lc}
+                        <span className="inline-flex items-center gap-2">
+                          <FlagWrapper
+                            locale={lc}
+                            className="w-4 h-3 rounded-[2px]"
+                          />
+                          <span>{lc}</span>
+                        </span>
                       </DropdownMenuCheckboxItem>
                     );
                   })}

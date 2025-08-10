@@ -1,1043 +1,590 @@
 {
-    "Auth": {
-        "login": "Sign In",
-        "logout": "Sign Out",
-        "email": "Email",
-        "password": "Password",
-        "rememberMe": "Remember me",
-        "forgotPassword": "Forgot password",
-        "loginSuccess": "Successfully signed in",
-        "loginError": "Sign in failed",
-        "invalidCredentials": "Invalid username or password",
-        "welcome": "Welcome",
-        "continue": "Continue by logging into your account",
-        "emailLabel": "Email Address",
-        "emailPlaceholder": "example@address.com",
-        "passwordLabel": "Password",
-        "loggingIn": "Signing in...",
-        "loginSuccessRedirect": "Login successful! Redirecting...",
-        "loginFailed": "Login failed",
-        "unexpectedError": "An unexpected error occurred.",
-        "noAccount": "Don't have an account yet?",
-        "register": "Sign Up",
-        "createAccountTitle": "Create an Account",
-        "createAccountDescription": "Enter your information to create your new account",
-        "fullNameLabel": "Full Name",
-        "fullNamePlaceholder": "Your name and surname",
-        "confirmPasswordLabel": "Confirm Password",
-        "passwordsDontMatch": "Passwords do not match",
-        "registering": "Registering...",
-        "registerSuccess": "Registration successful! Redirecting to login page.",
-        "registerError": "An error occurred during registration",
-        "registerErrorTryAgain": "An error occurred during registration. Please try again.",
-        "alreadyHaveAccount": "Already have an account?",
-        "passwordStrength": {
-            "weak": "Weak",
-            "medium": "Medium",
-            "strong": "Strong"
-        },
-        "forgotPasswordTitle": "Forgot Password",
-        "forgotPasswordDescription": "Enter your email address and we'll send you a link to reset your password",
-        "emailHelpText": "Enter your registered email address. We will send you a password reset link.",
-        "sendResetEmail": "Send Password Reset Email",
-        "sendingEmail": "Sending Email...",
-        "backToLogin": "Back to Login",
-        "emailSentTitle": "Email Sent",
-        "emailSentDescription": "A password reset link has been sent to <email>{email}</email>.",
-        "nextSteps": {
-            "title": "Next Steps:",
-            "steps": [
-                "Check your email inbox",
-                "Don't forget to check your spam folder",
-                "Reset your password by clicking the link",
-                "The link is valid for 15 minutes"
-            ]
-        },
-        "sendAgain": "Send Again",
-        "securityNotice": {
-            "title": "Security Notice:",
-            "description": "For security reasons, the password reset link will expire in 15 minutes. If you did not receive an email, check your spam folder."
-        },
-        "notifications": {
-            "sending": "Sending email...",
-            "sendSuccess": "Password reset email sent successfully!",
-            "sendError": "An error occurred while sending the email"
-        }
+  "Auth": {
+    "login": "Sign In",
+    "logout": "Sign Out",
+    "email": "Email",
+    "password": "Password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password",
+    "loginSuccess": "Successfully signed in",
+    "loginError": "Sign in failed",
+    "invalidCredentials": "Invalid username or password",
+    "welcome": "Welcome",
+    "continue": "Continue by logging into your account",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "example@address.com",
+    "passwordLabel": "Password",
+    "loggingIn": "Signing in...",
+    "loginSuccessRedirect": "Login successful! Redirecting...",
+    "loginFailed": "Login failed",
+    "unexpectedError": "An unexpected error occurred.",
+    "noAccount": "Don't have an account yet?",
+    "register": "Sign Up",
+    "createAccountTitle": "Create an Account",
+    "createAccountDescription": "Enter your information to create your new account",
+    "fullNameLabel": "Full Name",
+    "fullNamePlaceholder": "Your name and surname",
+    "confirmPasswordLabel": "Confirm Password",
+    "passwordsDontMatch": "Passwords do not match",
+    "registering": "Registering...",
+    "registerSuccess": "Registration successful! Redirecting to login page.",
+    "registerError": "An error occurred during registration",
+    "registerErrorTryAgain": "An error occurred during registration. Please try again.",
+    "alreadyHaveAccount": "Already have an account?",
+    "passwordStrength": {
+      "weak": "Weak",
+      "medium": "Medium",
+      "strong": "Strong"
     },
-    "AuthLayout": {
-        "pageTitle": "Memsidea Admin Panel",
-        "pageSubtitle": "Welcome to Management Panel",
-        "copyright": "© {year} Memsidea. All rights reserved."
+    "forgotPasswordTitle": "Forgot Password",
+    "forgotPasswordDescription": "Enter your email address and we'll send you a link to reset your password",
+    "emailHelpText": "Enter your registered email address. We will send you a password reset link.",
+    "sendResetEmail": "Send Password Reset Email",
+    "sendingEmail": "Sending Email...",
+    "backToLogin": "Back to Login",
+    "emailSentTitle": "Email Sent",
+    "emailSentDescription": "A password reset link has been sent to <email>{email}</email>.",
+    "nextSteps": {
+      "title": "Next Steps:",
+      "steps": "Check your email inbox,Don't forget to check your spam folder,Reset your password by clicking the link,The link is valid for 15 minutes"
     },
-    "Navigation": {
-        "dashboard": "Dashboard",
-        "users": "Users",
-        "profile": "Profile",
-        "settings": "Settings",
-        "logout": "Logout"
+    "sendAgain": "Send Again",
+    "securityNotice": {
+      "title": "Security Notice:",
+      "description": "For security reasons, the password reset link will expire in 15 minutes. If you did not receive an email, check your spam folder."
     },
-    "Common": {
-        "save": "Save",
-        "cancel": "Cancel",
-        "delete": "Delete",
-        "edit": "Edit",
-        "add": "Add",
-        "search": "Search",
-        "filter": "Filter",
-        "loading": "Loading...",
-        "error": "Error",
-        "success": "Success",
-        "confirm": "Confirm",
-        "yes": "Yes",
-        "no": "No"
-    },
-    "ProfileImageUpload": {
-        "errorFileSize": "File size cannot exceed 5MB",
-        "errorFileType": "Unsupported file format. Use PNG, JPG, JPEG, or WebP",
-        "uploadSuccess": "Profile image updated successfully",
-        "uploadError": "Error uploading image",
-        "deleteSuccess": "Profile image deleted successfully",
-        "deleteError": "Error deleting image",
-        "profileImageAlt": "Profile image",
-        "uploading": "Uploading...",
-        "selectImage": "Select Image",
-        "deleting": "Deleting...",
-        "delete": "Delete",
-        "fileDescription": "PNG, JPG, JPEG, or WebP, max 5MB.",
-        "selectImageAria": "Select profile image"
-    },
-    "AdminProfile": {
-        "title": "My Profile",
-        "description": "Manage your personal information and account settings.",
-        "edit": "Edit",
-        "save": "Save",
-        "cancel": "Cancel",
-        "updateSuccess": "Profile updated successfully.",
-        "updateError": "An error occurred while updating the profile.",
-        "profileImage": "Profile Image",
-        "profileImageDescription": "Update your profile picture here.",
-        "accountStats": "Account Statistics",
-        "role": "Role",
-        "administrator": "Administrator",
-        "status": "Status",
-        "active": "Active",
-        "inactive": "Inactive",
-        "createdAt": "Created At",
-        "profileDetails": "Profile Details",
-        "profileDetailsDescription": "You can edit your personal information here.",
-        "name": "Full Name",
-        "namePlaceholder": "Enter your full name",
-        "email": "Email Address",
-        "emailPlaceholder": "Enter your email address",
-        "notSpecified": "Not specified",
-        "security": "Security",
-        "securityDescription": "Change your password and enhance your account security.",
-        "changePassword": "Change Password",
-        "securityTip1": "Use a strong password.",
-        "securityTip2": "Do not share your password with anyone.",
-        "securityTip3": "Avoid using the same password on different platforms."
-    },
-    "ProfileImage": {
-        "upload": "Upload Image",
-        "change": "Change Image",
-        "remove": "Remove Image",
-        "uploading": "Uploading...",
-        "uploadSuccess": "Profile image updated successfully",
-        "uploadError": "Error occurred while uploading image",
-        "invalidFormat": "Invalid file format. Only JPEG, PNG and WebP are supported.",
-        "fileTooLarge": "File size too large. Maximum 5MB allowed."
-    },
-    "Language": {
-        "turkish": "Türkçe",
-        "english": "English",
-        "selectLanguage": "Select Language",
-        "changeLanguage": "Change Language",
-        "currentLanguage": "Current Language"
-    },
-    "Header": {
-        "navigation": {
-            "home": "Home",
-            "chiptuning": "Chiptuning",
-            "corporate": "Corporate",
-            "services": "Services",
-            "onsiteService": "On-Site Service",
-            "blog": "Blog",
-            "dealers": "Dealers",
-            "contact": "Contact"
-        },
-        "topBar": {
-            "dealershipApplication": "Dealership Application",
-            "faq": "Frequently Asked Questions"
-        },
-        "mobile": {
-            "languageSelection": "Language Selection",
-            "socialMedia": "Social Media"
-        }
-    },
-    "Footer": {
-        "description": "As Revv Tuned, we provide professional chiptuning services to maximize your vehicle performance.",
-        "quickLinks": "Quick Links",
-        "contact": "Contact",
-        "services": "Services",
-        "corporate": "Corporate",
-        "blog": "Blog",
-        "home": "Home",
-        "phone": "+90 XXX XXX XX XX",
-        "email": "info@revvtuned.com",
-        "address": "Istanbul, Turkey",
-        "copyright": "© 2025 Revv Tuned. All rights reserved.",
-        "newsletter": "Newsletter",
-        "newsletterDesc": "Subscribe to our newsletter for the latest updates and special offers.",
-        "subscribe": "Subscribe",
-        "enterEmail": "Enter your email address",
-        "followUs": "Follow Us",
-        "workingHours": "Working Hours",
-        "weekdays": "Monday - Friday: 9:00 - 18:00",
-        "saturday": "Saturday: 9:00 - 16:00",
-        "sunday": "Sunday: Closed"
-    },
-    "Hero": {
-        "badge": "#1 Chiptuning Center",
-        "title": {
-            "line1": "Custom Tuning",
-            "line2": "Time"
-        },
-        "description": "Professional service at your location or where your vehicle is located for a special Chiptuning experience",
-        "buttons": {
-            "discoverPower": "DISCOVER POWER",
-            "onsiteService": "ON-SITE SERVICE"
-        },
-        "features": {
-            "premiumService": {
-                "title": "Premium Service",
-                "subtitle": "Expert Team"
-            },
-            "fastDelivery": {
-                "title": "Fast Delivery",
-                "subtitle": "Same Day"
-            }
-        },
-        "stats": {
-            "customers": "Customers",
-            "years": "Years",
-            "success": "Success",
-            "support": "Support"
-        },
-        "scroll": "Scroll"
-    },
-    "MainContent": {
-        "title": {
-            "line1": "Reliable Power",
-            "highlight": "Low Fuel"
-        },
-        "description": "Maximize your vehicle's performance potential to the highest level. We are at your service with our professional team and state-of-the-art equipment.",
-        "features": {
-            "dealership": "Dealership Application",
-            "onsiteService": "On-site Service",
-            "reviews": "Reviews",
-            "faq": "Frequently Asked Questions"
-        },
-        "experience": "Years of Experience",
-        "imageAlt": "Car Tuning Service"
-    },
-    "ServiceCards": {
-        "title": "Our Services",
-        "description": "We offer a wide range of services to meet your vehicle's needs.",
-        "services": [
-            {
-                "title": "ECU Tuning",
-                "description": "We optimize your vehicle's brain, the ECU, for maximum performance and efficiency.",
-                "link": "/services/ecu-tuning"
-            },
-            {
-                "title": "On-Site Service",
-                "description": "We provide professional chiptuning service at your location, wherever your vehicle is.",
-                "link": "/services/on-site-service"
-            },
-            {
-                "title": "Power Measurement",
-                "description": "We measure your vehicle's power and torque with our state-of-the-art Dyno machine.",
-                "link": "/services/dyno"
-            }
-        ],
-        "learnMore": "Learn More"
-    },
-    "CorporateSection": {
-        "badge": "Corporate",
-        "title": "Professional Solutions for Your Fleet",
-        "description": "We offer special ECU tuning and fleet management solutions for your company vehicles. Increase your efficiency and reduce your costs.",
-        "button": "Get a Quote",
-        "features": [
-            "Fleet-specific software",
-            "Fuel savings",
-            "Performance increase",
-            "Detailed reporting"
-        ]
-    },
-    "Statistics": {
-        "title": "Our Numbers",
-        "stats": [
-            {
-                "value": "10.000+",
-                "label": "Satisfied Customers"
-            },
-            {
-                "value": "15+",
-                "label": "Years of Experience"
-            },
-            {
-                "value": "98%",
-                "label": "Success Rate"
-            },
-            {
-                "value": "50+",
-                "label": "Dealers Worldwide"
-            }
-        ]
-    },
-    "ServiceInfo": {
-        "badge": "Why Us?",
-        "title": "Why Should You Choose RevvTuned?",
-        "description": "We are at your service with our expert team, state-of-the-art equipment, and customer-oriented approach.",
-        "features": [
-            {
-                "title": "Expert Team",
-                "description": "Our experienced and certified experts are at your service for the best results."
-            },
-            {
-                "title": "Latest Technology",
-                "description": "We use the latest and most reliable equipment in the industry."
-            },
-            {
-                "title": "Customer Satisfaction",
-                "description": "Our top priority is to provide the highest level of service to our customers."
-            }
-        ]
-    },
-    "Testimonials": {
-        "badge": "Customer Reviews",
-        "title": "What Do Our Customers Say?",
-        "testimonials": [
-            {
-                "name": "Ahmet Yılmaz",
-                "role": "BMW F30 Owner",
-                "quote": "My car's performance has incredibly increased. It's much more enjoyable to drive now. Thank you RevvTuned team!",
-                "image": "/images/team/default-avatar.jpg"
-            },
-            {
-                "name": "Ayşe Kaya",
-                "role": "Fleet Manager",
-                "quote": "We achieved significant fuel savings in our company vehicles. Their professional approach is admirable.",
-                "image": "/images/team/default-avatar.jpg"
-            }
-        ]
-    },
-    "BlogSection": {
-        "badge": "Blog",
-        "title": "Latest from Our Blog",
-        "description": "Follow our blog for the latest news, tips, and articles about the chiptuning world.",
-        "button": "View All Posts",
-        "posts": [
-            {
-                "category": "ECU Tuning",
-                "title": "What is Stage 1 Software?",
-                "author": "Ercan Yter",
-                "date": "July 26, 2024"
-            },
-            {
-                "category": "Fuel Saving",
-                "title": "Is It Possible to Save Fuel with Chiptuning?",
-                "author": "Admin",
-                "date": "July 22, 2024"
-            }
-        ]
-    },
-    "ServiceIcons": {
-        "ecuTuning": "ECU Software",
-        "performanceUpgrades": "Performance Upgrades",
-        "startStop": "Start-Stop Disable",
-        "adblueDpf": "Adblue & DPF Solutions",
-        "powerDyno": "Power & Dyno Test",
-        "ecuRemap": "ECU Remap",
-        "turboBoost": "Turbo Boost"
-    },
-    "UI": {
-        "common": {
-            "close": "Close",
-            "more": "More"
-        },
-        "Contact": {
-            "badge": "# CONTACT",
-            "title": "Get in Touch",
-            "description": "Contact us for your questions or make an appointment. Our professional team is happy to help.",
-            "form": {
-                "title": "Appointment Form",
-                "name": "Full Name",
-                "email": "Email",
-                "phone": "Phone",
-                "vehicle": "Vehicle Info",
-                "service": "Service Type",
-                "selectService": "Select a service",
-                "message": "Your Message",
-                "submit": "Send Message",
-                "success": "Your message has been sent successfully! We will get back to you as soon as possible."
-            },
-            "placeholders": {
-                "name": "Your name and surname",
-                "email": "example@email.com",
-                "phone": "0555 123 45 67",
-                "vehicle": "Make, Model, Year",
-                "message": "You can write the details here..."
-            },
-            "info": {
-                "title": "Contact Information",
-                "phone": "Phone",
-                "phoneValue": "+90 555 123 45 67",
-                "email": "Email",
-                "emailValue": "info@ataperformance.com",
-                "address": "Address",
-                "addressValue": "Ataturk Ave. No:123 Cankaya/Ankara",
-                "hours": "Working Hours",
-                "hoursValue": "Mon-Sat: 09:00 - 18:00"
-            },
-            "services": [
-                "Stage 1 Chiptuning",
-                "Stage 2 Chiptuning",
-                "ECU Remapping",
-                "DPF/EGR Delete",
-                "Performance Test",
-                "Launch Control",
-                "Other"
-            ],
-            "map": {
-                "title": "Location",
-                "comingSoon": "Map will be added soon"
-            },
-            "emergency": {
-                "title": "Emergency",
-                "description": "For emergencies, you can reach our 24/7 hotline:"
-            },
-            "faq": {
-                "title": "Frequently Asked Questions",
-                "items": [
-                    {
-                        "q": "Is appointment required?",
-                        "a": "We recommend making an appointment for better service."
-                    },
-                    {
-                        "q": "How long does chiptuning take?",
-                        "a": "It varies between 2-5 hours depending on the service."
-                    },
-                    {
-                        "q": "Do you provide warranty?",
-                        "a": "Yes, we provide service with a 1-year warranty."
-                    },
-                    {
-                        "q": "Which vehicles do you service?",
-                        "a": "We provide service for all makes and models."
-                    }
-                ]
-            }
-        },
-        "Dealership": {
-            "badge": "# DEALERSHIP OPPORTUNITY",
-            "title": "Join the Revv Tuned Family",
-            "description": "Grow your business with Turkey's leading chiptuning brand and invest in the future.",
-            "stats": [
-                {
-                    "number": "25+",
-                    "label": "Dealers"
-                },
-                {
-                    "number": "50+",
-                    "label": "Cities"
-                },
-                {
-                    "number": "15+",
-                    "label": "Years of Experience"
-                },
-                {
-                    "number": "95%",
-                    "label": "Satisfaction"
-                }
-            ],
-            "benefits": {
-                "title": "Dealership Advantages",
-                "brandPower": {
-                    "title": "Brand Power",
-                    "description": "Opportunity to establish a strong partnership with the industry's leading brand"
-                },
-                "continuousSupport": {
-                    "title": "Continuous Support",
-                    "description": "Full support in technical, marketing and operational matters"
-                },
-                "highProfit": {
-                    "title": "High Profitability",
-                    "description": "Profitable business model with competitive prices and high profit margins"
-                },
-                "training": {
-                    "title": "Training Program",
-                    "description": "Comprehensive training and certification programs"
-                }
-            },
-            "requirements": {
-                "title": "Dealership Requirements",
-                "physicalSpace": {
-                    "title": "Physical Space",
-                    "description": "Minimum 100m² indoor area and suitable location"
-                },
-                "investment": {
-                    "title": "Investment Capacity",
-                    "description": "Sufficient capital for initial investment"
-                },
-                "experience": {
-                    "title": "Experience",
-                    "description": "At least 2 years of experience in the automotive industry"
-                },
-                "target": {
-                    "title": "Goal-Oriented",
-                    "description": "Determination to achieve sales targets"
-                }
-            },
-            "support": {
-                "title": "Support We Offer"
-            },
-            "supportServices": [
-                "Comprehensive technical training program",
-                "Marketing and advertising support",
-                "Continuous technical support line",
-                "Product and service updates",
-                "Sales and customer management training",
-                "Guidance in operational processes",
-                "Regional meetings and events",
-                "Access to online training platform"
-            ],
-            "form": {
-                "title": "Dealership Application Form",
-                "name": "Full Name",
-                "phone": "Phone",
-                "email": "Email",
-                "city": "City",
-                "experience": "Work Experience",
-                "select": "Select",
-                "years0to2": "0-2 years",
-                "years2to5": "2-5 years",
-                "years5to10": "5-10 years",
-                "years10plus": "10+ years",
-                "message": "Your Message",
-                "submit": "Submit Application",
-                "success": "Your application has been received. We will contact you as soon as possible."
-            },
-            "placeholders": {
-                "name": "Your Name Surname",
-                "phone": "0(5XX) XXX XX XX",
-                "email": "example@mail.com",
-                "city": "In which city do you want to open a dealership?",
-                "message": "Provide information about your current work experience, dealership plans and investment capacity..."
-            },
-            "moreInfo": {
-                "title": "For More Information",
-                "description": "Contact us for more information about dealership requirements and details.",
-                "callNow": "Call Now",
-                "sendEmail": "Send Email"
-            }
-        },
-        "LandingBlog": {
-            "badge": "# BLOG",
-            "title": "Blog & News",
-            "description": "Up-to-date articles, tips and news about chiptuning, automotive technologies and performance.",
-            "categories": [
-                "All",
-                "Chiptuning",
-                "Performance",
-                "Technical",
-                "Fuel",
-                "Turbo",
-                "ECU"
-            ],
-            "featured": "Featured",
-            "readMore": "Read More",
-            "read": "Read",
-            "newsletter": {
-                "title": "Stay Updated",
-                "description": "Join our mailing list to be informed about new blog posts, chiptuning tips and special offers.",
-                "placeholder": "Your email address",
-                "subscribe": "Subscribe"
-            }
-        },
-        "LandingServices": {
-            "badge": "# SERVICES",
-            "title": "Our Professional Services",
-            "description": "We offer all the services you need to increase your vehicle's performance under one roof.",
-            "durationLabel": "Duration:",
-            "buttons": {
-                "appointment": "Make an Appointment",
-                "callNow": "Call Now"
-            },
-            "cards": [
-                {
-                    "title": "Stage 1 Chiptuning",
-                    "description": "Basic performance increase and fuel optimization",
-                    "features": [
-                        "Power increase: +25-30%",
-                        "Torque increase: +20-25%",
-                        "Fuel saving: -10%",
-                        "Original hardware preserved"
-                    ],
-                    "price": "₺1,500",
-                    "duration": "2-3 hours"
-                },
-                {
-                    "title": "Stage 2 Chiptuning",
-                    "description": "Advanced performance and hardware upgrades",
-                    "features": [
-                        "Power increase: +35-40%",
-                        "Torque increase: +30-35%",
-                        "Performance oriented",
-                        "Hardware upgrade"
-                    ],
-                    "price": "₺2,500",
-                    "duration": "4-5 hours"
-                },
-                {
-                    "title": "ECU Remapping",
-                    "description": "Engine control unit software optimization",
-                    "features": [
-                        "Custom software development",
-                        "Engine characteristics tuning",
-                        "Emission optimization",
-                        "Safety limits"
-                    ],
-                    "price": "₺2,000",
-                    "duration": "3-4 hours"
-                },
-                {
-                    "title": "DPF/EGR Delete",
-                    "description": "DPF and EGR solutions",
-                    "features": [
-                        "Solves DPF cleaning issue",
-                        "Fixes EGR valve failures",
-                        "Extends engine life",
-                        "Reduces maintenance cost"
-                    ],
-                    "price": "₺1,200",
-                    "duration": "2-3 hours"
-                },
-                {
-                    "title": "Performance Test",
-                    "description": "Dyno test and detailed performance analysis",
-                    "features": [
-                        "Power and torque measurement",
-                        "Air/fuel ratio analysis",
-                        "Exhaust gas analysis",
-                        "Detailed report"
-                    ],
-                    "price": "₺500",
-                    "duration": "1 hour"
-                },
-                {
-                    "title": "Launch Control",
-                    "description": "Launch control setup",
-                    "features": [
-                        "Perfect start performance",
-                        "Adjustable RPM limit",
-                        "Anti-lag system",
-                        "Professional calibration"
-                    ],
-                    "price": "₺1,800",
-                    "duration": "3-4 hours"
-                }
-            ],
-            "advantages": {
-                "title": "Why Revv Tuned",
-                "items": [
-                    {
-                        "title": "Professional Team",
-                        "description": "Safe service with expert technicians"
-                    },
-                    {
-                        "title": "Fast Service",
-                        "description": "Same-day delivery guarantee"
-                    },
-                    {
-                        "title": "Quality Guarantee",
-                        "description": "We provide service with a 1-year warranty"
-                    },
-                    {
-                        "title": "10,000+ Customers",
-                        "description": "Our satisfied customer portfolio"
-                    }
-                ]
-            },
-            "process": {
-                "title": "Our Service Process",
-                "steps": [
-                    {
-                        "step": "01",
-                        "title": "Appointment",
-                        "description": "Make an appointment online or by phone"
-                    },
-                    {
-                        "step": "02",
-                        "title": "Analysis",
-                        "description": "We analyze your vehicle in detail"
-                    },
-                    {
-                        "step": "03",
-                        "title": "Application",
-                        "description": "We perform the selected service professionally"
-                    },
-                    {
-                        "step": "04",
-                        "title": "Test & Delivery",
-                        "description": "We test and deliver your vehicle"
-                    }
-                ]
-            },
-            "faq": {
-                "title": "Frequently Asked Questions",
-                "items": [
-                    {
-                        "q": "Is chiptuning guaranteed?",
-                        "a": "Yes, all our services are provided with a 1-year warranty."
-                    },
-                    {
-                        "q": "Will my vehicle's warranty be void?",
-                        "a": "With professional chiptuning, your warranty remains intact. We can revert to the original software if needed."
-                    },
-                    {
-                        "q": "Which vehicles do you service?",
-                        "a": "We serve all makes and models. We have solutions for gasoline, diesel and hybrid vehicles."
-                    },
-                    {
-                        "q": "Is appointment required?",
-                        "a": "We recommend making an appointment for better service. Call us for urgent situations."
-                    }
-                ]
-            },
-            "cta": {
-                "title": "More Information About Our Services",
-                "description": "Contact us to get detailed information from our expert team and make an appointment."
-            }
-        },
-        "LandingDealers": {
-            "badge": "# DEALERS",
-            "title": "Our Dealer Network",
-            "description": "Discover Revv Tuned dealers across Turkey. Contact the dealer closest to you.",
-            "stats": [
-                {
-                    "value": "25+",
-                    "label": "Dealer Points"
-                }
-            ],
-            "services": {
-                "title": "Services:"
-            },
-            "buttons": {
-                "call": "Call",
-                "appointment": "Appointment"
-            },
-            "become": {
-                "title": "Would You Like to Become a Dealer",
-                "description": "Join the Revv Tuned dealer network and offer professional chiptuning services in your region.",
-                "cards": [
-                    {
-                        "title": "Business Opportunity",
-                        "description": "Be part of the growing automotive industry"
-                    },
-                    {
-                        "title": "Training",
-                        "description": "Comprehensive technical training programs"
-                    },
-                    {
-                        "title": "Support",
-                        "description": "24/7 technical and marketing support"
-                    }
-                ],
-                "apply": "Apply for Dealership"
-            },
-            "map": {
-                "title": "Dealer Locations",
-                "comingSoon": "Interactive map coming soon",
-                "helpText": "For now, you can reach our dealers via the list above"
-            }
-        },
-        "LandingCorporate": {
-            "badge": "# CORPORATE",
-            "title": "Revv Tuned",
-            "subtitle": "Since 2018, we have been providing professional chiptuning and performance services in the automotive industry.",
-            "about": {
-                "title": "About Us",
-                "p1": "As Revv Tuned, our goal is to maximize our customers' vehicle performance with a quality and reliable service approach.",
-                "p2": "With our expert team and state-of-the-art equipment, we develop tailored solutions for all makes and models. With our customer-oriented approach, we continue to be a reliable partner in the industry.",
-                "stats": [
-                    {
-                        "value": "10,000+",
-                        "label": "Satisfied Customers"
-                    },
-                    {
-                        "value": "5+",
-                        "label": "Years of Experience"
-                    }
-                ]
-            },
-            "mission": {
-                "title": "Our Mission",
-                "description": "To provide the highest quality chiptuning and performance services and ensure our customers get maximum efficiency from their vehicles. To lead the industry with a reliable, transparent and customer-focused approach."
-            },
-            "vision": {
-                "title": "Our Vision",
-                "description": "To be Turkey's most reliable and preferred automotive performance center. To exceed expectations with continuous improvement and an innovative approach."
-            },
-            "values": {
-                "title": "Our Values",
-                "items": [
-                    {
-                        "title": "Quality",
-                        "description": "Providing services at the highest quality standards"
-                    },
-                    {
-                        "title": "Customer Focus",
-                        "description": "We put customer satisfaction above all"
-                    },
-                    {
-                        "title": "Reliability",
-                        "description": "Reliable and transparent business understanding"
-                    },
-                    {
-                        "title": "Innovation",
-                        "description": "We embrace continuous improvement and innovation"
-                    }
-                ]
-            },
-            "timeline": {
-                "title": "Our History",
-                "items": [
-                    {
-                        "title": "Company Establishment",
-                        "description": "We started our operations as Revv Tuned"
-                    },
-                    {
-                        "title": "First Major Project",
-                        "description": "Mass chiptuning project for 500+ vehicles"
-                    },
-                    {
-                        "title": "Technology Investment",
-                        "description": "Equipped with state-of-the-art equipment"
-                    },
-                    {
-                        "title": "International Certificate",
-                        "description": "Certification at European standards"
-                    },
-                    {
-                        "title": "Dealer Network",
-                        "description": "We expanded our dealer network across Turkey"
-                    },
-                    {
-                        "title": "10,000+ Customers",
-                        "description": "Reached 10,000+ satisfied customers"
-                    }
-                ]
-            },
-            "team": {
-                "title": "Our Team",
-                "items": [
-                    {
-                        "position": "Founder & CEO",
-                        "description": "15 years of automotive industry experience"
-                    },
-                    {
-                        "position": "Technical Director",
-                        "description": "Chiptuning expert, 12 years of experience"
-                    },
-                    {
-                        "position": "Operations Manager",
-                        "description": "Operational excellence expert"
-                    }
-                ]
-            },
-            "cta": {
-                "title": "Ready to Work With Us?",
-                "description": "We are here to increase your vehicle's performance with our professional team and quality service.",
-                "button": "Contact Us"
-            }
-        },
-        "LandingOnsite": {
-            "badge": "# ON-SITE SERVICE",
-            "title": "We Are Just One Click Away",
-            "subtitle": "We offer chiptuning service wherever you want with our professional team and mobile service vehicles.",
-            "features": {
-                "items": [
-                    {
-                        "title": "24/7 Service",
-                        "description": "Get service anytime, anywhere"
-                    },
-                    {
-                        "title": "Professional Equipment",
-                        "description": "On-site intervention with the latest technology equipment"
-                    },
-                    {
-                        "title": "Safe Operation",
-                        "description": "Fully secure and guaranteed service"
-                    },
-                    {
-                        "title": "Expert Team",
-                        "description": "Professional service with our experienced technicians"
-                    }
-                ]
-            },
-            "services": {
-                "title": "Our On-Site Services",
-                "items": [
-                    {
-                        "title": "Chiptuning",
-                        "description": "We optimize your vehicle's performance at your location",
-                        "items": [
-                            "Engine software update",
-                            "DPF-EGR solutions",
-                            "Performance increase",
-                            "Fuel optimization"
-                        ]
-                    },
-                    {
-                        "title": "Fault Solution",
-                        "description": "On-site fault detection and solution service",
-                        "items": [
-                            "Electronic fault detection",
-                            "Reading error codes",
-                            "Sensor check",
-                            "System optimization"
-                        ]
-                    },
-                    {
-                        "title": "Maintenance Service",
-                        "description": "Periodic maintenance and control operations",
-                        "items": [
-                            "Software check",
-                            "System update",
-                            "Performance test",
-                            "General check"
-                        ]
-                    }
-                ]
-            },
-            "process": {
-                "title": "How It Works",
-                "steps": [
-                    {
-                        "step": "01",
-                        "title": "Make an Appointment",
-                        "description": "Choose the day and time that suits you"
-                    },
-                    {
-                        "step": "02",
-                        "title": "Provide Location",
-                        "description": "Share the location of your vehicle"
-                    },
-                    {
-                        "step": "03",
-                        "title": "Get the Service",
-                        "description": "Our expert team will come to you"
-                    }
-                ]
-            },
-            "advantages": {
-                "title": "Advantages of On-Site Service",
-                "items": [
-                    "Save time - No need to bring your vehicle",
-                    "Flexible appointment system - Service at a time that suits you",
-                    "Safe location - Operation in your own area",
-                    "Quick intervention - Same day service available",
-                    "Professional equipment - Fully equipped service vehicle",
-                    "Under warranty - All operations are guaranteed"
-                ]
-            },
-            "pricing": {
-                "title": "On-Site Service Prices",
-                "popular": "Most Popular",
-                "plans": [
-                    {
-                        "title": "In-City",
-                        "price": "+₺200",
-                        "description": "City center and nearby areas",
-                        "features": [
-                            "Same-day service",
-                            "Quick access",
-                            "Standard equipment"
-                        ]
-                    },
-                    {
-                        "title": "Out-of-City",
-                        "price": "+₺350",
-                        "description": "Regions within a 50km radius",
-                        "features": [
-                            "Appointment 1-2 days in advance",
-                            "Fully equipped team",
-                            "Wide service area"
-                        ]
-                    },
-                    {
-                        "title": "Long Distance",
-                        "price": "Special Price",
-                        "description": "Regions farther than 50km",
-                        "features": [
-                            "Special planning",
-                            "Comprehensive service",
-                            "Accommodation included"
-                        ]
-                    }
-                ]
-            },
-            "cta": {
-                "title": "Make an Appointment Now",
-                "description": "Our nearest expert team is ready to serve you as soon as possible.",
-                "appointment": "Create Appointment",
-                "callNow": "Call Now"
-            }
-        }
-    },
-    "ImageUpload": {
-        "label": "Image",
-        "description": "Upload an image or enter a URL",
-        "errors": {
-            "onlyImages": "Only image files are supported",
-            "maxSize": "File size must be less than {maxSize}MB",
-            "uploadFailed": "Upload failed",
-            "loadError": "An error occurred while loading the image"
-        },
-        "uploading": "Uploading...",
-        "dragDrop": {
-            "title": "Drag and drop the file",
-            "subtitle": "or click to select a file"
-        },
-        "buttons": {
-            "selectFile": "Select File",
-            "url": "URL",
-            "cancel": "Cancel",
-            "add": "Add",
-            "change": "Change",
-            "replaceWithUrl": "Replace with URL"
-        },
-        "maxSizeHint": "Maximum {maxSize}MB, JPG, PNG, WebP",
-        "dialog": {
-            "enterImageUrl": "Enter Image URL",
-            "previewTitle": "Image Preview"
-        },
-        "alt": {
-            "preview": "Preview",
-            "fullSizePreview": "Full size preview"
-        },
-        "status": {
-            "loading": "Loading..."
-        }
-    },
-    "SEO": {
-        "landing": {
-            "title": "RevvTuned - ECU Chip Tuning Services",
-            "description": "Increase your vehicle's performance with professional ECU chip tuning services. Safe tuning solutions with our expert team and cutting-edge technology.",
-            "keywords": "ecu tuning, chip tuning, performance increase, engine tuning, car modification",
-            "ogTitle": "RevvTuned - ECU Chip Tuning Services",
-            "ogDescription": "Increase your vehicle's performance with professional ECU chip tuning services."
-        }
+    "notifications": {
+      "sending": "Sending email...",
+      "sendSuccess": "Password reset email sent successfully!",
+      "sendError": "An error occurred while sending the email"
     }
+  },
+  "AuthLayout": {
+    "pageTitle": "Memsidea Admin Panel",
+    "pageSubtitle": "Welcome to Management Panel",
+    "copyright": "© {year} Memsidea. All rights reserved."
+  },
+  "Navigation": {
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "Common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "filter": "Filter",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "ProfileImageUpload": {
+    "errorFileSize": "File size cannot exceed 5MB",
+    "errorFileType": "Unsupported file format. Use PNG, JPG, JPEG, or WebP",
+    "uploadSuccess": "Profile image updated successfully",
+    "uploadError": "Error uploading image",
+    "deleteSuccess": "Profile image deleted successfully",
+    "deleteError": "Error deleting image",
+    "profileImageAlt": "Profile image",
+    "uploading": "Uploading...",
+    "selectImage": "Select Image",
+    "deleting": "Deleting...",
+    "delete": "Delete",
+    "fileDescription": "PNG, JPG, JPEG, or WebP, max 5MB.",
+    "selectImageAria": "Select profile image"
+  },
+  "AdminProfile": {
+    "title": "My Profile",
+    "description": "Manage your personal information and account settings.",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "updateSuccess": "Profile updated successfully.",
+    "updateError": "An error occurred while updating the profile.",
+    "profileImage": "Profile Image",
+    "profileImageDescription": "Update your profile picture here.",
+    "accountStats": "Account Statistics",
+    "role": "Role",
+    "administrator": "Administrator",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "createdAt": "Created At",
+    "profileDetails": "Profile Details",
+    "profileDetailsDescription": "You can edit your personal information here.",
+    "name": "Full Name",
+    "namePlaceholder": "Enter your full name",
+    "email": "Email Address",
+    "emailPlaceholder": "Enter your email address",
+    "notSpecified": "Not specified",
+    "security": "Security",
+    "securityDescription": "Change your password and enhance your account security.",
+    "changePassword": "Change Password",
+    "securityTip1": "Use a strong password.",
+    "securityTip2": "Do not share your password with anyone.",
+    "securityTip3": "Avoid using the same password on different platforms."
+  },
+  "ProfileImage": {
+    "upload": "Upload Image",
+    "change": "Change Image",
+    "remove": "Remove Image",
+    "uploading": "Uploading...",
+    "uploadSuccess": "Profile image updated successfully",
+    "uploadError": "Error occurred while uploading image",
+    "invalidFormat": "Invalid file format. Only JPEG, PNG and WebP are supported.",
+    "fileTooLarge": "File size too large. Maximum 5MB allowed."
+  },
+  "Language": {
+    "turkish": "Türkçe",
+    "english": "English",
+    "selectLanguage": "Select Language",
+    "changeLanguage": "Change Language",
+    "currentLanguage": "Current Language"
+  },
+  "Header": {
+    "navigation": {
+      "home": "Home",
+      "chiptuning": "Chiptuning",
+      "corporate": "Corporate",
+      "services": "Services",
+      "onsiteService": "On-Site Service",
+      "blog": "Blog",
+      "dealers": "Dealers",
+      "contact": "Contact"
+    },
+    "topBar": {
+      "dealershipApplication": "Dealership Application",
+      "faq": "Frequently Asked Questions"
+    },
+    "mobile": {
+      "languageSelection": "Language Selection",
+      "socialMedia": "Social Media"
+    }
+  },
+  "Footer": {
+    "description": "As Revv Tuned, we provide professional chiptuning services to maximize your vehicle performance.",
+    "quickLinks": "Quick Links",
+    "contact": "Contact",
+    "services": "Services",
+    "corporate": "Corporate",
+    "blog": "Blog",
+    "home": "Home",
+    "phone": "+90 XXX XXX XX XX",
+    "email": "info@revvtuned.com",
+    "address": "Istanbul, Turkey",
+    "copyright": "© 2025 Revv Tuned. All rights reserved.",
+    "newsletter": "Newsletter",
+    "newsletterDesc": "Subscribe to our newsletter for the latest updates and special offers.",
+    "subscribe": "Subscribe",
+    "enterEmail": "Enter your email address",
+    "followUs": "Follow Us",
+    "workingHours": "Working Hours",
+    "weekdays": "Monday - Friday: 9:00 - 18:00",
+    "saturday": "Saturday: 9:00 - 16:00",
+    "sunday": "Sunday: Closed"
+  },
+  "Hero": {
+    "badge": "#1 Chiptuning Center",
+    "title": {
+      "line1": "Custom Tuning",
+      "line2": "Time"
+    },
+    "description": "Professional service at your location or where your vehicle is located for a special Chiptuning experience",
+    "buttons": {
+      "discoverPower": "DISCOVER POWER",
+      "onsiteService": "ON-SITE SERVICE"
+    },
+    "features": {
+      "premiumService": {
+        "title": "Premium Service",
+        "subtitle": "Expert Team"
+      },
+      "fastDelivery": {
+        "title": "Fast Delivery",
+        "subtitle": "Same Day"
+      }
+    },
+    "stats": {
+      "customers": "Customers",
+      "years": "Years",
+      "success": "Success",
+      "support": "Support"
+    },
+    "scroll": "Scroll"
+  },
+  "MainContent": {
+    "title": {
+      "line1": "Reliable Power",
+      "highlight": "Low Fuel"
+    },
+    "description": "Maximize your vehicle's performance potential to the highest level. We are at your service with our professional team and state-of-the-art equipment.",
+    "features": {
+      "dealership": "Dealership Application",
+      "onsiteService": "On-site Service",
+      "reviews": "Reviews",
+      "faq": "Frequently Asked Questions"
+    },
+    "experience": "Years of Experience",
+    "imageAlt": "Car Tuning Service"
+  },
+  "ServiceCards": {
+    "title": "Our Services",
+    "description": "We offer a wide range of services to meet your vehicle's needs.",
+    "services": "[object Object],[object Object],[object Object]",
+    "learnMore": "Learn More"
+  },
+  "CorporateSection": {
+    "badge": "Corporate",
+    "title": "Professional Solutions for Your Fleet",
+    "description": "We offer special ECU tuning and fleet management solutions for your company vehicles. Increase your efficiency and reduce your costs.",
+    "button": "Get a Quote",
+    "features": "Fleet-specific software,Fuel savings,Performance increase,Detailed reporting"
+  },
+  "Statistics": {
+    "title": "Our Numbers",
+    "stats": "[object Object],[object Object],[object Object],[object Object]"
+  },
+  "ServiceInfo": {
+    "badge": "Why Us?",
+    "title": "Why Should You Choose RevvTuned?",
+    "description": "We are at your service with our expert team, state-of-the-art equipment, and customer-oriented approach.",
+    "features": "[object Object],[object Object],[object Object]"
+  },
+  "Testimonials": {
+    "badge": "Customer Reviews",
+    "title": "What Do Our Customers Say?",
+    "testimonials": "[object Object],[object Object]"
+  },
+  "BlogSection": {
+    "badge": "Blog",
+    "title": "Latest from Our Blog",
+    "description": "Follow our blog for the latest news, tips, and articles about the chiptuning world.",
+    "button": "View All Posts",
+    "posts": "[object Object],[object Object]"
+  },
+  "ServiceIcons": {
+    "ecuTuning": "ECU Software",
+    "performanceUpgrades": "Performance Upgrades",
+    "startStop": "Start-Stop Disable",
+    "adblueDpf": "Adblue & DPF Solutions",
+    "powerDyno": "Power & Dyno Test",
+    "ecuRemap": "ECU Remap",
+    "turboBoost": "Turbo Boost"
+  },
+  "UI": {
+    "common": {
+      "close": "Close",
+      "more": "More"
+    },
+    "Contact": {
+      "badge": "# CONTACT",
+      "title": "Get in Touch",
+      "description": "Contact us for your questions or make an appointment. Our professional team is happy to help.",
+      "form": {
+        "title": "Appointment Form",
+        "name": "Full Name",
+        "email": "Email",
+        "phone": "Phone",
+        "vehicle": "Vehicle Info",
+        "service": "Service Type",
+        "selectService": "Select a service",
+        "message": "Your Message",
+        "submit": "Send Message",
+        "success": "Your message has been sent successfully! We will get back to you as soon as possible."
+      },
+      "placeholders": {
+        "name": "Your name and surname",
+        "email": "example@email.com",
+        "phone": "0555 123 45 67",
+        "vehicle": "Make, Model, Year",
+        "message": "You can write the details here..."
+      },
+      "info": {
+        "title": "Contact Information",
+        "phone": "Phone",
+        "phoneValue": "+90 555 123 45 67",
+        "email": "Email",
+        "emailValue": "info@ataperformance.com",
+        "address": "Address",
+        "addressValue": "Ataturk Ave. No:123 Cankaya/Ankara",
+        "hours": "Working Hours",
+        "hoursValue": "Mon-Sat: 09:00 - 18:00"
+      },
+      "services": "Stage 1 Chiptuning,Stage 2 Chiptuning,ECU Remapping,DPF/EGR Delete,Performance Test,Launch Control,Other",
+      "map": {
+        "title": "Location",
+        "comingSoon": "Map will be added soon"
+      },
+      "emergency": {
+        "title": "Emergency",
+        "description": "For emergencies, you can reach our 24/7 hotline:"
+      },
+      "faq": {
+        "title": "Frequently Asked Questions",
+        "items": "[object Object],[object Object],[object Object],[object Object]"
+      }
+    },
+    "Dealership": {
+      "badge": "# DEALERSHIP OPPORTUNITY",
+      "title": "Join the Revv Tuned Family",
+      "description": "Grow your business with Turkey's leading chiptuning brand and invest in the future.",
+      "stats": "[object Object],[object Object],[object Object],[object Object]",
+      "benefits": {
+        "title": "Dealership Advantages",
+        "brandPower": {
+          "title": "Brand Power",
+          "description": "Opportunity to establish a strong partnership with the industry's leading brand"
+        },
+        "continuousSupport": {
+          "title": "Continuous Support",
+          "description": "Full support in technical, marketing and operational matters"
+        },
+        "highProfit": {
+          "title": "High Profitability",
+          "description": "Profitable business model with competitive prices and high profit margins"
+        },
+        "training": {
+          "title": "Training Program",
+          "description": "Comprehensive training and certification programs"
+        }
+      },
+      "requirements": {
+        "title": "Dealership Requirements",
+        "physicalSpace": {
+          "title": "Physical Space",
+          "description": "Minimum 100m² indoor area and suitable location"
+        },
+        "investment": {
+          "title": "Investment Capacity",
+          "description": "Sufficient capital for initial investment"
+        },
+        "experience": {
+          "title": "Experience",
+          "description": "At least 2 years of experience in the automotive industry"
+        },
+        "target": {
+          "title": "Goal-Oriented",
+          "description": "Determination to achieve sales targets"
+        }
+      },
+      "support": {
+        "title": "Support We Offer"
+      },
+      "supportServices": "Comprehensive technical training program,Marketing and advertising support,Continuous technical support line,Product and service updates,Sales and customer management training,Guidance in operational processes,Regional meetings and events,Access to online training platform",
+      "form": {
+        "title": "Dealership Application Form",
+        "name": "Full Name",
+        "phone": "Phone",
+        "email": "Email",
+        "city": "City",
+        "experience": "Work Experience",
+        "select": "Select",
+        "years0to2": "0-2 years",
+        "years2to5": "2-5 years",
+        "years5to10": "5-10 years",
+        "years10plus": "10+ years",
+        "message": "Your Message",
+        "submit": "Submit Application",
+        "success": "Your application has been received. We will contact you as soon as possible."
+      },
+      "placeholders": {
+        "name": "Your Name Surname",
+        "phone": "0(5XX) XXX XX XX",
+        "email": "example@mail.com",
+        "city": "In which city do you want to open a dealership?",
+        "message": "Provide information about your current work experience, dealership plans and investment capacity..."
+      },
+      "moreInfo": {
+        "title": "For More Information",
+        "description": "Contact us for more information about dealership requirements and details.",
+        "callNow": "Call Now",
+        "sendEmail": "Send Email"
+      }
+    },
+    "LandingBlog": {
+      "badge": "# BLOG",
+      "title": "Blog & News",
+      "description": "Up-to-date articles, tips and news about chiptuning, automotive technologies and performance.",
+      "categories": "All,Chiptuning,Performance,Technical,Fuel,Turbo,ECU",
+      "featured": "Featured",
+      "readMore": "Read More",
+      "read": "Read",
+      "newsletter": {
+        "title": "Stay Updated",
+        "description": "Join our mailing list to be informed about new blog posts, chiptuning tips and special offers.",
+        "placeholder": "Your email address",
+        "subscribe": "Subscribe"
+      }
+    },
+    "LandingServices": {
+      "badge": "# SERVICES",
+      "title": "Our Professional Services",
+      "description": "We offer all the services you need to increase your vehicle's performance under one roof.",
+      "durationLabel": "Duration:",
+      "buttons": {
+        "appointment": "Make an Appointment",
+        "callNow": "Call Now"
+      },
+      "cards": "[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]",
+      "advantages": {
+        "title": "Why Revv Tuned",
+        "items": "[object Object],[object Object],[object Object],[object Object]"
+      },
+      "process": {
+        "title": "Our Service Process",
+        "steps": "[object Object],[object Object],[object Object],[object Object]"
+      },
+      "faq": {
+        "title": "Frequently Asked Questions",
+        "items": "[object Object],[object Object],[object Object],[object Object]"
+      },
+      "cta": {
+        "title": "More Information About Our Services",
+        "description": "Contact us to get detailed information from our expert team and make an appointment."
+      }
+    },
+    "LandingDealers": {
+      "badge": "# DEALERS",
+      "title": "Our Dealer Network",
+      "description": "Discover Revv Tuned dealers across Turkey. Contact the dealer closest to you.",
+      "stats": "[object Object]",
+      "services": {
+        "title": "Services:"
+      },
+      "buttons": {
+        "call": "Call",
+        "appointment": "Appointment"
+      },
+      "become": {
+        "title": "Would You Like to Become a Dealer",
+        "description": "Join the Revv Tuned dealer network and offer professional chiptuning services in your region.",
+        "cards": "[object Object],[object Object],[object Object]",
+        "apply": "Apply for Dealership"
+      },
+      "map": {
+        "title": "Dealer Locations",
+        "comingSoon": "Interactive map coming soon",
+        "helpText": "For now, you can reach our dealers via the list above"
+      }
+    },
+    "LandingCorporate": {
+      "badge": "# CORPORATE",
+      "title": "Revv Tuned",
+      "subtitle": "Since 2018, we have been providing professional chiptuning and performance services in the automotive industry.",
+      "about": {
+        "title": "About Us",
+        "p1": "As Revv Tuned, our goal is to maximize our customers' vehicle performance with a quality and reliable service approach.",
+        "p2": "With our expert team and state-of-the-art equipment, we develop tailored solutions for all makes and models. With our customer-oriented approach, we continue to be a reliable partner in the industry.",
+        "stats": "[object Object],[object Object]"
+      },
+      "mission": {
+        "title": "Our Mission",
+        "description": "To provide the highest quality chiptuning and performance services and ensure our customers get maximum efficiency from their vehicles. To lead the industry with a reliable, transparent and customer-focused approach."
+      },
+      "vision": {
+        "title": "Our Vision",
+        "description": "To be Turkey's most reliable and preferred automotive performance center. To exceed expectations with continuous improvement and an innovative approach."
+      },
+      "values": {
+        "title": "Our Values",
+        "items": "[object Object],[object Object],[object Object],[object Object]"
+      },
+      "timeline": {
+        "title": "Our History",
+        "items": "[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]"
+      },
+      "team": {
+        "title": "Our Team",
+        "items": "[object Object],[object Object],[object Object]"
+      },
+      "cta": {
+        "title": "Ready to Work With Us?",
+        "description": "We are here to increase your vehicle's performance with our professional team and quality service.",
+        "button": "Contact Us"
+      }
+    },
+    "LandingOnsite": {
+      "badge": "# ON-SITE SERVICE",
+      "title": "We Are Just One Click Away",
+      "subtitle": "We offer chiptuning service wherever you want with our professional team and mobile service vehicles.",
+      "features": {
+        "items": "[object Object],[object Object],[object Object],[object Object]"
+      },
+      "services": {
+        "title": "Our On-Site Services",
+        "items": "[object Object],[object Object],[object Object]"
+      },
+      "process": {
+        "title": "How It Works",
+        "steps": "[object Object],[object Object],[object Object]"
+      },
+      "advantages": {
+        "title": "Advantages of On-Site Service",
+        "items": "Save time - No need to bring your vehicle,Flexible appointment system - Service at a time that suits you,Safe location - Operation in your own area,Quick intervention - Same day service available,Professional equipment - Fully equipped service vehicle,Under warranty - All operations are guaranteed"
+      },
+      "pricing": {
+        "title": "On-Site Service Prices",
+        "popular": "Most Popular",
+        "plans": "[object Object],[object Object],[object Object]"
+      },
+      "cta": {
+        "title": "Make an Appointment Now",
+        "description": "Our nearest expert team is ready to serve you as soon as possible.",
+        "appointment": "Create Appointment",
+        "callNow": "Call Now"
+      }
+    }
+  },
+  "ImageUpload": {
+    "label": "Image",
+    "description": "Upload an image or enter a URL",
+    "errors": {
+      "onlyImages": "Only image files are supported",
+      "maxSize": "File size must be less than {maxSize}MB",
+      "uploadFailed": "Upload failed",
+      "loadError": "An error occurred while loading the image"
+    },
+    "uploading": "Uploading...",
+    "dragDrop": {
+      "title": "Drag and drop the file",
+      "subtitle": "or click to select a file"
+    },
+    "buttons": {
+      "selectFile": "Select File",
+      "url": "URL",
+      "cancel": "Cancel",
+      "add": "Add",
+      "change": "Change",
+      "replaceWithUrl": "Replace with URL"
+    },
+    "maxSizeHint": "Maximum {maxSize}MB, JPG, PNG, WebP",
+    "dialog": {
+      "enterImageUrl": "Enter Image URL",
+      "previewTitle": "Image Preview"
+    },
+    "alt": {
+      "preview": "Preview",
+      "fullSizePreview": "Full size preview"
+    },
+    "status": {
+      "loading": "Loading..."
+    }
+  },
+  "SEO": {
+    "landing": {
+      "title": "RevvTuned - ECU Chip Tuning Services",
+      "description": "Increase your vehicle's performance with professional ECU chip tuning services. Safe tuning solutions with our expert team and cutting-edge technology.",
+      "keywords": "ecu tuning, chip tuning, performance increase, engine tuning, car modification",
+      "ogTitle": "RevvTuned - ECU Chip Tuning Services",
+      "ogDescription": "Increase your vehicle's performance with professional ECU chip tuning services."
+    }
+  }
 }
