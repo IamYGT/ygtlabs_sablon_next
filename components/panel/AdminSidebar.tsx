@@ -14,6 +14,7 @@ import {
   ChevronRight,
   Languages,
   MessageSquareText,
+  Monitor,
   Route,
 } from "lucide-react";
 import Image from "next/image";
@@ -33,6 +34,7 @@ export function AdminSidebar() {
   const pathname = usePathname();
   const [i18nOpen, setI18nOpen] = useState<boolean>(true);
   const [authOpen, setAuthOpen] = useState<boolean>(true);
+  const [websiteOpen, setWebsiteOpen] = useState<boolean>(true);
 
   useEffect(() => {
     if (!isMobile) {
@@ -44,31 +46,44 @@ export function AdminSidebar() {
   const links = useAdminNavigation();
 
   // i18n grubu, yetkilendirme grubu (users/roles) ve diğer linkleri ayır
-  const { i18nItems, authItems, otherItems, isAnyI18nActive, isAnyAuthActive } =
-    useMemo(() => {
-      const i18nKeys = new Set(["i18nLanguages", "i18nMessages", "i18nRoutes"]);
-      const authKeys = new Set(["users", "roles"]);
+  const {
+    i18nItems,
+    authItems,
+    websiteItems,
+    otherItems,
+    isAnyI18nActive,
+    isAnyAuthActive,
+    isAnyWebsiteActive,
+  } = useMemo(() => {
+    const i18nKeys = new Set(["i18nLanguages", "i18nMessages", "i18nRoutes"]);
+    const authKeys = new Set(["users", "roles"]);
+    const websiteKeys = new Set(["hero-slider"]);
 
-      // permissions öğesini sidebar'dan tamamen kaldır
-      const visibleLinks = links.filter((l) => l.key !== "permissions");
+    // permissions öğesini sidebar'dan tamamen kaldır
+    const visibleLinks = links.filter((l) => l.key !== "permissions");
 
-      const i18n = visibleLinks.filter((l) => i18nKeys.has(l.key));
-      const auth = visibleLinks.filter((l) => authKeys.has(l.key));
-      const others = visibleLinks.filter(
-        (l) => !i18nKeys.has(l.key) && !authKeys.has(l.key)
-      );
+    const i18n = visibleLinks.filter((l) => i18nKeys.has(l.key));
+    const auth = visibleLinks.filter((l) => authKeys.has(l.key));
+    const website = visibleLinks.filter((l) => websiteKeys.has(l.key));
+    const others = visibleLinks.filter(
+      (l) =>
+        !i18nKeys.has(l.key) && !authKeys.has(l.key) && !websiteKeys.has(l.key)
+    );
 
-      const i18nActive = i18n.some((l) => l.href === pathname);
-      const authActive = auth.some((l) => l.href === pathname);
+    const i18nActive = i18n.some((l) => l.href === pathname);
+    const authActive = auth.some((l) => l.href === pathname);
+    const websiteActive = website.some((l) => l.href === pathname);
 
-      return {
-        i18nItems: i18n,
-        authItems: auth,
-        otherItems: others,
-        isAnyI18nActive: i18nActive,
-        isAnyAuthActive: authActive,
-      };
-    }, [links, pathname]);
+    return {
+      i18nItems: i18n,
+      authItems: auth,
+      websiteItems: website,
+      otherItems: others,
+      isAnyI18nActive: i18nActive,
+      isAnyAuthActive: authActive,
+      isAnyWebsiteActive: websiteActive,
+    };
+  }, [links, pathname]);
 
   return (
     <div className="h-screen flex relative" data-sidebar="true">
@@ -96,6 +111,62 @@ export function AdminSidebar() {
                 )}
               />
             ))}
+
+            {/* WEBSITE YÖNETİMİ Dropdown Group */}
+            {websiteItems.length > 0 && (
+              <div className="mt-1">
+                {/* Parent trigger */}
+                <button
+                  type="button"
+                  onClick={() => setWebsiteOpen((s) => !s)}
+                  className={cn(
+                    "flex w-full items-center group/sidebar transition-colors duration-200 rounded-lg",
+                    open
+                      ? "justify-start gap-2 py-2 md:py-2.5 px-3"
+                      : "justify-center p-3",
+                    isAnyWebsiteActive
+                      ? "bg-blue-200 dark:bg-slate-700"
+                      : "hover:bg-blue-100 dark:hover:bg-slate-700/50"
+                  )}
+                >
+                  <Monitor className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+                  <motion.span
+                    animate={{
+                      width: open ? "auto" : 0,
+                      opacity: open ? 1 : 0,
+                    }}
+                    transition={{ duration: 0.25, ease: "easeInOut" }}
+                    className={cn(
+                      "text-sm whitespace-pre overflow-hidden",
+                      isAnyWebsiteActive
+                        ? "text-slate-800 dark:text-slate-100 font-semibold"
+                        : "text-slate-700 dark:text-slate-200"
+                    )}
+                  >
+                    Website Yönetimi
+                  </motion.span>
+                  {open &&
+                    (websiteOpen ? (
+                      <ChevronDown className="ml-auto h-4 w-4 opacity-70" />
+                    ) : (
+                      <ChevronRight className="ml-auto h-4 w-4 opacity-70" />
+                    ))}
+                </button>
+
+                {/* Nested items */}
+                {open && websiteOpen && (
+                  <div className="mt-1 ml-6 flex flex-col gap-1">
+                    {websiteItems.map((link) => (
+                      <SidebarLink
+                        key={link.key}
+                        link={link}
+                        className={cn("rounded-md", "py-1.5 px-2 w-full")}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* YETKILENDIRME Dropdown Group */}
             {authItems.length > 0 && (
