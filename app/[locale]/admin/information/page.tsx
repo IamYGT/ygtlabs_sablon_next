@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import InformationPageClient from "./pageClient";
+import InformationPageClient from "./components/InformationPageClient";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -18,5 +18,3 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default function InformationPage() {
   return <InformationPageClient />;
 }
-
-

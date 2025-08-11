@@ -51,7 +51,7 @@ const NAVIGATION_CONFIG: Record<string, NavigationConfig> = {
     icon: "Monitor",
     translationKey: "information",
     href: "/admin/information",
-    order: 2.5 as unknown as number,
+    order: 10,
     requiredPermission: "admin.information.view",
   },
   users: {
