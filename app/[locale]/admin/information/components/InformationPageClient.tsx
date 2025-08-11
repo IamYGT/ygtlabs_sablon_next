@@ -5,9 +5,19 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { BlogSection } from "./BlogSection";
+import { FAQSection } from "./FAQSection";
 
 type Localized = { tr: string; en: string };
 
@@ -45,7 +55,9 @@ export default function InformationPageClient() {
         const res = await fetch("/api/admin/information");
         if (!res.ok) throw new Error("Failed to fetch information");
         const data = await res.json();
-        const sorted = (data.items || []).sort((a: InfoArticle, b: InfoArticle) => a.order - b.order);
+        const sorted = (data.items || []).sort(
+          (a: InfoArticle, b: InfoArticle) => a.order - b.order
+        );
         setItems(sorted);
       } catch (e) {
         console.error(e);
@@ -60,7 +72,9 @@ export default function InformationPageClient() {
   const filtered = useMemo(() => {
     if (!q) return items;
     const f = q.toLowerCase();
-    return items.filter((x) => parseJSONField(x.title).toLowerCase().includes(f));
+    return items.filter((x) =>
+      parseJSONField(x.title).toLowerCase().includes(f)
+    );
   }, [items, q]);
 
   if (loading) {
@@ -85,51 +99,76 @@ export default function InformationPageClient() {
             <h1 className="text-2xl font-bold">Bilgi Merkezi</h1>
           </div>
           <div className="flex items-center gap-2">
-            <Input placeholder="Ara..." value={q} onChange={(e) => setQ(e.target.value)} className="w-56" />
-            <Button size="sm" className="h-8">Yeni</Button>
+            <Input
+              placeholder="Ara..."
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              className="w-56"
+            />
           </div>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>İçerikler</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {filtered.length ? (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Başlık</TableHead>
-                    <TableHead>Sıra</TableHead>
-                    <TableHead>Durum</TableHead>
-                    <TableHead className="w-24" />
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filtered.map((item) => (
-                    <TableRow key={item.id}>
-                      <TableCell className="font-medium">{parseJSONField(item.title)}</TableCell>
-                      <TableCell>#{item.order}</TableCell>
-                      <TableCell>
-                        <Badge variant={item.isActive ? "default" : "secondary"}>
-                          {item.isActive ? "Aktif" : "Pasif"}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button variant="outline" size="sm">Düzenle</Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            ) : (
-              <div className="text-sm text-muted-foreground">Kayıt bulunamadı.</div>
-            )}
-          </CardContent>
-        </Card>
+        <Tabs defaultValue="articles">
+          <TabsList>
+            <TabsTrigger value="articles">Makale</TabsTrigger>
+            <TabsTrigger value="blog">Blog</TabsTrigger>
+            <TabsTrigger value="faq">SSS</TabsTrigger>
+          </TabsList>
+          <TabsContent value="articles">
+            <Card>
+              <CardHeader>
+                <CardTitle>İçerikler</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {filtered.length ? (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Başlık</TableHead>
+                        <TableHead>Sıra</TableHead>
+                        <TableHead>Durum</TableHead>
+                        <TableHead className="w-24" />
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filtered.map((item) => (
+                        <TableRow key={item.id}>
+                          <TableCell className="font-medium">
+                            {parseJSONField(item.title)}
+                          </TableCell>
+                          <TableCell>#{item.order}</TableCell>
+                          <TableCell>
+                            <Badge
+                              variant={item.isActive ? "default" : "secondary"}
+                            >
+                              {item.isActive ? "Aktif" : "Pasif"}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <Button variant="outline" size="sm">
+                              Düzenle
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                ) : (
+                  <div className="text-sm text-muted-foreground">
+                    Kayıt bulunamadı.
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="blog">
+            <BlogSection />
+          </TabsContent>
+          <TabsContent value="faq">
+            <FAQSection />
+          </TabsContent>
+        </Tabs>
       </div>
     </AdminPageGuard>
   );
 }
-
-

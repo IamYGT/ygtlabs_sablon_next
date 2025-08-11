@@ -230,6 +230,40 @@ export const VIEW_PERMISSIONS: PermissionConfig[] = [
     usedIn: ["InformationPageClient", "/api/admin/information (GET)"],
   },
   {
+    name: "admin.information.blog.view",
+    category: "view",
+    resourcePath: "information/blog",
+    action: "view",
+    permissionType: "admin",
+    displayName: {
+      tr: "Blog Yönetimi Görüntüleme",
+      en: "Blog Management View",
+    },
+    description: {
+      tr: "Blog yönetimi sayfasını görüntüleme ve yazıları okuma yetkisi",
+      en: "Permission to view blog management page and read posts",
+    },
+    dependencies: ["admin.information.view"],
+    usedIn: ["InformationPageClient", "/api/admin/information/blog (GET)"],
+  },
+  {
+    name: "admin.information.faq.view",
+    category: "view",
+    resourcePath: "information/faq",
+    action: "view",
+    permissionType: "admin",
+    displayName: {
+      tr: "SSS Yönetimi Görüntüleme",
+      en: "FAQ Management View",
+    },
+    description: {
+      tr: "SSS yönetimi sayfasını görüntüleme ve maddeleri okuma yetkisi",
+      en: "Permission to view FAQ management page and read items",
+    },
+    dependencies: ["admin.information.view"],
+    usedIn: ["InformationPageClient", "/api/admin/information/faq (GET)"],
+  },
+  {
     name: "user.dashboard.view",
     category: "view",
     resourcePath: "dashboard",
@@ -559,7 +593,12 @@ export const FUNCTION_PERMISSIONS: PermissionConfig[] = [
       en: "Permission to create new Knowledge Base articles",
     },
     dependencies: ["admin.information.view"],
-    usedIn: ["InformationCreateForm", "/api/admin/information (POST)"],
+    usedIn: [
+      "InformationCreateForm",
+      "/api/admin/information (POST)",
+      "/api/admin/information/blog (POST)",
+      "/api/admin/information/faq (POST)",
+    ],
   },
   {
     name: "information.update",
@@ -576,7 +615,12 @@ export const FUNCTION_PERMISSIONS: PermissionConfig[] = [
       en: "Permission to update Knowledge Base articles",
     },
     dependencies: ["admin.information.view"],
-    usedIn: ["InformationEditForm", "/api/admin/information/[id] (PUT)"],
+    usedIn: [
+      "InformationEditForm",
+      "/api/admin/information/[id] (PUT)",
+      "/api/admin/information/blog/[postId] (PUT)",
+      "/api/admin/information/faq/[faqId] (PUT)",
+    ],
   },
   {
     name: "information.delete",
@@ -593,7 +637,12 @@ export const FUNCTION_PERMISSIONS: PermissionConfig[] = [
       en: "Permission to delete Knowledge Base articles",
     },
     dependencies: ["admin.information.view"],
-    usedIn: ["InformationDeleteDialog", "/api/admin/information/[id] (DELETE)"],
+    usedIn: [
+      "InformationDeleteDialog",
+      "/api/admin/information/[id] (DELETE)",
+      "/api/admin/information/blog/[postId] (DELETE)",
+      "/api/admin/information/faq/[faqId] (DELETE)",
+    ],
   },
   {
     name: "hero-slider.update",
