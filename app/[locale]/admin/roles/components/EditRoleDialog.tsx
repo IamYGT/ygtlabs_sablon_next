@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -436,8 +437,8 @@ export default function EditRoleDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[94vw] sm:max-w-[95vw] lg:max-w-6xl max-h-[92vh] sm:max-h-[95vh] bg-white dark:bg-gray-900 flex flex-col overflow-y-auto md:overflow-hidden touch-pan-y touch-pan-x">
-        <DialogHeader className="border-b pb-3 md:pb-4">
+      <DialogContent className="max-w-[94vw] sm:max-w-[95vw] lg:max-w-6xl max-h-[92vh] sm:max-h-[95vh] overflow-y-auto bg-blue-50 dark:bg-slate-900 backdrop-blur-sm p-0 border border-gray-200 dark:border-gray-800 touch-pan-y touch-pan-x">
+        <DialogHeader className="border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/50 dark:to-indigo-950/50 p-3 rounded-t-lg">
           <DialogTitle className="flex items-center gap-2 md:gap-3 text-lg md:text-xl font-bold">
             <div className="p-2 md:p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
               <Edit className="h-4 w-4 md:h-5 md:w-5 text-blue-600 dark:text-blue-400" />
@@ -461,10 +462,10 @@ export default function EditRoleDialog({
             )}
           </DialogTitle>
         </DialogHeader>
-        <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-6 p-2 md:p-6 md:overflow-hidden scroll-smooth">
+        <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-6 p-2 md:p-6 overflow-y-auto scroll-smooth">
           {/* Sol Panel - Rol Bilgileri */}
           <div className="lg:col-span-1 space-y-4 md:space-y-6 overflow-y-auto md:pr-4 scroll-smooth">
-            <Card>
+            <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-base">
                   <Settings className="h-4 w-4" />
@@ -591,7 +592,7 @@ export default function EditRoleDialog({
 
           {/* Sağ Panel - Yetkiler */}
           <div className="lg:col-span-2 flex flex-col h-full overflow-hidden">
-            <Card className="flex-1 flex flex-col">
+            <Card className="flex-1 flex flex-col bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-sm md:text-base">
                   <Shield className="h-4 w-4" />
@@ -834,37 +835,39 @@ export default function EditRoleDialog({
             </Card>
           </div>
         </div>
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 p-0">
-          <Button
-            variant="outline"
-            onClick={() => onOpenChange(false)}
-            disabled={loading}
-            className="order-2 sm:order-1"
-          >
-            {tCommon("cancel")}
-          </Button>
-          <Button
-            onClick={handleSubmit}
-            disabled={
-              loading || !formData.displayName.trim() || isProtectedRole
-            }
-            className="order-1 sm:order-2"
-          >
-            {loading ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                <span className="hidden sm:inline">{t("updating")}</span>
-                <span className="sm:hidden">Güncelleniyor...</span>
-              </>
-            ) : (
-              <>
-                <Save className="w-4 h-4 mr-2" />
-                <span className="hidden sm:inline">{t("updateRole")}</span>
-                <span className="sm:hidden">Güncelle</span>
-              </>
-            )}
-          </Button>
-        </div>
+        <DialogFooter className="p-3 bg-gray-100/80 dark:bg-gray-800/80 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 w-full">
+            <Button
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+              disabled={loading}
+              className="order-2 sm:order-1"
+            >
+              {tCommon("cancel")}
+            </Button>
+            <Button
+              onClick={handleSubmit}
+              disabled={
+                loading || !formData.displayName.trim() || isProtectedRole
+              }
+              className="order-1 sm:order-2"
+            >
+              {loading ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                  <span className="hidden sm:inline">{t("updating")}</span>
+                  <span className="sm:hidden">Güncelleniyor...</span>
+                </>
+              ) : (
+                <>
+                  <Save className="w-4 h-4 mr-2" />
+                  <span className="hidden sm:inline">{t("updateRole")}</span>
+                  <span className="sm:hidden">Güncelle</span>
+                </>
+              )}
+            </Button>
+          </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
