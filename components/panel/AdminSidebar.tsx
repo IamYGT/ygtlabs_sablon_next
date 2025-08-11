@@ -7,7 +7,7 @@ import { useAdminNavigation } from "@/hooks/useAdminNavigation";
 import { useAdminAuth } from "@/lib/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { Key, Lock, Shield, Unlock, Users } from "lucide-react";
+import { Lock, Shield, Unlock } from "lucide-react";
 
 import {
   ChevronDown,
@@ -43,25 +43,29 @@ export function AdminSidebar() {
   // 🚀 SÜPER BASİT! Tek satırda tüm navigation'ı hallettik
   const links = useAdminNavigation();
 
-  // i18n grubu ve diğer linkleri ayır
+  // i18n grubu, yetkilendirme grubu (users/roles) ve diğer linkleri ayır
   const { i18nItems, authItems, otherItems, isAnyI18nActive, isAnyAuthActive } =
     useMemo(() => {
       const i18nKeys = new Set(["i18nLanguages", "i18nMessages", "i18nRoutes"]);
       const authKeys = new Set(["users", "roles"]);
-      const excludeKeys = new Set(["permissions"]);
-      const i18n = links.filter((l) => i18nKeys.has(l.key));
-      const nonI18n = links.filter((l) => !i18nKeys.has(l.key));
-      const auth = nonI18n.filter((l) => authKeys.has(l.key));
-      const others = nonI18n.filter(
-        (l) => !authKeys.has(l.key) && !excludeKeys.has(l.key)
+
+      // permissions öğesini sidebar'dan tamamen kaldır
+      const visibleLinks = links.filter((l) => l.key !== "permissions");
+
+      const i18n = visibleLinks.filter((l) => i18nKeys.has(l.key));
+      const auth = visibleLinks.filter((l) => authKeys.has(l.key));
+      const others = visibleLinks.filter(
+        (l) => !i18nKeys.has(l.key) && !authKeys.has(l.key)
       );
-      const active = i18n.some((l) => l.href === pathname);
+
+      const i18nActive = i18n.some((l) => l.href === pathname);
       const authActive = auth.some((l) => l.href === pathname);
+
       return {
         i18nItems: i18n,
         authItems: auth,
         otherItems: others,
-        isAnyI18nActive: active,
+        isAnyI18nActive: i18nActive,
         isAnyAuthActive: authActive,
       };
     }, [links, pathname]);
@@ -93,7 +97,7 @@ export function AdminSidebar() {
               />
             ))}
 
-            {/* YETKİLENDİRME Dropdown Group */}
+            {/* YETKILENDIRME Dropdown Group */}
             {authItems.length > 0 && (
               <div className="mt-1">
                 {/* Parent trigger */}
@@ -137,23 +141,13 @@ export function AdminSidebar() {
                 {/* Nested items */}
                 {open && authOpen && (
                   <div className="mt-1 ml-6 flex flex-col gap-1">
-                    {authItems.map((link) => {
-                      const iconEl =
-                        link.key === "users" ? (
-                          <Users className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-                        ) : link.key === "roles" ? (
-                          <Key className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-                        ) : (
-                          <Shield className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-                        );
-                      return (
-                        <SidebarLink
-                          key={link.key}
-                          link={{ ...link, icon: iconEl }}
-                          className={cn("rounded-md", "py-1.5 px-2 w-full")}
-                        />
-                      );
-                    })}
+                    {authItems.map((link) => (
+                      <SidebarLink
+                        key={link.key}
+                        link={link}
+                        className={cn("rounded-md", "py-1.5 px-2 w-full")}
+                      />
+                    ))}
                   </div>
                 )}
               </div>
