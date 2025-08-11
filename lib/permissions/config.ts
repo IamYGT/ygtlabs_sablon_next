@@ -213,6 +213,23 @@ export const VIEW_PERMISSIONS: PermissionConfig[] = [
     usedIn: ["HeroSliderPageClient", "/api/admin/hero-slider (GET)"],
   },
   {
+    name: "admin.information.view",
+    category: "view",
+    resourcePath: "information",
+    action: "view",
+    permissionType: "admin",
+    displayName: {
+      tr: "Bilgi Merkezi Görüntüleme",
+      en: "Knowledge Base View",
+    },
+    description: {
+      tr: "Bilgi Merkezi sayfasını görüntüleme ve içerikleri okuma yetkisi",
+      en: "Permission to view Knowledge Base page and read articles",
+    },
+    dependencies: ["admin.layout"],
+    usedIn: ["InformationPageClient", "/api/admin/information (GET)"],
+  },
+  {
     name: "user.dashboard.view",
     category: "view",
     resourcePath: "dashboard",
@@ -525,6 +542,58 @@ export const FUNCTION_PERMISSIONS: PermissionConfig[] = [
       "/api/admin/hero-slider (POST)",
       "SliderCreateForm",
     ],
+  },
+  // INFORMATION CENTER FUNCTIONS
+  {
+    name: "information.create",
+    category: "function",
+    resourcePath: "information",
+    action: "create",
+    permissionType: "admin",
+    displayName: {
+      tr: "Bilgi Oluşturma",
+      en: "Create Information",
+    },
+    description: {
+      tr: "Bilgi Merkezi'ne yeni içerik ekleme yetkisi",
+      en: "Permission to create new Knowledge Base articles",
+    },
+    dependencies: ["admin.information.view"],
+    usedIn: ["InformationCreateForm", "/api/admin/information (POST)"],
+  },
+  {
+    name: "information.update",
+    category: "function",
+    resourcePath: "information",
+    action: "update",
+    permissionType: "admin",
+    displayName: {
+      tr: "Bilgi Güncelleme",
+      en: "Update Information",
+    },
+    description: {
+      tr: "Bilgi Merkezi içeriklerini güncelleme yetkisi",
+      en: "Permission to update Knowledge Base articles",
+    },
+    dependencies: ["admin.information.view"],
+    usedIn: ["InformationEditForm", "/api/admin/information/[id] (PUT)"],
+  },
+  {
+    name: "information.delete",
+    category: "function",
+    resourcePath: "information",
+    action: "delete",
+    permissionType: "admin",
+    displayName: {
+      tr: "Bilgi Silme",
+      en: "Delete Information",
+    },
+    description: {
+      tr: "Bilgi Merkezi içeriklerini silme yetkisi",
+      en: "Permission to delete Knowledge Base articles",
+    },
+    dependencies: ["admin.information.view"],
+    usedIn: ["InformationDeleteDialog", "/api/admin/information/[id] (DELETE)"],
   },
   {
     name: "hero-slider.update",

@@ -57,7 +57,7 @@ export function AdminSidebar() {
   } = useMemo(() => {
     const i18nKeys = new Set(["i18nLanguages", "i18nMessages", "i18nRoutes"]);
     const authKeys = new Set(["users", "roles"]);
-    const websiteKeys = new Set(["hero-slider"]);
+    const websiteKeys = new Set(["hero-slider", "information"]);
 
     // permissions öğesini sidebar'dan tamamen kaldır
     const visibleLinks = links.filter((l) => l.key !== "permissions");

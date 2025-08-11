@@ -47,6 +47,13 @@ const NAVIGATION_CONFIG: Record<string, NavigationConfig> = {
     order: 2,
     requiredPermission: "admin.hero-slider.view",
   },
+  information: {
+    icon: "Monitor",
+    translationKey: "information",
+    href: "/admin/information",
+    order: 2.5 as unknown as number,
+    requiredPermission: "admin.information.view",
+  },
   users: {
     icon: "Users",
     translationKey: "users",

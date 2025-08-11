@@ -941,6 +941,7 @@
   "AdminNavigation": {
     "dashboard": "Ana Panel",
     "heroSlider": "Hero Slider Yönetimi",
+    "information": "Bilgi Merkezi",
     "users": "Kullanıcılar",
     "roles": "Roller",
     "permissions": "Yetkiler",

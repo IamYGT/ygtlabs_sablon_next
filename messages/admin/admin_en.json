@@ -911,6 +911,7 @@
     "AdminNavigation": {
         "dashboard": "Dashboard",
         "heroSlider": "Hero Slider Management",
+        "information": "Knowledge Base",
         "users": "Users",
         "roles": "Roles",
         "permissions": "Permissions",
