@@ -1319,6 +1319,97 @@
       "en": "English"
     }
   },
+  "Customers": {
+    "title": "Müşteri Yönetimi",
+    "subtitle": "Müşterileri görüntüleyin, oluşturun ve yönetin.",
+    "loading": "Yükleniyor...",
+    "empty": "Kayıt bulunamadı.",
+    "searchPlaceholder": "Ara...",
+    "filters": {
+      "status": {
+        "placeholder": "Durum",
+        "all": "Tümü",
+        "active": "Aktif",
+        "inactive": "Pasif"
+      }
+    },
+    "table": {
+      "name": "Ad",
+      "email": "E-posta",
+      "phone": "Telefon",
+      "company": "Firma",
+      "status": "Durum",
+      "actions": "İşlemler"
+    },
+    "status": {
+      "active": "Aktif",
+      "inactive": "Pasif"
+    },
+    "actions": {
+      "newCustomer": "Yeni Müşteri",
+      "view": "Görüntüle",
+      "edit": "Düzenle",
+      "delete": "Sil"
+    },
+    "dialogs": {
+      "create": {
+        "title": "Yeni Müşteri",
+        "description": "Temel bilgileri doldurarak yeni müşteri oluşturun."
+      },
+      "edit": {
+        "title": "Müşteri Düzenle",
+        "description": "Müşteri bilgilerini güncelleyin."
+      },
+      "view": {
+        "title": "Müşteri Detayı",
+        "description": "Müşteri bilgilerini görüntüleyin."
+      },
+      "delete": {
+        "title": "Silme Onayı",
+        "description": "Bu işlem geri alınamaz.",
+        "confirm": "Sil",
+        "cancel": "Vazgeç"
+      }
+    },
+    "form": {
+      "basicInfo": {
+        "title": "Temel Bilgiler",
+        "name": "Ad",
+        "email": "E-posta",
+        "phone": "Telefon",
+        "company": "Firma",
+        "notes": "Notlar",
+        "notesPlaceholder": "Opsiyonel"
+      },
+      "settings": {
+        "title": "Ayarlar",
+        "publishStatus": "Yayın Durumu",
+        "publishStatusDesc": "Müşterinin aktiflik durumunu belirler."
+      },
+      "save": "Kaydet",
+      "saving": "Kaydediliyor...",
+      "validation": {
+        "nameRequired": "İsim gereklidir"
+      }
+    },
+    "fields": {
+      "id": "ID",
+      "createdAt": "Oluşturma",
+      "updatedAt": "Güncelleme"
+    },
+    "messages": {
+      "fetchError": "Müşteri listesi alınamadı",
+      "createSuccess": "Müşteri oluşturuldu",
+      "createError": "Müşteri oluşturulamadı",
+      "updateSuccess": "Müşteri güncellendi",
+      "updateError": "Müşteri güncellenemedi",
+      "deleteSuccess": "Müşteri silindi",
+      "deleteError": "Müşteri silinemedi",
+      "activateSuccess": "Aktifleştirildi",
+      "deactivateSuccess": "Pasifleştirildi",
+      "statusUpdateError": "Durum güncellenemedi"
+    }
+  },
   "AdminHeader": {
     "searchPlaceholder": "Kullanıcıları, logları veya ayarları ara...",
     "loading": "Yükleniyor...",

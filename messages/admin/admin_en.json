@@ -1290,6 +1290,97 @@
       "en": "English"
     }
   },
+  "Customers": {
+    "title": "Customer Management",
+    "subtitle": "View, create and manage customers.",
+    "loading": "Loading...",
+    "empty": "No records found.",
+    "searchPlaceholder": "Search...",
+    "filters": {
+      "status": {
+        "placeholder": "Status",
+        "all": "All",
+        "active": "Active",
+        "inactive": "Inactive"
+      }
+    },
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "company": "Company",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "actions": {
+      "newCustomer": "New Customer",
+      "view": "View",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "dialogs": {
+      "create": {
+        "title": "New Customer",
+        "description": "Create a new customer by filling in the basic information."
+      },
+      "edit": {
+        "title": "Edit Customer",
+        "description": "Update customer information."
+      },
+      "view": {
+        "title": "Customer Detail",
+        "description": "View customer information."
+      },
+      "delete": {
+        "title": "Delete Confirmation",
+        "description": "This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
+      }
+    },
+    "form": {
+      "basicInfo": {
+        "title": "Basic Information",
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "company": "Company",
+        "notes": "Notes",
+        "notesPlaceholder": "Optional"
+      },
+      "settings": {
+        "title": "Settings",
+        "publishStatus": "Publish Status",
+        "publishStatusDesc": "Determines the customer's active status."
+      },
+      "save": "Save",
+      "saving": "Saving...",
+      "validation": {
+        "nameRequired": "Name is required"
+      }
+    },
+    "fields": {
+      "id": "ID",
+      "createdAt": "Created",
+      "updatedAt": "Updated"
+    },
+    "messages": {
+      "fetchError": "Could not fetch customer list",
+      "createSuccess": "Customer created",
+      "createError": "Could not create customer",
+      "updateSuccess": "Customer updated",
+      "updateError": "Could not update customer",
+      "deleteSuccess": "Customer deleted",
+      "deleteError": "Could not delete customer",
+      "activateSuccess": "Activated",
+      "deactivateSuccess": "Deactivated",
+      "statusUpdateError": "Could not update status"
+    }
+  },
   "AdminHeader": {
     "searchPlaceholder": "Search users, logs or settings...",
     "loading": "Loading...",

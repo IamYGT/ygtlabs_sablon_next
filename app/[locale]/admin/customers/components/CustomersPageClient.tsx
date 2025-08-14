@@ -1,30 +1,25 @@
 "use client";
 
-import {
-  AdminPageGuard,
-  FunctionGuard,
-} from "@/components/panel/AdminPageGuard";
+import { AdminPageGuard } from "@/components/panel/AdminPageGuard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Pagination } from "@/components/ui/pagination";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -33,50 +28,65 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import type { Locale } from "date-fns";
+import { format } from "date-fns";
+import * as dfLocales from "date-fns/locale";
+import {
+  CheckCircle,
+  Edit,
+  Eye,
+  MoreHorizontal,
+  Search,
+  Trash2,
+  UserPlus,
+  Users,
+  XCircle,
+} from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-
-type Customer = {
-  id: string;
-  name: string;
-  email?: string | null;
-  phone?: string | null;
-  company?: string | null;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-};
+import { CreateCustomerDialog } from "./CreateCustomerDialog";
+import { DeleteCustomerDialog } from "./DeleteCustomerDialog";
+import { EditCustomerDialog } from "./EditCustomerDialog";
+import { ViewCustomerDialog } from "./ViewCustomerDialog";
+import type { Customer } from "./types";
 
 export default function CustomersPageClient() {
+  const t = useTranslations("Customers");
+  const tCommon = useTranslations("AdminCommon");
+  const router = useRouter();
+  const locale = useLocale();
+
   const [items, setItems] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
+  const [selectedCustomers, setSelectedCustomers] = useState<string[]>([]);
+
   const [isCreateOpen, setCreateOpen] = useState(false);
   const [editing, setEditing] = useState<Customer | null>(null);
   const [deleting, setDeleting] = useState<Customer | null>(null);
-  const [statusFilter, setStatusFilter] = useState<"all" | "true" | "false">(
-    "all"
-  );
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [viewing, setViewing] = useState<Customer | null>(null);
+  const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
+
+  const dateLocale: Locale =
+    (dfLocales as unknown as Record<string, Locale>)[locale] ?? dfLocales.enUS;
 
   async function load() {
     setLoading(true);
     try {
       const params = new URLSearchParams();
-      params.set("limit", "10");
-      params.set("page", String(page));
+      params.set("limit", "1000"); // Daha fazla veri çekmek için limiti artırabiliriz
       if (q) params.set("q", q);
-      if (statusFilter) params.set("isActive", statusFilter);
 
       const res = await fetch(`/api/admin/customers?${params.toString()}`);
-      if (!res.ok) throw new Error("Müşteri listesi alınamadı");
+      if (!res.ok) throw new Error(t("messages.fetchError"));
       const data = await res.json();
       setItems(data.items || []);
-      setTotalPages(data.pagination?.totalPages || 1);
     } catch (e) {
       console.error(e);
-      toast.error("Müşteri listesi alınamadı");
+      toast.error(t("messages.fetchError"));
     } finally {
       setLoading(false);
     }
@@ -85,362 +95,285 @@ export default function CustomersPageClient() {
   useEffect(() => {
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, statusFilter]);
+  }, []);
 
   const filtered = useMemo(() => {
     if (!q) return items;
     const f = q.toLowerCase();
     return items.filter(
       (x) =>
-        x.name.toLowerCase().includes(f) || x.email?.toLowerCase().includes(f)
+        x.name.toLowerCase().includes(f) ||
+        x.email?.toLowerCase().includes(f) ||
+        x.company?.toLowerCase().includes(f)
     );
   }, [items, q]);
 
+  const handleSelectCustomer = (customerId: string) => {
+    setSelectedCustomers((prev) =>
+      prev.includes(customerId)
+        ? prev.filter((id) => id !== customerId)
+        : [...prev, customerId]
+    );
+  };
+
+  const handleSelectAll = () => {
+    if (selectedCustomers.length === filtered.length) {
+      setSelectedCustomers([]);
+    } else {
+      setSelectedCustomers(filtered.map((c) => c.id));
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    // Toplu silme API'si henüz yok, gelecekte eklenebilir.
+    // Bu fonksiyon şimdilik bir uyarı gösterecek.
+    toast.error("Toplu silme işlemi henüz desteklenmiyor.");
+    setBulkDeleteModalOpen(false);
+  };
+
   return (
     <AdminPageGuard requiredPermission="admin.customers.view">
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
+      <div className="space-y-8">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-emerald-100 rounded-lg">
-              <span className="text-emerald-600 font-bold">C</span>
+            <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+              <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />
             </div>
-            <h1 className="text-2xl font-bold">Müşteri Yönetimi</h1>
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+                {t("title")}
+              </h1>
+              <p className="text-gray-600 dark:text-gray-400 text-lg">
+                {t("subtitle")}
+              </p>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Input
-              placeholder="Ara..."
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              className="w-56"
-            />
-            <Select
-              value={statusFilter}
-              onValueChange={(v: "all" | "true" | "false") => {
-                setPage(1);
-                setStatusFilter(v);
-              }}
-            >
-              <SelectTrigger className="w-[140px]">
-                <SelectValue placeholder="Durum" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Tümü</SelectItem>
-                <SelectItem value="true">Aktif</SelectItem>
-                <SelectItem value="false">Pasif</SelectItem>
-              </SelectContent>
-            </Select>
-            <FunctionGuard
-              requiredPermission="customers.create"
-              showMessage={false}
-            >
-              <Dialog open={isCreateOpen} onOpenChange={setCreateOpen}>
-                <DialogTrigger asChild>
-                  <Button size="sm" className="h-8">
-                    Yeni
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Yeni Müşteri</DialogTitle>
-                  </DialogHeader>
-                  <CustomerForm
-                    onSubmit={async (payload) => {
-                      const res = await fetch("/api/admin/customers", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(payload),
-                      });
-                      if (!res.ok) {
-                        toast.error("Müşteri oluşturulamadı");
-                        return;
-                      }
-                      toast.success("Müşteri oluşturuldu");
-                      setCreateOpen(false);
-                      await load();
-                    }}
-                  />
-                </DialogContent>
-              </Dialog>
-            </FunctionGuard>
-          </div>
+          <Button
+            onClick={() => setCreateOpen(true)}
+            className="shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4"
+          >
+            <UserPlus className="h-4 w-4 mr-2" />
+            {t("actions.newCustomer")}
+          </Button>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Müşteriler</CardTitle>
+        {/* Customers Table */}
+        <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+          <CardHeader className="border-b border-gray-200 dark:border-gray-700 p-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="relative w-full sm:max-w-lg">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <Search className="h-4 w-4 text-gray-400 dark:text-gray-500" />
+                </div>
+                <Input
+                  placeholder={t("searchPlaceholder")}
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all duration-200 text-base"
+                />
+              </div>
+              {selectedCustomers.length > 0 && (
+                <Button
+                  variant="destructive"
+                  onClick={() => setBulkDeleteModalOpen(true)}
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  {t("actions.deleteSelected", {
+                    count: selectedCustomers.length,
+                  })}
+                </Button>
+              )}
+            </div>
           </CardHeader>
-          <CardContent>
-            {loading ? (
-              <div className="text-sm text-muted-foreground">Yükleniyor...</div>
-            ) : filtered.length ? (
-              <Table>
-                <TableHeader>
+          <CardContent className="p-0">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-white dark:bg-gray-900">
+                  <TableHead className="w-[50px] pl-6">
+                    <Checkbox
+                      checked={
+                        selectedCustomers.length === filtered.length &&
+                        filtered.length > 0
+                      }
+                      onCheckedChange={handleSelectAll}
+                    />
+                  </TableHead>
+                  <TableHead>{t("table.name")}</TableHead>
+                  <TableHead>{t("table.contact")}</TableHead>
+                  <TableHead>{t("table.company")}</TableHead>
+                  <TableHead>{t("table.status")}</TableHead>
+                  <TableHead>{t("table.createdAt")}</TableHead>
+                  <TableHead className="text-right pr-6">
+                    {t("table.actions")}
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {loading ? (
                   <TableRow>
-                    <TableHead>Ad</TableHead>
-                    <TableHead>E-posta</TableHead>
-                    <TableHead>Telefon</TableHead>
-                    <TableHead>Firma</TableHead>
-                    <TableHead>Durum</TableHead>
-                    <TableHead className="w-36" />
+                    <TableCell colSpan={7} className="text-center py-12">
+                      {t("loading")}
+                    </TableCell>
                   </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filtered.map((item) => (
-                    <TableRow key={item.id}>
-                      <TableCell className="font-medium">{item.name}</TableCell>
-                      <TableCell>{item.email || "-"}</TableCell>
-                      <TableCell>{item.phone || "-"}</TableCell>
-                      <TableCell>{item.company || "-"}</TableCell>
+                ) : filtered.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center py-12">
+                      {t("empty")}
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  filtered.map((item) => (
+                    <TableRow
+                      key={item.id}
+                      className="hover:bg-gray-50/70 dark:hover:bg-gray-800/50"
+                    >
+                      <TableCell className="pl-6">
+                        <Checkbox
+                          checked={selectedCustomers.includes(item.id)}
+                          onCheckedChange={() => handleSelectCustomer(item.id)}
+                        />
+                      </TableCell>
                       <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Badge
-                            variant={item.isActive ? "default" : "secondary"}
-                          >
-                            {item.isActive ? "Aktif" : "Pasif"}
-                          </Badge>
-                          <FunctionGuard
-                            requiredPermission="customers.update"
-                            showMessage={false}
-                          >
-                            <Switch
-                              checked={item.isActive}
-                              onCheckedChange={async () => {
-                                try {
-                                  const res = await fetch(
-                                    `/api/admin/customers/${item.id}`,
-                                    {
-                                      method: "PUT",
-                                      headers: {
-                                        "Content-Type": "application/json",
-                                      },
-                                      body: JSON.stringify({
-                                        isActive: !item.isActive,
-                                      }),
-                                    }
-                                  );
-                                  if (!res.ok)
-                                    throw new Error("Durum güncellenemedi");
-                                  toast.success(
-                                    !item.isActive
-                                      ? "Aktifleştirildi"
-                                      : "Pasifleştirildi"
-                                  );
-                                  load();
-                                } catch (err) {
-                                  console.error(err);
-                                  toast.error("Durum güncellenemedi");
-                                }
-                              }}
+                        <div className="flex items-center gap-3">
+                          <div className="relative h-10 w-10">
+                            <Image
+                              src={`https://ui-avatars.com/api/?name=${
+                                item.name || "C"
+                              }&background=random`}
+                              alt={item.name}
+                              fill
+                              className="rounded-full object-cover"
                             />
-                          </FunctionGuard>
+                          </div>
+                          <span className="font-medium">{item.name}</span>
                         </div>
                       </TableCell>
-                      <TableCell className="text-right space-x-2">
-                        <FunctionGuard
-                          requiredPermission="customers.update"
-                          showMessage={false}
+                      <TableCell>
+                        <div>
+                          <div>{item.email || "-"}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {item.phone || "-"}
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell>{item.company || "-"}</TableCell>
+                      <TableCell>
+                        <Badge
+                          variant={item.isActive ? "default" : "secondary"}
                         >
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setEditing(item)}
-                          >
-                            Düzenle
-                          </Button>
-                        </FunctionGuard>
-                        <FunctionGuard
-                          requiredPermission="customers.delete"
-                          showMessage={false}
-                        >
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={() => setDeleting(item)}
-                          >
-                            Sil
-                          </Button>
-                        </FunctionGuard>
+                          {item.isActive ? (
+                            <CheckCircle className="h-3 w-3 mr-1" />
+                          ) : (
+                            <XCircle className="h-3 w-3 mr-1" />
+                          )}
+                          {item.isActive
+                            ? t("status.active")
+                            : t("status.inactive")}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        {format(new Date(item.createdAt), "PPP", {
+                          locale: dateLocale,
+                        })}
+                      </TableCell>
+                      <TableCell className="text-right pr-6">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              className="h-9 w-9 p-0 rounded-lg"
+                            >
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => setViewing(item)}>
+                              <Eye className="h-4 w-4 mr-2" />
+                              {t("actions.view")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => setEditing(item)}>
+                              <Edit className="h-4 w-4 mr-2" />
+                              {t("actions.edit")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => setDeleting(item)}
+                              className="text-red-600"
+                            >
+                              <Trash2 className="h-4 w-4 mr-2" />
+                              {t("actions.delete")}
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            ) : (
-              <div className="text-sm text-muted-foreground">
-                Kayıt bulunamadı.
-              </div>
-            )}
-
-            {/* Edit Dialog */}
-            {editing && (
-              <Dialog
-                open={!!editing}
-                onOpenChange={(open) => !open && setEditing(null)}
-              >
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Müşteri Düzenle</DialogTitle>
-                  </DialogHeader>
-                  <CustomerForm
-                    initial={editing}
-                    onSubmit={async (payload) => {
-                      const res = await fetch(
-                        `/api/admin/customers/${editing.id}`,
-                        {
-                          method: "PUT",
-                          headers: { "Content-Type": "application/json" },
-                          body: JSON.stringify(payload),
-                        }
-                      );
-                      if (!res.ok) {
-                        toast.error("Müşteri güncellenemedi");
-                        return;
-                      }
-                      toast.success("Müşteri güncellendi");
-                      setEditing(null);
-                      await load();
-                    }}
-                  />
-                </DialogContent>
-              </Dialog>
-            )}
-
-            {/* Delete Dialog */}
-            {deleting && (
-              <Dialog
-                open={!!deleting}
-                onOpenChange={(open) => !open && setDeleting(null)}
-              >
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Silme Onayı</DialogTitle>
-                  </DialogHeader>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    "{deleting.name}" müşterisini silmek istediğinize emin
-                    misiniz?
-                  </p>
-                  <div className="flex justify-end gap-2">
-                    <Button variant="outline" onClick={() => setDeleting(null)}>
-                      Vazgeç
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      onClick={async () => {
-                        const res = await fetch(
-                          `/api/admin/customers/${deleting.id}`,
-                          { method: "DELETE" }
-                        );
-                        if (!res.ok) {
-                          toast.error("Müşteri silinemedi");
-                          return;
-                        }
-                        toast.success("Müşteri silindi");
-                        setDeleting(null);
-                        await load();
-                      }}
-                    >
-                      Sil
-                    </Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            )}
+                  ))
+                )}
+              </TableBody>
+            </Table>
           </CardContent>
         </Card>
-        {totalPages > 1 && (
-          <div className="flex justify-end">
-            <Pagination
-              currentPage={page}
-              totalPages={totalPages}
-              onPageChange={(p) => setPage(p)}
-            />
-          </div>
-        )}
+
+        {/* Modals */}
+        <CreateCustomerDialog
+          open={isCreateOpen}
+          onOpenChange={setCreateOpen}
+          onSuccess={() => {
+            load();
+            router.refresh();
+          }}
+        />
+        <EditCustomerDialog
+          open={!!editing}
+          onOpenChange={(open) => !open && setEditing(null)}
+          customer={editing}
+          onSuccess={() => {
+            load();
+            router.refresh();
+          }}
+        />
+        <ViewCustomerDialog
+          open={!!viewing}
+          onOpenChange={(open) => !open && setViewing(null)}
+          customer={viewing}
+        />
+        <DeleteCustomerDialog
+          open={!!deleting}
+          onOpenChange={(open) => !open && setDeleting(null)}
+          customer={deleting}
+          onSuccess={() => {
+            load();
+            router.refresh();
+          }}
+        />
+
+        <Dialog
+          open={bulkDeleteModalOpen}
+          onOpenChange={setBulkDeleteModalOpen}
+        >
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{t("messages.bulkDeleteConfirmTitle")}</DialogTitle>
+              <DialogDescription>
+                {t("messages.bulkDeleteConfirmText", {
+                  count: selectedCustomers.length,
+                })}
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setBulkDeleteModalOpen(false)}
+              >
+                {tCommon("cancel")}
+              </Button>
+              <Button variant="destructive" onClick={handleBulkDelete}>
+                {tCommon("delete")}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </AdminPageGuard>
   );
 }
-
-function CustomerForm({
-  initial,
-  onSubmit,
-}: {
-  initial?: Partial<Customer>;
-  onSubmit: (payload: Record<string, unknown>) => Promise<void>;
-}) {
-  const [name, setName] = useState(initial?.name || "");
-  const [email, setEmail] = useState(initial?.email || "");
-  const [phone, setPhone] = useState(initial?.phone || "");
-  const [company, setCompany] = useState(initial?.company || "");
-  const [isActive, setIsActive] = useState<boolean>(initial?.isActive ?? true);
-  const [notes, setNotes] = useState<string>("");
-  const [submitting, setSubmitting] = useState(false);
-
-  async function handleSubmit() {
-    if (!name) {
-      toast.error("İsim gereklidir");
-      return;
-    }
-    setSubmitting(true);
-    try {
-      const payload = {
-        name,
-        email: email || undefined,
-        phone: phone || undefined,
-        company: company || undefined,
-        isActive,
-        notes: notes ? { tr: notes } : undefined,
-      };
-      await onSubmit(payload);
-    } finally {
-      setSubmitting(false);
-    }
-  }
-
-  return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-2 gap-3">
-        <div>
-          <Label>Ad</Label>
-          <Input value={name} onChange={(e) => setName(e.target.value)} />
-        </div>
-        <div>
-          <Label>E-posta</Label>
-          <Input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-      </div>
-      <div className="grid grid-cols-2 gap-3">
-        <div>
-          <Label>Telefon</Label>
-          <Input value={phone} onChange={(e) => setPhone(e.target.value)} />
-        </div>
-        <div>
-          <Label>Firma</Label>
-          <Input value={company} onChange={(e) => setCompany(e.target.value)} />
-        </div>
-      </div>
-      <div>
-        <Label>Notlar</Label>
-        <Input
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          placeholder="Opsiyonel"
-        />
-      </div>
-      <div className="flex items-center gap-2">
-        <Switch checked={isActive} onCheckedChange={setIsActive} />
-        <Label>Aktif</Label>
-      </div>
-      <div className="flex justify-end gap-2">
-        <Button onClick={handleSubmit} disabled={submitting}>
-          {submitting ? "Kaydediliyor..." : "Kaydet"}
-        </Button>
-      </div>
-    </div>
-  );
-}
-
