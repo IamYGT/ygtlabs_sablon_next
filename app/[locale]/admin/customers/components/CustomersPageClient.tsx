@@ -17,6 +17,8 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -287,18 +289,32 @@ export default function CustomersPageClient() {
                               <MoreHorizontal className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => setViewing(item)}>
+                          <DropdownMenuContent
+                            align="end"
+                            className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-lg w-56"
+                          >
+                            <DropdownMenuLabel className="text-gray-700 dark:text-gray-300 font-semibold">
+                              {t("table.actions")}
+                            </DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              onClick={() => setViewing(item)}
+                              className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150 cursor-pointer"
+                            >
                               <Eye className="h-4 w-4 mr-2" />
                               {t("actions.view")}
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => setEditing(item)}>
+                            <DropdownMenuItem
+                              onClick={() => setEditing(item)}
+                              className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150 cursor-pointer"
+                            >
                               <Edit className="h-4 w-4 mr-2" />
                               {t("actions.edit")}
                             </DropdownMenuItem>
+                            <DropdownMenuSeparator />
                             <DropdownMenuItem
                               onClick={() => setDeleting(item)}
-                              className="text-red-600"
+                              className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-150 cursor-pointer"
                             >
                               <Trash2 className="h-4 w-4 mr-2" />
                               {t("actions.delete")}

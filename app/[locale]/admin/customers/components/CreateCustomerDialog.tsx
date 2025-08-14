@@ -17,7 +17,7 @@ import { CustomerForm } from "./CustomerForm";
 
 type Props = {
   open: boolean;
-  onOpencha: (open: boolean) => void;
+  onOpenChange: (open: boolean) => void;
   onSuccess: () => void;
 };
 
