@@ -141,6 +141,8 @@ model User {
   updatedBlogPosts       BlogPost[]          @relation("BlogPostUpdatedBy")
   createdFaqItems        FaqItem[]           @relation("FaqItemCreatedBy")
   updatedFaqItems        FaqItem[]           @relation("FaqItemUpdatedBy")
+  createdCustomers       Customer[]          @relation("CustomerCreatedBy")
+  updatedCustomers       Customer[]          @relation("CustomerUpdatedBy")
   LoginHistory           LoginHistory[]
   UserStats              UserStats?
 
@@ -391,6 +393,29 @@ model FaqItem {
 
   @@index([isActive])
   @@index([order])
+  @@schema("public")
+}
+
+// Müşteri Yönetimi
+model Customer {
+  id            String   @id @default(uuid())
+  name          String
+  email         String?  @unique
+  phone         String?
+  company       String?
+  notes         Json?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  createdById   String?
+  updatedById   String?
+
+  // Relations
+  createdBy User? @relation("CustomerCreatedBy", fields: [createdById], references: [id])
+  updatedBy User? @relation("CustomerUpdatedBy", fields: [updatedById], references: [id])
+
+  @@index([isActive])
+  @@index([name])
   @@schema("public")
 }
 

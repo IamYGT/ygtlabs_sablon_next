@@ -54,6 +54,13 @@ const NAVIGATION_CONFIG: Record<string, NavigationConfig> = {
     order: 10,
     requiredPermission: "admin.information.view",
   },
+  customers: {
+    icon: "Users",
+    translationKey: "customers",
+    href: "/admin/customers",
+    order: 2,
+    requiredPermission: "admin.customers.view",
+  },
   users: {
     icon: "Users",
     translationKey: "users",

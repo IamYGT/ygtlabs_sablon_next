@@ -137,6 +137,23 @@ export const VIEW_PERMISSIONS: PermissionConfig[] = [
     usedIn: ["UsersPageClient", "/api/users (GET)"],
   },
   {
+    name: "admin.customers.view",
+    category: "view",
+    resourcePath: "customers",
+    action: "view",
+    permissionType: "admin",
+    displayName: {
+      tr: "Müşteri Yönetimi Görüntüleme",
+      en: "Customer Management View",
+    },
+    description: {
+      tr: "Müşteri listesi sayfasını görüntüleme ve müşteri bilgilerini okuma yetkisi",
+      en: "Permission to view customer management page and read customer information",
+    },
+    dependencies: ["admin.layout"],
+    usedIn: ["CustomersPageClient", "/api/admin/customers (GET)"],
+  },
+  {
     name: "admin.roles.view",
     category: "view",
     resourcePath: "roles",
@@ -643,6 +660,58 @@ export const FUNCTION_PERMISSIONS: PermissionConfig[] = [
       "/api/admin/information/blog/[postId] (DELETE)",
       "/api/admin/information/faq/[faqId] (DELETE)",
     ],
+  },
+  // CUSTOMER MANAGEMENT FUNCTIONS
+  {
+    name: "customers.create",
+    category: "function",
+    resourcePath: "customers",
+    action: "create",
+    permissionType: "admin",
+    displayName: {
+      tr: "Müşteri Oluşturma",
+      en: "Create Customer",
+    },
+    description: {
+      tr: "Yeni müşteri oluşturma ve temel bilgileri kaydetme yetkisi",
+      en: "Permission to create new customers and save basic information",
+    },
+    dependencies: ["admin.customers.view"],
+    usedIn: ["CustomerCreateDialog", "/api/admin/customers (POST)"],
+  },
+  {
+    name: "customers.update",
+    category: "function",
+    resourcePath: "customers",
+    action: "update",
+    permissionType: "admin",
+    displayName: {
+      tr: "Müşteri Güncelleme",
+      en: "Update Customer",
+    },
+    description: {
+      tr: "Mevcut müşteri bilgilerini güncelleme yetkisi",
+      en: "Permission to update existing customer information",
+    },
+    dependencies: ["admin.customers.view"],
+    usedIn: ["CustomerEditDialog", "/api/admin/customers/[id] (PUT)"],
+  },
+  {
+    name: "customers.delete",
+    category: "function",
+    resourcePath: "customers",
+    action: "delete",
+    permissionType: "admin",
+    displayName: {
+      tr: "Müşteri Silme",
+      en: "Delete Customer",
+    },
+    description: {
+      tr: "Müşteri kaydını silme yetkisi",
+      en: "Permission to delete customer records",
+    },
+    dependencies: ["admin.customers.view"],
+    usedIn: ["CustomerDeleteDialog", "/api/admin/customers/[id] (DELETE)"],
   },
   {
     name: "hero-slider.update",
