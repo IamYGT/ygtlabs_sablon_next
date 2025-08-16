@@ -909,6 +909,7 @@
     "maintenanceMode": "Maintenance Mode"
   },
   "AdminNavigation": {
+    "about": "About Us",
     "dashboard": "Dashboard",
     "heroSlider": "Hero Slider Management",
     "information": "Knowledge Base",

@@ -939,6 +939,7 @@
     "maintenanceMode": "Bakım Modu"
   },
   "AdminNavigation": {
+    "about": "Hakkımızda",
     "dashboard": "Ana Panel",
     "heroSlider": "Hero Slider Yönetimi",
     "information": "Bilgi Merkezi",

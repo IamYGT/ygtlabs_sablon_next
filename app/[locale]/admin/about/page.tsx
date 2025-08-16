@@ -38,6 +38,7 @@ export default async function AboutPage() {
       delete: t("actions.delete"),
       view: t("actions.view"),
     },
+    fetchError: t("messages.fetchError"),
   };
   return <AboutPageClient messages={messages} />;
 }

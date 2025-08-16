@@ -51,6 +51,7 @@ interface AboutPageClientProps {
       delete: string;
       view: string;
     };
+    fetchError: string;
   };
 }
 
@@ -84,18 +85,18 @@ export function AboutPageClient({ messages }: AboutPageClientProps) {
       const response = await fetch("/api/admin/about");
 
       if (!response.ok) {
-        throw new Error("Veri getirme hatası");
+        throw new Error(messages.fetchError);
       }
 
       const data = await response.json();
       setAboutData(data.about);
     } catch (error) {
       console.error("About data fetch error:", error);
-      toast.error("Veri getirme hatası");
+      toast.error(messages.fetchError);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [messages.fetchError]);
 
   useEffect(() => {
     fetchAboutData();
