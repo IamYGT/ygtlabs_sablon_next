@@ -1144,19 +1144,5 @@
       "deleteSuccess": "İçerik başarıyla silindi.",
       "deleteError": "İçerik silinirken bir hata oluştu."
     }
-  },
-  "AdminNavigation": {
-    "dashboard": "Dashboard",
-    "users": "Kullanıcılar",
-    "customers": "Müşteriler",
-    "roles": "Roller",
-    "permissions": "Yetkiler",
-    "profile": "Profilim",
-    "heroSlider": "Hero Slider",
-    "information": "Bilgi Merkezi",
-    "about": "Hakkımızda",
-    "i18nRoutes": "Uluslararası Rotalar",
-    "i18nLanguages": "Uluslararası Diller",
-    "i18nMessages": "Uluslararası Mesajlar"
   }
 }

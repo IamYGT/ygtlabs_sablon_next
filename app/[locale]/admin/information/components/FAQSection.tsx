@@ -241,7 +241,7 @@ export function FAQSection() {
                 <DialogTitle>Silme Onayı</DialogTitle>
               </DialogHeader>
               <p className="text-sm text-muted-foreground mb-4">
-                "{parseJSONField(deleting.question)}" sorusunu silmek
+                &quot;{parseJSONField(deleting.question)}&quot; sorusunu silmek
                 istediğinize emin misiniz?
               </p>
               <div className="flex justify-end gap-2">

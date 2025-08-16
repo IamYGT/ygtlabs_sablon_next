@@ -249,8 +249,8 @@ export function BlogSection() {
                 <DialogTitle>Silme Onayı</DialogTitle>
               </DialogHeader>
               <p className="text-sm text-muted-foreground mb-4">
-                "{parseJSONField(deleting.title)}" başlıklı blog yazısını silmek
-                istediğinize emin misiniz?
+                &quot;{parseJSONField(deleting.title)}&quot; başlıklı blog
+                yazısını silmek istediğinize emin misiniz?
               </p>
               <div className="flex justify-end gap-2">
                 <Button variant="outline" onClick={() => setDeleting(null)}>
@@ -299,7 +299,9 @@ function BlogForm({
   );
   const [contentEN, setContentEN] = useState("");
   const [excerptTR, setExcerptTR] = useState(
-    initial ? parseJSONField(initial.excerpt as any) : ""
+    initial
+      ? parseJSONField(initial.excerpt as string | Localized | null | undefined)
+      : ""
   );
   const [excerptEN, setExcerptEN] = useState("");
   const [coverImage, setCoverImage] = useState(initial?.coverImage || "");

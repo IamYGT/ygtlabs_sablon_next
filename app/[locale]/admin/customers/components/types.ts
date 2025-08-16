@@ -5,7 +5,7 @@ export type Customer = {
   phone?: string | null;
   company?: string | null;
   isActive: boolean;
-  notes?: Record<string, any> | null;
+  notes?: Record<string, unknown> | null;
   createdAt: string;
   updatedAt: string;
 };

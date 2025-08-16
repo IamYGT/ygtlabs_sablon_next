@@ -87,8 +87,8 @@ export function EditAboutDialog({
       toast.success(t("messages.updateSuccess"));
       onSuccess();
       onOpenChange(false);
-    } catch (error) {
-      console.error("Update about error:", error);
+    } catch (_e) {
+      console.error("Update about error:", _e);
       toast.error(t("messages.updateError"));
     } finally {
       setLoading(false);
@@ -101,7 +101,7 @@ export function EditAboutDialog({
         formData[field as keyof typeof formData] || "{}"
       );
       return parsed[lang] || "";
-    } catch (e) {
+    } catch (_e) {
       return "";
     }
   };
