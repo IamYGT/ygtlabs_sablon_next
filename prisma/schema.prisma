@@ -145,6 +145,8 @@ model User {
   updatedCustomers       Customer[]          @relation("CustomerUpdatedBy")
   LoginHistory           LoginHistory[]
   UserStats              UserStats?
+  createdAbouts          About[]             @relation("AboutCreatedBy")
+  updatedAbouts          About[]             @relation("AboutUpdatedBy")
 
   @@index([roleId])
   @@schema("public")
@@ -416,6 +418,25 @@ model Customer {
 
   @@index([isActive])
   @@index([name])
+  @@schema("public")
+}
+
+// Hakkımızda sayfası içerikleri
+model About {
+  id        String   @id @default(uuid())
+  about     Json // {"tr": "Hakkımızda", "en": "About Us"}
+  mission   Json // {"tr": "Misyonumuz", "en": "Our Mission"}
+  vision    Json // {"tr": "Vizyonumuz", "en": "Our Vision"}
+  roadmap   Json // {"tr": "Yol Haritası", "en": "Roadmap"}
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdById String?
+  updatedById String?
+  
+  // Relations
+  createdBy User? @relation("AboutCreatedBy", fields: [createdById], references: [id])
+  updatedBy User? @relation("AboutUpdatedBy", fields: [updatedById], references: [id])
+
   @@schema("public")
 }
 

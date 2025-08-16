@@ -71,6 +71,20 @@
     "settings": "Settings",
     "logout": "Logout"
   },
+  "AdminNavigation": {
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "customers": "Customers",
+    "roles": "Roles",
+    "permissions": "Permissions",
+    "profile": "My Profile",
+    "heroSlider": "Hero Slider",
+    "information": "Knowledge Base",
+    "about": "About Us",
+    "i18nRoutes": "I18n Routes",
+    "i18nLanguages": "I18n Languages",
+    "i18nMessages": "I18n Messages"
+  },
   "Common": {
     "save": "Save",
     "cancel": "Cancel",
@@ -84,7 +98,8 @@
     "success": "Success",
     "confirm": "Confirm",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "GoBack": "Go Back"
   },
   "ProfileImageUpload": {
     "errorFileSize": "File size cannot exceed 5MB",
@@ -586,5 +601,64 @@
       "ogTitle": "RevvTuned - ECU Chip Tuning Services",
       "ogDescription": "Increase your vehicle's performance with professional ECU chip tuning services."
     }
+  },
+  "About": {
+    "title": "About Management",
+    "description": "Manage your company's about, mission, vision, and roadmap content.",
+    "newAbout": "Add New Content",
+    "contentTitle": "Company Information",
+    "field": "Field",
+    "content": "Content",
+    "about": "About Us",
+    "mission": "Mission",
+    "vision": "Vision",
+    "roadmap": "Roadmap",
+    "noContent": "No about content has been added yet.",
+    "noContentDescription": "Please create new content to get started.",
+    "createFirstAbout": "Create First About Content",
+    "loading": "Loading...",
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "view": "View",
+      "cancel": "Cancel",
+      "create": "Create",
+      "creating": "Creating...",
+      "update": "Update",
+      "updating": "Updating...",
+      "deleting": "Deleting...",
+      "close": "Close"
+    },
+    "dialogs": {
+      "create": {
+        "title": "Create About Content",
+        "description": "Fill in all fields in both languages."
+      },
+      "edit": {
+        "title": "Edit About Content",
+        "description": "Update the existing content."
+      },
+      "delete": {
+        "title": "Are you sure you want to delete the content?",
+        "description": "This action cannot be undone. The content will be permanently deleted."
+      },
+      "view": {
+        "title": "Content Details",
+        "description": "Preview of the about content."
+      }
+    },
+    "messages": {
+      "fetchError": "An error occurred while fetching data.",
+      "createSuccess": "Content created successfully.",
+      "createError": "An error occurred while creating the content.",
+      "updateSuccess": "Content updated successfully.",
+      "updateError": "An error occurred while updating the content.",
+      "deleteSuccess": "Content deleted successfully.",
+      "deleteError": "An error occurred while deleting the content."
+    }
+  },
+  "HeroSlider": {
+    "title": "Hero Slider Management",
+    "subtitle": "Manage the homepage hero slider component"
   }
 }

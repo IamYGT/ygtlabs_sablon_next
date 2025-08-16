@@ -281,6 +281,23 @@ export const VIEW_PERMISSIONS: PermissionConfig[] = [
     usedIn: ["InformationPageClient", "/api/admin/information/faq (GET)"],
   },
   {
+    name: "admin.about.view",
+    category: "view",
+    resourcePath: "about",
+    action: "view",
+    permissionType: "admin",
+    displayName: {
+      tr: "Hakkımızda Yönetimi Görüntüleme",
+      en: "About Management View",
+    },
+    description: {
+      tr: "Hakkımızda sayfasını görüntüleme ve içeriği okuma yetkisi",
+      en: "Permission to view about page and read its content",
+    },
+    dependencies: ["admin.layout"],
+    usedIn: ["AboutPageClient", "/api/admin/about (GET)"],
+  },
+  {
     name: "user.dashboard.view",
     category: "view",
     resourcePath: "dashboard",
@@ -712,6 +729,57 @@ export const FUNCTION_PERMISSIONS: PermissionConfig[] = [
     },
     dependencies: ["admin.customers.view"],
     usedIn: ["CustomerDeleteDialog", "/api/admin/customers/[id] (DELETE)"],
+  },
+  {
+    name: "about.create",
+    category: "function",
+    resourcePath: "about",
+    action: "create",
+    permissionType: "admin",
+    displayName: {
+      tr: "Hakkımızda İçeriği Oluşturma",
+      en: "Create About Content",
+    },
+    description: {
+      tr: "Hakkımızda sayfası için içerik oluşturma yetkisi",
+      en: "Permission to create content for the about page",
+    },
+    dependencies: ["admin.about.view"],
+    usedIn: ["CreateAboutDialog", "/api/admin/about (POST)"],
+  },
+  {
+    name: "about.update",
+    category: "function",
+    resourcePath: "about",
+    action: "update",
+    permissionType: "admin",
+    displayName: {
+      tr: "Hakkımızda İçeriği Güncelleme",
+      en: "Update About Content",
+    },
+    description: {
+      tr: "Hakkımızda sayfası içeriğini güncelleme yetkisi",
+      en: "Permission to update content on the about page",
+    },
+    dependencies: ["admin.about.view"],
+    usedIn: ["EditAboutDialog", "/api/admin/about (PUT)"],
+  },
+  {
+    name: "about.delete",
+    category: "function",
+    resourcePath: "about",
+    action: "delete",
+    permissionType: "admin",
+    displayName: {
+      tr: "Hakkımızda İçeriği Silme",
+      en: "Delete About Content",
+    },
+    description: {
+      tr: "Hakkımızda sayfası içeriğini silme yetkisi",
+      en: "Permission to delete content from the about page",
+    },
+    dependencies: ["admin.about.view"],
+    usedIn: ["DeleteAboutDialog", "/api/admin/about (DELETE)"],
   },
   {
     name: "hero-slider.update",
