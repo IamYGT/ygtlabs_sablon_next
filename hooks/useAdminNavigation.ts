@@ -27,7 +27,7 @@ interface NavigationItem {
   key: string;
   label: string;
   href: string;
-  icon: React.ReactElement;
+  icon: React.ComponentType<{ className?: string }>;
   order: number;
 }
 
@@ -150,10 +150,7 @@ export function useAdminNavigation(): NavigationItem[] {
           label: t(config.translationKey),
           href: config.href,
           order: config.order,
-          icon: React.createElement(IconComponent, {
-            className:
-              "text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0",
-          }),
+          icon: IconComponent,
         };
       });
   }, [has, t]);

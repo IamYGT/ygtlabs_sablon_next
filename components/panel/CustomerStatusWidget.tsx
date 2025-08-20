@@ -1,12 +1,9 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { useCustomerAuth } from "@/lib/hooks/useAuth";
 import { ShoppingCart, Package, CreditCard, Heart } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 export function CustomerStatusWidget() {
-  const customer = useCustomerAuth();
   const t = useTranslations("CustomerStatus");
 
   const stats = [

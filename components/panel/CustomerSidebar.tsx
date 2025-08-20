@@ -10,30 +10,17 @@ import { motion } from "framer-motion";
 import {
   ChevronDown,
   ChevronRight,
-  CreditCard,
-  Heart,
-  Home,
-  MessageSquare,
-  Package,
   Settings,
   ShoppingBag,
   ShoppingCart,
-  Star,
-  User,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 export function CustomerSidebar() {
   const customer = useCustomerAuth();
-  const {
-    open,
-    locked: _locked,
-    setLocked: _setLocked,
-    setCollapsed,
-  } = useSidebar();
+  const { open, setCollapsed } = useSidebar();
   const isMobile = useIsMobile();
   const pathname = usePathname();
   const [ordersOpen, setOrdersOpen] = useState<boolean>(true);

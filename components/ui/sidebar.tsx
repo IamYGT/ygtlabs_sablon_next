@@ -17,7 +17,7 @@ import React, { ComponentType } from "react";
 interface Links {
   label: string;
   href: string;
-  icon: ComponentType<{ className?: string }>;
+  icon: ComponentType<{ className?: string }> | React.ReactElement;
 }
 
 // Zustand-based sidebar hook - Optimized to prevent infinite loops
@@ -246,7 +246,11 @@ export const SidebarLink = ({
       )}
       {...props}
     >
-      <link.icon className="h-5 w-5 flex-shrink-0 text-slate-500 dark:text-slate-400 group-hover/sidebar:text-slate-700 dark:group-hover/sidebar:text-slate-200" />
+      {React.isValidElement(link.icon) ? (
+        link.icon
+      ) : (
+        <link.icon className="h-5 w-5 flex-shrink-0 text-slate-500 dark:text-slate-400 group-hover/sidebar:text-slate-700 dark:group-hover/sidebar:text-slate-200" />
+      )}
 
       <motion.span
         animate={{

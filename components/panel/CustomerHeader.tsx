@@ -2,7 +2,7 @@
 
 import { CustomerStatusWidget } from "@/components/panel/CustomerStatusWidget";
 import LogoutButton from "@/components/panel/LogoutButton";
-import { ThemeToggle, useTheme } from "@/components/panel/ThemeToggle";
+import { ThemeToggle } from "@/components/panel/ThemeToggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -254,7 +254,7 @@ export function CustomerHeader({
                   <div className="flex items-center justify-between w-full">
                     <div className="flex items-center gap-2">
                       {getLanguageFlag(loc)}
-                      <span className="capitalize">{tLang(loc as any)}</span>
+                      <span className="capitalize">{tLang(loc)}</span>
                     </div>
                     {locale === loc && <Check className="h-4 w-4" />}
                   </div>
