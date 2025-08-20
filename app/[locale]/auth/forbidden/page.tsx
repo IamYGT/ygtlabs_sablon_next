@@ -110,7 +110,7 @@ export default function ForbiddenPage() {
                             </Link>
 
                             {userRole ? (
-                                <Link href={userRole === 'USER' ? '/users/dashboard' : '/'} className="w-full">
+                                <Link href={userRole === 'USER' ? '/customer/dashboard' : '/'} className="w-full">
                                     <Button variant="outline" className="w-full">
                                         <ArrowLeft className="mr-2 h-4 w-4" />
                                         {userRole === 'USER' ? 'Kullanıcı Paneline Dön' : 'Ana Sayfaya Dön'}

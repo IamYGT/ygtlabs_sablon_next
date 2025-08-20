@@ -98,7 +98,7 @@ if (path === "/") {
 ### 3. Protected Routes
 ```typescript
 // Protect admin and user areas
-if ((path.startsWith("/admin") || path.startsWith("/users")) && !isAuthenticated) {
+if ((path.startsWith("/admin") || path.startsWith("/customer")) && !isAuthenticated) {
   return NextResponse.redirect(
     new URL(`/${locale}/auth/login?callbackUrl=${encodeURIComponent(pathname)}`, request.url)
   );
@@ -153,7 +153,7 @@ return NextResponse.redirect(new URL(dashboardUrl, request.url));
 
 ### 2. Protected Routes
 - `/admin/*` - Admin panel (requires authentication)
-- `/users/*` - User dashboard (requires authentication)
+- `/customer/*` - Customer dashboard (requires authentication)
 
 ### 3. Excluded Routes
 - `/api/*` - API routes (handled separately)
@@ -199,7 +199,7 @@ const isAuthenticated = token &&
 ```typescript
 // Group related route checks
 const isAuthRoute = path.startsWith("/auth");
-const isProtectedRoute = path.startsWith("/admin") || path.startsWith("/users");
+const isProtectedRoute = path.startsWith("/admin") || path.startsWith("/customer");
 const isPublicRoute = path.startsWith("/landing") || path === "/";
 ```
 

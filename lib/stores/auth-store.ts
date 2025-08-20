@@ -55,6 +55,7 @@ interface AuthStore extends AuthState {
   // New computed functions
   hasAdminAccess: () => boolean;
   hasUserAccess: () => boolean;
+  hasCustomerAccess: () => boolean;
   getUserInitials: () => string;
   getUserDisplayName: () => string;
   getRoleName: () => string;
@@ -217,6 +218,11 @@ export const useAuthStore = create<AuthStore>()(
       hasUserAccess: () => {
         const { hasPermission } = get();
         return hasPermission("user.layout") || hasPermission("admin.layout");
+      },
+
+      hasCustomerAccess: () => {
+        const { hasPermission } = get();
+        return hasPermission("customer.layout") || hasPermission("admin.layout");
       },
 
       getUserInitials: () => {

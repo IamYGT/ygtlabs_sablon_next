@@ -72,20 +72,20 @@ export const LAYOUT_PERMISSIONS: PermissionConfig[] = [
     usedIn: ["AdminPageGuard", "AdminLayout"],
   },
   {
-    name: "user.layout",
+    name: "customer.layout",
     category: "layout",
-    resourcePath: "user",
+    resourcePath: "customer",
     action: "access",
     permissionType: "user",
     displayName: {
-      tr: "Kullanıcı Panel Erişimi",
-      en: "User Panel Access",
+      tr: "Müşteri Panel Erişimi",
+      en: "Customer Panel Access",
     },
     description: {
-      tr: "Kullanıcı paneline erişim yetkisi",
-      en: "Access permission to user panel",
+      tr: "Müşteri paneline erişim yetkisi",
+      en: "Access permission to customer panel",
     },
-    usedIn: ["UserPageGuard", "UserLayout"],
+    usedIn: ["CustomerPageGuard", "CustomerLayout"],
   },
 ];
 

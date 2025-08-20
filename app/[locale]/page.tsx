@@ -38,10 +38,10 @@ export default function HomePage() {
                 return;
             }
 
-            // User layout erişimi varsa user paneline yönlendir
+            // customer layout erişimi varsa customer paneline yönlendir
             if (hasLayoutAccess('user')) {
                 setHasRedirected(true);
-                router.push('/users/dashboard');
+                router.push('/customer/dashboard');
                 return;
             }
 

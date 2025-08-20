@@ -61,7 +61,7 @@ async function main() {
     "/admin/roles",
     "/admin/permissions",
     "/admin/profile",
-    "/users/dashboard",
+    "/customer/dashboard",
   ];
 
   for (const name of baseRoutes) {
@@ -87,12 +87,12 @@ async function main() {
     "/auth/forbidden": "/erisim-engellendi",
     "/auth/unauthorized": "/yetkisiz",
     "/auth/error": "/hata",
-    "/admin/dashboard": "/admin/kontrol-paneli",
+    "/admin/dashboard": "/admin/panel",
     "/admin/users": "/admin/kullanicilar",
     "/admin/roles": "/admin/roller",
     "/admin/permissions": "/admin/yetkiler",
     "/admin/profile": "/admin/profil",
-    "/users/dashboard": "/kullanicilar/kontrol-paneli",
+    "/customer/dashboard": "/musteri/panel",
   };
 
   for (const [routeName, path] of Object.entries(trTranslations)) {

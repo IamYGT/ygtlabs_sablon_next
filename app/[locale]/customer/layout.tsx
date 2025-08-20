@@ -1,0 +1,89 @@
+import { CustomerHeader } from '@/components/panel/CustomerHeader';
+import { CustomerSidebar } from '@/components/panel/CustomerSidebar';
+import { CustomerGuard } from '@/components/panel/AuthGuards';
+import { LogoutModalProvider } from '@/components/panel/LogoutModalProvider';
+import { routing } from '@/src/i18n/routing';
+import type { Metadata } from "next";
+import { NextIntlClientProvider } from 'next-intl';
+import { getTranslations } from "next-intl/server";
+import React from 'react';
+import { Toaster } from 'sonner';
+import './styles/customer.css';
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+    const { locale } = await params;
+    const t = await getTranslations({ locale, namespace: "CustomerDashboard" });
+
+    return {
+        title: t("title"),
+        description: t("description"),
+        robots: {
+            index: false,
+            follow: false,
+        },
+    };
+}
+
+export const dynamic = 'force-dynamic';
+
+interface CustomerLayoutProps {
+    children: React.ReactNode;
+    params: Promise<{ locale: string }>;
+}
+
+export default async function CustomerLayout({ children, params }: CustomerLayoutProps) {
+    const { locale } = await params;
+
+    // Validate locale using dynamic routing locales
+    const validLocale = (routing.locales as readonly string[]).includes(locale) ? locale : routing.defaultLocale;
+
+    // Customer için özel mesajları yükle
+    const customerMessages = (await import(`../../../messages/customer/customer_${validLocale}.json`).catch(async () => (
+        await import(`../../../messages/customer/customer_${routing.defaultLocale}.json`)
+    ))).default;
+    const t = await getTranslations({ locale: validLocale, namespace: "CustomerDashboard" });
+
+    return (
+        <NextIntlClientProvider messages={customerMessages} locale={validLocale}>
+            <CustomerGuard>
+                <LogoutModalProvider>
+                    {/* Z-Index Hierarchy: Sidebar(9999) < Toaster(10000) < Modal(99999) */}
+                    <div className="relative z-0" data-scope="customer">
+                        {/* Modern Customer Layout */}
+                        <div className="flex h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-50 dark:from-slate-900 dark:via-purple-900/10 dark:to-slate-900">
+                            {/* Sidebar - Desktop: Fixed, Mobile: Overlay */}
+                            <div className="relative z-[9999]">
+                                <CustomerSidebar />
+                            </div>
+
+                            {/* Ana İçerik Alanı - Modern Rounded Design */}
+                            <div className="flex flex-1 flex-col overflow-hidden md:rounded-tl-[2rem] md:rounded-bl-[2rem] bg-white/50 dark:bg-gray-900/95 backdrop-blur-xl relative z-10">
+                                {/* Header - Responsive */}
+                                <CustomerHeader
+                                    title={t("subtitle")}
+                                    subtitle={t("description")}
+                                />
+
+                                {/* Sayfa İçeriği - Modern Padding */}
+                                <main className="flex-1 overflow-y-auto p-4 md:p-8 lg:p-10 bg-gradient-to-b from-white/50 to-gray-50/30 dark:from-gray-900/50 dark:to-slate-900/80">
+                                    <div className="max-w-7xl mx-auto">
+                                        {children}
+                                    </div>
+                                </main>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Toast Notifications - Higher z-index */}
+                    <Toaster
+                        position="top-right"
+                        toastOptions={{
+                            className: 'z-[10000]',
+                            duration: 4000,
+                        }}
+                    />
+                </LogoutModalProvider>
+            </CustomerGuard>
+        </NextIntlClientProvider>
+    );
+}

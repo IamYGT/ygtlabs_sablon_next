@@ -18,10 +18,10 @@ ecu_sablon/
 │   │   │   └── page.tsx          # Landing page içeriği (component)
 │   │   ├── admin/                # Admin paneli
 │   │   ├── auth/                 # Kimlik doğrulama sayfaları
-│   │   └── users/                # Kullanıcı paneli
+│   │   └── customer/                # Kullanıcı paneli
 │   └── api/                      # API rotaları
 ├── components/                   # Yeniden kullanılabilir bileşenler
-│   ├── panel/                    # Panel bileşenleri (admin/user/landing)
+│   ├── panel/                    # Panel bileşenleri (admin/customer/landing)
 │   └── ui/                       # UI bileşenleri (shadcn/ui)
 ├── lib/                          # Yardımcı kütüphaneler
 ├── messages/                     # Çok dilli mesajlar
@@ -66,7 +66,7 @@ ecu_sablon/
 - **Şifremi Unuttum**: Şifre sıfırlama
 - **Özel Auth Layout**: Modern glassmorphism tasarım
 
-### 👤 **Kullanıcı Paneli (`/users`)**
+### 👤 **Kullanıcı Paneli (`/customer`)**
 - **Dashboard**: Kullanıcı özgü istatistikler
 - **Profil**: Kullanıcı profil yönetimi
 
@@ -78,7 +78,7 @@ ecu_sablon/
 /auth/login (/tr/auth/giris)    → Giriş sayfası
 /auth/register (/tr/auth/kayit-ol) → Kayıt sayfası
 /admin/dashboard                → Admin dashboard
-/users/dashboard                → Kullanıcı dashboard
+/customer/dashboard                → Kullanıcı dashboard
 ```
 
 ### Çok Dilli Destek
@@ -162,7 +162,7 @@ Shadcn/ui tabanlı temel UI bileşenleri
 1. → / (root URL)
 2. → Middleware: Session var
 3. → Dashboard'a otomatik yönlendirme
-4. → /admin/dashboard veya /users/dashboard
+4. → /admin/dashboard veya /customer/dashboard
 ```
 
 ## Deployment

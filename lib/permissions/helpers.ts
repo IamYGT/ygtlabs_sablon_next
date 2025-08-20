@@ -116,7 +116,7 @@ function _getRequiredPermissionForPath(path: string): PermissionName | null {
 
   // Layout permission for general admin access
   if (path.includes("/admin")) return "admin.layout";
-  if (path.includes("/users")) return "user.layout";
+  if (path.includes("/customer")) return "user.layout";
 
   return null;
 }

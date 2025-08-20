@@ -53,7 +53,7 @@ export async function middleware(request: NextRequest) {
   // Bu yönlendirme yetkisiz kullanıcılar için döngü yaratıyordu
 
   if (
-    (path.startsWith("/admin") || path.startsWith("/users")) &&
+    (path.startsWith("/admin") || path.startsWith("/customer")) &&
     !isAuthenticated
   ) {
     return NextResponse.redirect(

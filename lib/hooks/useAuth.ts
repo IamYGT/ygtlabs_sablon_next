@@ -36,6 +36,7 @@ export function useAuth() {
     hasPermission: useAuthStore((state) => state.hasPermission),
     hasAdminAccess: useAuthStore((state) => state.hasAdminAccess),
     hasUserAccess: useAuthStore((state) => state.hasUserAccess),
+    hasCustomerAccess: useAuthStore((state) => state.hasCustomerAccess),
     isAdmin: useAuthStore((state) => state.isAdmin),
     // User info helpers
     getUserInitials: useAuthStore((state) => state.getUserInitials),
@@ -82,7 +83,7 @@ export function useCurrentUser() {
           const currentPath = window.location.pathname;
           if (
             currentPath.includes("/admin") ||
-            currentPath.includes("/users")
+            currentPath.includes("/customer")
           ) {
             const locale = currentPath.split("/")[1] || "en";
             window.location.href = `/${locale}/auth/login?callbackUrl=${encodeURIComponent(
@@ -153,7 +154,7 @@ export function useLogin() {
       const hasAdminAccess = user.permissions?.includes("admin.layout");
       const dashboardPath = hasAdminAccess
         ? "/admin/dashboard"
-        : "/users/dashboard";
+        : "/customer/dashboard";
       router.push(`/${locale}${dashboardPath}`);
     },
     onError: (error: unknown) => {
@@ -252,6 +253,20 @@ export function useUserAuth(): SimpleUser | null {
   const hasUserAccess = useAuthStore((state) => state.hasUserAccess());
 
   if (!isAuthenticated || !user || !hasUserAccess) {
+    return null;
+  }
+
+  return user;
+}
+
+/**
+ * Customer auth hook - customer veya admin kullanıcılar için
+ */
+export function useCustomerAuth(): SimpleUser | null {
+  const { user, isAuthenticated } = useAuth();
+  const hasCustomerAccess = useAuthStore((state) => state.hasCustomerAccess());
+
+  if (!isAuthenticated || !user || !hasCustomerAccess) {
     return null;
   }
 

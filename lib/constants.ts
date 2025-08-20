@@ -12,7 +12,7 @@ export const AUTH_ROUTES = {
   REGISTER: "/auth/register",
   FORBIDDEN: "/auth/forbidden",
   UNAUTHORIZED: "/auth/unauthorized",
-  USER_DASHBOARD: "/users/dashboard",
+  USER_DASHBOARD: "/customer/dashboard",
   ADMIN_DASHBOARD: "/admin/dashboard",
 } as const;
 

@@ -113,6 +113,52 @@ export function UserGuard({ children, fallback }: AuthGuardProps) {
     return <>{children}</>;
 }
 
+// Customer Guard - customer.layout permission kontrolü
+export function CustomerGuard({ children, fallback }: AuthGuardProps) {
+    const { user, isAuthenticated, isLoading, hasCustomerAccess } = useAuth();
+    const { isLoading: queryLoading } = useCurrentUser();
+    const router = useRouter();
+    const params = useParams();
+    const locale = (params.locale as string) || 'en';
+
+    // Loading durumu
+    const loading = isLoading || queryLoading;
+
+    // Redirect işlemlerini useEffect ile render sonrasına ertele
+    useEffect(() => {
+        if (loading) return; // Loading sırasında redirect yapma
+
+        if (!isAuthenticated || !user) {
+            // Hard redirect to ensure clean state
+            window.location.href = `/${locale}/auth/login`;
+            return;
+        }
+
+        if (!hasCustomerAccess()) {
+            router.push(`/${locale}/auth/forbidden`);
+            return;
+        }
+    }, [loading, isAuthenticated, user, hasCustomerAccess, router, locale]);
+
+    // Loading durumu
+    if (loading) {
+        return fallback || <LoadingSpinner />;
+    }
+
+    // Giriş yapmamış kullanıcılar için loading göster
+    if (!isAuthenticated || !user) {
+        return fallback || <LoadingSpinner />;
+    }
+
+    // customer.layout permission kontrolü
+    if (!hasCustomerAccess()) {
+        return fallback || <LoadingSpinner />;
+    }
+
+    // Customer access var - içeriği göster
+    return <>{children}</>;
+}
+
 // Guest Guard - sadece giriş yapmamış kullanıcılar geçebilir
 export function GuestGuard({ children, fallback }: AuthGuardProps) {
     const { user, isAuthenticated, isLoading, hasAdminAccess } = useAuth();
@@ -132,7 +178,7 @@ export function GuestGuard({ children, fallback }: AuthGuardProps) {
             if (hasAdminAccess()) {
                 router.push(`/${locale}/admin/dashboard`);
             } else {
-                router.push(`/${locale}/users/dashboard`);
+                router.push(`/${locale}/customer/dashboard`);
             }
         }
     }, [loading, isAuthenticated, user, hasAdminAccess, router, locale]);

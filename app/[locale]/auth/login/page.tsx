@@ -85,7 +85,7 @@ const UnifiedAuthLoginForm = memo(() => {
                     result.user.userRoles?.includes('super_admin');
 
                 // Redirect to appropriate dashboard with proper i18n routing
-                const dashboardPath = hasAdminAccess ? '/admin/dashboard' : '/users/dashboard';
+                const dashboardPath = hasAdminAccess ? '/admin/dashboard' : '/customer/dashboard';
                 const dashboardUrl = locale === routing.defaultLocale ? dashboardPath : `/${locale}${dashboardPath}`;
 
                 // Hard redirect ile tam geçiş
