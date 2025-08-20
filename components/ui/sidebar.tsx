@@ -1,23 +1,23 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import Link, { LinkProps } from "next/link";
-import React from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { X } from "lucide-react";
-import { usePathname } from "next/navigation";
 import {
-  useUIStore,
+  useSetSidebarCollapsed,
   useSetSidebarOpen,
   useToggleSidebar,
-  useSetSidebarCollapsed,
-  useToggleSidebarCollapse
+  useToggleSidebarCollapse,
+  useUIStore,
 } from "@/lib/stores/ui-store";
+import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "framer-motion";
+import { X } from "lucide-react";
+import Link, { LinkProps } from "next/link";
+import { usePathname } from "next/navigation";
+import React, { ComponentType } from "react";
 
 interface Links {
   label: string;
   href: string;
-  icon: React.JSX.Element | React.ReactNode;
+  icon: ComponentType<{ className?: string }>;
 }
 
 // Zustand-based sidebar hook - Optimized to prevent infinite loops
@@ -51,11 +51,7 @@ export const SidebarProvider = ({
   return <>{children}</>;
 };
 
-export const Sidebar = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const Sidebar = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
@@ -66,7 +62,10 @@ export const SidebarBody = ({
 }: {
   className?: string;
   children: React.ReactNode;
-} & Omit<React.ComponentProps<typeof motion.div>, 'className' | 'children'>) => {
+} & Omit<
+  React.ComponentProps<typeof motion.div>,
+  "className" | "children"
+>) => {
   const { open, setOpen, collapsed } = useSidebar();
 
   return (
@@ -128,9 +127,7 @@ export const SidebarBody = ({
               </div>
 
               {/* Content */}
-              <div className="mt-8">
-                {children}
-              </div>
+              <div className="mt-8">{children}</div>
             </motion.div>
           </>
         )}
@@ -214,9 +211,7 @@ export const MobileSidebar = ({
               </div>
 
               {/* Content */}
-              <div className="mt-8">
-                {children}
-              </div>
+              <div className="mt-8">{children}</div>
             </motion.div>
           </>
         )}
@@ -251,7 +246,7 @@ export const SidebarLink = ({
       )}
       {...props}
     >
-      {link.icon}
+      <link.icon className="h-5 w-5 flex-shrink-0 text-slate-500 dark:text-slate-400 group-hover/sidebar:text-slate-700 dark:group-hover/sidebar:text-slate-200" />
 
       <motion.span
         animate={{
@@ -260,11 +255,13 @@ export const SidebarLink = ({
         }}
         transition={{
           duration: 0.25,
-          ease: "easeInOut"
+          ease: "easeInOut",
         }}
         className={cn(
           "text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre !p-0 !m-0 overflow-hidden",
-          isActive ? "text-slate-800 dark:text-slate-100 font-semibold" : "text-slate-700 dark:text-slate-200"
+          isActive
+            ? "text-slate-800 dark:text-slate-100 font-semibold"
+            : "text-slate-700 dark:text-slate-200"
         )}
       >
         {link.label}

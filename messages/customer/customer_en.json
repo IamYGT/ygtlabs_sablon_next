@@ -1,0 +1,81 @@
+{
+  "CustomerNav": {
+    "dashboard": "Dashboard",
+    "orders": "My Orders",
+    "orderHistory": "Order History",
+    "trackOrder": "Track Order",
+    "cart": "My Cart",
+    "wishlist": "My Wishlist",
+    "loyalty": "Loyalty Program",
+    "payment": "Payment Methods",
+    "profile": "My Profile",
+    "settings": "Account Settings",
+    "logout": "Logout",
+    "home": "Home",
+    "sections": {
+      "main": "Main Menu",
+      "account": "My Account",
+      "shopping": "Shopping"
+    }
+  },
+  "CustomerNavigation": {
+    "dashboard": "Dashboard",
+    "orders": "My Orders",
+    "orderHistory": "Order History",
+    "trackOrder": "Track Order",
+    "wishlist": "My Wishlist",
+    "cart": "My Cart",
+    "loyalty": "Loyalty Program",
+    "payment": "Payment Methods",
+    "profile": "My Profile",
+    "settings": "Account Settings"
+  },
+  "CustomerDashboard": {
+    "title": "Welcome",
+    "subtitle": "Your account summary and recent activities",
+    "quickStats": {
+      "title": "Quick Overview",
+      "totalOrders": "Total Orders",
+      "pendingOrders": "Pending Orders",
+      "cartItems": "Items in Cart",
+      "wishlistItems": "Wishlist Items",
+      "loyaltyPoints": "Points",
+      "loyaltyTier": "Membership Tier"
+    },
+    "recentOrders": {
+      "title": "Recent Orders",
+      "viewAll": "View All",
+      "orderNumber": "Order #",
+      "date": "Date",
+      "status": "Status",
+      "total": "Total",
+      "items": "Items",
+      "viewDetails": "View Details"
+    },
+    "loyaltyProgram": {
+      "title": "Loyalty Program",
+      "currentPoints": "Current Points",
+      "nextTier": "Next Tier",
+      "pointsNeeded": "points needed",
+      "tierProgress": "Tier Progress",
+      "benefits": "Your Benefits",
+      "viewAll": "View All Benefits"
+    },
+    "recommendations": {
+      "title": "Recommended for You",
+      "viewAll": "View All",
+      "addToCart": "Add to Cart",
+      "addToWishlist": "Add to Wishlist"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "markAllRead": "Mark All as Read",
+      "viewAll": "View All Notifications",
+      "noNotifications": "No new notifications"
+    },
+    "memberSince": "Member Since",
+    "accountStatus": "Account Status",
+    "active": "Active",
+    "verified": "Verified"
+  }
+}

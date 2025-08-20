@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import LRU from "lru-cache";
+import { LRUCache } from "lru-cache";
 
 type RoutingData = {
   locales: string[];
@@ -8,7 +8,7 @@ type RoutingData = {
   pathnames: Record<string, string | Record<string, string>>;
 };
 
-const cache = new LRU<string, RoutingData>({ max: 1, ttl: 60_000 });
+const cache = new LRUCache<string, RoutingData>({ max: 1, ttl: 60_000 });
 
 export async function getRoutingFromDB(): Promise<RoutingData> {
   const cached = cache.get("routing");

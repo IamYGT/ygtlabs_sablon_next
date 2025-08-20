@@ -1,0 +1,81 @@
+{
+  "CustomerNav": {
+    "dashboard": "Ana Sayfa",
+    "orders": "Siparişlerim",
+    "orderHistory": "Sipariş Geçmişi",
+    "trackOrder": "Sipariş Takibi",
+    "cart": "Sepetim",
+    "wishlist": "Favorilerim",
+    "loyalty": "Sadakat Programı",
+    "payment": "Ödeme Yöntemleri",
+    "profile": "Profilim",
+    "settings": "Hesap Ayarları",
+    "logout": "Çıkış Yap",
+    "home": "Ana Sayfa",
+    "sections": {
+      "main": "Ana Menü",
+      "account": "Hesabım",
+      "shopping": "Alışveriş"
+    }
+  },
+  "CustomerNavigation": {
+    "dashboard": "Ana Sayfa",
+    "orders": "Siparişlerim",
+    "orderHistory": "Sipariş Geçmişi",
+    "trackOrder": "Sipariş Takibi",
+    "wishlist": "Favorilerim",
+    "cart": "Sepetim",
+    "loyalty": "Sadakat Programı",
+    "payment": "Ödeme Yöntemleri",
+    "profile": "Profilim",
+    "settings": "Hesap Ayarları"
+  },
+  "CustomerDashboard": {
+    "title": "Hoş Geldiniz",
+    "subtitle": "Hesap özetiniz ve son aktiviteleriniz",
+    "quickStats": {
+      "title": "Hızlı Bakış",
+      "totalOrders": "Toplam Sipariş",
+      "pendingOrders": "Bekleyen Sipariş",
+      "cartItems": "Sepetteki Ürün",
+      "wishlistItems": "Favori Ürün",
+      "loyaltyPoints": "Puan",
+      "loyaltyTier": "Üyelik Seviyesi"
+    },
+    "recentOrders": {
+      "title": "Son Siparişler",
+      "viewAll": "Tümünü Görüntüle",
+      "orderNumber": "Sipariş No",
+      "date": "Tarih",
+      "status": "Durum",
+      "total": "Toplam",
+      "items": "Ürün",
+      "viewDetails": "Detayları Gör"
+    },
+    "loyaltyProgram": {
+      "title": "Sadakat Programı",
+      "currentPoints": "Mevcut Puan",
+      "nextTier": "Sonraki Seviye",
+      "pointsNeeded": "puan daha",
+      "tierProgress": "Seviye İlerlemesi",
+      "benefits": "Avantajlarınız",
+      "viewAll": "Tüm Avantajları Gör"
+    },
+    "recommendations": {
+      "title": "Size Özel Öneriler",
+      "viewAll": "Tümünü Gör",
+      "addToCart": "Sepete Ekle",
+      "addToWishlist": "Favorilere Ekle"
+    },
+    "notifications": {
+      "title": "Bildirimler",
+      "markAllRead": "Tümünü Okundu İşaretle",
+      "viewAll": "Tüm Bildirimleri Gör",
+      "noNotifications": "Yeni bildirim yok"
+    },
+    "memberSince": "Üyelik Tarihi",
+    "accountStatus": "Hesap Durumu",
+    "active": "Aktif",
+    "verified": "Onaylı"
+  }
+}
