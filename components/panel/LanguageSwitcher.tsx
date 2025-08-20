@@ -20,10 +20,12 @@ import useSWR from "swr";
 
 interface LanguageSwitcherProps {
   isAdmin?: boolean;
+  isCustomer?: boolean;
 }
 
 export default function LanguageSwitcher({
   isAdmin: _isAdmin = false,
+  isCustomer: _isCustomer = false,
 }: LanguageSwitcherProps) {
   const t = useTranslations("Language");
   const locale = useLocale();

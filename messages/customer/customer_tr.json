@@ -33,6 +33,7 @@
   "CustomerDashboard": {
     "title": "Hoş Geldiniz",
     "subtitle": "Hesap özetiniz ve son aktiviteleriniz",
+    "description": "Müşteri paneline hoş geldiniz",
     "quickStats": {
       "title": "Hızlı Bakış",
       "totalOrders": "Toplam Sipariş",
@@ -77,5 +78,51 @@
     "accountStatus": "Hesap Durumu",
     "active": "Aktif",
     "verified": "Onaylı"
+  },
+  "CustomerHeader": {
+    "customerPanel": "Müşteri Paneli",
+    "searchPlaceholder": "Ürün, servis veya içerik ara...",
+    "loading": "Yükleniyor",
+    "notifications": "Bildirimler",
+    "noNotifications": "Yeni bildirim yok",
+    "markAllAsRead": "Tümünü Okundu Olarak İşaretle",
+    "viewAllNotifications": "Tüm Bildirimleri Görüntüle",
+    "unreadBadge": "{count} yeni",
+    "defaultUserName": "Kullanıcı",
+    "viewNotification": "Bildirimi Görüntüle",
+    "language": "Dil",
+    "theme": "Tema",
+    "light": "Açık",
+    "dark": "Koyu",
+    "profile": "Profil",
+    "settings": "Ayarlar",
+    "logout": "Çıkış Yap",
+    "logoutOptions": "Çıkış Seçenekleri",
+    "selectLanguage": "Dil Seçin",
+    "userRoles": {
+      "customer": "Müşteri",
+      "premiumCustomer": "Premium Müşteri"
+    },
+    "demoNotification": {
+      "title": "Hoş Geldiniz",
+      "message": "Müşteri paneline başarıyla giriş yaptınız."
+    },
+    "orderNotification": {
+      "title": "Sipariş Güncellemesi",
+      "message": "Siparişiniz başarıyla işleme alındı."
+    }
+  },
+  "CustomerStatus": {
+    "cart": "Sepet",
+    "activeOrders": "Aktif Siparişler",
+    "wishlist": "Favori",
+    "loyaltyPoints": "Puan"
+  },
+  "Language": {
+    "turkish": "Türkçe",
+    "english": "English",
+    "selectLanguage": "Dil Seçin",
+    "changeLanguage": "Dil Değiştir",
+    "currentLanguage": "Mevcut Dil"
   }
 }

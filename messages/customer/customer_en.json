@@ -33,6 +33,7 @@
   "CustomerDashboard": {
     "title": "Welcome",
     "subtitle": "Your account summary and recent activities",
+    "description": "Welcome to customer panel",
     "quickStats": {
       "title": "Quick Overview",
       "totalOrders": "Total Orders",
@@ -77,5 +78,47 @@
     "accountStatus": "Account Status",
     "active": "Active",
     "verified": "Verified"
+  },
+  "CustomerHeader": {
+    "customerPanel": "Customer Panel",
+    "searchPlaceholder": "Search for products, services or content...",
+    "loading": "Loading",
+    "notifications": "Notifications",
+    "noNotifications": "No new notifications",
+    "markAllAsRead": "Mark All as Read",
+    "viewAllNotifications": "View All Notifications",
+    "unreadBadge": "{count} new",
+    "defaultUserName": "User",
+    "viewNotification": "View Notification",
+    "language": "Language",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout",
+    "logoutOptions": "Logout Options",
+    "selectLanguage": "Select Language",
+    "userRoles": {
+      "customer": "Customer",
+      "premiumCustomer": "Premium Customer"
+    },
+    "demoNotification": {
+      "title": "Welcome",
+      "message": "You have successfully logged into the customer panel."
+    }
+  },
+  "CustomerStatus": {
+    "cart": "Cart",
+    "activeOrders": "Active Orders",
+    "wishlist": "Wishlist",
+    "loyaltyPoints": "Points"
+  },
+  "Language": {
+    "turkish": "Türkçe",
+    "english": "English",
+    "selectLanguage": "Select Language",
+    "changeLanguage": "Change Language",
+    "currentLanguage": "Current Language"
   }
 }

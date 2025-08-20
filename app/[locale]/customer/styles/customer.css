@@ -1,219 +1,3 @@
-/* Customer Panel Özel Stilleri */
-
-/* Customer panel'e özel renk paleti */
-[data-scope="customer"] {
-  --customer-primary: 147, 51, 234; /* purple-600 */
-  --customer-secondary: 236, 72, 153; /* pink-600 */
-  --customer-accent: 99, 102, 241; /* indigo-500 */
-  --customer-gradient-start: 250, 245, 255; /* purple-50 */
-  --customer-gradient-mid: 252, 231, 243; /* pink-50 */
-  --customer-gradient-end: 238, 242, 255; /* indigo-50 */
-}
-
-/* Dark mode renkleri */
-[data-scope="customer"].dark {
-  --customer-primary: 168, 85, 247; /* purple-500 */
-  --customer-secondary: 244, 114, 182; /* pink-500 */
-  --customer-accent: 129, 140, 248; /* indigo-400 */
-  --customer-gradient-start: 15, 23, 42; /* slate-900 */
-  --customer-gradient-mid: 88, 28, 135; /* purple-900 */
-  --customer-gradient-end: 15, 23, 42; /* slate-900 */
-}
-
-/* Customer Sidebar stilleri */
-[data-scope="customer"] .customer-sidebar {
-  background: linear-gradient(
-    135deg,
-    rgb(var(--customer-primary) / 0.05),
-    rgb(var(--customer-secondary) / 0.05)
-  );
-  backdrop-filter: blur(12px);
-}
-
-/* Customer Header stilleri */
-[data-scope="customer"] .customer-header {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(var(--customer-primary) / 0.1);
-}
-
-[data-scope="customer"].dark .customer-header {
-  background: rgba(15, 23, 42, 0.8);
-  border-bottom: 1px solid rgba(var(--customer-primary) / 0.2);
-}
-
-/* Customer Card stilleri */
-[data-scope="customer"] .customer-card {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.9),
-    rgba(255, 255, 255, 0.7)
-  );
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(var(--customer-primary) / 0.1);
-  box-shadow: 0 10px 40px rgba(var(--customer-primary) / 0.1);
-}
-
-[data-scope="customer"].dark .customer-card {
-  background: linear-gradient(
-    135deg,
-    rgba(30, 41, 59, 0.9),
-    rgba(30, 41, 59, 0.7)
-  );
-  border: 1px solid rgba(var(--customer-primary) / 0.2);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-}
-
-/* Customer Button stilleri */
-[data-scope="customer"] .customer-btn-primary {
-  background: linear-gradient(
-    135deg,
-    rgb(var(--customer-primary)),
-    rgb(var(--customer-secondary))
-  );
-  color: white;
-  transition: all 0.3s ease;
-}
-
-[data-scope="customer"] .customer-btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(var(--customer-primary) / 0.3);
-}
-
-/* Customer Navigation aktif durumu */
-[data-scope="customer"] .customer-nav-active {
-  background: linear-gradient(
-    90deg,
-    rgb(var(--customer-primary) / 0.1),
-    rgb(var(--customer-secondary) / 0.1)
-  );
-  border-left: 3px solid rgb(var(--customer-primary));
-}
-
-/* Customer Dashboard widget'ları */
-[data-scope="customer"] .customer-widget {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.95),
-    rgba(255, 255, 255, 0.85)
-  );
-  border: 1px solid rgba(var(--customer-primary) / 0.08);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-[data-scope="customer"] .customer-widget:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(var(--customer-primary) / 0.15);
-  border-color: rgba(var(--customer-primary) / 0.2);
-}
-
-[data-scope="customer"].dark .customer-widget {
-  background: linear-gradient(
-    135deg,
-    rgba(30, 41, 59, 0.95),
-    rgba(30, 41, 59, 0.85)
-  );
-  border: 1px solid rgba(var(--customer-primary) / 0.15);
-}
-
-/* Customer animasyonları */
-@keyframes customerFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes customerPulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.8;
-  }
-}
-
-[data-scope="customer"] .animate-customer-fade-in {
-  animation: customerFadeIn 0.5s ease-out;
-}
-
-[data-scope="customer"] .animate-customer-pulse {
-  animation: customerPulse 2s ease-in-out infinite;
-}
-
-/* Customer scrollbar stilleri */
-[data-scope="customer"] ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-[data-scope="customer"] ::-webkit-scrollbar-track {
-  background: rgba(var(--customer-primary) / 0.05);
-  border-radius: 4px;
-}
-
-[data-scope="customer"] ::-webkit-scrollbar-thumb {
-  background: linear-gradient(
-    135deg,
-    rgb(var(--customer-primary) / 0.3),
-    rgb(var(--customer-secondary) / 0.3)
-  );
-  border-radius: 4px;
-}
-
-[data-scope="customer"] ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(
-    135deg,
-    rgb(var(--customer-primary) / 0.5),
-    rgb(var(--customer-secondary) / 0.5)
-  );
-}
-
-/* Customer Badge stilleri */
-[data-scope="customer"] .customer-badge {
-  background: linear-gradient(
-    90deg,
-    rgb(var(--customer-primary) / 0.1),
-    rgb(var(--customer-secondary) / 0.1)
-  );
-  color: rgb(var(--customer-primary));
-  border: 1px solid rgba(var(--customer-primary) / 0.2);
-  font-weight: 600;
-}
-
-/* Customer Input stilleri */
-[data-scope="customer"] .customer-input {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(var(--customer-primary) / 0.15);
-  transition: all 0.3s ease;
-}
-
-[data-scope="customer"] .customer-input:focus {
-  border-color: rgb(var(--customer-primary) / 0.5);
-  box-shadow: 0 0 0 3px rgba(var(--customer-primary) / 0.1);
-}
-
-[data-scope="customer"].dark .customer-input {
-  background: rgba(30, 41, 59, 0.9);
-  border: 1px solid rgba(var(--customer-primary) / 0.25);
-}
-
-/* Customer Glassmorphism efektleri */
-[data-scope="customer"] .glass-effect {
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-[data-scope="customer"].dark .glass-effect {
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -259,7 +43,7 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-[data-scope="user"] {
+[data-scope="customer"] {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.129 0.042 264.695);
@@ -292,10 +76,13 @@
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
+  --scrollbar-track-bg: hsl(0 0% 95%);
+  --scrollbar-thumb-bg: hsl(0 0% 60%);
+  --scrollbar-thumb-hover-bg: hsl(0 0% 45%);
 }
 
-.dark [data-scope="user"],
-[data-scope="user"].dark {
+.dark [data-scope="customer"],
+[data-scope="customer"].dark {
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
   --card: oklch(0.208 0.042 265.755);
@@ -327,39 +114,86 @@
   --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
+  --scrollbar-track-bg: hsl(240 5% 15%);
+  --scrollbar-thumb-bg: hsl(240 5% 40%);
+  --scrollbar-thumb-hover-bg: hsl(240 5% 55%);
 }
 
 @layer base {
-  [data-scope="user"] * {
+  [data-scope="customer"] * {
     @apply border-border outline-ring/50;
   }
 
-  [data-scope="user"] {
+  [data-scope="customer"] {
     @apply bg-background text-foreground;
   }
 }
 
 /* Tema geçişleri için smooth transitions */
-html {
-  transition: color-scheme 0.3s ease-in-out;
-}
-
-html * {
-  transition:
-    background-color 0.3s ease-in-out,
-    border-color 0.3s ease-in-out,
-    color 0.3s ease-in-out,
-    fill 0.3s ease-in-out,
-    stroke 0.3s ease-in-out,
+[data-scope="customer"],
+[data-scope="customer"] * {
+  transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out,
+    color 0.3s ease-in-out, fill 0.3s ease-in-out, stroke 0.3s ease-in-out,
     box-shadow 0.3s ease-in-out;
 }
 
 /* Animasyonları devre dışı bırakmak isteyenler için */
 @media (prefers-reduced-motion: reduce) {
 
-  html *,
-  html {
+  [data-scope="customer"] *,
+  [data-scope="customer"] {
     transition: none !important;
     animation: none !important;
   }
+}
+
+/* Custom Scrollbar Styles */
+/* Works on Firefox */
+[data-scope="customer"] * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb-bg) var(--scrollbar-track-bg);
+}
+
+/* Works on Chrome, Edge, and Safari */
+[data-scope="customer"] ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+[data-scope="customer"] ::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-bg);
+  border-radius: 6px;
+}
+
+[data-scope="customer"] ::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb-bg);
+  border-radius: 10px;
+  border: 3px solid var(--scrollbar-track-bg);
+}
+
+[data-scope="customer"] ::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover-bg);
+}
+
+/* Header-specific styles to ensure clean appearance */
+[data-scope="customer"] header {
+  border: none !important;
+  border-bottom: none !important;
+}
+
+[data-scope="customer"] .customer-header {
+  border: none !important;
+  border-bottom: none !important;
+}
+
+[data-scope="customer"] header * {
+  border: none !important;
+}
+
+[data-scope="customer"] header[class*="border"] {
+  border: none !important;
+}
+
+[data-scope="customer"] header[class*="border-"] {
+  border: none !important;
 }
