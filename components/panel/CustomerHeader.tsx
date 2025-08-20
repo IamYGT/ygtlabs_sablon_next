@@ -27,16 +27,13 @@ import {
   ChevronRight,
   Languages,
   Menu,
-  Moon,
   Package,
   Search,
   ShoppingCart,
-  Sun,
   User,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
-import LanguageSwitcher from "./LanguageSwitcher";
 
 interface CustomerHeaderProps {
   title?: string;
@@ -65,7 +62,6 @@ export function CustomerHeader({
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
-  const { theme, setTheme } = useTheme();
 
   const resolvedTitle = title || t("customerPanel");
 
