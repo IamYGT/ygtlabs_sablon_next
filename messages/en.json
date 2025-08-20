@@ -660,5 +660,62 @@
   "HeroSlider": {
     "title": "Hero Slider Management",
     "subtitle": "Manage the homepage hero slider component"
+  },
+  "CustomerDashboard": {
+    "title": "Welcome",
+    "subtitle": "Your account summary and recent activities",
+    "description": "Welcome to the customer panel"
+  },
+  "AdminHeader": {
+    "searchPlaceholder": "Search users, logs, or settings...",
+    "loading": "Loading...",
+    "notifications": "Notifications",
+    "noNotifications": "No new notifications",
+    "markAllAsRead": "Mark All as Read",
+    "viewAllNotifications": "View All Notifications",
+    "adminPanel": "Admin Panel",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout",
+    "logoutOptions": "Logout Options",
+    "userRoles": {
+      "admin": "Administrator",
+      "user": "User",
+      "guest": "Guest"
+    },
+    "demoNotification": {
+      "title": "System Ready",
+      "message": "Project is running successfully."
+    },
+    "unreadBadge": "{count} new",
+    "defaultUserName": "User",
+    "viewNotification": "View Notification",
+    "language": "Language",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "switchToLight": "Switch to light theme",
+    "switchToDark": "Switch to dark theme",
+    "system": "System"
+  },
+  "LogoutModal": {
+    "title": "Are you sure you want to log out?",
+    "descriptionCurrent": "You are about to log out from this device. After this action:",
+    "descriptionAll": "You are about to log out from all devices. After this action:",
+    "listCurrent": [
+      "Your current session will be terminated.",
+      "Your sessions on other devices will continue.",
+      "You will need to log in again."
+    ],
+    "listAll": [
+      "All your active sessions will be terminated.",
+      "Your access on other devices will be cut off.",
+      "You will need to log in again."
+    ],
+    "cancel": "Cancel",
+    "confirmCurrent": "Log Out from This Device",
+    "confirmAll": "Log Out from All Devices",
+    "loggingOut": "Logging out...",
+    "error": "An error occurred while logging out."
   }
 }
