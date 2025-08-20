@@ -46,7 +46,6 @@ function DropdownMenuContent({
           className
         )}
         {...props}
-        data-scope="admin"
       />
     </DropdownMenuPrimitive.Portal>
   );

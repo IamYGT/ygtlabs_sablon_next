@@ -21,11 +21,13 @@ import useSWR from "swr";
 interface LanguageSwitcherProps {
   isAdmin?: boolean;
   isCustomer?: boolean;
+  dataScope?: "admin" | "customer";
 }
 
 export default function LanguageSwitcher({
   isAdmin: _isAdmin = false,
   isCustomer: _isCustomer = false,
+  dataScope,
 }: LanguageSwitcherProps) {
   const t = useTranslations("Language");
   const locale = useLocale();
@@ -85,6 +87,7 @@ export default function LanguageSwitcher({
       <DropdownMenuContent
         align="end"
         className="w-48 border-border/60 shadow-xl backdrop-blur-sm"
+        data-scope={dataScope}
       >
         <DropdownMenuLabel className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
           {t("selectLanguage")}

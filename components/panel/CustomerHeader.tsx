@@ -196,6 +196,7 @@ export function CustomerHeader({
             <DropdownMenuContent
               align="end"
               className="w-72 sm:w-80 p-4 border-border/60 shadow-xl"
+              data-scope="customer"
             >
               <form onSubmit={handleSearch} className="relative w-full group">
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground/60 transition-all duration-300 group-focus-within:text-blue-500" />
@@ -232,6 +233,7 @@ export function CustomerHeader({
             <DropdownMenuContent
               align="end"
               className="w-72 sm:w-80 lg:w-96 max-h-96 overflow-y-auto border-border/60 shadow-xl"
+              data-scope="customer"
             >
               <DropdownMenuLabel className="flex items-center justify-between">
                 <span>{t("notifications")}</span>
@@ -326,7 +328,7 @@ export function CustomerHeader({
 
           {/* Dil Değiştirici */}
           <div className="hidden md:flex">
-            <LanguageSwitcher isCustomer={true} />
+            <LanguageSwitcher isCustomer={true} dataScope="customer" />
           </div>
 
           {/* Tema Değiştirici */}
@@ -341,7 +343,7 @@ export function CustomerHeader({
                 variant="ghost"
                 className="relative h-10 w-10 rounded-full transition-all duration-200 hover:scale-105 ml-3 p-0"
               >
-                <Avatar className="h-10 w-10 ring-2 ring-background transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/25">
+                <Avatar className="h-10 w-10 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/25">
                   {customer?.profileImage ? (
                     <AvatarImage
                       src={customer.profileImage}
@@ -368,6 +370,7 @@ export function CustomerHeader({
               className="w-56 sm:w-64 border-border/60 shadow-xl"
               align="end"
               forceMount
+              data-scope="customer"
             >
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
@@ -414,7 +417,7 @@ export function CustomerHeader({
                       </div>
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
+                  <DropdownMenuContent align="end" data-scope="customer">
                     {routing.locales.map((loc) => (
                       <DropdownMenuItem
                         key={loc}
@@ -462,6 +465,7 @@ export function CustomerHeader({
                   variant="ghost"
                   size="sm"
                   className="w-full justify-start transition-colors duration-200"
+                  dataScope="customer"
                 />
               </div>
             </DropdownMenuContent>

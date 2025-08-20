@@ -124,5 +124,67 @@
     "selectLanguage": "Dil Seçin",
     "changeLanguage": "Dil Değiştir",
     "currentLanguage": "Mevcut Dil"
+  },
+  "AdminHeader": {
+    "searchPlaceholder": "Kullanıcıları, logları veya ayarları ara...",
+    "loading": "Yükleniyor...",
+    "notifications": "Bildirimler",
+    "noNotifications": "Yeni bildirim yok",
+    "markAllAsRead": "Tümünü Okundu Olarak İşaretle",
+    "viewAllNotifications": "Tüm Bildirimleri Görüntüle",
+    "customerPanel": "Müşteri Paneli",
+    "profile": "Profil",
+    "settings": "Ayarlar",
+    "logout": "Çıkış Yap",
+    "logoutOptions": "Çıkış Seçenekleri",
+    "userRoles": {
+      "customer": "Müşteri",
+      "premiumCustomer": "Premium Müşteri"
+    },
+    "demoNotification": {
+      "title": "Hoş Geldiniz",
+      "message": "Müşteri paneline başarıyla giriş yaptınız."
+    },
+    "orderNotification": {
+      "title": "Sipariş Güncellemesi",
+      "message": "Siparişiniz başarıyla işleme alındı."
+    },
+    "unreadBadge": "{count} yeni",
+    "defaultUserName": "Kullanıcı",
+    "viewNotification": "Bildirimi Görüntüle",
+    "language": "Dil",
+    "theme": "Tema",
+    "light": "Açık",
+    "dark": "Koyu",
+    "switchToLight": "Açık temaya geç",
+    "switchToDark": "Koyu temaya geç",
+    "system": "Sistem"
+  },
+  "LogoutModal": {
+    "title": "Çıkış yapmak istediğinizden emin misiniz?",
+    "descriptionCurrent": "Bu cihazdan çıkış yapmak üzeresiniz. Bu işlemden sonra:",
+    "descriptionAll": "Tüm cihazlardan çıkış yapmak üzeresiniz. Bu işlemden sonra:",
+    "listCurrent": [
+      "Mevcut oturumunuz sonlandırılacak.",
+      "Diğer cihazlardaki oturumlarınız devam edecek.",
+      "Tekrar giriş yapmanız gerekecek."
+    ],
+    "listAll": [
+      "Tüm aktif oturumlarınız sonlandırılacak.",
+      "Diğer cihazlardaki erişimleriniz kesilecek.",
+      "Tekrar giriş yapmanız gerekecek."
+    ],
+    "cancel": "İptal",
+    "confirmCurrent": "Bu Cihazdan Çıkış Yap",
+    "confirmAll": "Tüm Cihazlardan Çıkış Yap",
+    "loggingOut": "Çıkış yapılıyor...",
+    "error": "Çıkış yapılırken bir hata oluştu."
+  },
+  "Auth": {
+    "logout": {
+      "success": "Başarıyla çıkış yapıldı",
+      "error": "Çıkış yapılırken bir hata oluştu",
+      "confirm": "Çıkış yapmak istediğinizden emin misiniz?"
+    }
   }
 }

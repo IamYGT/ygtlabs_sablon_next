@@ -67,7 +67,7 @@ export default async function CustomerLayout({
   return (
     <NextIntlClientProvider messages={customerMessages} locale={validLocale}>
       <CustomerGuard>
-        <LogoutModalProvider>
+        <LogoutModalProvider dataScope="customer">
           {/* Z-Index Hierarchy: Sidebar(9999) < Toaster(10000) < Modal(99999) */}
           <div className="relative z-0" data-scope="customer">
             {/* Corporate Professional Layout - Banking/Finance Style */}

@@ -120,5 +120,67 @@
     "selectLanguage": "Select Language",
     "changeLanguage": "Change Language",
     "currentLanguage": "Current Language"
+  },
+  "AdminHeader": {
+    "searchPlaceholder": "Search for users, logs or settings...",
+    "loading": "Loading...",
+    "notifications": "Notifications",
+    "noNotifications": "No new notifications",
+    "markAllAsRead": "Mark All as Read",
+    "viewAllNotifications": "View All Notifications",
+    "customerPanel": "Customer Panel",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout",
+    "logoutOptions": "Logout Options",
+    "userRoles": {
+      "customer": "Customer",
+      "premiumCustomer": "Premium Customer"
+    },
+    "demoNotification": {
+      "title": "Welcome",
+      "message": "You have successfully logged into the customer panel."
+    },
+    "orderNotification": {
+      "title": "Order Update",
+      "message": "Your order has been successfully processed."
+    },
+    "unreadBadge": "{count} new",
+    "defaultUserName": "User",
+    "viewNotification": "View Notification",
+    "language": "Language",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "switchToLight": "Switch to light theme",
+    "switchToDark": "Switch to dark theme",
+    "system": "System"
+  },
+  "LogoutModal": {
+    "title": "Are you sure you want to logout?",
+    "descriptionCurrent": "You are logging out from this device. After this action:",
+    "descriptionAll": "You are logging out from all devices. After this action:",
+    "listCurrent": [
+      "Your current session will be terminated.",
+      "Sessions on other devices will continue.",
+      "You will need to log in again."
+    ],
+    "listAll": [
+      "All your active sessions will be terminated.",
+      "Access on other devices will be cut off.",
+      "You will need to log in again."
+    ],
+    "cancel": "Cancel",
+    "confirmCurrent": "Logout from This Device",
+    "confirmAll": "Logout from All Devices",
+    "loggingOut": "Logging out...",
+    "error": "An error occurred while logging out."
+  },
+  "Auth": {
+    "logout": {
+      "success": "Successfully logged out",
+      "error": "An error occurred while logging out",
+      "confirm": "Are you sure you want to logout?"
+    }
   }
 }

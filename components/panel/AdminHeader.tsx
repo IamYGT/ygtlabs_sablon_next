@@ -191,6 +191,7 @@ export function AdminHeader({
             <DropdownMenuContent
               align="end"
               className="w-72 sm:w-80 p-4 border-border/60 shadow-xl"
+              data-scope="admin"
             >
               <form onSubmit={handleSearch} className="relative w-full group">
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground/60 transition-all duration-300 group-focus-within:text-blue-500" />
@@ -227,6 +228,7 @@ export function AdminHeader({
             <DropdownMenuContent
               align="end"
               className="w-72 sm:w-80 lg:w-96 max-h-96 overflow-y-auto border-border/60 shadow-xl"
+              data-scope="admin"
             >
               <DropdownMenuLabel className="flex items-center justify-between">
                 <span>{t("notifications")}</span>
@@ -321,7 +323,7 @@ export function AdminHeader({
 
           {/* Dil Değiştirici */}
           <div className="hidden md:flex">
-            <LanguageSwitcher isAdmin={true} />
+            <LanguageSwitcher isAdmin={true} dataScope="admin" />
           </div>
 
           {/* Tema Değiştirici */}
@@ -363,6 +365,7 @@ export function AdminHeader({
               className="w-56 sm:w-64 border-border/60 shadow-xl"
               align="end"
               forceMount
+              data-scope="admin"
             >
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
@@ -409,7 +412,7 @@ export function AdminHeader({
                       </div>
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
+                  <DropdownMenuContent align="end" data-scope="admin">
                     {routing.locales.map((loc) => (
                       <DropdownMenuItem
                         key={loc}
@@ -457,6 +460,7 @@ export function AdminHeader({
                   variant="ghost"
                   size="sm"
                   className="w-full justify-start transition-colors duration-200"
+                  dataScope="admin"
                 />
               </div>
             </DropdownMenuContent>
