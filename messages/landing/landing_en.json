@@ -1,0 +1,209 @@
+{
+  "header": {
+    "navigation": {
+      "home": "Home",
+      "chiptuning": "Chiptuning",
+      "corporate": "Corporate",
+      "services": "Services",
+      "onsiteService": "On-Site Service",
+      "blog": "Blog",
+      "dealers": "Dealers",
+      "contact": "Contact"
+    },
+    "topBar": {
+      "dealershipApplication": "Dealership Application",
+      "faq": "Frequently Asked Questions"
+    },
+    "mobile": {
+      "languageSelection": "Language Selection",
+      "socialMedia": "Social Media"
+    }
+  },
+  "footer": {
+    "description": "As Revv Tuned, we provide professional chiptuning services to maximize your vehicle performance.",
+    "quickLinks": "Quick Links",
+    "contact": "Contact",
+    "services": "Services",
+    "corporate": "Corporate",
+    "blog": "Blog",
+    "home": "Home",
+    "phone": "+90 XXX XXX XX XX",
+    "email": "info@revvtuned.com",
+    "address": "Istanbul, Turkey",
+    "copyright": "© 2025 Revv Tuned. All rights reserved.",
+    "newsletter": "Newsletter",
+    "newsletterDesc": "Subscribe to our newsletter for the latest updates and special offers.",
+    "subscribe": "Subscribe",
+    "enterEmail": "Enter your email address",
+    "followUs": "Follow Us",
+    "workingHours": "Working Hours",
+    "weekdays": "Monday - Friday: 9:00 - 18:00",
+    "saturday": "Saturday: 9:00 - 16:00",
+    "sunday": "Sunday: Closed"
+  },
+  "hero": {
+    "badge": "#1 Chiptuning Center",
+    "title": {
+      "line1": "Custom Tuning",
+      "line2": "Time"
+    },
+    "description": "Professional service at your location or where your vehicle is located for a special Chiptuning experience",
+    "buttons": {
+      "discoverPower": "DISCOVER POWER",
+      "onsiteService": "ON-SITE SERVICE"
+    },
+    "features": {
+      "premiumService": {
+        "title": "Premium Service",
+        "subtitle": "Expert Team"
+      },
+      "fastDelivery": {
+        "title": "Fast Delivery",
+        "subtitle": "Same Day"
+      }
+    },
+    "stats": {
+      "customers": "Customers",
+      "years": "Years",
+      "success": "Success",
+      "support": "Support"
+    },
+    "scroll": "Scroll"
+  },
+  "mainContent": {
+    "title": {
+      "line1": "Reliable Power",
+      "highlight": "Low Fuel"
+    },
+    "description": "Maximize your vehicle's performance potential to the highest level. We are at your service with our professional team and state-of-the-art equipment.",
+    "features": {
+      "dealership": "Dealership Application",
+      "onsiteService": "On-site Service",
+      "reviews": "Reviews",
+      "faq": "Frequently Asked Questions"
+    },
+    "experience": "Years of Experience",
+    "imageAlt": "Car Tuning Service"
+  },
+  "serviceCards": {
+    "title": "Our Services",
+    "description": "We offer a wide range of services to meet your vehicle's needs.",
+    "services": [
+      {
+        "title": "ECU Software",
+        "description": "We optimize your vehicle's brain, the ECU, for maximum performance and efficiency.",
+        "link": "/services/ecu-software"
+      },
+      {
+        "title": "On-Site Service",
+        "description": "We bring professional chiptuning service to you wherever your vehicle is.",
+        "link": "/services/on-site-service"
+      },
+      {
+        "title": "Power Measurement",
+        "description": "We measure your vehicle's power and torque with our state-of-the-art Dyno machine.",
+        "link": "/services/dyno"
+      }
+    ],
+    "learnMore": "Learn More"
+  },
+  "corporateSection": {
+    "badge": "Corporate",
+    "title": "Professional Solutions for Your Fleet",
+    "description": "We offer special ECU tuning and fleet management solutions for your company vehicles. Increase your efficiency and reduce your costs.",
+    "button": "Get a Quote",
+    "features": [
+      "Fleet-specific software",
+      "Fuel savings",
+      "Performance increase",
+      "Detailed reporting"
+    ]
+  },
+  "statistics": {
+    "title": "Our Numbers",
+    "stats": [
+      {
+        "value": "10,000+",
+        "label": "Happy Customers"
+      },
+      {
+        "value": "15+",
+        "label": "Years Experience"
+      },
+      {
+        "value": "98%",
+        "label": "Success Rate"
+      },
+      {
+        "value": "50+",
+        "label": "Worldwide Dealers"
+      }
+    ]
+  },
+  "serviceInfo": {
+    "badge": "Why Us?",
+    "title": "Why Should You Choose RevvTuned?",
+    "description": "We are at your service with our expert team, state-of-the-art equipment, and customer-oriented approach.",
+    "features": [
+      {
+        "title": "Expert Team",
+        "description": "Our experienced and certified experts are at your service for the best results."
+      },
+      {
+        "title": "Latest Technology",
+        "description": "We use the newest and most reliable equipment in the industry."
+      },
+      {
+        "title": "Customer Satisfaction",
+        "description": "Our priority is to provide the highest level of service to our customers."
+      }
+    ]
+  },
+  "testimonials": {
+    "badge": "Customer Reviews",
+    "title": "What Do Our Customers Say?",
+    "testimonials": [
+      {
+        "name": "Ahmet Yılmaz",
+        "role": "BMW F30 Owner",
+        "quote": "My car's performance has increased incredibly. Driving is now much more enjoyable. Thanks RevvTuned team!",
+        "image": "/images/team/default-avatar.jpg"
+      },
+      {
+        "name": "Ayşe Kaya",
+        "role": "Fleet Manager",
+        "quote": "We achieved significant fuel savings in our company vehicles. Their professional approach is commendable.",
+        "image": "/images/team/default-avatar.jpg"
+      }
+    ]
+  },
+  "blogSection": {
+    "badge": "Blog",
+    "title": "Latest from Our Blog",
+    "description": "Follow our blog for the latest news, tips, and articles about the chiptuning world.",
+    "button": "View All Posts",
+    "posts": [
+      {
+        "category": "ECU Software",
+        "title": "What is Stage 1 Software?",
+        "author": "Ercan Yter",
+        "date": "July 26, 2024"
+      },
+      {
+        "category": "Fuel Efficiency",
+        "title": "Is Fuel Saving Possible with Chiptuning?",
+        "author": "Admin",
+        "date": "July 22, 2024"
+      }
+    ]
+  },
+  "seo": {
+    "landing": {
+      "title": "RevvTuned - ECU Chip Tuning Services",
+      "description": "Increase your vehicle's performance with professional ECU chip tuning services. Safe tuning solutions with our expert team and cutting-edge technology.",
+      "keywords": "ecu tuning, chip tuning, performance increase, engine tuning, car modification",
+      "ogTitle": "RevvTuned - ECU Chip Tuning Services",
+      "ogDescription": "Increase your vehicle's performance with professional ECU chip tuning services."
+    }
+  }
+}

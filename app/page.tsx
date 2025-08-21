@@ -1,7 +1,7 @@
-import { redirect } from 'next/navigation';
-import { routing } from '@/src/i18n/routing';
+import { routing } from "@/lib/i18n/routing";
+import { redirect } from "next/navigation";
 
 export default function RootPage() {
-    // Varsayılan locale'e yönlendir
-    redirect(`/${routing.defaultLocale}`);
-} 
+  // Varsayılan locale'e yönlendir
+  redirect(`/${routing.defaultLocale}`);
+}

@@ -1,0 +1,90 @@
+{
+  "login": "Sign In",
+  "logout": "Sign Out",
+  "email": "Email",
+  "password": "Password",
+  "rememberMe": "Remember me",
+  "forgotPassword": "Forgot password",
+  "loginSuccess": "Successfully signed in",
+  "loginError": "Sign in failed",
+  "invalidCredentials": "Invalid username or password",
+  "welcome": "Welcome",
+  "continue": "Continue by logging into your account",
+  "emailLabel": "Email Address",
+  "emailPlaceholder": "example@address.com",
+  "passwordLabel": "Password",
+  "loggingIn": "Signing in...",
+  "loginSuccessRedirect": "Login successful! Redirecting...",
+  "loginFailed": "Login failed",
+  "unexpectedError": "An unexpected error occurred.",
+  "noAccount": "Don't have an account yet?",
+  "register": "Sign Up",
+  "createAccountTitle": "Create an Account",
+  "createAccountDescription": "Enter your information to create your new account",
+  "fullNameLabel": "Full Name",
+  "fullNamePlaceholder": "Your name and surname",
+  "confirmPasswordLabel": "Confirm Password",
+  "passwordsDontMatch": "Passwords do not match",
+  "registering": "Registering...",
+  "registerSuccess": "Registration successful! Redirecting to login page.",
+  "registerError": "An error occurred during registration",
+  "registerErrorTryAgain": "An error occurred during registration. Please try again.",
+  "alreadyHaveAccount": "Already have an account?",
+  "passwordStrength": {
+    "weak": "Weak",
+    "medium": "Medium",
+    "strong": "Strong"
+  },
+  "forgotPasswordTitle": "Forgot Password",
+  "forgotPasswordDescription": "Enter your email address and we'll send you a link to reset your password",
+  "emailHelpText": "Enter your registered email address. We will send you a password reset link.",
+  "sendResetEmail": "Send Password Reset Email",
+  "sendingEmail": "Sending Email...",
+  "backToLogin": "Back to Login",
+  "emailSentTitle": "Email Sent",
+  "emailSentDescription": "A password reset link has been sent to <email>{email}</email>.",
+  "nextSteps": {
+    "title": "Next Steps:",
+    "steps": [
+      "Check your email inbox",
+      "Don't forget to check your spam folder",
+      "Reset your password by clicking the link",
+      "The link is valid for 15 minutes"
+    ]
+  },
+  "sendAgain": "Send Again",
+  "securityNotice": {
+    "title": "Security Notice:",
+    "description": "For security reasons, the password reset link will expire in 15 minutes. If you did not receive an email, check your spam folder."
+  },
+  "notifications": {
+    "sending": "Sending email...",
+    "sendSuccess": "Password reset email sent successfully!",
+    "sendError": "An error occurred while sending the email"
+  },
+  "layout": {
+    "pageTitle": "Memsidea Admin Panel",
+    "pageSubtitle": "Welcome to Management Panel",
+    "copyright": "© {year} Memsidea. All rights reserved."
+  },
+  "logoutModal": {
+    "title": "Are you sure you want to log out?",
+    "descriptionCurrent": "You are about to log out from this device. After this action:",
+    "descriptionAll": "You are about to log out from all devices. After this action:",
+    "listCurrent": [
+      "Your current session will be terminated.",
+      "Your sessions on other devices will continue.",
+      "You will need to log in again."
+    ],
+    "listAll": [
+      "All your active sessions will be terminated.",
+      "Your access on other devices will be cut off.",
+      "You will need to log in again."
+    ],
+    "cancel": "Cancel",
+    "confirmCurrent": "Log Out from This Device",
+    "confirmAll": "Log Out from All Devices",
+    "loggingOut": "Logging out...",
+    "error": "An error occurred while logging out."
+  }
+}

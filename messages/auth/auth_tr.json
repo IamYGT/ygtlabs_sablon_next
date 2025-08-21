@@ -1,0 +1,90 @@
+{
+  "login": "Giriş Yap",
+  "logout": "Çıkış Yap",
+  "email": "E-posta",
+  "password": "Şifre",
+  "rememberMe": "Beni hatırla",
+  "forgotPassword": "Şifremi unuttum",
+  "loginSuccess": "Başarıyla giriş yapıldı",
+  "loginError": "Giriş başarısız",
+  "invalidCredentials": "Geçersiz kullanıcı adı veya şifre",
+  "welcome": "Hoş Geldiniz",
+  "continue": "Hesabınıza giriş yaparak devam edin",
+  "emailLabel": "E-posta Adresi",
+  "emailPlaceholder": "ornek@adres.com",
+  "passwordLabel": "Şifre",
+  "loggingIn": "Giriş yapılıyor...",
+  "loginSuccessRedirect": "Giriş başarılı! Yönlendiriliyorsunuz...",
+  "loginFailed": "Giriş başarısız",
+  "unexpectedError": "Beklenmeyen bir hata oluştu.",
+  "noAccount": "Henüz hesabınız yok mu?",
+  "register": "Kayıt Olun",
+  "createAccountTitle": "Hesap Oluşturun",
+  "createAccountDescription": "Yeni hesabınızı oluşturmak için bilgilerinizi girin",
+  "fullNameLabel": "Ad Soyad",
+  "fullNamePlaceholder": "Adınız ve soyadınız",
+  "confirmPasswordLabel": "Şifre Tekrar",
+  "passwordsDontMatch": "Şifreler eşleşmiyor",
+  "registering": "Kayıt olunuyor...",
+  "registerSuccess": "Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz.",
+  "registerError": "Kayıt sırasında bir hata oluştu",
+  "registerErrorTryAgain": "Kayıt sırasında bir hata oluştu. Lütfen tekrar deneyin.",
+  "alreadyHaveAccount": "Zaten bir hesabınız var mı?",
+  "passwordStrength": {
+    "weak": "Zayıf",
+    "medium": "Orta",
+    "strong": "Güçlü"
+  },
+  "forgotPasswordTitle": "Şifremi Unuttum",
+  "forgotPasswordDescription": "E-posta adresinizi girin, şifre sıfırlama bağlantısını size gönderelim",
+  "emailHelpText": "Kayıtlı e-posta adresinizi girin. Size şifre sıfırlama bağlantısı göndereceğiz.",
+  "sendResetEmail": "Şifre Sıfırlama E-postası Gönder",
+  "sendingEmail": "E-posta Gönderiliyor...",
+  "backToLogin": "Giriş Sayfasına Dön",
+  "emailSentTitle": "E-posta Gönderildi",
+  "emailSentDescription": "Şifre sıfırlama bağlantısı <email>{email}</email> adresine gönderildi.",
+  "nextSteps": {
+    "title": "Sonraki Adımlar:",
+    "steps": [
+      "E-posta kutunuzu kontrol edin",
+      "Spam klasörünü de kontrol etmeyi unutmayın",
+      "Bağlantıya tıklayarak şifrenizi sıfırlayın",
+      "Bağlantı 15 dakika boyunca geçerlidir"
+    ]
+  },
+  "sendAgain": "Tekrar Gönder",
+  "securityNotice": {
+    "title": "Güvenlik Bildirimi:",
+    "description": "Şifre sıfırlama bağlantısı güvenlik nedeniyle 15 dakika sonra geçersiz olacaktır. E-posta almadıysanız spam klasörünüzü kontrol edin."
+  },
+  "notifications": {
+    "sending": "E-posta gönderiliyor...",
+    "sendSuccess": "Şifre sıfırlama e-postası başarıyla gönderildi!",
+    "sendError": "E-posta gönderilirken bir hata oluştu"
+  },
+  "layout": {
+    "pageTitle": "Memsidea Admin Panel",
+    "pageSubtitle": "Yönetim Paneline Hoş Geldiniz",
+    "copyright": "© {year} Memsidea. Tüm hakları saklıdır."
+  },
+  "logoutModal": {
+    "title": "Çıkış yapmak istediğinizden emin misiniz?",
+    "descriptionCurrent": "Bu cihazdan çıkış yapmak üzeresiniz. Bu işlemden sonra:",
+    "descriptionAll": "Tüm cihazlardan çıkış yapmak üzeresiniz. Bu işlemden sonra:",
+    "listCurrent": [
+      "Mevcut oturumunuz sonlandırılacak.",
+      "Diğer cihazlardaki oturumlarınız devam edecek.",
+      "Tekrar giriş yapmanız gerekecek."
+    ],
+    "listAll": [
+      "Tüm aktif oturumlarınız sonlandırılacak.",
+      "Diğer cihazlardaki erişimleriniz kesilecek.",
+      "Tekrar giriş yapmanız gerekecek."
+    ],
+    "cancel": "İptal",
+    "confirmCurrent": "Bu Cihazdan Çıkış Yap",
+    "confirmAll": "Tüm Cihazlardan Çıkış Yap",
+    "loggingOut": "Çıkış yapılıyor...",
+    "error": "Çıkış yapılırken bir hata oluştu."
+  }
+}

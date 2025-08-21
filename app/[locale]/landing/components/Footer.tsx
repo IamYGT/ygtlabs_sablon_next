@@ -1,24 +1,36 @@
-'use client';
+"use client";
 
-import { ArrowRight, Clock, Facebook, Instagram, Mail, MapPin, Phone, Send } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import Image from 'next/image';
-import React, { useState } from 'react';
-import { Link } from '../../../../src/i18n/navigation';
+import {
+  ArrowRight,
+  Clock,
+  Facebook,
+  Instagram,
+  Mail,
+  MapPin,
+  Phone,
+  Send,
+} from "lucide-react";
+import { useTranslations } from "next-intl";
+import Image from "next/image";
+import React, { useState } from "react";
+import { Link } from "../../../../lib/i18n/navigation";
 
 export default function Footer() {
-  const [email, setEmail] = useState('');
-  const t = useTranslations('Footer');
+  const [email, setEmail] = useState("");
+  const t = useTranslations("Footer");
 
   const handleNewsletterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Newsletter subscription logic here
-    console.log('Newsletter subscription:', email);
-    setEmail('');
+    console.log("Newsletter subscription:", email);
+    setEmail("");
   };
 
   return (
-    <footer id="contact" className="relative bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white overflow-hidden">
+    <footer
+      id="contact"
+      className="relative bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white overflow-hidden"
+    >
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0 bg-[url('/images/pattern.png')] bg-repeat opacity-30"></div>
@@ -30,22 +42,27 @@ export default function Footer() {
       {/* Top Glow Effect */}
       <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
 
-
-
       <div className="relative w-full max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         {/* Newsletter - Üstte Yatay */}
         <div className="mb-12">
           <div className="bg-gradient-to-r from-primary/15 via-primary/10 to-primary/15 rounded-2xl border border-primary/30 p-8 backdrop-blur-sm shadow-2xl hover:shadow-primary/10 transition-all duration-500 group">
             <div className="max-w-2xl mx-auto text-center">
-              <h3 className="text-white text-xl font-bold mb-2 group-hover:text-primary/90 transition-colors duration-300">{t('newsletter')}</h3>
-              <p className="text-gray-300 text-sm mb-6 group-hover:text-gray-200 transition-colors duration-300">{t('newsletterDesc')}</p>
-              <form onSubmit={handleNewsletterSubmit} className="max-w-md mx-auto">
+              <h3 className="text-white text-xl font-bold mb-2 group-hover:text-primary/90 transition-colors duration-300">
+                {t("newsletter")}
+              </h3>
+              <p className="text-gray-300 text-sm mb-6 group-hover:text-gray-200 transition-colors duration-300">
+                {t("newsletterDesc")}
+              </p>
+              <form
+                onSubmit={handleNewsletterSubmit}
+                className="max-w-md mx-auto"
+              >
                 <div className="relative">
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder={t('enterEmail')}
+                    placeholder={t("enterEmail")}
                     className="w-full px-4 py-3 pl-4 pr-32 rounded-full focus:outline-none focus:ring-2 focus:ring-primary/70 focus:border-primary/50 backdrop-blur-md bg-gray-800/40 hover:bg-gray-800/50 text-white border-gray-600/50 border shadow-xl placeholder-gray-400 transition-all duration-300 text-sm"
                     required
                   />
@@ -53,7 +70,7 @@ export default function Footer() {
                     type="submit"
                     className="absolute right-1 top-1/2 -translate-y-1/2 px-6 py-2 rounded-full bg-gradient-to-r from-primary via-primary to-primary/80 text-white font-medium transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-primary/25 active:scale-95 hover:scale-105 flex items-center space-x-2 group text-sm"
                   >
-                    <span>{t('subscribe')}</span>
+                    <span>{t("subscribe")}</span>
                     <Send className="w-3 h-3 transform group-hover:translate-x-1 transition-transform" />
                   </button>
                 </div>
@@ -76,13 +93,13 @@ export default function Footer() {
               />
             </div>
             <p className="text-gray-300 leading-relaxed max-w-md text-sm lg:text-base">
-              {t('description')}
+              {t("description")}
             </p>
 
             {/* Social Media */}
             <div className="space-y-3">
               <h4 className="text-white font-semibold text-sm uppercase tracking-wide">
-                {t('followUs')}
+                {t("followUs")}
               </h4>
               <div className="flex space-x-4">
                 <a
@@ -104,7 +121,7 @@ export default function Footer() {
           {/* Hızlı Linkler */}
           <div className="space-y-4">
             <h3 className="text-white text-lg font-bold relative group">
-              {t('quickLinks')}
+              {t("quickLinks")}
               <span className="absolute bottom-0 left-0 w-8 h-0.5 bg-gradient-to-r from-primary to-primary/50 group-hover:w-full transition-all duration-500"></span>
             </h3>
             <ul className="space-y-3">
@@ -114,7 +131,9 @@ export default function Footer() {
                   className="text-gray-300 hover:text-primary transition-all duration-300 flex items-center group text-sm"
                 >
                   <ArrowRight className="w-4 h-4 mr-2 transform translate-x-0 group-hover:translate-x-1 transition-transform duration-300 opacity-0 group-hover:opacity-100" />
-                  <span className="group-hover:translate-x-2 transition-transform duration-300">{t('home')}</span>
+                  <span className="group-hover:translate-x-2 transition-transform duration-300">
+                    {t("home")}
+                  </span>
                 </Link>
               </li>
               <li>
@@ -123,7 +142,9 @@ export default function Footer() {
                   className="text-gray-300 hover:text-primary transition-all duration-300 flex items-center group text-sm"
                 >
                   <ArrowRight className="w-4 h-4 mr-2 transform translate-x-0 group-hover:translate-x-1 transition-transform duration-300 opacity-0 group-hover:opacity-100" />
-                  <span className="group-hover:translate-x-2 transition-transform duration-300">{t('services')}</span>
+                  <span className="group-hover:translate-x-2 transition-transform duration-300">
+                    {t("services")}
+                  </span>
                 </Link>
               </li>
               <li>
@@ -132,7 +153,9 @@ export default function Footer() {
                   className="text-gray-300 hover:text-primary transition-all duration-300 flex items-center group text-sm"
                 >
                   <ArrowRight className="w-4 h-4 mr-2 transform translate-x-0 group-hover:translate-x-1 transition-transform duration-300 opacity-0 group-hover:opacity-100" />
-                  <span className="group-hover:translate-x-2 transition-transform duration-300">{t('corporate')}</span>
+                  <span className="group-hover:translate-x-2 transition-transform duration-300">
+                    {t("corporate")}
+                  </span>
                 </Link>
               </li>
               <li>
@@ -141,7 +164,9 @@ export default function Footer() {
                   className="text-gray-300 hover:text-primary transition-all duration-300 flex items-center group text-sm"
                 >
                   <ArrowRight className="w-4 h-4 mr-2 transform translate-x-0 group-hover:translate-x-1 transition-transform duration-300 opacity-0 group-hover:opacity-100" />
-                  <span className="group-hover:translate-x-2 transition-transform duration-300">{t('blog')}</span>
+                  <span className="group-hover:translate-x-2 transition-transform duration-300">
+                    {t("blog")}
+                  </span>
                 </Link>
               </li>
             </ul>
@@ -150,7 +175,7 @@ export default function Footer() {
           {/* İletişim */}
           <div className="space-y-4">
             <h3 className="text-white text-lg font-bold relative group">
-              {t('contact')}
+              {t("contact")}
               <span className="absolute bottom-0 left-0 w-8 h-0.5 bg-gradient-to-r from-primary to-primary/50 group-hover:w-full transition-all duration-500"></span>
             </h3>
             <div className="space-y-4">
@@ -159,7 +184,9 @@ export default function Footer() {
                   <Phone className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <span className="text-gray-300 text-sm block">{t('phone')}</span>
+                  <span className="text-gray-300 text-sm block">
+                    {t("phone")}
+                  </span>
                 </div>
               </div>
               <div className="flex items-start space-x-3 group">
@@ -167,8 +194,11 @@ export default function Footer() {
                   <Mail className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <a href={`mailto:${t('email')}`} className="text-gray-300 hover:text-primary transition-colors text-sm">
-                    {t('email')}
+                  <a
+                    href={`mailto:${t("email")}`}
+                    className="text-gray-300 hover:text-primary transition-colors text-sm"
+                  >
+                    {t("email")}
                   </a>
                 </div>
               </div>
@@ -177,7 +207,7 @@ export default function Footer() {
                   <MapPin className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <span className="text-gray-300 text-sm">{t('address')}</span>
+                  <span className="text-gray-300 text-sm">{t("address")}</span>
                 </div>
               </div>
             </div>
@@ -186,36 +216,31 @@ export default function Footer() {
           {/* Çalışma Saatleri */}
           <div className="space-y-4">
             <h3 className="text-white text-lg font-bold relative group">
-              {t('workingHours')}
+              {t("workingHours")}
               <span className="absolute bottom-0 left-0 w-8 h-0.5 bg-gradient-to-r from-primary to-primary/50 group-hover:w-full transition-all duration-500"></span>
             </h3>
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <Clock className="w-4 h-4 text-primary flex-shrink-0" />
-                <span className="text-gray-300 text-sm">{t('weekdays')}</span>
+                <span className="text-gray-300 text-sm">{t("weekdays")}</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Clock className="w-4 h-4 text-primary flex-shrink-0" />
-                <span className="text-gray-300 text-sm">{t('saturday')}</span>
+                <span className="text-gray-300 text-sm">{t("saturday")}</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Clock className="w-4 h-4 text-primary flex-shrink-0" />
-                <span className="text-gray-300 text-sm">{t('sunday')}</span>
+                <span className="text-gray-300 text-sm">{t("sunday")}</span>
               </div>
             </div>
           </div>
-
-
         </div>
 
         {/* Bottom Section */}
         <div className="border-t border-gray-700/50 mt-16 pt-8 relative">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-gray-400 text-sm">
-              {t('copyright')}
-            </p>
+            <p className="text-gray-400 text-sm">{t("copyright")}</p>
             <div className="flex items-center space-x-6">
-
               <a
                 href="https://memsidea.com"
                 target="_blank"

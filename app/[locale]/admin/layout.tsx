@@ -2,7 +2,7 @@ import { AdminHeader } from "@/components/panel/AdminHeader";
 import { AdminSidebar } from "@/components/panel/AdminSidebar";
 import { AdminGuard } from "@/components/panel/AuthGuards";
 import { LogoutModalProvider } from "@/components/panel/LogoutModalProvider";
-import { routing } from "@/src/i18n/routing";
+import { routing } from "@/lib/i18n/routing";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";

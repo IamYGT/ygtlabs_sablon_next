@@ -198,256 +198,356 @@
       "saving": "Kaydediliyor...",
       "updateSuccess": "Rol başarıyla güncellendi.",
       "updateFailed": "Rol güncelleme başarısız oldu."
+    }
+  },
+  "AdminSupport": {
+    "title": "Destek Yönetimi",
+    "dashboard": "Destek Paneli",
+    "tickets": {
+      "title": "Destek Talepleri",
+      "all": "Tüm Talepler",
+      "assigned": "Bana Atananlar",
+      "unassigned": "Atanmayanlar",
+      "assignTo": "Şuna Ata",
+      "assignToMe": "Bana Ata",
+      "unassign": "Atamayı Kaldır",
+      "bulkActions": "Toplu İşlemler",
+      "export": "Dışa Aktar",
+      "agents": "Destek Ajanları",
+      "workload": "İş Yükü",
+      "templates": "Yanıt Şablonları",
+      "internalNote": "İç Not Ekle",
+      "changeStatus": "Durumu Değiştir",
+      "changePriority": "Önceliği Değiştir",
+      "customerInfo": "Müşteri Bilgisi",
+      "assignmentHistory": "Atama Geçmişi"
     },
-    "deleteConfirmation": "Silme Onayı",
-    "bulkDeleteConfirmation": "Toplu Silme Onayı",
-    "noName": "İsimsiz Kullanıcı",
-    "noEmail": "Email yok",
-    "activateUser": "Aktif Et",
-    "deactivateUser": "Pasif Et",
-    "userNotFound": "Kullanıcı bulunamadı",
-    "usersFound": "{count} kullanıcı bulundu",
-    "userChar": "K",
-    "tryDifferentCriteria": "Arama kriterlerinizi değiştirmeyi deneyin",
-    "deleteUsers": "Kullanıcıları Sil",
-    "deleteUsersConfirm": "kullanıcıyı silmek istediğinize emin misiniz?",
-    "actionCannotBeUndone": "Bu işlem geri alınamaz.",
-    "usersWithRoles": "{count} kullanıcıya rol atanmış",
-    "roleManagementLink": {
-      "text": "Rol yönetimi için",
-      "linkText": "Roller",
-      "suffix": "sayfasını ziyaret edin"
+    "stats": {
+      "title": "Destek İstatistikleri",
+      "totalTickets": "Toplam Talep",
+      "openTickets": "Açık Talepler",
+      "pendingTickets": "Bekleyen Talepler",
+      "inProgressTickets": "İşlemdeki Talepler",
+      "resolvedTickets": "Çözülen Talepler",
+      "closedTickets": "Kapanan Talepler",
+      "todayNew": "Bugün Açılan",
+      "todayResolved": "Bugün Çözülen",
+      "avgResponseTime": "Ort. Yanıt Süresi",
+      "avgResolutionTime": "Ort. Çözüm Süresi",
+      "satisfaction": "Müşteri Memnuniyeti",
+      "byCategory": "Kategoriye Göre",
+      "byPriority": "Önceliğe Göre",
+      "byAgent": "Ajana Göre",
+      "performance": "Performans Raporu"
     },
-    "messages": {
-      "deleteSuccess": "Kullanıcı başarıyla silindi.",
-      "deleteError": "Kullanıcı silinemedi.",
-      "deleteConfirmTitle": "Kullanıcıyı Sil?",
-      "deleteConfirmText": "Bu kullanıcıyı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
-      "bulkDeleteSuccess": "{count} kullanıcı başarıyla silindi.",
-      "bulkDeleteError": "Seçili kullanıcılar silinemedi.",
-      "bulkDeleteConfirmTitle": "Kullanıcıları Sil?",
-      "bulkDeleteConfirmText": "Seçili {count} kullanıcıyı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
-      "statusUpdateSuccess": "Kullanıcı durumu başarıyla güncellendi.",
-      "statusUpdateError": "Kullanıcı durumu güncellenemedi.",
-      "roleUpdateSuccess": "Kullanıcı rolü başarıyla güncellendi.",
-      "roleUpdateError": "Kullanıcı rolü güncellenemedi.",
-      "exportSuccess": "Kullanıcı verileri başarıyla CSV olarak dışa aktarıldı.",
-      "genericError": "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.",
-      "bulkActivateSuccess": "{count} kullanıcı başarıyla aktif edildi.",
-      "bulkDeactivateSuccess": "{count} kullanıcı başarıyla devre dışı bırakıldı."
+    "categories": {
+      "title": "Kategori Yönetimi",
+      "add": "Kategori Ekle",
+      "edit": "Kategoriyi Düzenle",
+      "delete": "Kategoriyi Sil",
+      "activate": "Aktifleştir",
+      "deactivate": "Pasifleştir",
+      "reorder": "Sıralamayı Değiştir",
+      "ticketCount": "Talep Sayısı"
     },
-    "createUser": {
-      "title": "Yeni Kullanıcı Oluştur",
-      "description": "Yeni bir kullanıcı oluşturmak ve rol atamak için aşağıdaki bilgileri girin.",
-      "basicInfo": "Temel Bilgiler",
-      "fullNameLabel": "Ad Soyad",
-      "fullNamePlaceholder": "Örn: Can Yılmaz",
-      "emailLabel": "E-posta Adresi",
-      "emailPlaceholder": "Örn: kullanici@ornek.com",
-      "passwordLabel": "Şifre",
-      "passwordPlaceholder": "Güvenli bir şifre girin",
-      "passwordHint": "En az 6 karakter olmalıdır.",
-      "statusLabel": "Durum",
-      "statusActive": "Aktif",
-      "statusInactive": "Pasif",
-      "roleSelection": "Rol Seçimi",
-      "roleSelectionDescription": "Yeni kullanıcıya atanacak bir rol seçin. Sadece bir rol seçilebilir.",
-      "searchRolePlaceholder": "Rol ara...",
-      "noRolesFound": "Sistemde aktif rol bulunamadı.",
-      "noMatchingRoles": "Aramanıza uygun rol bulunamadı.",
-      "systemDefault": "Sistem Varsayılanı",
-      "createButton": "Kullanıcı Oluştur",
-      "creatingButton": "Oluşturuluyor...",
-      "successMessage": "Kullanıcı başarıyla oluşturuldu!",
-      "errorMessage": "Kullanıcı oluşturulamadı. Lütfen bilgileri kontrol edin.",
-      "genericError": "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.",
-      "accountStatusLabel": "Hesap Durumu",
-      "accountStatusDescription": "Kullanıcı oluşturulduğunda aktif olsun mu?",
-      "roleAndStatus": "Rol & Durum",
-      "roleSearchPlaceholder": "Rol ara...",
-      "roleNotFound": "Aramanıza uygun rol bulunamadı.",
-      "selectedRoleLabel": "Seçili Rol",
-      "validation": {
-        "nameRequired": "Ad soyad zorunludur.",
-        "emailRequired": "Geçerli bir e-posta adresi zorunludur.",
-        "passwordMinLength": "Şifre en az 6 karakter olmalıdır.",
-        "roleRequired": "Lütfen kullanıcı için bir rol seçin."
-      }
+    "filters": {
+      "dateRange": "Tarih Aralığı",
+      "lastWeek": "Son 1 Hafta",
+      "lastMonth": "Son 1 Ay",
+      "last3Months": "Son 3 Ay",
+      "customRange": "Özel Aralık",
+      "agent": "Ajan",
+      "customer": "Müşteri",
+      "category": "Kategori",
+      "status": "Durum",
+      "priority": "Öncelik"
     },
-    "editUserDialog": {
-      "title": "Kullanıcıyı Düzenle",
-      "unnamedUser": "Kullanıcı",
-      "description": "Kullanıcı bilgilerini, şifresini ve rollerini güncelleyin.",
-      "profileImage": {
-        "title": "Profil Resmi",
-        "description": "Kullanıcının profil resmini yönetin. PNG, JPG, GIF formatları desteklenir. Maksimum 5MB.",
-        "enlargeHint": "Büyütmek için tıkla",
-        "uploadButton": "Yükle",
-        "revertButton": "Geri Al",
-        "removeButton": "Kaldır",
-        "dropzone": {
-          "title": "Resim dosyasını sürükleyip bırakın",
-          "subtitle": "veya",
-          "link": "dosya seçmek için tıklayın",
-          "requirements": "PNG, JPG, GIF - Maksimum 5MB",
-          "recommendedSize": "Önerilen boyut: 400x400 piksel",
-          "dropPrompt": "Dosyayı bırakın"
-        },
-        "status": {
-          "removed": "Profil resmi kaldırıldı",
-          "changed": "Profil resmi değiştirildi",
-          "savePrompt": "Değişiklikleri kaydetmek için \"Güncelle\" butonuna tıklayın."
-        }
-      },
-      "basicInfo": {
-        "title": "Temel Bilgiler",
-        "nameLabel": "Ad Soyad *",
-        "namePlaceholder": "Kullanıcının adını girin",
-        "emailLabel": "E-posta Adresi *",
-        "emailPlaceholder": "kullanici@ornek.com",
-        "accountStatusLabel": "Hesap Durumu",
-        "accountStatusDescription": "Kullanıcının sisteme erişim durumu",
-        "accountActive": "Aktif",
-        "accountPassive": "Pasif"
-      },
-      "password": {
-        "title": "Şifre Değiştir",
-        "description": "Kullanıcının şifresini değiştirmek için aşağıdaki alanları doldurun.",
-        "checkboxLabel": "Şifreyi değiştir",
-        "newPasswordLabel": "Yeni Şifre *",
-        "newPasswordPlaceholder": "En az 8 karakter",
-        "confirmPasswordLabel": "Şifre Tekrarı *",
-        "confirmPasswordPlaceholder": "Şifreyi tekrar girin",
-        "requirementsTitle": "Şifre gereksinimleri:",
-        "reqMinLength": "En az 8 karakter",
-        "reqMatch": "Şifreler uyuşmalı"
-      },
-      "roleAssignment": {
-        "title": "Rol Atamaları",
-        "descriptionSelfNoPermission": "Kendi rollerinizi bu şekilde değiştiremezsiniz.",
-        "descriptionSelfWithPermission": "Süper Admin olarak kendi rollerinizi yönetebilirsiniz.",
-        "descriptionOther": "Kullanıcıya atanacak rolleri seçin.",
-        "securityWarningTitle": "Güvenlik Uyarısı",
-        "securityWarningText": "Kendi rollerinizi değiştiremezsiniz. Bu işlem için başka bir yönetici ile iletişime geçin.",
-        "superAdminWarningTitle": "Süper Admin Yetkisi",
-        "superAdminWarningText": "Süper Admin olarak kendi hesabınızı düzenleyebilirsiniz. Dikkatli olun!",
-        "currentRoleSuffix": "(Mevcut)",
-        "restrictedRolesTitle": "Kısıtlı Roller",
-        "restrictedRolesText": "Kendi seviyenizdeki veya daha üst seviyedeki roller görüntülenmemektedir.",
-        "noRoleSelected": "Henüz rol seçilmedi",
-        "selectedRoleLabel": "Seçili Rol:"
-      },
-      "buttons": {
-        "cancel": "İptal",
-        "updating": "Güncelleniyor...",
-        "update": "Güncelle"
-      },
-      "imageViewer": {
-        "title": "{name} - Profil Resmi",
-        "closeButton": "Kapat",
-        "changeButton": "Değiştir",
-        "revertButton": "Geri Al",
-        "removeButton": "Kaldır"
-      },
-      "notifications": {
-        "fileTooLarge": "Dosya çok büyük! Maksimum boyut 5MB'dir.",
-        "invalidFileType": "Geçersiz dosya türü. Lütfen PNG, JPG veya GIF yükleyin.",
-        "imageUploadSuccess": "Resim başarıyla yüklendi.",
-        "imageRemoveSuccess": "Resim kaldırıldı.",
-        "imageRevertSuccess": "Resim geri yüklendi.",
-        "passwordRequired": "Yeni şifre gereklidir.",
-        "passwordMinLength": "Şifre en az 8 karakter olmalıdır.",
-        "passwordsNoMatch": "Şifreler uyuşmuyor.",
-        "editSelfError": "Kendi hesabınızı bu şekilde düzenleyemezsiniz.",
-        "nameRequired": "İsim alanı zorunludur.",
-        "emailRequired": "E-posta alanı zorunludur.",
-        "updateSuccess": "Kullanıcı başarıyla güncellendi.",
-        "updateError": "Kullanıcı güncellenemedi.",
-        "guncellemeBasarisiz": "Kullanıcı güncellenemedi."
-      }
+    "actions": {
+      "resolve": "Çözüldü İşaretle",
+      "close": "Kapat",
+      "reopen": "Yeniden Aç",
+      "escalate": "Üst Yönetime Bildir",
+      "merge": "Talepleri Birleştir",
+      "split": "Talebi Böl",
+      "markAsSpam": "Spam Olarak İşaretle",
+      "assignToTeam": "Takıma Ata"
     },
-    "deleteUserDialog": {
-      "title": "Kullanıcıyı Sil",
-      "description": "Bu işlem, kullanıcıyı ve ilişkili tüm verileri kalıcı olarak silecektir.",
-      "userAvatarAlt": "Kullanıcı Avatarı",
-      "unnamed": "İsimsiz Kullanıcı",
-      "registeredAt": "Kayıt tarihi",
-      "accountStatus": {
-        "active": "Aktif",
-        "passive": "Pasif"
-      },
-      "userRole": "Kullanıcı Rolü",
-      "warning": {
-        "title": "Uyarı",
-        "permanentDeletion": "Bu kalıcı bir silme işlemidir.",
-        "roleRemoval": "Tüm rol atamaları kaldırılacaktır.",
-        "unrecoverable": "Bu işlem geri alınamaz.",
-        "roleAssignmentLost": "Kullanıcının rol geçmişi kaybolacaktır.",
-        "superAdmin": "Süper Admin'ler silinemez. Önce rollerini kaldırmalısınız."
-      },
-      "buttons": {
-        "cancel": "İptal",
-        "deleting": "Siliniyor...",
-        "delete": "Sil"
-      },
-      "notifications": {
-        "deleteSuccess": "Kullanıcı başarıyla silindi.",
-        "deleteError": "Kullanıcı silinemedi.",
-        "unexpectedError": "Beklenmeyen bir hata oluştu."
-      }
+    "notifications": {
+      "newTicket": "Yeni destek talebi oluşturuldu",
+      "ticketAssigned": "Size yeni bir talep atandı",
+      "ticketUpdated": "Talep güncellendi",
+      "customerReplied": "Müşteri yanıt verdi",
+      "ticketEscalated": "Talep üst yönetime bildirildi",
+      "reminderPending": "Bekleyen talepleriniz var",
+      "overdueTickets": "Süresi geçmiş talepler var"
     },
-    "addUserDialog": {
-      "title": "Kullanıcı Ekle",
-      "description": "Aşağıdaki formu doldurarak yeni bir kullanıcı oluşturun.",
-      "form": {
-        "nameLabel": "Ad Soyad",
-        "namePlaceholder": "Can Yılmaz",
-        "emailLabel": "E-posta",
-        "emailPlaceholder": "kullanici@ornek.com",
-        "passwordLabel": "Şifre",
-        "passwordPlaceholder": "Güvenli bir şifre girin",
-        "rolesLabel": "Roller",
-        "activeUserLabel": "Aktif Kullanıcı",
-        "activeUserDescription": "Kullanıcı hemen giriş yapabilecek."
-      },
-      "buttons": {
-        "cancel": "İptal",
-        "create": "Kullanıcı Oluştur",
-        "creating": "Oluşturuluyor..."
-      },
-      "validation": {
-        "nameMinLength": "İsim en az 2 karakter olmalıdır.",
-        "emailInvalid": "Lütfen geçerli bir e-posta adresi girin.",
-        "passwordMinLength": "Şifre en az 6 karakter olmalıdır.",
-        "roleRequired": "En az bir rol seçilmelidir."
-      },
-      "notifications": {
-        "createSuccess": "Kullanıcı başarıyla oluşturuldu.",
-        "createError": "Kullanıcı oluşturulamadı.",
-        "unexpectedError": "Beklenmeyen bir hata oluştu."
-      }
+    "templates": {
+      "title": "Yanıt Şablonları",
+      "greeting": "Hoş Geldiniz",
+      "moreInfo": "Daha Fazla Bilgi",
+      "resolution": "Çözüm Onayı",
+      "followUp": "Takip",
+      "closing": "Kapanış",
+      "escalation": "Yükseltme",
+      "apology": "Özür"
     },
-    "userFilters": {
-      "filterButton": "Filtrele",
-      "categories": {
-        "status": "Durum",
-        "role": "Rol",
-        "activity": "Aktivite"
+    "reports": {
+      "title": "Raporlar",
+      "daily": "Günlük Rapor",
+      "weekly": "Haftalık Rapor",
+      "monthly": "Aylık Rapor",
+      "custom": "Özel Rapor",
+      "export": "Raporu Dışa Aktar",
+      "schedule": "Rapor Zamanla"
+    }
+  },
+  "bulkDeleteConfirmation": "Toplu Silme Onayı",
+  "noName": "İsimsiz Kullanıcı",
+  "noEmail": "Email yok",
+  "activateUser": "Aktif Et",
+  "deactivateUser": "Pasif Et",
+  "userNotFound": "Kullanıcı bulunamadı",
+  "usersFound": "{count} kullanıcı bulundu",
+  "userChar": "K",
+  "tryDifferentCriteria": "Arama kriterlerinizi değiştirmeyi deneyin",
+  "deleteUsers": "Kullanıcıları Sil",
+  "deleteUsersConfirm": "kullanıcıyı silmek istediğinize emin misiniz?",
+  "actionCannotBeUndone": "Bu işlem geri alınamaz.",
+  "usersWithRoles": "{count} kullanıcıya rol atanmış",
+  "roleManagementLink": {
+    "text": "Rol yönetimi için",
+    "linkText": "Roller",
+    "suffix": "sayfasını ziyaret edin"
+  },
+  "messages": {
+    "deleteSuccess": "Kullanıcı başarıyla silindi.",
+    "deleteError": "Kullanıcı silinemedi.",
+    "deleteConfirmTitle": "Kullanıcıyı Sil?",
+    "deleteConfirmText": "Bu kullanıcıyı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+    "bulkDeleteSuccess": "{count} kullanıcı başarıyla silindi.",
+    "bulkDeleteError": "Seçili kullanıcılar silinemedi.",
+    "bulkDeleteConfirmTitle": "Kullanıcıları Sil?",
+    "bulkDeleteConfirmText": "Seçili {count} kullanıcıyı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+    "statusUpdateSuccess": "Kullanıcı durumu başarıyla güncellendi.",
+    "statusUpdateError": "Kullanıcı durumu güncellenemedi.",
+    "roleUpdateSuccess": "Kullanıcı rolü başarıyla güncellendi.",
+    "roleUpdateError": "Kullanıcı rolü güncellenemedi.",
+    "exportSuccess": "Kullanıcı verileri başarıyla CSV olarak dışa aktarıldı.",
+    "genericError": "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.",
+    "bulkActivateSuccess": "{count} kullanıcı başarıyla aktif edildi.",
+    "bulkDeactivateSuccess": "{count} kullanıcı başarıyla devre dışı bırakıldı."
+  },
+  "createUser": {
+    "title": "Yeni Kullanıcı Oluştur",
+    "description": "Yeni bir kullanıcı oluşturmak ve rol atamak için aşağıdaki bilgileri girin.",
+    "basicInfo": "Temel Bilgiler",
+    "fullNameLabel": "Ad Soyad",
+    "fullNamePlaceholder": "Örn: Can Yılmaz",
+    "emailLabel": "E-posta Adresi",
+    "emailPlaceholder": "Örn: kullanici@ornek.com",
+    "passwordLabel": "Şifre",
+    "passwordPlaceholder": "Güvenli bir şifre girin",
+    "passwordHint": "En az 6 karakter olmalıdır.",
+    "statusLabel": "Durum",
+    "statusActive": "Aktif",
+    "statusInactive": "Pasif",
+    "roleSelection": "Rol Seçimi",
+    "roleSelectionDescription": "Yeni kullanıcıya atanacak bir rol seçin. Sadece bir rol seçilebilir.",
+    "searchRolePlaceholder": "Rol ara...",
+    "noRolesFound": "Sistemde aktif rol bulunamadı.",
+    "noMatchingRoles": "Aramanıza uygun rol bulunamadı.",
+    "systemDefault": "Sistem Varsayılanı",
+    "createButton": "Kullanıcı Oluştur",
+    "creatingButton": "Oluşturuluyor...",
+    "successMessage": "Kullanıcı başarıyla oluşturuldu!",
+    "errorMessage": "Kullanıcı oluşturulamadı. Lütfen bilgileri kontrol edin.",
+    "genericError": "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.",
+    "accountStatusLabel": "Hesap Durumu",
+    "accountStatusDescription": "Kullanıcı oluşturulduğunda aktif olsun mu?",
+    "roleAndStatus": "Rol & Durum",
+    "roleSearchPlaceholder": "Rol ara...",
+    "roleNotFound": "Aramanıza uygun rol bulunamadı.",
+    "selectedRoleLabel": "Seçili Rol",
+    "validation": {
+      "nameRequired": "Ad soyad zorunludur.",
+      "emailRequired": "Geçerli bir e-posta adresi zorunludur.",
+      "passwordMinLength": "Şifre en az 6 karakter olmalıdır.",
+      "roleRequired": "Lütfen kullanıcı için bir rol seçin."
+    }
+  },
+  "editUserDialog": {
+    "title": "Kullanıcıyı Düzenle",
+    "unnamedUser": "Kullanıcı",
+    "description": "Kullanıcı bilgilerini, şifresini ve rollerini güncelleyin.",
+    "profileImage": {
+      "title": "Profil Resmi",
+      "description": "Kullanıcının profil resmini yönetin. PNG, JPG, GIF formatları desteklenir. Maksimum 5MB.",
+      "enlargeHint": "Büyütmek için tıkla",
+      "uploadButton": "Yükle",
+      "revertButton": "Geri Al",
+      "removeButton": "Kaldır",
+      "dropzone": {
+        "title": "Resim dosyasını sürükleyip bırakın",
+        "subtitle": "veya",
+        "link": "dosya seçmek için tıklayın",
+        "requirements": "PNG, JPG, GIF - Maksimum 5MB",
+        "recommendedSize": "Önerilen boyut: 400x400 piksel",
+        "dropPrompt": "Dosyayı bırakın"
       },
       "status": {
-        "activeUsers": "Aktif Kullanıcılar",
-        "inactiveUsers": "Pasif Kullanıcılar"
-      },
-      "role": {
-        "admins": "Yöneticiler",
-        "noRole": "Rolü Olmayanlar"
-      },
-      "activity": {
-        "recentLogin": "Yakın Zamanda Giriş Yapanlar",
-        "neverLogin": "Hiç Giriş Yapmayanlar"
-      },
-      "clearAll": "Tüm Filtreleri Temizle"
+        "removed": "Profil resmi kaldırıldı",
+        "changed": "Profil resmi değiştirildi",
+        "savePrompt": "Değişiklikleri kaydetmek için \"Güncelle\" butonuna tıklayın."
+      }
+    },
+    "basicInfo": {
+      "title": "Temel Bilgiler",
+      "nameLabel": "Ad Soyad *",
+      "namePlaceholder": "Kullanıcının adını girin",
+      "emailLabel": "E-posta Adresi *",
+      "emailPlaceholder": "kullanici@ornek.com",
+      "accountStatusLabel": "Hesap Durumu",
+      "accountStatusDescription": "Kullanıcının sisteme erişim durumu",
+      "accountActive": "Aktif",
+      "accountPassive": "Pasif"
+    },
+    "password": {
+      "title": "Şifre Değiştir",
+      "description": "Kullanıcının şifresini değiştirmek için aşağıdaki alanları doldurun.",
+      "checkboxLabel": "Şifreyi değiştir",
+      "newPasswordLabel": "Yeni Şifre *",
+      "newPasswordPlaceholder": "En az 8 karakter",
+      "confirmPasswordLabel": "Şifre Tekrarı *",
+      "confirmPasswordPlaceholder": "Şifreyi tekrar girin",
+      "requirementsTitle": "Şifre gereksinimleri:",
+      "reqMinLength": "En az 8 karakter",
+      "reqMatch": "Şifreler uyuşmalı"
+    },
+    "roleAssignment": {
+      "title": "Rol Atamaları",
+      "descriptionSelfNoPermission": "Kendi rollerinizi bu şekilde değiştiremezsiniz.",
+      "descriptionSelfWithPermission": "Süper Admin olarak kendi rollerinizi yönetebilirsiniz.",
+      "descriptionOther": "Kullanıcıya atanacak rolleri seçin.",
+      "securityWarningTitle": "Güvenlik Uyarısı",
+      "securityWarningText": "Kendi rollerinizi değiştiremezsiniz. Bu işlem için başka bir yönetici ile iletişime geçin.",
+      "superAdminWarningTitle": "Süper Admin Yetkisi",
+      "superAdminWarningText": "Süper Admin olarak kendi hesabınızı düzenleyebilirsiniz. Dikkatli olun!",
+      "currentRoleSuffix": "(Mevcut)",
+      "restrictedRolesTitle": "Kısıtlı Roller",
+      "restrictedRolesText": "Kendi seviyenizdeki veya daha üst seviyedeki roller görüntülenmemektedir.",
+      "noRoleSelected": "Henüz rol seçilmedi",
+      "selectedRoleLabel": "Seçili Rol:"
+    },
+    "buttons": {
+      "cancel": "İptal",
+      "updating": "Güncelleniyor...",
+      "update": "Güncelle"
+    },
+    "imageViewer": {
+      "title": "{name} - Profil Resmi",
+      "closeButton": "Kapat",
+      "changeButton": "Değiştir",
+      "revertButton": "Geri Al",
+      "removeButton": "Kaldır"
+    },
+    "notifications": {
+      "fileTooLarge": "Dosya çok büyük! Maksimum boyut 5MB'dir.",
+      "invalidFileType": "Geçersiz dosya türü. Lütfen PNG, JPG veya GIF yükleyin.",
+      "imageUploadSuccess": "Resim başarıyla yüklendi.",
+      "imageRemoveSuccess": "Resim kaldırıldı.",
+      "imageRevertSuccess": "Resim geri yüklendi.",
+      "passwordRequired": "Yeni şifre gereklidir.",
+      "passwordMinLength": "Şifre en az 8 karakter olmalıdır.",
+      "passwordsNoMatch": "Şifreler uyuşmuyor.",
+      "editSelfError": "Kendi hesabınızı bu şekilde düzenleyemezsiniz.",
+      "nameRequired": "İsim alanı zorunludur.",
+      "emailRequired": "E-posta alanı zorunludur.",
+      "updateSuccess": "Kullanıcı başarıyla güncellendi.",
+      "updateError": "Kullanıcı güncellenemedi.",
+      "guncellemeBasarisiz": "Kullanıcı güncellenemedi."
     }
+  },
+  "deleteUserDialog": {
+    "title": "Kullanıcıyı Sil",
+    "description": "Bu işlem, kullanıcıyı ve ilişkili tüm verileri kalıcı olarak silecektir.",
+    "userAvatarAlt": "Kullanıcı Avatarı",
+    "unnamed": "İsimsiz Kullanıcı",
+    "registeredAt": "Kayıt tarihi",
+    "accountStatus": {
+      "active": "Aktif",
+      "passive": "Pasif"
+    },
+    "userRole": "Kullanıcı Rolü",
+    "warning": {
+      "title": "Uyarı",
+      "permanentDeletion": "Bu kalıcı bir silme işlemidir.",
+      "roleRemoval": "Tüm rol atamaları kaldırılacaktır.",
+      "unrecoverable": "Bu işlem geri alınamaz.",
+      "roleAssignmentLost": "Kullanıcının rol geçmişi kaybolacaktır.",
+      "superAdmin": "Süper Admin'ler silinemez. Önce rollerini kaldırmalısınız."
+    },
+    "buttons": {
+      "cancel": "İptal",
+      "deleting": "Siliniyor...",
+      "delete": "Sil"
+    },
+    "notifications": {
+      "deleteSuccess": "Kullanıcı başarıyla silindi.",
+      "deleteError": "Kullanıcı silinemedi.",
+      "unexpectedError": "Beklenmeyen bir hata oluştu."
+    }
+  },
+  "addUserDialog": {
+    "title": "Kullanıcı Ekle",
+    "description": "Aşağıdaki formu doldurarak yeni bir kullanıcı oluşturun.",
+    "form": {
+      "nameLabel": "Ad Soyad",
+      "namePlaceholder": "Can Yılmaz",
+      "emailLabel": "E-posta",
+      "emailPlaceholder": "kullanici@ornek.com",
+      "passwordLabel": "Şifre",
+      "passwordPlaceholder": "Güvenli bir şifre girin",
+      "rolesLabel": "Roller",
+      "activeUserLabel": "Aktif Kullanıcı",
+      "activeUserDescription": "Kullanıcı hemen giriş yapabilecek."
+    },
+    "buttons": {
+      "cancel": "İptal",
+      "create": "Kullanıcı Oluştur",
+      "creating": "Oluşturuluyor..."
+    },
+    "validation": {
+      "nameMinLength": "İsim en az 2 karakter olmalıdır.",
+      "emailInvalid": "Lütfen geçerli bir e-posta adresi girin.",
+      "passwordMinLength": "Şifre en az 6 karakter olmalıdır.",
+      "roleRequired": "En az bir rol seçilmelidir."
+    },
+    "notifications": {
+      "createSuccess": "Kullanıcı başarıyla oluşturuldu.",
+      "createError": "Kullanıcı oluşturulamadı.",
+      "unexpectedError": "Beklenmeyen bir hata oluştu."
+    }
+  },
+  "userFilters": {
+    "filterButton": "Filtrele",
+    "categories": {
+      "status": "Durum",
+      "role": "Rol",
+      "activity": "Aktivite"
+    },
+    "status": {
+      "activeUsers": "Aktif Kullanıcılar",
+      "inactiveUsers": "Pasif Kullanıcılar"
+    },
+    "role": {
+      "admins": "Yöneticiler",
+      "noRole": "Rolü Olmayanlar"
+    },
+    "activity": {
+      "recentLogin": "Yakın Zamanda Giriş Yapanlar",
+      "neverLogin": "Hiç Giriş Yapmayanlar"
+    },
+    "clearAll": "Tüm Filtreleri Temizle"
   },
   "AdminRoles": {
     "activate": "Aktif Et",

@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
 import { ClientThemeProvider } from "@/components/panel/ClientThemeProvider";
+import { routing } from "@/lib/i18n/routing";
+import { QueryProvider } from "@/lib/providers/query-provider";
+import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { routing } from "@/src/i18n/routing";
-import { QueryProvider } from "@/lib/providers/query-provider";
 
 export const metadata: Metadata = {
   // You can define locale-specific metadata here
@@ -27,10 +27,8 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider messages={messages} locale={locale}>
       <QueryProvider>
-        <ClientThemeProvider>
-          {children}
-        </ClientThemeProvider>
+        <ClientThemeProvider>{children}</ClientThemeProvider>
       </QueryProvider>
     </NextIntlClientProvider>
   );
-} 
+}

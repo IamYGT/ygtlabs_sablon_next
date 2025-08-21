@@ -9,8 +9,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { usePathname, useRouter } from "@/src/i18n/navigation";
-import { routing } from "@/src/i18n/routing";
+import { usePathname, useRouter } from "@/lib/i18n/navigation";
+import { routing } from "@/lib/i18n/routing";
 import { Check, Languages } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 // Bayrak ikonları için SVG importları

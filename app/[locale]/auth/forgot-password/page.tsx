@@ -1,245 +1,261 @@
 "use client";
 
-import React, { useState, useCallback, memo } from 'react';
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import {
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Link } from "@/lib/i18n/navigation";
 import { cn } from "@/lib/utils";
-import { Loader2, Mail, ArrowLeft, Check, AlertCircle } from "lucide-react";
 import { motion } from "framer-motion";
-import { Link } from '@/src/i18n/navigation';
-import { useTranslations } from 'next-intl';
+import { AlertCircle, ArrowLeft, Check, Loader2, Mail } from "lucide-react";
+import { useTranslations } from "next-intl";
+import React, { memo, useCallback, useState } from "react";
+import { toast } from "sonner";
 
 // Optimized loading component
-const LoadingSpinner = memo(({ className, ...props }: React.SVGProps<SVGSVGElement>) => (
+const LoadingSpinner = memo(
+  ({ className, ...props }: React.SVGProps<SVGSVGElement>) => (
     <Loader2 className={cn("animate-spin", className)} {...props} />
-));
+  )
+);
 LoadingSpinner.displayName = "LoadingSpinner";
 
 // Success state component
-const SuccessState = memo(({ onReset }: { email: string; onReset: () => void }) => {
-    const t = useTranslations('Auth');
-    const nextSteps = t.raw('nextSteps.steps') as string[];
+const SuccessState = memo(
+  ({ onReset }: { email: string; onReset: () => void }) => {
+    const t = useTranslations("Auth");
+    const nextSteps = t.raw("nextSteps.steps") as string[];
     return (
-        <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="text-center space-y-6"
-        >
-            <div className="mx-auto w-16 h-16 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center">
-                <Check className="w-8 h-8 text-green-600 dark:text-green-400" />
-            </div>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="text-center space-y-6"
+      >
+        <div className="mx-auto w-16 h-16 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center">
+          <Check className="w-8 h-8 text-green-600 dark:text-green-400" />
+        </div>
 
-            <div className="space-y-2">
-                <h2 className="text-xl font-semibold text-foreground">
-                    {t('emailSentTitle')}
-                </h2>
-                <p className="text-muted-foreground text-sm">
-                    {t.rich('emailSentDescription', {
-                        email: (chunks) => <span className="font-medium text-foreground">{chunks}</span>,
-                    })}
-                </p>
-            </div>
+        <div className="space-y-2">
+          <h2 className="text-xl font-semibold text-foreground">
+            {t("emailSentTitle")}
+          </h2>
+          <p className="text-muted-foreground text-sm">
+            {t.rich("emailSentDescription", {
+              email: (chunks) => (
+                <span className="font-medium text-foreground">{chunks}</span>
+              ),
+            })}
+          </p>
+        </div>
 
-            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-                <div className="flex items-start space-x-3">
-                    <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-                    <div className="text-sm text-blue-800 dark:text-blue-200">
-                        <p className="font-medium mb-1">{t('nextSteps.title')}</p>
-                        {Array.isArray(nextSteps) && (
-                            <ul className="space-y-1 text-blue-700 dark:text-blue-300">
-                                {nextSteps.map((step, index) => (
-                                    <li key={index}>• {step}</li>
-                                ))}
-                            </ul>
-                        )}
-                    </div>
-                </div>
+        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+          <div className="flex items-start space-x-3">
+            <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+            <div className="text-sm text-blue-800 dark:text-blue-200">
+              <p className="font-medium mb-1">{t("nextSteps.title")}</p>
+              {Array.isArray(nextSteps) && (
+                <ul className="space-y-1 text-blue-700 dark:text-blue-300">
+                  {nextSteps.map((step, index) => (
+                    <li key={index}>• {step}</li>
+                  ))}
+                </ul>
+              )}
             </div>
+          </div>
+        </div>
 
-            <div className="flex flex-col space-y-3">
-                <Button
-                    onClick={onReset}
-                    variant="outline"
-                    className="w-full"
-                >
-                    {t('sendAgain')}
-                </Button>
+        <div className="flex flex-col space-y-3">
+          <Button onClick={onReset} variant="outline" className="w-full">
+            {t("sendAgain")}
+          </Button>
 
-                <Link href="/auth/login">
-                    <Button variant="ghost" className="w-full">
-                        <ArrowLeft className="w-4 h-4 mr-2" />
-                        {t('backToLogin')}
-                    </Button>
-                </Link>
-            </div>
-        </motion.div>
+          <Link href="/auth/login">
+            <Button variant="ghost" className="w-full">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              {t("backToLogin")}
+            </Button>
+          </Link>
+        </div>
+      </motion.div>
     );
-});
+  }
+);
 SuccessState.displayName = "SuccessState";
 
 // Main forgot password form
 const ForgotPasswordForm = memo(() => {
-    const t = useTranslations('Auth');
-    const [email, setEmail] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [isSubmitted, setIsSubmitted] = useState(false);
-    const [submittedEmail, setSubmittedEmail] = useState("");
+  const t = useTranslations("Auth");
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submittedEmail, setSubmittedEmail] = useState("");
 
-    const handleEmailChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        setEmail(e.target.value);
-    }, []);
+  const handleEmailChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setEmail(e.target.value);
+    },
+    []
+  );
 
-    const handleSubmit = useCallback(async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (loading) return;
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      if (loading) return;
 
-        setLoading(true);
-        const toastId = "forgot-password-toast";
-        toast.loading(t('notifications.sending'), { id: toastId });
+      setLoading(true);
+      const toastId = "forgot-password-toast";
+      toast.loading(t("notifications.sending"), { id: toastId });
 
-        try {
-            const response = await fetch(`/api/auth/forgot-password`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email }),
-                credentials: "include",
-            });
+      try {
+        const response = await fetch(`/api/auth/forgot-password`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+          credentials: "include",
+        });
 
-            const result = await response.json();
+        const result = await response.json();
 
-            if (result.success) {
-                toast.success(t('notifications.sendSuccess'), { id: toastId });
-                setSubmittedEmail(email);
-                setIsSubmitted(true);
-            } else {
-                toast.error(result.error || t('notifications.sendError'), { id: toastId });
-            }
-        } catch (error) {
-            console.error("Forgot password error:", error);
-            toast.error(t('unexpectedError'), { id: toastId });
-        } finally {
-            setLoading(false);
+        if (result.success) {
+          toast.success(t("notifications.sendSuccess"), { id: toastId });
+          setSubmittedEmail(email);
+          setIsSubmitted(true);
+        } else {
+          toast.error(result.error || t("notifications.sendError"), {
+            id: toastId,
+          });
         }
-    }, [email, loading, t]);
+      } catch (error) {
+        console.error("Forgot password error:", error);
+        toast.error(t("unexpectedError"), { id: toastId });
+      } finally {
+        setLoading(false);
+      }
+    },
+    [email, loading, t]
+  );
 
-    const handleReset = useCallback(() => {
-        setIsSubmitted(false);
-        setSubmittedEmail("");
-        setEmail("");
-    }, []);
+  const handleReset = useCallback(() => {
+    setIsSubmitted(false);
+    setSubmittedEmail("");
+    setEmail("");
+  }, []);
 
-    if (isSubmitted) {
-        return <SuccessState email={submittedEmail} onReset={handleReset} />;
-    }
+  if (isSubmitted) {
+    return <SuccessState email={submittedEmail} onReset={handleReset} />;
+  }
 
-    return (
-        <div className="p-4 sm:p-6">
-            <CardHeader className="text-center pb-6 px-0">
-                <motion.div
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <CardTitle className="text-2xl font-bold text-foreground">
-                        {t('forgotPasswordTitle')}
-                    </CardTitle>
-                    <CardDescription className="mt-2 text-muted-foreground">
-                        {t('forgotPasswordDescription')}
-                    </CardDescription>
-                </motion.div>
-            </CardHeader>
+  return (
+    <div className="p-4 sm:p-6">
+      <CardHeader className="text-center pb-6 px-0">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <CardTitle className="text-2xl font-bold text-foreground">
+            {t("forgotPasswordTitle")}
+          </CardTitle>
+          <CardDescription className="mt-2 text-muted-foreground">
+            {t("forgotPasswordDescription")}
+          </CardDescription>
+        </motion.div>
+      </CardHeader>
 
-            <CardContent className="px-0">
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <motion.div
-                        className="space-y-2"
-                        initial={{ x: -20, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        transition={{ duration: 0.5, delay: 0.1 }}
-                    >
-                        <Label htmlFor="email" className="text-sm font-medium text-foreground">
-                            {t('emailLabel')}
-                        </Label>
-                        <div className="relative">
-                            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                            <Input
-                                id="email"
-                                name="email"
-                                type="email"
-                                autoComplete="email"
-                                required
-                                placeholder={t('emailPlaceholder')}
-                                disabled={loading}
-                                value={email}
-                                onChange={handleEmailChange}
-                                className="pl-10 h-12 bg-background border-border focus:border-primary focus:ring-primary/20 transition-all duration-200"
-                            />
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                            {t('emailHelpText')}
-                        </p>
-                    </motion.div>
+      <CardContent className="px-0">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <motion.div
+            className="space-y-2"
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            <Label
+              htmlFor="email"
+              className="text-sm font-medium text-foreground"
+            >
+              {t("emailLabel")}
+            </Label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                placeholder={t("emailPlaceholder")}
+                disabled={loading}
+                value={email}
+                onChange={handleEmailChange}
+                className="pl-10 h-12 bg-background border-border focus:border-primary focus:ring-primary/20 transition-all duration-200"
+              />
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {t("emailHelpText")}
+            </p>
+          </motion.div>
 
-                    <motion.div
-                        className="space-y-4"
-                        initial={{ y: 20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                    >
-                        <Button
-                            type="submit"
-                            className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl"
-                            disabled={loading || !email.trim()}
-                        >
-                            {loading ? (
-                                <span className="flex items-center justify-center">
-                                    <LoadingSpinner className="mr-2 h-5 w-5" />
-                                    {t('sendingEmail')}
-                                </span>
-                            ) : (
-                                t('sendResetEmail')
-                            )}
-                        </Button>
+          <motion.div
+            className="space-y-4"
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <Button
+              type="submit"
+              className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl"
+              disabled={loading || !email.trim()}
+            >
+              {loading ? (
+                <span className="flex items-center justify-center">
+                  <LoadingSpinner className="mr-2 h-5 w-5" />
+                  {t("sendingEmail")}
+                </span>
+              ) : (
+                t("sendResetEmail")
+              )}
+            </Button>
 
-                        <Link href="/auth/login">
-                            <Button
-                                variant="ghost"
-                                className="w-full h-12 text-muted-foreground hover:text-foreground transition-colors"
-                                disabled={loading}
-                            >
-                                <ArrowLeft className="w-4 h-4 mr-2" />
-                                {t('backToLogin')}
-                            </Button>
-                        </Link>
-                    </motion.div>
-                </form>
+            <Link href="/auth/login">
+              <Button
+                variant="ghost"
+                className="w-full h-12 text-muted-foreground hover:text-foreground transition-colors"
+                disabled={loading}
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                {t("backToLogin")}
+              </Button>
+            </Link>
+          </motion.div>
+        </form>
 
-                <motion.div
-                    className="mt-8 p-4 bg-muted/50 rounded-lg border border-border"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                >
-                    <div className="flex items-start space-x-3">
-                        <AlertCircle className="w-5 h-5 text-muted-foreground mt-0.5 flex-shrink-0" />
-                        <div className="text-sm text-muted-foreground">
-                            <p className="font-medium mb-1">{t('securityNotice.title')}</p>
-                            <p>
-                                {t('securityNotice.description')}
-                            </p>
-                        </div>
-                    </div>
-                </motion.div>
-            </CardContent>
-        </div>
-    );
+        <motion.div
+          className="mt-8 p-4 bg-muted/50 rounded-lg border border-border"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          <div className="flex items-start space-x-3">
+            <AlertCircle className="w-5 h-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+            <div className="text-sm text-muted-foreground">
+              <p className="font-medium mb-1">{t("securityNotice.title")}</p>
+              <p>{t("securityNotice.description")}</p>
+            </div>
+          </div>
+        </motion.div>
+      </CardContent>
+    </div>
+  );
 });
 ForgotPasswordForm.displayName = "ForgotPasswordForm";
 
 export default function ForgotPasswordPage() {
-    return <ForgotPasswordForm />;
+  return <ForgotPasswordForm />;
 }

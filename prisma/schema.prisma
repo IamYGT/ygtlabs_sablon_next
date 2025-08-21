@@ -147,6 +147,15 @@ model User {
   UserStats              UserStats?
   createdAbouts          About[]             @relation("AboutCreatedBy")
   updatedAbouts          About[]             @relation("AboutUpdatedBy")
+  
+  // Support System Relations
+  customerTickets        SupportTicket[]      @relation("CustomerTickets")
+  assignedTickets        SupportTicket[]      @relation("AssignedTickets")
+  sentMessages           SupportMessage[]     @relation("SentMessages")
+  uploadedAttachments    SupportAttachment[]  @relation("UploadedAttachments")
+  assignmentTargets      TicketAssignment[]   @relation("AssignmentTarget")
+  assignmentCreators     TicketAssignment[]   @relation("AssignmentCreator")
+  ticketNotifications    TicketNotification[] @relation("TicketNotifications")
 
   @@index([roleId])
   @@schema("public")
@@ -455,6 +464,220 @@ model Language {
 
   @@index([isActive])
   @@index([code])
+  @@schema("public")
+}
+
+// ==========================
+// SUPPORT SYSTEM ENUMS
+// ==========================
+
+enum TicketStatus {
+  open
+  pending
+  in_progress
+  resolved
+  closed
+  @@schema("public")
+}
+
+enum TicketPriority {
+  low
+  medium
+  high
+  urgent
+  @@schema("public")
+}
+
+enum MessageType {
+  customer_message
+  admin_message
+  system_message
+  @@schema("public")
+}
+
+// ==========================
+// SUPPORT SYSTEM MODELS
+// ==========================
+
+// Support Kategorileri
+model SupportCategory {
+  id          String   @id @default(uuid())
+  name        Json     // {"tr": "Teknik Destek", "en": "Technical Support"}
+  description Json?    // {"tr": "Açıklama", "en": "Description"}
+  icon        String?  // Lucide icon name
+  color       String?  // Tailwind color class
+  isActive    Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  tickets     SupportTicket[]
+  
+  @@index([isActive])
+  @@index([order])
+  @@schema("public")
+}
+
+// Support Ticket
+model SupportTicket {
+  id              String         @id @default(uuid())
+  ticketNumber    String         @unique // AUTO-GENERATED: TKT-202501-001
+  title           String
+  description     String         @db.Text
+  status          TicketStatus   @default(open)
+  priority        TicketPriority @default(medium)
+  categoryId      String?
+  customerId      String         // User who created the ticket
+  assignedToId    String?        // Admin assigned to handle
+  
+  // Metadata
+  tags            String[]       // Etiketler
+  metadata        Json?          // Ek bilgiler
+  
+  // Timestamps
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  resolvedAt      DateTime?      // Çözüm zamanı
+  closedAt        DateTime?      // Kapatma zamanı
+  firstResponseAt DateTime?      // İlk yanıt zamanı
+  lastMessageAt   DateTime?      // Son mesaj zamanı
+  
+  // Stats
+  messageCount    Int            @default(0)
+  attachmentCount Int            @default(0)
+  viewCount       Int            @default(0)
+  
+  // Relations
+  category        SupportCategory?       @relation(fields: [categoryId], references: [id])
+  customer        User                   @relation("CustomerTickets", fields: [customerId], references: [id])
+  assignedTo      User?                  @relation("AssignedTickets", fields: [assignedToId], references: [id])
+  messages        SupportMessage[]
+  attachments     SupportAttachment[]
+  assignments     TicketAssignment[]
+  notifications   TicketNotification[]
+  
+  @@index([status])
+  @@index([priority])
+  @@index([customerId])
+  @@index([assignedToId])
+  @@index([categoryId])
+  @@index([createdAt])
+  @@index([ticketNumber])
+  @@schema("public")
+}
+
+// Support Mesajları
+model SupportMessage {
+  id           String      @id @default(uuid())
+  ticketId     String
+  senderId     String
+  messageType  MessageType @default(customer_message)
+  content      String      @db.Text
+  
+  // Metadata
+  isRead       Boolean     @default(false)
+  isEdited     Boolean     @default(false)
+  editedAt     DateTime?
+  metadata     Json?       // Ek bilgiler (IP, browser info vb.)
+  
+  // Timestamps
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  readAt       DateTime?
+  
+  // Relations
+  ticket       SupportTicket          @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  sender       User                   @relation("SentMessages", fields: [senderId], references: [id])
+  attachments  SupportAttachment[]
+  
+  @@index([ticketId])
+  @@index([senderId])
+  @@index([createdAt])
+  @@index([isRead])
+  @@schema("public")
+}
+
+// Dosya Eklentileri
+model SupportAttachment {
+  id          String          @id @default(uuid())
+  ticketId    String?
+  messageId   String?
+  uploadedById String
+  
+  // File info
+  fileName    String
+  fileType    String          // MIME type
+  fileSize    Int             // Bytes
+  filePath    String          // Storage path
+  fileUrl     String?         // Public URL
+  
+  // Metadata
+  metadata    Json?           // Ek bilgiler
+  
+  // Timestamps
+  createdAt   DateTime        @default(now())
+  
+  // Relations
+  ticket      SupportTicket?  @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  message     SupportMessage? @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  uploadedBy  User            @relation("UploadedAttachments", fields: [uploadedById], references: [id])
+  
+  @@index([ticketId])
+  @@index([messageId])
+  @@index([uploadedById])
+  @@schema("public")
+}
+
+// Ticket Atama Geçmişi
+model TicketAssignment {
+  id           String        @id @default(uuid())
+  ticketId     String
+  assignedToId String?       // NULL = unassigned
+  assignedById String
+  reason       String?       // Atama nedeni
+  note         String?       // Atama notu
+  
+  // Timestamps
+  createdAt    DateTime      @default(now())
+  
+  // Relations
+  ticket       SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  assignedTo   User?         @relation("AssignmentTarget", fields: [assignedToId], references: [id])
+  assignedBy   User          @relation("AssignmentCreator", fields: [assignedById], references: [id])
+  
+  @@index([ticketId])
+  @@index([assignedToId])
+  @@index([createdAt])
+  @@schema("public")
+}
+
+// Ticket Bildirimleri
+model TicketNotification {
+  id           String        @id @default(uuid())
+  ticketId     String
+  userId       String        // Bildirimi alacak kullanıcı
+  type         String        // new_message, status_change, assignment vb.
+  title        String
+  content      String?
+  
+  // Status
+  isRead       Boolean       @default(false)
+  isEmailSent  Boolean       @default(false)
+  isPushSent   Boolean       @default(false)
+  
+  // Timestamps
+  createdAt    DateTime      @default(now())
+  readAt       DateTime?
+  
+  // Relations
+  ticket       SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  user         User          @relation("TicketNotifications", fields: [userId], references: [id])
+  
+  @@index([userId])
+  @@index([ticketId])
+  @@index([isRead])
+  @@index([createdAt])
   @@schema("public")
 }
 

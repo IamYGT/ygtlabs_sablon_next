@@ -17,8 +17,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { useSidebar } from "@/components/ui/sidebar";
 import { useCustomerAuth } from "@/lib/hooks/useAuth";
-import { usePathname, useRouter } from "@/src/i18n/navigation";
-import { routing } from "@/src/i18n/routing";
+import { usePathname, useRouter } from "@/lib/i18n/navigation";
+import { routing } from "@/lib/i18n/routing";
 import TR from "country-flag-icons/react/3x2/TR";
 import US from "country-flag-icons/react/3x2/US";
 import {

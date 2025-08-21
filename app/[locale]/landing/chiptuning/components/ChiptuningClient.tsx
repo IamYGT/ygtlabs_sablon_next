@@ -1,92 +1,92 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { Car, ChartLine, Cog, Fuel, Shield, Wrench } from 'lucide-react';
-import { Link } from '../../../../../src/i18n/navigation';
-import Footer from '../../components/Footer';
-import Header from '../../components/Header';
+import { motion } from "framer-motion";
+import { Car, ChartLine, Cog, Fuel, Shield, Wrench } from "lucide-react";
+import { Link } from "../../../../../lib/i18n/navigation";
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
 
 export default function ChiptuningClient() {
   const stages = [
     {
-      title: 'Stage 1',
-      description: 'Temel performans artışı ve yakıt optimizasyonu',
+      title: "Stage 1",
+      description: "Temel performans artışı ve yakıt optimizasyonu",
       benefits: [
-        'Güç artışı: +25-30%',
-        'Tork artışı: +20-25%',
-        'Yakıt tasarrufu: -10%',
-        'Orijinal donanım korunur'
+        "Güç artışı: +25-30%",
+        "Tork artışı: +20-25%",
+        "Yakıt tasarrufu: -10%",
+        "Orijinal donanım korunur",
       ],
-      recommended: 'Günlük kullanım için ideal'
+      recommended: "Günlük kullanım için ideal",
     },
     {
-      title: 'Stage 2',
-      description: 'Gelişmiş performans ve donanım güncellemeleri',
+      title: "Stage 2",
+      description: "Gelişmiş performans ve donanım güncellemeleri",
       benefits: [
-        'Güç artışı: +35-40%',
-        'Tork artışı: +30-35%',
-        'Performans odaklı',
-        'Donanım güncellemesi gerekir'
+        "Güç artışı: +35-40%",
+        "Tork artışı: +30-35%",
+        "Performans odaklı",
+        "Donanım güncellemesi gerekir",
       ],
-      recommended: 'Yüksek performans arayanlar için'
+      recommended: "Yüksek performans arayanlar için",
     },
     {
-      title: 'Stage 3',
-      description: 'Maksimum performans ve yarış düzeyi modifikasyonlar',
+      title: "Stage 3",
+      description: "Maksimum performans ve yarış düzeyi modifikasyonlar",
       benefits: [
-        'Güç artışı: +45-50%',
-        'Tork artışı: +40-45%',
-        'Yarış performansı',
-        'Kapsamlı donanım değişimi'
+        "Güç artışı: +45-50%",
+        "Tork artışı: +40-45%",
+        "Yarış performansı",
+        "Kapsamlı donanım değişimi",
       ],
-      recommended: 'Profesyonel kullanım için'
-    }
+      recommended: "Profesyonel kullanım için",
+    },
   ];
 
   const features = [
     {
       icon: <ChartLine className="w-8 h-8" />,
-      title: 'Performans Artışı',
-      description: 'Motor gücü ve tork değerlerinde optimize edilmiş artış'
+      title: "Performans Artışı",
+      description: "Motor gücü ve tork değerlerinde optimize edilmiş artış",
     },
     {
       icon: <Fuel className="w-8 h-8" />,
-      title: 'Yakıt Tasarrufu',
-      description: 'Optimize edilmiş yazılım ile yakıt tüketiminde azalma'
+      title: "Yakıt Tasarrufu",
+      description: "Optimize edilmiş yazılım ile yakıt tüketiminde azalma",
     },
     {
       icon: <Cog className="w-8 h-8" />,
-      title: 'Özel Yazılım',
-      description: 'Her araca özel geliştirilmiş yazılım çözümleri'
+      title: "Özel Yazılım",
+      description: "Her araca özel geliştirilmiş yazılım çözümleri",
     },
     {
       icon: <Shield className="w-8 h-8" />,
-      title: 'Güvenli İşlem',
-      description: 'Güvenlik sınırları içinde performans optimizasyonu'
-    }
+      title: "Güvenli İşlem",
+      description: "Güvenlik sınırları içinde performans optimizasyonu",
+    },
   ];
 
   const process = [
     {
       icon: <Car className="w-8 h-8" />,
-      title: 'Araç Analizi',
-      description: 'Aracınızın mevcut durumu detaylı olarak analiz edilir'
+      title: "Araç Analizi",
+      description: "Aracınızın mevcut durumu detaylı olarak analiz edilir",
     },
     {
       icon: <Cog className="w-8 h-8" />,
-      title: 'Yazılım Hazırlığı',
-      description: 'Aracınıza özel chiptuning yazılımı hazırlanır'
+      title: "Yazılım Hazırlığı",
+      description: "Aracınıza özel chiptuning yazılımı hazırlanır",
     },
     {
       icon: <Wrench className="w-8 h-8" />,
-      title: 'Uygulama',
-      description: 'Hazırlanan yazılım profesyonel ekipmanlarla yüklenir'
+      title: "Uygulama",
+      description: "Hazırlanan yazılım profesyonel ekipmanlarla yüklenir",
     },
     {
       icon: <ChartLine className="w-8 h-8" />,
-      title: 'Test ve Kontrol',
-      description: 'Performans testleri ve son kontroller yapılır'
-    }
+      title: "Test ve Kontrol",
+      description: "Performans testleri ve son kontroller yapılır",
+    },
   ];
 
   return (
@@ -109,7 +109,8 @@ export default function ChiptuningClient() {
               Profesyonel Chiptuning<span className="text-primary">.</span>
             </h1>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Aracınızın performansını artırın, yakıt tüketimini optimize edin. Uzman ekibimizle güvenli ve profesyonel chiptuning hizmeti.
+              Aracınızın performansını artırın, yakıt tüketimini optimize edin.
+              Uzman ekibimizle güvenli ve profesyonel chiptuning hizmeti.
             </p>
           </motion.div>
 
@@ -157,7 +158,10 @@ export default function ChiptuningClient() {
                   <p className="text-gray-600 mb-6">{stage.description}</p>
                   <ul className="space-y-3 mb-6">
                     {stage.benefits.map((benefit, i) => (
-                      <li key={i} className="flex items-center gap-3 text-gray-700">
+                      <li
+                        key={i}
+                        className="flex items-center gap-3 text-gray-700"
+                      >
                         <span className="w-2 h-2 bg-primary/50 rounded-full"></span>
                         {benefit}
                       </li>
@@ -220,7 +224,8 @@ export default function ChiptuningClient() {
                 Aracınızın Gücünü Keşfedin
               </h2>
               <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
-                Profesyonel chiptuning hizmetimiz ile aracınızın performansını artırın.
+                Profesyonel chiptuning hizmetimiz ile aracınızın performansını
+                artırın.
               </p>
               <Link
                 href="/landing/contact"
@@ -236,4 +241,4 @@ export default function ChiptuningClient() {
       <Footer />
     </div>
   );
-} 
+}

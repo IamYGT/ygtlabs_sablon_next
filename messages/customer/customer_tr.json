@@ -1,5 +1,95 @@
 {
-  "CustomerNav": {
+  "support": {
+    "title": "Destek Merkezi",
+    "subtitle": "Size nasıl yardımcı olabiliriz?",
+    "dashboard": "Destek Paneli",
+    "myTickets": "Taleplerim",
+    "newTicket": "Yeni Talep",
+    "createTicket": "Talep Oluştur",
+    "ticketDetail": "Talep Detayı",
+    "noTickets": "Henüz destek talebiniz bulunmuyor",
+    "createFirstTicket": "İlk talebinizi oluşturun",
+    "form": {
+      "subject": {
+        "label": "Konu",
+        "placeholder": "Sorununuzu kısaca özetleyin",
+        "required": "Konu gerekli"
+      },
+      "description": {
+        "label": "Açıklama",
+        "placeholder": "Sorununuzu detaylı olarak açıklayın",
+        "required": "Açıklama gerekli"
+      },
+      "category": {
+        "label": "Kategori",
+        "placeholder": "Kategori seçin",
+        "required": "Kategori seçimi gerekli"
+      },
+      "priority": {
+        "label": "Öncelik",
+        "placeholder": "Öncelik seçin"
+      },
+      "attachments": {
+        "label": "Dosya Ekle",
+        "hint": "Maksimum 10MB, izin verilen formatlar: jpg, png, pdf, doc, docx",
+        "uploading": "Yükleniyor...",
+        "uploaded": "Yüklendi",
+        "remove": "Kaldır"
+      },
+      "submit": "Talep Oluştur",
+      "submitting": "Oluşturuluyor...",
+      "success": "Talebiniz başarıyla oluşturuldu",
+      "error": "Talep oluşturulurken hata oluştu"
+    },
+    "ticket": {
+      "number": "Talep No",
+      "status": "Durum",
+      "priority": "Öncelik",
+      "category": "Kategori",
+      "created": "Oluşturulma",
+      "lastUpdate": "Son Güncelleme",
+      "reply": "Yanıtla",
+      "close": "Kapat",
+      "reopen": "Yeniden Aç",
+      "resolved": "Çözüldü",
+      "waitingResponse": "Yanıt Bekleniyor",
+      "responded": "Yanıtlandı"
+    },
+    "messages": {
+      "title": "Mesajlar",
+      "placeholder": "Mesajınızı yazın...",
+      "send": "Gönder",
+      "sending": "Gönderiliyor...",
+      "you": "Siz",
+      "support": "Destek Ekibi",
+      "system": "Sistem"
+    },
+    "filters": {
+      "all": "Tümü",
+      "open": "Açık",
+      "pending": "Beklemede",
+      "resolved": "Çözüldü",
+      "closed": "Kapalı",
+      "search": "Talep ara..."
+    },
+    "notifications": {
+      "newResponse": "Talebinize yeni yanıt geldi",
+      "statusChanged": "Talep durumunuz güncellendi",
+      "ticketClosed": "Talebiniz kapatıldı",
+      "ticketResolved": "Talebiniz çözüldü olarak işaretlendi"
+    },
+    "satisfaction": {
+      "title": "Destek deneyiminizi değerlendirin",
+      "question": "Aldığınız destekten memnun musunuz?",
+      "excellent": "Mükemmel",
+      "good": "İyi",
+      "average": "Orta",
+      "poor": "Kötü",
+      "submit": "Gönder",
+      "thanks": "Geri bildiriminiz için teşekkürler!"
+    }
+  },
+  "customer": {
     "dashboard": "Ana Sayfa",
     "orders": "Siparişlerim",
     "orderHistory": "Sipariş Geçmişi",

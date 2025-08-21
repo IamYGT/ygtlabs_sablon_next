@@ -1,0 +1,394 @@
+{
+  "header": {
+    "navigation": {
+      "home": "Anasayfa",
+      "chiptuning": "Chiptuning",
+      "corporate": "Kurumsal",
+      "services": "Hizmetler",
+      "onsiteService": "Yerinde Hizmet",
+      "blog": "Blog",
+      "dealers": "Bayiler",
+      "contact": "İletişim"
+    },
+    "topBar": {
+      "dealershipApplication": "Bayilik Başvurusu",
+      "faq": "Sık Sorulan Sorular"
+    },
+    "mobile": {
+      "languageSelection": "Dil Seçimi",
+      "socialMedia": "Sosyal Medya"
+    }
+  },
+  "footer": {
+    "description": "Revv Tuned olarak, araç performansınızı en üst seviyeye çıkarmak için profesyonel chiptuning hizmetleri sunuyoruz.",
+    "quickLinks": "Hızlı Linkler",
+    "contact": "İletişim",
+    "services": "Hizmetler",
+    "corporate": "Kurumsal",
+    "blog": "Blog",
+    "home": "Anasayfa",
+    "phone": "+90 XXX XXX XX XX",
+    "email": "info@ataperformance.com",
+    "address": "İstanbul, Türkiye",
+    "copyright": "© 2024 Revv Tuned. Tüm hakları saklıdır.",
+    "newsletter": "Bülten",
+    "newsletterDesc": "En son güncellemeler ve özel teklifler için bültenimize abone olun.",
+    "subscribe": "Abone Ol",
+    "enterEmail": "E-posta adresinizi girin",
+    "followUs": "Bizi Takip Edin",
+    "workingHours": "Çalışma Saatleri",
+    "weekdays": "Pazartesi - Cuma: 09:00 - 18:00",
+    "saturday": "Cumartesi: 09:00 - 16:00",
+    "sunday": "Pazar: Kapalı"
+  },
+  "hero": {
+    "badge": "#1 Chiptuning Merkezi",
+    "title": {
+      "line1": "Özel Tuning",
+      "line2": "Zamanı"
+    },
+    "description": "Özel Chiptuning deneyimi için elinizden veya aracınızın bulunduğu yerde profesyonel hizmet",
+    "buttons": {
+      "discoverPower": "Gücü Keşfet",
+      "onsiteService": "Yerinde Hizmet"
+    },
+    "features": {
+      "premiumService": {
+        "title": "Premium Hizmet",
+        "subtitle": "Uzman Ekip"
+      },
+      "fastDelivery": {
+        "title": "Hızlı Teslimat",
+        "subtitle": "Aynı Gün"
+      }
+    },
+    "stats": {
+      "customers": "Müşteri",
+      "years": "Yıl",
+      "success": "Başarı",
+      "support": "Destek"
+    },
+    "scroll": "Kaydır"
+  },
+  "mainContent": {
+    "title": {
+      "line1": "Güvenilir Güç",
+      "highlight": "Düşük Yakıt"
+    },
+    "description": "Aracınızın performans potansiyelini en üst seviyeye çıkarın. Profesyonel ekibimiz ve son teknoloji ekipmanlarımızla hizmetinizdeyiz.",
+    "features": {
+      "dealership": "Bayilik Başvurusu",
+      "onsiteService": "Yerinde Hizmet",
+      "reviews": "Değerlendirmeler",
+      "faq": "Sık Sorulan Sorular"
+    },
+    "experience": "Yıllık Deneyim",
+    "imageAlt": "Araba Tuning Hizmeti"
+  },
+  "serviceIcons": {
+    "ecuTuning": "ECU Yazılım",
+    "performanceUpgrades": "Performans Yükseltme",
+    "startStop": "Start-Stop Devre Dışı",
+    "adblueDpf": "Adblue & DPF Çözümleri",
+    "powerDyno": "Güç & Dyno Testi",
+    "ecuRemap": "ECU Remap",
+    "turboBoost": "Turbo Boost"
+  },
+  "serviceCards": {
+    "title": "Hizmetlerimiz",
+    "description": "Aracınızın ihtiyaçlarına yönelik geniş bir hizmet yelpazesi sunuyoruz.",
+    "services": [
+      {
+        "title": "ECU Yazılım",
+        "description": "Aracınızın beyni olan ECU'yu, maksimum performans ve verimlilik için optimize ediyoruz.",
+        "link": "/hizmetler/ecu-yazilim"
+      },
+      {
+        "title": "Yerinde Hizmet",
+        "description": "Aracınız nerede olursa olsun, profesyonel chiptuning hizmetini ayağınıza getiriyoruz.",
+        "link": "/hizmetler/yerinde-hizmet"
+      },
+      {
+        "title": "Güç Ölçümü",
+        "description": "Son teknoloji Dyno makinemiz ile aracınızın gücünü ve torkunu ölçüyoruz.",
+        "link": "/hizmetler/dyno"
+      }
+    ],
+    "learnMore": "Detayları Gör"
+  },
+  "corporateSection": {
+    "badge": "Kurumsal",
+    "title": "Filonuza Profesyonel Çözümler",
+    "description": "Şirket araçlarınız için özel ECU yazılım ve filo yönetim çözümleri sunuyoruz. Verimliliğinizi artırın, maliyetlerinizi düşürün.",
+    "button": "Teklif Alın",
+    "features": [
+      "Filoya özel yazılım",
+      "Yakıt tasarrufu",
+      "Performans artışı",
+      "Detaylı raporlama"
+    ]
+  },
+  "statistics": {
+    "title": "Rakamlarla Biz",
+    "stats": [
+      {
+        "value": "10.000+",
+        "label": "Mutlu Müşteri"
+      },
+      {
+        "value": "15+",
+        "label": "Yıllık Deneyim"
+      },
+      {
+        "value": "98%",
+        "label": "Başarı Oranı"
+      },
+      {
+        "value": "50+",
+        "label": "Dünya Çapında Bayi"
+      }
+    ]
+  },
+  "serviceInfo": {
+    "badge": "Neden Biz?",
+    "title": "Neden RevvTuned'i Seçmelisiniz?",
+    "description": "Uzman ekibimiz, son teknoloji ekipmanlarımız ve müşteri odaklı yaklaşımımızla hizmetinizdeyiz.",
+    "features": [
+      {
+        "title": "Uzman Ekip",
+        "description": "Deneyimli ve sertifikalı uzmanlarımız, en iyi sonuçlar için hizmetinizdedir."
+      },
+      {
+        "title": "Son Teknoloji",
+        "description": "Sektördeki en yeni ve en güvenilir ekipmanları kullanıyoruz."
+      },
+      {
+        "title": "Müşteri Memnuniyeti",
+        "description": "Önceliğimiz, müşterilerimize en üst düzeyde hizmet sunmaktır."
+      }
+    ]
+  },
+  "testimonials": {
+    "badge": "Müşteri Yorumları",
+    "title": "Müşterilerimiz Ne Diyor?",
+    "testimonials": [
+      {
+        "name": "Ahmet Yılmaz",
+        "role": "BMW F30 Sahibi",
+        "quote": "Aracımın performansı inanılmaz arttı. Artık araba kullanmak çok daha keyifli. Teşekkürler RevvTuned ekibi!",
+        "image": "/images/team/default-avatar.jpg"
+      },
+      {
+        "name": "Ayşe Kaya",
+        "role": "Filo Yöneticisi",
+        "quote": "Şirket araçlarımızda ciddi bir yakıt tasarrufu sağladık. Profesyonel yaklaşımları takdire şayan.",
+        "image": "/images/team/default-avatar.jpg"
+      }
+    ]
+  },
+  "blogSection": {
+    "badge": "Blog",
+    "title": "Blog'dan Son Yazılar",
+    "description": "Chiptuning dünyası hakkındaki en son haberler, ipuçları ve makaleler için blogumuzu takip edin.",
+    "button": "Tüm Yazıları Gör",
+    "posts": [
+      {
+        "category": "ECU Yazılım",
+        "title": "Stage 1 Yazılım Nedir?",
+        "author": "Ercan Yter",
+        "date": "26 Temmuz 2024"
+      },
+      {
+        "category": "Yakıt Tasarrufu",
+        "title": "Chiptuning ile Yakıt Tasarrufu Mümkün mü?",
+        "author": "Admin",
+        "date": "22 Temmuz 2024"
+      }
+    ]
+  },
+  "contact": {
+    "badge": "# İLETİŞİM",
+    "title": "Bizimle İletişime Geçin",
+    "description": "Sorularınız için bize ulaşın, randevu alın. Profesyonel ekibimiz size yardımcı olmaktan mutluluk duyar.",
+    "form": {
+      "title": "Randevu Formu",
+      "name": "Ad Soyad",
+      "email": "E-posta",
+      "phone": "Telefon",
+      "vehicle": "Araç Bilgisi",
+      "service": "Hizmet Türü",
+      "selectService": "Hizmet seçiniz",
+      "message": "Mesajınız",
+      "submit": "Mesaj Gönder",
+      "success": "Mesajınız başarıyla gönderildi! En kısa sürede size dönüş yapacağız."
+    },
+    "placeholders": {
+      "name": "Adınız ve soyadınız",
+      "email": "ornek@email.com",
+      "phone": "0555 123 45 67",
+      "vehicle": "Marka, Model, Yıl",
+      "message": "Detayları buraya yazabilirsiniz..."
+    },
+    "info": {
+      "title": "İletişim Bilgileri",
+      "phone": "Telefon",
+      "phoneValue": "+90 555 123 45 67",
+      "email": "E-posta",
+      "emailValue": "info@ataperformance.com",
+      "address": "Adres",
+      "addressValue": "Atatürk Cad. No:123 Çankaya/Ankara",
+      "hours": "Çalışma Saatleri",
+      "hoursValue": "Pzt-Cmt: 09:00 - 18:00"
+    },
+    "services": [
+      "Stage 1 Chiptuning",
+      "Stage 2 Chiptuning",
+      "ECU Remapping",
+      "DPF/EGR İptali",
+      "Performans Testi",
+      "Launch Control",
+      "Diğer"
+    ],
+    "map": {
+      "title": "Konum",
+      "comingSoon": "Harita yakında eklenecek"
+    },
+    "emergency": {
+      "title": "Acil Durum",
+      "description": "Acil durumlar için 7/24 ulaşabileceğiniz hattımız:"
+    },
+    "faq": {
+      "title": "Sık Sorulan Sorular",
+      "items": [
+        {
+          "q": "Randevu almak zorunlu mu?",
+          "a": "Daha iyi hizmet için randevu almanızı öneriyoruz."
+        },
+        {
+          "q": "Chiptuning ne kadar sürer?",
+          "a": "Hizmet türüne göre 2-5 saat arası değişmektedir."
+        },
+        {
+          "q": "Garanti veriliyor mu?",
+          "a": "Evet, 1 yıl garanti ile hizmet veriyoruz."
+        },
+        {
+          "q": "Hangi araçlara hizmet veriyorsunuz?",
+          "a": "Tüm marka ve modellere hizmet vermekteyiz."
+        }
+      ]
+    }
+  },
+  "dealership": {
+    "badge": "# BAYİLİK FIRSATI",
+    "title": "Revv Tuned Ailesine Katılın",
+    "description": "Türkiye'nin lider chiptuning markası ile işinizi büyütün ve geleceğe yatırım yapın.",
+    "stats": [
+      {
+        "number": "25+",
+        "label": "Bayi Sayısı"
+      },
+      {
+        "number": "50+",
+        "label": "Şehir"
+      },
+      {
+        "number": "15+",
+        "label": "Yıllık Deneyim"
+      },
+      {
+        "number": "95%",
+        "label": "Memnuniyet"
+      }
+    ],
+    "benefits": {
+      "title": "Bayilik Avantajları",
+      "brandPower": {
+        "title": "Marka Gücü",
+        "description": "Sektörün lider markası ile güçlü bir iş ortaklığı kurma fırsatı"
+      },
+      "continuousSupport": {
+        "title": "Sürekli Destek",
+        "description": "Teknik, pazarlama ve operasyonel konularda tam destek"
+      },
+      "highProfit": {
+        "title": "Yüksek Karlılık",
+        "description": "Rekabetçi fiyatlar ve yüksek kar marjı ile karlı iş modeli"
+      },
+      "training": {
+        "title": "Eğitim Programı",
+        "description": "Kapsamlı eğitim ve sertifikasyon programları"
+      }
+    },
+    "requirements": {
+      "title": "Bayilik Şartları",
+      "physicalSpace": {
+        "title": "Fiziksel Mekan",
+        "description": "Minimum 100m² kapalı alan ve uygun lokasyon"
+      },
+      "investment": {
+        "title": "Yatırım Kapasitesi",
+        "description": "Başlangıç yatırımı için yeterli sermaye"
+      },
+      "experience": {
+        "title": "Deneyim",
+        "description": "Otomotiv sektöründe minimum 2 yıl deneyim"
+      },
+      "target": {
+        "title": "Hedef Odaklılık",
+        "description": "Satış hedeflerine ulaşma kararlılığı"
+      }
+    },
+    "support": {
+      "title": "Size Sunduğumuz Destekler"
+    },
+    "supportServices": [
+      "Kapsamlı teknik eğitim programı",
+      "Pazarlama ve reklam desteği",
+      "Sürekli teknik destek hattı",
+      "Ürün ve hizmet güncellemeleri",
+      "Satış ve müşteri yönetimi eğitimi",
+      "Operasyonel süreçlerde rehberlik",
+      "Bölgesel toplantı ve etkinlikler",
+      "Online eğitim platformu erişimi"
+    ],
+    "form": {
+      "title": "Bayilik Başvuru Formu",
+      "name": "Ad Soyad",
+      "phone": "Telefon",
+      "email": "E-posta",
+      "city": "Şehir",
+      "experience": "İş Deneyimi",
+      "select": "Seçiniz",
+      "years0to2": "0-2 yıl",
+      "years2to5": "2-5 yıl",
+      "years5to10": "5-10 yıl",
+      "years10plus": "10+ yıl",
+      "message": "Mesajınız",
+      "submit": "Başvuruyu Gönder",
+      "success": "Başvurunuz alınmıştır. En kısa sürede sizinle iletişime geçeceğiz."
+    },
+    "placeholders": {
+      "name": "Adınız Soyadınız",
+      "phone": "0(5XX) XXX XX XX",
+      "email": "ornek@mail.com",
+      "city": "Hangi şehirde bayilik yapmak istiyorsunuz?",
+      "message": "Mevcut iş deneyiminiz, bayilik planlarınız ve yatırım kapasiteleriniz hakkında bilgi veriniz..."
+    },
+    "moreInfo": {
+      "title": "Daha Fazla Bilgi İçin",
+      "description": "Bayilik şartları ve detayları hakkında daha fazla bilgi almak için bizimle iletişime geçin.",
+      "callNow": "Hemen Ara",
+      "sendEmail": "E-posta Gönder"
+    }
+  },
+  "seo": {
+    "landing": {
+      "title": "RevvTuned - ECU Chip Tuning Hizmetleri",
+      "description": "Profesyonel ECU chip tuning hizmetleri ile aracınızın performansını artırın. Uzman ekibimiz ve son teknoloji ile güvenli tuning çözümleri.",
+      "keywords": "ecu tuning, chip tuning, performans artırma, motor tuning, araç modifikasyonu",
+      "ogTitle": "RevvTuned - ECU Chip Tuning Hizmetleri",
+      "ogDescription": "Profesyonel ECU chip tuning hizmetleri ile aracınızın performansını artırın."
+    }
+  }
+}

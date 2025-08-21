@@ -2,7 +2,7 @@ import { CustomerGuard } from "@/components/panel/AuthGuards";
 import { CustomerHeader } from "@/components/panel/CustomerHeader";
 import { CustomerSidebar } from "@/components/panel/CustomerSidebar";
 import { LogoutModalProvider } from "@/components/panel/LogoutModalProvider";
-import { routing } from "@/src/i18n/routing";
+import { routing } from "@/lib/i18n/routing";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";

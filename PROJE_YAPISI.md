@@ -18,7 +18,7 @@ ecu_sablon/
 │   │   │   └── page.tsx          # Landing page içeriği (component)
 │   │   ├── admin/                # Admin paneli
 │   │   ├── auth/                 # Kimlik doğrulama sayfaları
-│   │   └── customer/                # Kullanıcı paneli
+│   │   └── customer/             # Kullanıcı paneli
 │   └── api/                      # API rotaları
 ├── components/                   # Yeniden kullanılabilir bileşenler
 │   ├── panel/                    # Panel bileşenleri (admin/customer/landing)
@@ -27,8 +27,7 @@ ecu_sablon/
 ├── messages/                     # Çok dilli mesajlar
 ├── prisma/                       # Veritabanı şeması ve migrasyonlar
 ├── public/                       # Statik dosyalar
-├── src/i18n/                     # Uluslararasılaştırma konfigürasyonu
-└── landing_page/                 # Ayrı React projesi (eski)
+├── lib/i18n/                     # Uluslararasılaştırma konfigürasyonu
 ```
 
 ## Sayfa Yapısı
