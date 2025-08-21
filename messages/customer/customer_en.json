@@ -1,4 +1,61 @@
 {
+  "support": {
+    "title": "Support Center",
+    "subtitle": "How can we help you?",
+    "description": "Manage and track your support tickets",
+    "searchPlaceholder": "Search tickets...",
+    "newTicketTitle": "New Support Ticket",
+    "newTicketDescription": "Let us know about your issues and questions",
+    "ticketDetails": "Ticket Details",
+    "ticketDetailsDescription": "Track your ticket details here",
+    "ticketTitlePlaceholder": "Enter ticket title",
+    "ticketTitleDescription": "Write a brief title describing your issue",
+    "selectCategory": "Select Category",
+    "priorityDescription": "Set the priority level for your ticket",
+    "descriptionPlaceholder": "Describe your issue in detail",
+    "descriptionHelp": "Include all details about your issue, the steps you took, and your expectations",
+    "attachmentsDescription": "You can attach files, images, or logs related to your issue",
+    "addAttachment": "Add File",
+    "cancel": "Cancel",
+    "createTicket": "Create Ticket",
+    "ticketHelpText": "Your ticket will be reviewed as soon as possible",
+    "ticketTitle": "Ticket Title",
+    "category": "Category",
+    "attachments": "Attachments",
+    "selectPriority": "Select Priority",
+    "filterByStatus": "Filter by status",
+    "allStatuses": "All statuses",
+    "filterByPriority": "Filter by priority",
+    "allPriorities": "All priorities",
+    "noTicketsDescription": "You haven't created any support tickets yet. Click the button below to create your first ticket.",
+    "status": {
+      "open": "Open",
+      "pending": "Pending",
+      "inProgress": "In Progress",
+      "resolved": "Resolved",
+      "closed": "Closed"
+    },
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "urgent": "Urgent",
+      "label": "Priority"
+    },
+    "filters": {
+      "title": "Filters",
+      "all": "All",
+      "open": "Open",
+      "pending": "Pending",
+      "resolved": "Resolved",
+      "closed": "Closed",
+      "search": "Search tickets..."
+    }
+  },
+  "ticket": {
+    "lastMessage": "Last Message",
+    "assignedTo": "Assigned to"
+  },
   "CustomerNav": {
     "dashboard": "Dashboard",
     "orders": "My Orders",

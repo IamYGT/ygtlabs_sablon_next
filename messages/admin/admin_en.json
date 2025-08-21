@@ -445,6 +445,79 @@
     "usersActive": "users active",
     "usersRoleAssigned": "users have assigned roles"
   },
+  "AdminSupport": {
+    "title": "Support Management",
+    "dashboard": "Support Dashboard",
+    "description": "Manage and track support tickets",
+    "tickets": {
+      "title": "Support Tickets",
+      "all": "All Tickets",
+      "assigned": "Assigned to Me",
+      "unassigned": "Unassigned",
+      "assignTo": "Assign To",
+      "assignToMe": "Assign to Me",
+      "unassign": "Unassign",
+      "bulkActions": "Bulk Actions",
+      "export": "Export",
+      "agents": "Support Agents",
+      "workload": "Workload",
+      "templates": "Response Templates",
+      "internalNote": "Add Internal Note",
+      "changeStatus": "Change Status",
+      "changePriority": "Change Priority",
+      "customerInfo": "Customer Info",
+      "assignmentHistory": "Assignment History"
+    },
+    "stats": {
+      "title": "Support Statistics",
+      "totalTickets": "Total Tickets",
+      "newToday": "New Today",
+      "openTickets": "Open Tickets",
+      "needsAttention": "Needs Attention",
+      "inProgress": "In Progress",
+      "beingHandled": "Being Handled",
+      "resolved": "Resolved",
+      "todayResolved": "Resolved Today",
+      "avgResponseTime": "Avg. Response Time",
+      "firstResponse": "First Response"
+    },
+    "searchPlaceholder": "Search tickets...",
+    "allStatuses": "All Statuses",
+    "allPriorities": "All Priorities",
+    "allAssignees": "All Assignees",
+    "noTickets": "No Tickets",
+    "noTicketsDescription": "There are currently no support tickets.",
+    "status": {
+      "open": "Open",
+      "pending": "Pending",
+      "inProgress": "In Progress",
+      "resolved": "Resolved",
+      "closed": "Closed"
+    },
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "urgent": "Urgent"
+    },
+    "filters": {
+      "title": "Filters"
+    },
+    "filterByStatus": "Filter by Status",
+    "filterByPriority": "Filter by Priority",
+    "filterByAssignee": "Filter by Assignee",
+    "unassigned": "Unassigned",
+    "actions": "Actions",
+    "view": "View",
+    "markInProgress": "Mark as In Progress",
+    "markResolved": "Mark as Resolved",
+    "deleteConfirm": "Are you sure you want to delete this ticket?",
+    "delete": "Delete",
+    "assign": "Assign",
+    "statusUpdated": "Ticket status updated",
+    "ticketAssigned": "Ticket assigned",
+    "ticketDeleted": "Ticket deleted"
+  },
   "AdminRoles": {
     "activate": "Activate",
     "deactivate": "Deactivate",
@@ -1110,7 +1183,10 @@
             "label": "Light",
             "description": "Always use light theme"
           },
-          "dark": { "label": "Dark", "description": "Always use dark theme" },
+          "dark": {
+            "label": "Dark",
+            "description": "Always use dark theme"
+          },
           "system": {
             "label": "System",
             "description": "Follow system preference"

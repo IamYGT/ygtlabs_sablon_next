@@ -1,25 +1,15 @@
 "use client";
 
-import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
-import { useParams, useRouter } from "next/navigation";
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle 
-} from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,29 +18,39 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  Search, 
-  MessageSquare,
-  Clock,
-  AlertCircle,
-  CheckCircle,
-  XCircle,
-  MoreHorizontal,
-  User,
-  Calendar,
-  TrendingUp,
-  UserCheck,
-  Trash2,
-  Eye,
-  Activity
-} from "lucide-react";
+import type { TicketPriority, TicketStatus } from "@prisma/client";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
-import { tr, enUS } from "date-fns/locale";
-import type { TicketStatus, TicketPriority } from "@prisma/client";
+import { enUS, tr } from "date-fns/locale";
+import {
+  Activity,
+  AlertCircle,
+  Calendar,
+  CheckCircle,
+  Clock,
+  Eye,
+  MessageSquare,
+  MoreHorizontal,
+  Search,
+  Trash2,
+  TrendingUp,
+  User,
+  UserCheck,
+  XCircle,
+} from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface SupportTicket {
   id: string;
@@ -104,7 +104,11 @@ interface TicketStats {
 const statusConfig = {
   open: { label: "open", icon: AlertCircle, color: "bg-yellow-500" },
   pending: { label: "pending", icon: Clock, color: "bg-blue-500" },
-  in_progress: { label: "inProgress", icon: MessageSquare, color: "bg-purple-500" },
+  in_progress: {
+    label: "inProgress",
+    icon: MessageSquare,
+    color: "bg-purple-500",
+  },
   resolved: { label: "resolved", icon: CheckCircle, color: "bg-green-500" },
   closed: { label: "closed", icon: XCircle, color: "bg-gray-500" },
 };
@@ -123,7 +127,7 @@ export default function AdminSupportPage() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const locale = params.locale as string;
-  
+
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [priorityFilter, setPriorityFilter] = useState<string>("all");
@@ -152,14 +156,22 @@ export default function AdminSupportPage() {
 
   // Ticketları getir
   const { data: ticketsData, isLoading } = useQuery({
-    queryKey: ["admin-tickets", statusFilter, priorityFilter, assigneeFilter, searchQuery],
+    queryKey: [
+      "admin-tickets",
+      statusFilter,
+      priorityFilter,
+      assigneeFilter,
+      searchQuery,
+    ],
     queryFn: async () => {
       const queryParams = new URLSearchParams();
       if (statusFilter !== "all") queryParams.append("status", statusFilter);
-      if (priorityFilter !== "all") queryParams.append("priority", priorityFilter);
-      if (assigneeFilter !== "all") queryParams.append("assignedToId", assigneeFilter);
+      if (priorityFilter !== "all")
+        queryParams.append("priority", priorityFilter);
+      if (assigneeFilter !== "all")
+        queryParams.append("assignedToId", assigneeFilter);
       if (searchQuery) queryParams.append("search", searchQuery);
-      
+
       const response = await fetch(`/api/support/tickets?${queryParams}`);
       if (!response.ok) throw new Error("Failed to fetch tickets");
       return response.json();
@@ -170,7 +182,13 @@ export default function AdminSupportPage() {
 
   // Ticket durumunu güncelle
   const updateStatusMutation = useMutation({
-    mutationFn: async ({ ticketId, status }: { ticketId: string; status: TicketStatus }) => {
+    mutationFn: async ({
+      ticketId,
+      status,
+    }: {
+      ticketId: string;
+      status: TicketStatus;
+    }) => {
       const response = await fetch(`/api/support/tickets/${ticketId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -191,7 +209,13 @@ export default function AdminSupportPage() {
 
   // Ticket'ı ata
   const assignTicketMutation = useMutation({
-    mutationFn: async ({ ticketId, assignedToId }: { ticketId: string; assignedToId: string | null }) => {
+    mutationFn: async ({
+      ticketId,
+      assignedToId,
+    }: {
+      ticketId: string;
+      assignedToId: string | null;
+    }) => {
       const response = await fetch(`/api/support/tickets/${ticketId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -242,66 +266,82 @@ export default function AdminSupportPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t("totalTickets")}</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              {t("stats.totalTickets")}
+            </CardTitle>
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.total || 0}</div>
             <div className="flex items-center text-xs text-muted-foreground">
               <TrendingUp className="h-3 w-3 mr-1 text-green-500" />
-              {stats?.todayNew || 0} {t("newToday")}
+              {stats?.todayNew || 0} {t("stats.newToday")}
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t("openTickets")}</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              {t("stats.openTickets")}
+            </CardTitle>
             <AlertCircle className="h-4 w-4 text-yellow-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.open || 0}</div>
             <Badge variant="secondary" className="text-xs">
-              {t("needsAttention")}
+              {t("stats.needsAttention")}
             </Badge>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t("inProgress")}</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              {t("stats.inProgress")}
+            </CardTitle>
             <MessageSquare className="h-4 w-4 text-purple-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.inProgress || 0}</div>
-            <p className="text-xs text-muted-foreground">{t("beingHandled")}</p>
+            <p className="text-xs text-muted-foreground">
+              {t("stats.beingHandled")}
+            </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t("resolved")}</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              {t("stats.resolved")}
+            </CardTitle>
             <CheckCircle className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.resolved || 0}</div>
             <div className="flex items-center text-xs text-muted-foreground">
               <TrendingUp className="h-3 w-3 mr-1 text-green-500" />
-              {stats?.todayResolved || 0} {t("todayResolved")}
+              {stats?.todayResolved || 0} {t("stats.todayResolved")}
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{t("avgResponseTime")}</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              {t("stats.avgResponseTime")}
+            </CardTitle>
             <Clock className="h-4 w-4 text-blue-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {stats?.avgResponseTime ? `${Math.round(stats.avgResponseTime / 60)}m` : "N/A"}
+              {stats?.avgResponseTime
+                ? `${Math.round(stats.avgResponseTime / 60)}m`
+                : "N/A"}
             </div>
-            <p className="text-xs text-muted-foreground">{t("firstResponse")}</p>
+            <p className="text-xs text-muted-foreground">
+              {t("stats.firstResponse")}
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -309,7 +349,7 @@ export default function AdminSupportPage() {
       {/* Filtreler */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">{t("filters")}</CardTitle>
+          <CardTitle className="text-lg">{t("filters.title")}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col lg:flex-row gap-4">
@@ -332,7 +372,11 @@ export default function AdminSupportPage() {
                 <SelectItem value="all">{t("allStatuses")}</SelectItem>
                 {Object.keys(statusConfig).map((status) => (
                   <SelectItem key={status} value={status}>
-                    {t(`status.${statusConfig[status as keyof typeof statusConfig].label}`)}
+                    {t(
+                      `status.${
+                        statusConfig[status as keyof typeof statusConfig].label
+                      }`
+                    )}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -345,7 +389,12 @@ export default function AdminSupportPage() {
                 <SelectItem value="all">{t("allPriorities")}</SelectItem>
                 {Object.keys(priorityConfig).map((priority) => (
                   <SelectItem key={priority} value={priority}>
-                    {t(`priority.${priorityConfig[priority as keyof typeof priorityConfig].label}`)}
+                    {t(
+                      `priority.${
+                        priorityConfig[priority as keyof typeof priorityConfig]
+                          .label
+                      }`
+                    )}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -388,14 +437,19 @@ export default function AdminSupportPage() {
             <CardContent className="text-center py-12">
               <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-2">{t("noTickets")}</h3>
-              <p className="text-muted-foreground">{t("noTicketsDescription")}</p>
+              <p className="text-muted-foreground">
+                {t("noTicketsDescription")}
+              </p>
             </CardContent>
           </Card>
         ) : (
           tickets.map((ticket: SupportTicket) => {
             const StatusIcon = statusConfig[ticket.status].icon;
             return (
-              <Card key={ticket.id} className="hover:shadow-md transition-shadow">
+              <Card
+                key={ticket.id}
+                className="hover:shadow-md transition-shadow"
+              >
                 <CardHeader>
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
@@ -403,25 +457,38 @@ export default function AdminSupportPage() {
                         <Badge variant="outline" className="font-mono">
                           {ticket.ticketNumber}
                         </Badge>
-                        <Badge className={`${statusConfig[ticket.status].color} text-white`}>
+                        <Badge
+                          className={`${
+                            statusConfig[ticket.status].color
+                          } text-white`}
+                        >
                           <StatusIcon className="h-3 w-3 mr-1" />
                           {t(`status.${statusConfig[ticket.status].label}`)}
                         </Badge>
-                        <Badge className={`${priorityConfig[ticket.priority].color} text-white`}>
-                          {t(`priority.${priorityConfig[ticket.priority].label}`)}
+                        <Badge
+                          className={`${
+                            priorityConfig[ticket.priority].color
+                          } text-white`}
+                        >
+                          {t(
+                            `priority.${priorityConfig[ticket.priority].label}`
+                          )}
                         </Badge>
                         {ticket.category && (
-                          <Badge 
+                          <Badge
                             variant="secondary"
                             style={{ backgroundColor: ticket.category.color }}
                           >
-                            {ticket.category.name[locale] || ticket.category.name.en}
+                            {ticket.category.name[locale] ||
+                              ticket.category.name.en}
                           </Badge>
                         )}
                       </div>
-                      <CardTitle 
+                      <CardTitle
                         className="text-xl cursor-pointer hover:text-primary"
-                        onClick={() => router.push(`/${locale}/admin/support/${ticket.id}`)}
+                        onClick={() =>
+                          router.push(`/${locale}/admin/support/${ticket.id}`)
+                        }
                       >
                         {ticket.title}
                       </CardTitle>
@@ -439,28 +506,37 @@ export default function AdminSupportPage() {
                         <DropdownMenuLabel>{t("actions")}</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
-                          onClick={() => router.push(`/${locale}/admin/support/${ticket.id}`)}
+                          onClick={() =>
+                            router.push(`/${locale}/admin/support/${ticket.id}`)
+                          }
                         >
                           <Eye className="h-4 w-4 mr-2" />
                           {t("view")}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
-                          onClick={() => updateStatusMutation.mutate({ 
-                            ticketId: ticket.id, 
-                            status: "in_progress" 
-                          })}
+                          onClick={() =>
+                            updateStatusMutation.mutate({
+                              ticketId: ticket.id,
+                              status: "in_progress",
+                            })
+                          }
                           disabled={ticket.status === "in_progress"}
                         >
                           <MessageSquare className="h-4 w-4 mr-2" />
                           {t("markInProgress")}
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          onClick={() => updateStatusMutation.mutate({ 
-                            ticketId: ticket.id, 
-                            status: "resolved" 
-                          })}
-                          disabled={ticket.status === "resolved" || ticket.status === "closed"}
+                          onClick={() =>
+                            updateStatusMutation.mutate({
+                              ticketId: ticket.id,
+                              status: "resolved",
+                            })
+                          }
+                          disabled={
+                            ticket.status === "resolved" ||
+                            ticket.status === "closed"
+                          }
                         >
                           <CheckCircle className="h-4 w-4 mr-2" />
                           {t("markResolved")}
@@ -491,9 +567,9 @@ export default function AdminSupportPage() {
                       <div className="flex items-center gap-2">
                         <Calendar className="h-4 w-4" />
                         <span>
-                          {formatDistanceToNow(new Date(ticket.createdAt), { 
-                            addSuffix: true, 
-                            locale: dateLocale 
+                          {formatDistanceToNow(new Date(ticket.createdAt), {
+                            addSuffix: true,
+                            locale: dateLocale,
                           })}
                         </span>
                       </div>
@@ -508,20 +584,24 @@ export default function AdminSupportPage() {
                       {ticket.assignedTo ? (
                         <div className="flex items-center gap-2">
                           <Avatar className="h-6 w-6">
-                            <AvatarImage src={ticket.assignedTo.profileImage || undefined} />
+                            <AvatarImage
+                              src={ticket.assignedTo.profileImage || undefined}
+                            />
                             <AvatarFallback>
                               <UserCheck className="h-3 w-3" />
                             </AvatarFallback>
                           </Avatar>
-                          <span className="text-sm">{ticket.assignedTo.name}</span>
+                          <span className="text-sm">
+                            {ticket.assignedTo.name}
+                          </span>
                         </div>
                       ) : (
                         <Select
                           value=""
-                          onValueChange={(value) => 
-                            assignTicketMutation.mutate({ 
-                              ticketId: ticket.id, 
-                              assignedToId: value 
+                          onValueChange={(value) =>
+                            assignTicketMutation.mutate({
+                              ticketId: ticket.id,
+                              assignedToId: value,
                             })
                           }
                         >
@@ -529,11 +609,13 @@ export default function AdminSupportPage() {
                             <SelectValue placeholder={t("assign")} />
                           </SelectTrigger>
                           <SelectContent>
-                            {admins?.users?.map((admin: { id: string; name: string }) => (
-                              <SelectItem key={admin.id} value={admin.id}>
-                                {admin.name}
-                              </SelectItem>
-                            ))}
+                            {admins?.users?.map(
+                              (admin: { id: string; name: string }) => (
+                                <SelectItem key={admin.id} value={admin.id}>
+                                  {admin.name}
+                                </SelectItem>
+                              )
+                            )}
                           </SelectContent>
                         </Select>
                       )}

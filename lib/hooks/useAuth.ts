@@ -175,7 +175,6 @@ export function useLogout() {
   const { showSuccess } = useUIStore();
   const params = useParams();
   const locale = (params.locale as string) || "en";
-  const t = useTranslations('Auth');
 
   return useMutation<void, Error, boolean>({
     mutationFn: async (logoutAllSessions = false): Promise<void> => {
@@ -212,9 +211,10 @@ export function useLogout() {
       await clearAllCacheOnLogout();
     },
     onSuccess: (_, logoutAllSessions) => {
+      // Use hardcoded message instead of translation to avoid i18n issues
       const message = logoutAllSessions
-        ? t('logoutSuccess')
-        : t('logoutSuccess');
+        ? "Successfully logged out from all devices"
+        : "Successfully logged out";
       showSuccess(message);
 
       // Hard redirect to login page to ensure clean state

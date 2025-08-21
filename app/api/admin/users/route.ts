@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib";
 import { prisma } from "@/lib/prisma";
+import { NextRequest, NextResponse } from "next/server";
 
 // GET /api/admin/users - List all users
 export async function GET(request: NextRequest) {
@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Check permission - yeni permission sistemi
-    if (!currentUser.permissions.includes("view./admin/users.view")) {
+    if (!currentUser.permissions.includes("admin.users.view")) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

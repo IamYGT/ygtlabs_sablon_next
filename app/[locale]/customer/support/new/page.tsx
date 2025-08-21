@@ -1,22 +1,15 @@
 "use client";
 
-import { useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
-import { useParams, useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle 
-} from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -26,6 +19,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -33,19 +27,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  Send, 
-  Paperclip,
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import {
   AlertCircle,
+  ArrowLeft,
   FileText,
-  X,
   Loader2,
-  ArrowLeft
+  Paperclip,
+  Send,
+  X,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const ACCEPTED_FILE_TYPES = [
@@ -62,7 +62,10 @@ const ACCEPTED_FILE_TYPES = [
 
 const ticketSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters").max(200),
-  description: z.string().min(20, "Description must be at least 20 characters").max(5000),
+  description: z
+    .string()
+    .min(20, "Description must be at least 20 characters")
+    .max(5000),
   priority: z.enum(["low", "medium", "high", "urgent"]),
   categoryId: z.string().optional(),
   tags: z.array(z.string()).optional(),
@@ -79,12 +82,12 @@ interface SupportCategory {
 }
 
 export default function NewTicketPage() {
-  const t = useTranslations("Support");
+  const t = useTranslations("support");
   const params = useParams();
   const router = useRouter();
   const { toast } = useToast();
   const locale = params.locale as string;
-  
+
   const [attachments, setAttachments] = useState<File[]>([]);
 
   // Kategorileri getir
@@ -120,7 +123,7 @@ export default function NewTicketPage() {
       if (data.tags && data.tags.length > 0) {
         formData.append("tags", JSON.stringify(data.tags));
       }
-      
+
       // Dosya eklentilerini ekle
       attachments.forEach((file) => {
         formData.append("attachments", file);
@@ -212,8 +215,12 @@ export default function NewTicketPage() {
           </Button>
         </Link>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">{t("newTicketTitle")}</h1>
-          <p className="text-muted-foreground mt-2">{t("newTicketDescription")}</p>
+          <h1 className="text-3xl font-bold tracking-tight">
+            {t("newTicketTitle")}
+          </h1>
+          <p className="text-muted-foreground mt-2">
+            {t("newTicketDescription")}
+          </p>
         </div>
       </div>
 
@@ -221,9 +228,7 @@ export default function NewTicketPage() {
       <Card>
         <CardHeader>
           <CardTitle>{t("ticketDetails")}</CardTitle>
-          <CardDescription>
-            {t("ticketDetailsDescription")}
-          </CardDescription>
+          <CardDescription>{t("ticketDetailsDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -236,9 +241,9 @@ export default function NewTicketPage() {
                   <FormItem>
                     <FormLabel>{t("ticketTitle")}</FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder={t("ticketTitlePlaceholder")} 
-                        {...field} 
+                      <Input
+                        placeholder={t("ticketTitlePlaceholder")}
+                        {...field}
                       />
                     </FormControl>
                     <FormDescription>
@@ -257,7 +262,10 @@ export default function NewTicketPage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{t("category")}</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder={t("selectCategory")} />
@@ -268,8 +276,8 @@ export default function NewTicketPage() {
                             <SelectItem key={category.id} value={category.id}>
                               <div className="flex items-center gap-2">
                                 {category.color && (
-                                  <div 
-                                    className="w-3 h-3 rounded-full" 
+                                  <div
+                                    className="w-3 h-3 rounded-full"
                                     style={{ backgroundColor: category.color }}
                                   />
                                 )}
@@ -290,7 +298,10 @@ export default function NewTicketPage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{t("priority.label")}</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder={t("selectPriority")} />
@@ -300,7 +311,9 @@ export default function NewTicketPage() {
                           {priorityOptions.map((option) => (
                             <SelectItem key={option.value} value={option.value}>
                               <div className="flex items-center gap-2">
-                                <div className={`w-3 h-3 rounded-full ${option.color}`} />
+                                <div
+                                  className={`w-3 h-3 rounded-full ${option.color}`}
+                                />
                                 {option.label}
                               </div>
                             </SelectItem>
@@ -324,15 +337,13 @@ export default function NewTicketPage() {
                   <FormItem>
                     <FormLabel>{t("description")}</FormLabel>
                     <FormControl>
-                      <Textarea 
+                      <Textarea
                         placeholder={t("descriptionPlaceholder")}
                         className="min-h-[150px] resize-none"
-                        {...field} 
+                        {...field}
                       />
                     </FormControl>
-                    <FormDescription>
-                      {t("descriptionHelp")}
-                    </FormDescription>
+                    <FormDescription>{t("descriptionHelp")}</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -346,7 +357,7 @@ export default function NewTicketPage() {
                     {t("attachmentsDescription")}
                   </FormDescription>
                 </div>
-                
+
                 <div className="flex items-center gap-4">
                   <Input
                     type="file"
@@ -369,7 +380,7 @@ export default function NewTicketPage() {
                 {attachments.length > 0 && (
                   <div className="space-y-2">
                     {attachments.map((file, index) => (
-                      <div 
+                      <div
                         key={index}
                         className="flex items-center justify-between p-2 bg-muted rounded-md"
                       >
@@ -401,8 +412,8 @@ export default function NewTicketPage() {
                     {t("cancel")}
                   </Button>
                 </Link>
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   disabled={createTicketMutation.isPending}
                   className="gap-2"
                 >
@@ -427,9 +438,7 @@ export default function NewTicketPage() {
       {/* Help Alert */}
       <Alert>
         <AlertCircle className="h-4 w-4" />
-        <AlertDescription>
-          {t("ticketHelpText")}
-        </AlertDescription>
+        <AlertDescription>{t("ticketHelpText")}</AlertDescription>
       </Alert>
     </div>
   );

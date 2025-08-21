@@ -203,6 +203,7 @@
   "AdminSupport": {
     "title": "Destek Yönetimi",
     "dashboard": "Destek Paneli",
+    "description": "Destek taleplerini yönetin ve takip edin",
     "tickets": {
       "title": "Destek Talepleri",
       "all": "Tüm Talepler",
@@ -225,7 +226,15 @@
     "stats": {
       "title": "Destek İstatistikleri",
       "totalTickets": "Toplam Talep",
+      "newToday": "Bugün Yeni",
       "openTickets": "Açık Talepler",
+      "needsAttention": "Dikkat Gerektiriyor",
+      "inProgress": "Devam Ediyor",
+      "beingHandled": "İşleniyor",
+      "resolved": "Çözüldü",
+      "todayResolved": "Bugün Çözülen",
+      "avgResponseTime": "Ort. Yanıt Süresi",
+      "firstResponse": "İlk Yanıt",
       "pendingTickets": "Bekleyen Talepler",
       "inProgressTickets": "İşlemdeki Talepler",
       "resolvedTickets": "Çözülen Talepler",
@@ -251,6 +260,7 @@
       "ticketCount": "Talep Sayısı"
     },
     "filters": {
+      "title": "Filtreler",
       "dateRange": "Tarih Aralığı",
       "lastWeek": "Son 1 Hafta",
       "lastMonth": "Son 1 Ay",
@@ -262,6 +272,39 @@
       "status": "Durum",
       "priority": "Öncelik"
     },
+    "searchPlaceholder": "Talep ara...",
+    "allStatuses": "Tüm Durumlar",
+    "allPriorities": "Tüm Öncelikler",
+    "allAssignees": "Tüm Atananlar",
+    "noTickets": "Talep Yok",
+    "noTicketsDescription": "Şu anda açık destek talebi bulunmuyor.",
+    "status": {
+      "open": "Açık",
+      "pending": "Beklemede",
+      "inProgress": "Devam Ediyor",
+      "resolved": "Çözüldü",
+      "closed": "Kapalı"
+    },
+    "priority": {
+      "low": "Düşük",
+      "medium": "Orta",
+      "high": "Yüksek",
+      "urgent": "Acil"
+    },
+    "filterByStatus": "Duruma Göre Filtrele",
+    "filterByPriority": "Önceliğe Göre Filtrele",
+    "filterByAssignee": "Atanana Göre Filtrele",
+    "unassigned": "Atanmamış",
+    "actions": "İşlemler",
+    "view": "Görüntüle",
+    "markInProgress": "Devam Ediyor Olarak İşaretle",
+    "markResolved": "Çözüldü Olarak İşaretle",
+    "deleteConfirm": "Bu talebi silmek istediğinizden emin misiniz?",
+    "delete": "Sil",
+    "assign": "Ata",
+    "statusUpdated": "Talep durumu güncellendi",
+    "ticketAssigned": "Talep atandı",
+    "ticketDeleted": "Talep silindi",
     "actions": {
       "resolve": "Çözüldü İşaretle",
       "close": "Kapat",

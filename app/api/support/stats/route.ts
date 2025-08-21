@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "@/lib/session-utils";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const isAdmin = session.user.permissions?.includes("admin.support.manage");
+    const isAdmin = session.user.permissions?.includes("admin.layout");
     if (!isAdmin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
@@ -29,63 +29,63 @@ export async function GET(request: NextRequest) {
       todayNew,
       todayResolved,
       avgResponseTimeResult,
-      avgResolutionTimeResult
+      avgResolutionTimeResult,
     ] = await Promise.all([
       // Toplam ticket sayısı
       prisma.supportTicket.count(),
-      
+
       // Açık ticketlar
       prisma.supportTicket.count({
-        where: { status: "open" }
+        where: { status: "open" },
       }),
-      
+
       // Bekleyen ticketlar
       prisma.supportTicket.count({
-        where: { status: "pending" }
+        where: { status: "pending" },
       }),
-      
+
       // İşlemde olan ticketlar
       prisma.supportTicket.count({
-        where: { status: "in_progress" }
+        where: { status: "in_progress" },
       }),
-      
+
       // Çözülmüş ticketlar
       prisma.supportTicket.count({
-        where: { status: "resolved" }
+        where: { status: "resolved" },
       }),
-      
+
       // Kapalı ticketlar
       prisma.supportTicket.count({
-        where: { status: "closed" }
+        where: { status: "closed" },
       }),
-      
+
       // Bugün açılan ticketlar
       prisma.supportTicket.count({
         where: {
-          createdAt: { gte: today }
-        }
+          createdAt: { gte: today },
+        },
       }),
-      
+
       // Bugün çözülen ticketlar
       prisma.supportTicket.count({
         where: {
-          resolvedAt: { gte: today }
-        }
+          resolvedAt: { gte: today },
+        },
       }),
-      
+
       // Ortalama ilk yanıt süresi (saniye)
       prisma.$queryRaw<{ avg: number | null }[]>`
         SELECT AVG(EXTRACT(EPOCH FROM ("firstResponseAt" - "createdAt"))) as avg
         FROM "SupportTicket"
         WHERE "firstResponseAt" IS NOT NULL
       `,
-      
+
       // Ortalama çözüm süresi (saniye)
       prisma.$queryRaw<{ avg: number | null }[]>`
         SELECT AVG(EXTRACT(EPOCH FROM ("resolvedAt" - "createdAt"))) as avg
         FROM "SupportTicket"
         WHERE "resolvedAt" IS NOT NULL
-      `
+      `,
     ]);
 
     const avgResponseTime = avgResponseTimeResult[0]?.avg || 0;
@@ -101,7 +101,7 @@ export async function GET(request: NextRequest) {
       todayNew,
       todayResolved,
       avgResponseTime,
-      avgResolutionTime
+      avgResolutionTime,
     });
   } catch (error) {
     console.error("Error fetching support stats:", error);

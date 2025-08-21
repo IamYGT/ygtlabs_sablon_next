@@ -1,17 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
-import { useParams, useRouter } from "next/navigation";
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle 
-} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -20,21 +17,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { 
-  Plus, 
-  Search,
-  MessageSquare,
-  Clock,
+import type { TicketPriority, TicketStatus } from "@prisma/client";
+import { useQuery } from "@tanstack/react-query";
+import { formatDistanceToNow } from "date-fns";
+import { enUS, tr } from "date-fns/locale";
+import {
   AlertCircle,
   CheckCircle,
-  XCircle
+  Clock,
+  MessageSquare,
+  Plus,
+  Search,
+  XCircle,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { formatDistanceToNow } from "date-fns";
-import { tr, enUS } from "date-fns/locale";
-import type { TicketStatus, TicketPriority } from "@prisma/client";
+import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface SupportTicket {
   id: string;
@@ -63,7 +63,11 @@ interface SupportTicket {
 const statusConfig = {
   open: { label: "open", icon: AlertCircle, color: "bg-yellow-500" },
   pending: { label: "pending", icon: Clock, color: "bg-blue-500" },
-  in_progress: { label: "inProgress", icon: MessageSquare, color: "bg-purple-500" },
+  in_progress: {
+    label: "inProgress",
+    icon: MessageSquare,
+    color: "bg-purple-500",
+  },
   resolved: { label: "resolved", icon: CheckCircle, color: "bg-green-500" },
   closed: { label: "closed", icon: XCircle, color: "bg-gray-500" },
 };
@@ -76,40 +80,47 @@ const priorityConfig = {
 };
 
 export default function CustomerSupportPage() {
-  const t = useTranslations("Support");
+  const t = useTranslations("support");
   const params = useParams();
   const router = useRouter();
   const locale = params.locale as string;
-  
+
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [priorityFilter, setPriorityFilter] = useState<string>("all");
 
-  const { data: tickets, isLoading } = useQuery<SupportTicket[]>({
+  const { data, isLoading } = useQuery<{
+    tickets: SupportTicket[];
+    pagination: any;
+  }>({
     queryKey: ["customer-tickets", statusFilter, priorityFilter],
     queryFn: async () => {
       const queryParams = new URLSearchParams();
       if (statusFilter !== "all") queryParams.append("status", statusFilter);
-      if (priorityFilter !== "all") queryParams.append("priority", priorityFilter);
-      
+      if (priorityFilter !== "all")
+        queryParams.append("priority", priorityFilter);
+
       const response = await fetch(`/api/support/tickets?${queryParams}`);
       if (!response.ok) throw new Error("Failed to fetch tickets");
       return response.json();
     },
   });
 
+  const tickets = data?.tickets;
+
   // Filtreleme
-  const filteredTickets = tickets?.filter(ticket => {
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      return (
-        ticket.title.toLowerCase().includes(query) ||
-        ticket.ticketNumber.toLowerCase().includes(query) ||
-        ticket.description.toLowerCase().includes(query)
-      );
-    }
-    return true;
-  }) || [];
+  const filteredTickets =
+    tickets?.filter((ticket) => {
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        return (
+          ticket.title.toLowerCase().includes(query) ||
+          ticket.ticketNumber.toLowerCase().includes(query) ||
+          ticket.description.toLowerCase().includes(query)
+        );
+      }
+      return true;
+    }) || [];
 
   const dateLocale = locale === "tr" ? tr : enUS;
 
@@ -132,7 +143,7 @@ export default function CustomerSupportPage() {
       {/* Filters */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">{t("filters")}</CardTitle>
+          <CardTitle className="text-lg">{t("filters.title")}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col sm:flex-row gap-4">
@@ -155,7 +166,11 @@ export default function CustomerSupportPage() {
                 <SelectItem value="all">{t("allStatuses")}</SelectItem>
                 {Object.keys(statusConfig).map((status) => (
                   <SelectItem key={status} value={status}>
-                    {t(`status.${statusConfig[status as keyof typeof statusConfig].label}`)}
+                    {t(
+                      `status.${
+                        statusConfig[status as keyof typeof statusConfig].label
+                      }`
+                    )}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -168,7 +183,12 @@ export default function CustomerSupportPage() {
                 <SelectItem value="all">{t("allPriorities")}</SelectItem>
                 {Object.keys(priorityConfig).map((priority) => (
                   <SelectItem key={priority} value={priority}>
-                    {t(`priority.${priorityConfig[priority as keyof typeof priorityConfig].label}`)}
+                    {t(
+                      `priority.${
+                        priorityConfig[priority as keyof typeof priorityConfig]
+                          .label
+                      }`
+                    )}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -199,7 +219,9 @@ export default function CustomerSupportPage() {
             <CardContent className="text-center py-12">
               <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-2">{t("noTickets")}</h3>
-              <p className="text-muted-foreground mb-4">{t("noTicketsDescription")}</p>
+              <p className="text-muted-foreground mb-4">
+                {t("noTicketsDescription")}
+              </p>
               <Link href={`/${locale}/customer/support/new`}>
                 <Button>
                   <Plus className="h-4 w-4 mr-2" />
@@ -213,10 +235,12 @@ export default function CustomerSupportPage() {
           filteredTickets.map((ticket) => {
             const StatusIcon = statusConfig[ticket.status].icon;
             return (
-              <Card 
-                key={ticket.id} 
+              <Card
+                key={ticket.id}
                 className="hover:shadow-md transition-shadow cursor-pointer"
-                onClick={() => router.push(`/${locale}/customer/support/${ticket.id}`)}
+                onClick={() =>
+                  router.push(`/${locale}/customer/support/${ticket.id}`)
+                }
               >
                 <CardHeader>
                   <div className="flex justify-between items-start">
@@ -225,23 +249,30 @@ export default function CustomerSupportPage() {
                         <Badge variant="outline" className="font-mono">
                           {ticket.ticketNumber}
                         </Badge>
-                        <Badge 
-                          className={`${statusConfig[ticket.status].color} text-white`}
+                        <Badge
+                          className={`${
+                            statusConfig[ticket.status].color
+                          } text-white`}
                         >
                           <StatusIcon className="h-3 w-3 mr-1" />
                           {t(`status.${statusConfig[ticket.status].label}`)}
                         </Badge>
-                        <Badge 
-                          className={`${priorityConfig[ticket.priority].color} text-white`}
+                        <Badge
+                          className={`${
+                            priorityConfig[ticket.priority].color
+                          } text-white`}
                         >
-                          {t(`priority.${priorityConfig[ticket.priority].label}`)}
+                          {t(
+                            `priority.${priorityConfig[ticket.priority].label}`
+                          )}
                         </Badge>
                         {ticket.category && (
-                          <Badge 
+                          <Badge
                             variant="secondary"
                             style={{ backgroundColor: ticket.category.color }}
                           >
-                            {ticket.category.name[locale] || ticket.category.name.en}
+                            {ticket.category.name[locale] ||
+                              ticket.category.name.en}
                           </Badge>
                         )}
                       </div>
@@ -253,7 +284,9 @@ export default function CustomerSupportPage() {
                     {ticket._count.messages > 0 && (
                       <div className="flex items-center gap-1 text-muted-foreground">
                         <MessageSquare className="h-4 w-4" />
-                        <span className="text-sm">{ticket._count.messages}</span>
+                        <span className="text-sm">
+                          {ticket._count.messages}
+                        </span>
                       </div>
                     )}
                   </div>
@@ -261,16 +294,18 @@ export default function CustomerSupportPage() {
                 <CardContent>
                   <div className="flex items-center gap-4 text-sm text-muted-foreground">
                     <span>
-                      {t("created")} {formatDistanceToNow(new Date(ticket.createdAt), { 
-                        addSuffix: true, 
-                        locale: dateLocale 
+                      {t("created")}{" "}
+                      {formatDistanceToNow(new Date(ticket.createdAt), {
+                        addSuffix: true,
+                        locale: dateLocale,
                       })}
                     </span>
                     {ticket.lastMessageAt && (
                       <span>
-                        {t("lastMessage")} {formatDistanceToNow(new Date(ticket.lastMessageAt), { 
-                          addSuffix: true, 
-                          locale: dateLocale 
+                        {t("lastMessage")}{" "}
+                        {formatDistanceToNow(new Date(ticket.lastMessageAt), {
+                          addSuffix: true,
+                          locale: dateLocale,
                         })}
                       </span>
                     )}

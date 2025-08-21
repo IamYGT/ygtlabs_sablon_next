@@ -27,12 +27,22 @@ export default getRequestConfig(async ({ requestLocale }) => {
       ).default;
     }
   })();
+  const authMessages = await (async () => {
+    try {
+      return (await import(`../../messages/auth/auth_${locale}.json`)).default;
+    } catch {
+      return (
+        await import(`../../messages/auth/auth_${routing.defaultLocale}.json`)
+      ).default;
+    }
+  })();
 
   return {
     locale,
     messages: {
       ...baseMessages,
       ...adminMessages,
+      ...authMessages,
     },
   };
 });

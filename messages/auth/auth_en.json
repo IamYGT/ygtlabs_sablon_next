@@ -17,6 +17,7 @@
   "loginSuccessRedirect": "Login successful! Redirecting...",
   "loginFailed": "Login failed",
   "unexpectedError": "An unexpected error occurred.",
+  "logoutSuccess": "Successfully logged out",
   "noAccount": "Don't have an account yet?",
   "register": "Sign Up",
   "createAccountTitle": "Create an Account",
