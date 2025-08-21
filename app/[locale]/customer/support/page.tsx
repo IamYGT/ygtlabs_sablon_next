@@ -91,7 +91,12 @@ export default function CustomerSupportPage() {
 
   const { data, isLoading } = useQuery<{
     tickets: SupportTicket[];
-    pagination: any;
+    pagination: {
+      page: number;
+      limit: number;
+      total: number;
+      totalPages: number;
+    };
   }>({
     queryKey: ["customer-tickets", statusFilter, priorityFilter],
     queryFn: async () => {

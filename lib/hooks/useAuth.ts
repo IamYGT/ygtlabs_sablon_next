@@ -12,7 +12,6 @@ import { clearAllCacheOnLogout } from "../providers/query-provider";
 import { authActions, useAuthStore } from "../stores/auth-store";
 import { useUIStore } from "../stores/ui-store";
 import type { LoginData, SimpleUser } from "../types";
-import { useTranslations } from "next-intl";
 
 // =============================================================================
 // MODERN CLIENT-SIDE AUTH HOOKS
@@ -115,7 +114,6 @@ export function useLogin() {
   const params = useParams();
   const locale = (params.locale as string) || "en";
   const router = useRouter();
-  const t = useTranslations('Auth');
 
   return useMutation({
     mutationFn: async (data: LoginData): Promise<SimpleUser> => {
@@ -148,7 +146,7 @@ export function useLogin() {
       }
     },
     onSuccess: (user: SimpleUser) => {
-      showSuccess(t('loginSuccess'));
+      showSuccess("Successfully logged in");
 
       // Redirect to appropriate dashboard
       const hasAdminAccess = user.permissions?.includes("admin.layout");
@@ -159,9 +157,7 @@ export function useLogin() {
     },
     onError: (error: unknown) => {
       const errorMessage =
-        error instanceof Error
-          ? error.message
-          : t('loginError');
+        error instanceof Error ? error.message : "Login failed";
       authActions.setError(errorMessage);
       showError(errorMessage);
     },
@@ -211,7 +207,7 @@ export function useLogout() {
       await clearAllCacheOnLogout();
     },
     onSuccess: (_, logoutAllSessions) => {
-      // Use hardcoded message instead of translation to avoid i18n issues
+      // Use hardcoded messages to avoid i18n issues
       const message = logoutAllSessions
         ? "Successfully logged out from all devices"
         : "Successfully logged out";

@@ -18,6 +18,7 @@
   "loginFailed": "Giriş başarısız",
   "unexpectedError": "Beklenmeyen bir hata oluştu.",
   "logoutSuccess": "Başarıyla çıkış yapıldı",
+  "logoutAllSuccess": "Tüm cihazlardan başarıyla çıkış yapıldı",
   "noAccount": "Henüz hesabınız yok mu?",
   "register": "Kayıt Olun",
   "createAccountTitle": "Hesap Oluşturun",
