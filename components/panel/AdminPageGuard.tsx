@@ -38,18 +38,7 @@ export function AdminPageGuard({
   const hasRequiredLayoutAccess = isSuperAdmin || hasLayoutAccess(requireLayout);
   const hasRequiredViewAccess = !requiredPermission || isSuperAdmin || hasViewAccess(requiredPermission);
 
-  // Debug log
-  console.log("🛡️ AdminPageGuard:", {
-    user: user?.email,
-    role: user?.primaryRole,
-    requireLayout,
-    requiredPermission,
-    hasRequiredLayoutAccess,
-    hasRequiredViewAccess,
-    isSuperAdmin,
-    isAuthenticated,
-    permissionsLoading
-  });
+
 
   // Server-side debug log
   useEffect(() => {
@@ -61,7 +50,7 @@ export function AdminPageGuard({
           requireLayout,
           requiredPermission
         })
-      }).catch(console.error);
+      }).catch(() => {}); // Silent error handling
     }
   }, [user, permissionsLoading, requireLayout, requiredPermission]);
 
@@ -90,7 +79,7 @@ export function AdminPageGuard({
           requiredPermission,
           userEmail: user.email
         })
-      }).catch(console.error);
+      }).catch(() => {}); // Silent error handling
 
       return;
     }
@@ -109,7 +98,7 @@ export function AdminPageGuard({
           requiredPermission,
           userEmail: user.email
         })
-      }).catch(console.error);
+      }).catch(() => {}); // Silent error handling
 
       return;
     }

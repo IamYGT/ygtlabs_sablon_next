@@ -20,12 +20,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // IP adresi ve kullanıcı ajanını al
+    // IP adresi ve kullanıcı ajanını al (şimdilik kullanılmıyor)
     const forwardedFor = request.headers.get("x-forwarded-for");
     const realIp = request.headers.get("x-real-ip");
-    const ip = forwardedFor?.split(",")[0] || realIp || "unknown";
+    const _ip = forwardedFor?.split(",")[0] || realIp || "unknown";
 
-    const userAgent = request.headers.get("user-agent") || "unknown";
+    const _userAgent = request.headers.get("user-agent") || "unknown";
 
     // Server-side device info parse et
     const serverDeviceInfo = {
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     };
 
     // Client-side device info ile merge et (daha detaylı bilgi için)
-    const mergedDeviceInfo = {
+    const _mergedDeviceInfo = {
       ...serverDeviceInfo,
       ...(clientDeviceInfo && {
         screenResolution: clientDeviceInfo.screenResolution,
@@ -44,12 +44,7 @@ export async function POST(request: NextRequest) {
       }),
     };
 
-    console.log(`🔐 Login attempt:`, {
-      email: email.substring(0, 3) + "***",
-      ip,
-      userAgent: userAgent.substring(0, 50) + "...",
-      device: `${mergedDeviceInfo.browser} on ${mergedDeviceInfo.os}`,
-    });
+
 
     // Kullanıcıyı bul
     const user = await prisma.user.findUnique({
@@ -58,7 +53,6 @@ export async function POST(request: NextRequest) {
     });
 
     if (!user || !user.isActive) {
-      console.log(`❌ Login failed for ${email}: User not found or inactive`);
       return NextResponse.json(
         { success: false, error: "Geçersiz e-posta veya şifre" },
         { status: 401 }
@@ -68,7 +62,6 @@ export async function POST(request: NextRequest) {
     // Şifre kontrolü
     const isValidPassword = await hashPassword.verify(password, user.password);
     if (!isValidPassword) {
-      console.log(`❌ Login failed for ${email}: Invalid password`);
       return NextResponse.json(
         { success: false, error: "Geçersiz e-posta veya şifre" },
         { status: 401 }
@@ -78,7 +71,7 @@ export async function POST(request: NextRequest) {
     // Session oluştur
     const sessionToken = crypto.randomUUID();
     const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + (rememberDevice ? 7 : 1)); // 7 gün veya 1 gün
+    expiresAt.setDate(expiresAt.getDate() + (body.rememberDevice ? 7 : 1)); // 7 gün veya 1 gün
 
     await prisma.session.create({
       data: {
@@ -128,10 +121,6 @@ export async function POST(request: NextRequest) {
       createdAt: user.createdAt,
       lastLoginAt: new Date(),
     };
-
-    console.log(
-      `✅ Login successful for ${email} from ${ip} (${mergedDeviceInfo.browser})`
-    );
 
     const response = NextResponse.json({
       success: true,

@@ -383,7 +383,6 @@ if (typeof window !== "undefined") {
     // Monitor user changes (but don't update activity automatically to avoid loops)
     if (state.user !== previousUser) {
       if (state.user && !isUpdatingActivity) {
-        console.log("👤 User changed:", state.user.email);
         // Don't auto-update activity here to avoid infinite loops
         // Activity will be updated on actual user interactions
       }

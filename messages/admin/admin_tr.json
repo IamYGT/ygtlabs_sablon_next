@@ -1,4 +1,10 @@
 {
+  "UI": {
+    "common": {
+      "close": "Kapat",
+      "more": "Daha fazla"
+    }
+  },
   "AdminDashboard": {
     "stats": {
       "totalUsers": "Toplam Kullanıcı",
@@ -622,6 +628,7 @@
     "superAdmin": "Süper Admin",
     "admin": "Admin",
     "user": "Kullanıcı",
+    "customer": "Müşteri",
     "custom": "Özel",
     "systemRole": "Sistem Rolü",
     "customRole": "Özel Rol",
@@ -637,6 +644,20 @@
     "usersCount": "kullanıcı",
     "permissionsCount": "yetki",
     "view": "Görüntüle",
+    "rolesList": "Rol Listesi",
+    "description": "Sistem rollerini yönetin ve kullanıcı yetkilerini kontrol edin",
+    "role": "rol",
+    "roles": "roller",
+    "usersAssigned": "atanan kullanıcı",
+    "totalPermissions": "toplam yetki",
+    "pleaseWait": "Lütfen bekleyin...",
+    "userNotFound": "Kullanıcı bulunamadı",
+    "tryDifferentCriteria": "Farklı arama kriterleri deneyin",
+    "clearFilters": "Filtreleri Temizle",
+    "search": {
+      "placeholder": "Rolleri ara...",
+      "clearSelection": "Seçimi Temizle"
+    },
     "noRolesMatchCriteria": "Arama kriterlerinize uygun rol bulunamadı.",
     "info": {
       "noViewPermission": "🚫 Rol listesi API çağrısı yapılmadı - yetki yok",

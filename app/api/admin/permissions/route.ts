@@ -8,14 +8,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 // Tüm yetkileri getir
 export async function GET(request: NextRequest) {
-  console.log("🔐 /api/admin/permissions GET çağrıldı");
 
   try {
     const currentUser = await getCurrentUser(request);
-    console.log(`👤 Current user: ${currentUser?.email || "None"}`);
 
     if (!currentUser) {
-      console.log("❌ Permission API: User not found, returning 401");
       return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 });
     }
 
@@ -152,13 +149,6 @@ export async function GET(request: NextRequest) {
       },
       where: { isActive: true },
     });
-
-    console.log(
-      `✅ Permission API: Returning ${formattedPermissions.length} permissions`
-    );
-    console.log(
-      `📊 User permissions: ${currentUser.permissions?.length || 0} permissions`
-    );
 
     return NextResponse.json({
       permissions: formattedPermissions,

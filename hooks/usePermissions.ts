@@ -14,12 +14,6 @@ interface Permission {
   updatedAt?: string;
 }
 
-interface UserPermission {
-  permissionName: string;
-  roleName: string;
-  isAllowed: boolean;
-  isActive: boolean;
-}
 
 interface GroupedPermissions {
   [key: string]: Permission[];
@@ -102,12 +96,7 @@ export function usePermissions() {
         fetch("/api/auth/current-user"),
       ]);
 
-      console.log("🔄 usePermissions fetch:", {
-        permissionsUrl: "/api/admin/permissions?limit=1000",
-        userUrl: "/api/auth/current-user",
-        permissionsOk: permissionsResponse.ok,
-        userOk: userPermissionsResponse.ok,
-      });
+
 
       if (!permissionsResponse.ok) {
         throw new Error("Yetkiler getirilemedi");

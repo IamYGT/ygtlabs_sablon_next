@@ -48,12 +48,24 @@ function DialogOverlay({
   );
 }
 
+interface DialogContentProps extends React.ComponentProps<typeof DialogPrimitive.Content> {
+  translationNamespace?: string;
+}
+
 function DialogContent({
   className,
   children,
+  translationNamespace,
   ...props
-}: React.ComponentProps<typeof DialogPrimitive.Content>) {
-  const t = useTranslations("UI.common");
+}: DialogContentProps) {
+  // Admin panel'de mi kontrol et ve otomatik olarak admin çeviri dosyasını kullan
+  const isAdminContext = typeof window !== 'undefined' &&
+    (window.location?.pathname?.includes('/admin') || window.location?.pathname?.includes('/tr/admin'));
+
+  // Eğer translationNamespace belirtilmemişse ve admin context'teyse admin çeviri dosyasını kullan
+  const effectiveNamespace = translationNamespace || (isAdminContext ? "UI.common" : "UI.common");
+
+  const t = useTranslations(effectiveNamespace);
   return (
     <DialogPortal data-slot="dialog-portal">
       <DialogOverlay />

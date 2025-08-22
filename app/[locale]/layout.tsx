@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
+import HydrationErrorBoundary from "@/components/panel/HydrationErrorBoundary";
 
 export const metadata: Metadata = {
   // You can define locale-specific metadata here
@@ -27,7 +28,9 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider messages={messages} locale={locale}>
       <QueryProvider>
-        <ClientThemeProvider>{children}</ClientThemeProvider>
+        <HydrationErrorBoundary>
+          <ClientThemeProvider>{children}</ClientThemeProvider>
+        </HydrationErrorBoundary>
       </QueryProvider>
     </NextIntlClientProvider>
   );

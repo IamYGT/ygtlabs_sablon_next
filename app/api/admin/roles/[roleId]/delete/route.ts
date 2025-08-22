@@ -123,7 +123,6 @@ export async function DELETE(
           targetRoleName: targetRole.displayName,
         });
 
-        console.log(
           `Kullanıcı ${user.name || user.email} ${role.displayName} rolünden ${
             targetRole.displayName
           } rolüne aktarıldı`

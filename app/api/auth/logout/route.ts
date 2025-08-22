@@ -4,19 +4,10 @@ import { AUTH_COOKIE_NAME, prisma } from "@/lib";
 // POST /api/auth/logout
 export async function POST(request: NextRequest) {
   try {
-    // IP adresi al (loglama için)
-    const ip =
-      request.headers.get("x-forwarded-for") ||
-      request.headers.get("x-real-ip") ||
-      "unknown";
 
     // Request body'den logout türünü al
     const body = await request.json().catch(() => ({}));
     const { logoutAllSessions = false } = body;
-
-    console.log(
-      `🔓 Logout attempt from IP: ${ip}, logoutAll: ${logoutAllSessions}`
-    );
 
     // Session token'ı al
     const sessionToken = request.cookies.get(AUTH_COOKIE_NAME)?.value;
@@ -33,9 +24,7 @@ export async function POST(request: NextRequest) {
             where: { userId: session.userId },
             data: { isActive: false },
           });
-          console.log(
-            `🔓 All sessions deactivated for user: ${session.userId}`
-          );
+       
         }
       } else {
         // Sadece mevcut session'ı deaktif et
@@ -43,9 +32,7 @@ export async function POST(request: NextRequest) {
           where: { sessionToken },
           data: { isActive: false },
         });
-        console.log(
-          `🔓 Session deactivated: ${sessionToken.substring(0, 8)}...`
-        );
+   
       }
     }
 
@@ -53,9 +40,7 @@ export async function POST(request: NextRequest) {
       ? "Tüm cihazlardan başarıyla çıkış yapıldı"
       : "Bu cihazdan başarıyla çıkış yapıldı";
 
-    console.log(
-      `✅ Logout completed successfully (all sessions: ${logoutAllSessions})`
-    );
+   
 
     const response = NextResponse.json({
       success: true,
@@ -88,7 +73,6 @@ export async function POST(request: NextRequest) {
       sameSite: "lax",
     });
 
-    console.log(`🍪 Cookie cleared aggressively with multiple methods`);
 
     return response;
   } catch (error) {

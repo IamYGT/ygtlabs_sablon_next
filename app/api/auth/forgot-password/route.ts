@@ -24,7 +24,6 @@ export async function POST(request: NextRequest) {
     // For security reasons, always return success even if user doesn't exist
     // This prevents email enumeration attacks
     if (!user) {
-      console.log(`Password reset requested for non-existent email: ${email}`);
       return NextResponse.json({
         success: true,
         message:
@@ -51,7 +50,6 @@ export async function POST(request: NextRequest) {
       process.env.NEXTAUTH_URL || "http://localhost:3001"
     }/auth/reset-password?token=${resetToken}`;
 
-    console.log(`
 === ŞİFRE SIFIRLAMA E-POSTASI ===
 Kime: ${user.email}
 İsim: ${user.name}

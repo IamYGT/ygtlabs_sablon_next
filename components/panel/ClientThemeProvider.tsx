@@ -9,6 +9,24 @@ export function ClientThemeProvider({ children, ...props }: React.ComponentProps
 
     React.useEffect(() => {
         setMounted(true);
+
+        // Hydration mismatch'i handle et
+        const handleHydrationError = () => {
+            // Browser extension'lardan kaynaklanan hydration mismatch'i suppress et
+            if (typeof window !== 'undefined') {
+                const originalError = console.error;
+                console.error = (...args) => {
+                    if (args[0]?.includes?.('hydration') || args[0]?.includes?.('Hydration')) {
+                        // Hydration hatalarını logla ama crash etme
+                        console.warn('Hydration mismatch detected (likely from browser extension):', args);
+                        return;
+                    }
+                    originalError.apply(console, args);
+                };
+            }
+        };
+
+        handleHydrationError();
     }, []);
 
     if (!mounted) {

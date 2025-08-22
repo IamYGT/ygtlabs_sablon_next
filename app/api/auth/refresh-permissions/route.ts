@@ -14,7 +14,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    console.log(`🔄 Refreshing permissions for user: ${currentUser.email}`);
 
     // User'ın güncel bilgilerini ve rolünü al
     const user = await prisma.user.findUnique({
@@ -46,7 +45,6 @@ export async function POST(request: NextRequest) {
       permissions = rolePermissions.map((rp) => rp.permission.name);
     }
 
-    console.log(`✅ Refreshed permissions for ${user.email}:`, permissions);
 
     // Güncellenmiş user objesi
     const refreshedUser = {

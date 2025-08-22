@@ -19,13 +19,13 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { CheckCircle, Crown, Edit2, Eye, Filter, MoreHorizontal, Plus, Search, Settings, Shield, Trash2, Users, XCircle } from 'lucide-react';
+import { CheckCircle, Crown, Edit2, Eye, Filter, MoreHorizontal, Plus, Search, Settings, Shield, Trash2, Users, X, XCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 
 import { useAuth } from '@/lib/hooks/useAuth';
-import CreateRoleDialog from './CreateRoleDialog';
+import CreateRoleDialogV3 from './CreateRoleDialogV3';
 import DeleteRoleDialog from './DeleteRoleDialog';
 import EditRoleDialog from './EditRoleDialog';
 import RoleDetailsDialog from './RoleDetailsDialog';
@@ -147,6 +147,17 @@ export default function RolesPageClient({
             (statusFilter === 'inactive' && !role.isActive);
 
         return matchesSearch && matchesStatus;
+    }).sort((a, b) => {
+        // Korumalı roller her zaman en üstte
+        const aIsProtected = a.name === 'super_admin' || a.name === 'admin' || a.name === 'customer';
+        const bIsProtected = b.name === 'super_admin' || b.name === 'admin' || b.name === 'customer';
+
+        // Korumalı roller önce gelir
+        if (aIsProtected && !bIsProtected) return -1;
+        if (!aIsProtected && bIsProtected) return 1;
+
+        // Her ikisi korumalı veya korumalı değilse alfabetik sırala
+        return a.displayName.localeCompare(b.displayName);
     });
 
     // İstatistikleri hesapla
@@ -160,7 +171,7 @@ export default function RolesPageClient({
         if (role.name === 'super_admin') return { label: t('superAdmin'), variant: 'destructive' as const, icon: Crown };
         if (role.name === 'admin') return { label: t('admin'), variant: 'default' as const, icon: Shield };
         if (role.name === 'customer') return { label: t('customer'), variant: 'secondary' as const, icon: Users };
-        return { label: t('custom'), variant: 'outline' as const, icon: Settings };
+        return { label: t('admin'), variant: 'default' as const, icon: Shield }; // Custom roles as admin
     };
 
     // Kategori bazında yetkileri grupla
@@ -265,268 +276,474 @@ export default function RolesPageClient({
     return (
         <AdminPageGuard requiredPermission="admin.roles.view">
             <Toaster position="top-right" />
-            <div className="space-y-6">
+            <div className="space-y-8 max-w-7xl mx-auto px-4 md:px-6 lg:px-8 min-h-full">
 
 
                 {/* Header */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                        <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
-                            <Shield className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                        </div>
-                        <div>
-                            <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
-                            <p className="text-muted-foreground">
-                                {t('subtitle')}
-                            </p>
+                <div className="flex flex-col items-center md:flex-row md:items-center md:justify-between gap-4">
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-3">
+                            <div className="relative">
+                                <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+                                    <Shield className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                                </div>
+                            </div>
+                            <div>
+                                <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+                                    {t('title')}
+                                </h1>
+                                <p className="text-gray-600 dark:text-gray-400 text-lg">
+                                    {t('subtitle')}
+                                </p>
+                            </div>
                         </div>
                     </div>
-                    <div className="flex gap-2">
-                        <Button
-                            onClick={handleRefresh}
-                            disabled={loading}
-                            className="h-8 rounded-md px-4 text-s shadow transition-colors duration-200 border bg-white/80 dark:bg-gray-900/80 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/50 backdrop-blur-sm"
-                        >
-                            {loading ? t('loading') : t('refresh')}
-                        </Button>
-                        <Button
-                            onClick={() => setShowCreateDialog(true)}
-                            className="shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4"
-                        >
-                            <Plus className="mr-2 h-4 w-4" />
-                            {t('newRole')}
-                        </Button>
-                    </div>
+
                 </div>
 
-                {/* İstatistikler */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
-                        <CardContent className="p-4">
-                            <div className="flex items-center space-x-2">
-                                <Shield className="h-5 w-5 text-blue-500" />
-                                <div>
-                                    <p className="text-sm font-medium">{t('totalRoles')}</p>
-                                    <p className="text-2xl font-bold">{totalRoles}</p>
+                {/* Stats Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/30 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow duration-200">
+                        <CardContent className="p-4 overflow-hidden">
+                            <div className="flex items-center space-x-3">
+                                <div className="p-2 bg-blue-500 rounded-lg flex-shrink-0">
+                                    <Shield className="h-5 w-5 text-white" />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <p className="text-sm font-medium text-blue-700 dark:text-blue-300 truncate">{t('totalRoles')}</p>
+                                    <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">{totalRoles}</p>
                                 </div>
                             </div>
                         </CardContent>
                     </Card>
-                    <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
-                        <CardContent className="p-4">
-                            <div className="flex items-center space-x-2">
-                                <Users className="h-5 w-5 text-green-500" />
-                                <div>
-                                    <p className="text-sm font-medium">{t('users')}</p>
-                                    <p className="text-2xl font-bold">{totalUsers}</p>
+                    <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/30 dark:to-green-900/30 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow duration-200">
+                        <CardContent className="p-4 overflow-hidden">
+                            <div className="flex items-center space-x-3">
+                                <div className="p-2 bg-green-500 rounded-lg flex-shrink-0">
+                                    <Users className="h-5 w-5 text-white" />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <p className="text-sm font-medium text-green-700 dark:text-green-300 truncate">{t('users')}</p>
+                                    <p className="text-2xl font-bold text-green-900 dark:text-green-100">{totalUsers}</p>
                                 </div>
                             </div>
                         </CardContent>
                     </Card>
-                    <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
-                        <CardContent className="p-4">
-                            <div className="flex items-center space-x-2">
-                                <Settings className="h-5 w-5 text-purple-500" />
-                                <div>
-                                    <p className="text-sm font-medium">{t('activeRoles')}</p>
-                                    <p className="text-2xl font-bold">{activeRoles}</p>
+
+                    <Card className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/30 dark:to-orange-900/30 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow duration-200">
+                        <CardContent className="p-4 overflow-hidden">
+                            <div className="flex items-center space-x-3">
+                                <div className="p-2 bg-orange-500 rounded-lg flex-shrink-0">
+                                    <Filter className="h-5 w-5 text-white" />
                                 </div>
-                            </div>
-                        </CardContent>
-                    </Card>
-                    <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
-                        <CardContent className="p-4">
-                            <div className="flex items-center space-x-2">
-                                <Filter className="h-5 w-5 text-orange-500" />
-                                <div>
-                                    <p className="text-sm font-medium">{t('permissions')}</p>
-                                    <p className="text-2xl font-bold">{totalPermissions}</p>
+                                <div className="min-w-0 flex-1">
+                                    <p className="text-sm font-medium text-orange-700 dark:text-orange-300 truncate">{t('permissions')}</p>
+                                    <p className="text-2xl font-bold text-orange-900 dark:text-orange-100">{totalPermissions}</p>
                                 </div>
                             </div>
                         </CardContent>
                     </Card>
                 </div>
 
-                {/* Filtreler */}
-                <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
-                    <CardContent className="p-4">
-                        <div className="flex flex-col md:flex-row gap-4">
-                            <div className="flex-1">
+                {/* Roles Table */}
+                <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+                    <CardHeader className="border-b border-gray-200 dark:border-gray-700">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                            <div className="flex items-center gap-4">
                                 <div className="relative">
-                                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                    <Input
-                                        placeholder={t('searchRoles')}
-                                        value={searchTerm}
-                                        onChange={(e) => setSearchTerm(e.target.value)}
-                                        className="pl-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all duration-200"
-                                    />
+                                    <div className="p-2 sm:p-4 bg-blue-600 rounded-lg sm:rounded-xl shadow-lg">
+                                        <Shield className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+                                    </div>
+                                </div>
+                                <div className="flex flex-col">
+                                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">
+                                        {t('rolesList')}
+                                    </h3>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                                        {t('description')}
+                                    </p>
                                 </div>
                             </div>
-                            <Select value={statusFilter} onValueChange={(value: 'all' | 'active' | 'inactive') => setStatusFilter(value)}>
-                                <SelectTrigger className="w-[140px] bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all duration-200">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="all">{t('all')}</SelectItem>
-                                    <SelectItem value="active">{t('active')}</SelectItem>
-                                    <SelectItem value="inactive">{t('inactive')}</SelectItem>
-                                </SelectContent>
-                            </Select>
+                            <div className="flex items-center gap-2 sm:gap-4 flex-wrap justify-end w-full sm:w-auto">
+                                <div className="flex flex-col items-end">
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                                        <span className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">
+                                            {filteredRoles.length}
+                                        </span>
+                                    </div>
+                                    <span className="text-xs text-gray-500 dark:text-gray-500 uppercase tracking-wide font-medium">
+                                        {filteredRoles.length === 1 ? t('role') : t('roles')}
+                                    </span>
+                                </div>
+                                <div className="h-12 w-px bg-gray-200 dark:bg-gray-700 hidden sm:block"></div>
+                                <div className="flex flex-col items-end">
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                                        <span className="text-base sm:text-lg font-semibold text-green-600 dark:text-green-400">
+                                            {activeRoles}
+                                        </span>
+                                    </div>
+                                    <span className="text-xs text-gray-500 dark:text-gray-500 uppercase tracking-wide font-medium">
+                                        {t('active')}
+                                    </span>
+                                </div>
+                                <div className="flex flex-col items-end">
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                                        <span className="text-base sm:text-lg font-semibold text-red-600 dark:text-red-400">
+                                            {totalRoles - activeRoles}
+                                        </span>
+                                    </div>
+                                    <span className="text-xs text-gray-500 dark:text-gray-500 uppercase tracking-wide font-medium">
+                                        {t('inactive')}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                        <p className="text-xs text-muted-foreground mt-2">
-                            {filteredRoles.length} {t('rolesShowing')}
-                        </p>
+
+                        {/* Secondary Info Bar */}
+                        <div className="mt-4 border-gray-200 dark:border-gray-700 flex items-center justify-between flex-wrap gap-4">
+                            <div className="flex items-center gap-6 flex-wrap">
+                                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                    <div className="p-1.5 bg-emerald-100 dark:bg-emerald-900/20 rounded">
+                                        <Users className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
+                                    </div>
+                                    <span className="font-medium">
+                                        {totalUsers} {t('usersAssigned')}
+                                    </span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                    <div className="p-1.5 bg-blue-100 dark:bg-blue-900/20 rounded">
+                                        <Settings className="h-3 w-3 text-blue-600 dark:text-blue-400" />
+                                    </div>
+                                    <span className="font-medium">
+                                        {totalPermissions} {t('totalPermissions')}
+                                    </span>
+                                </div>
+                            </div>
+                            {searchTerm && (
+                                <div className="flex items-center gap-2 bg-emerald-100 dark:bg-emerald-900/20 px-3 py-1.5 rounded-full">
+                                    <Search className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                                    <span className="text-sm font-semibold text-emerald-700 dark:text-emerald-400">
+                                        &ldquo;{searchTerm}&rdquo;
+                                    </span>
+                                    <button
+                                        onClick={() => setSearchTerm('')}
+                                        className="ml-2 hover:bg-emerald-200 dark:hover:bg-emerald-900/40 rounded-full p-0.5 transition-colors duration-150"
+                                    >
+                                        <X className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Enhanced Search and Filters */}
+                        <div className="mt-6 pt-6 border-t-2 border-gradient-to-r from-blue-200 to-indigo-200 dark:from-blue-800 dark:to-indigo-800">
+                            <div className="bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/20 dark:to-indigo-950/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800">
+                                <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+                                    {/* Search Section */}
+                                    <div className="flex-1 space-y-3">
+                                        <div className="flex items-center gap-2">
+                                            <div className="p-2 bg-blue-500 rounded-lg">
+                                                <Search className="h-4 w-4 text-white" />
+                                            </div>
+                                            <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                                {t('search.placeholder')}
+                                            </label>
+                                        </div>
+                                        <div className="relative">
+                                            <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                                                <Search className="h-5 w-5 text-blue-500" />
+                                            </div>
+                                            <Input
+                                                placeholder={t('searchRoles')}
+                                                value={searchTerm}
+                                                onChange={(e) => setSearchTerm(e.target.value)}
+                                                className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-gray-900 border-2 border-blue-200 dark:border-blue-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 text-base rounded-xl shadow-sm hover:shadow-md"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Filters Section */}
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-end gap-4 lg:w-auto">
+                                        <div className="space-y-3">
+                                            <div className="flex items-center gap-2">
+                                                <div className="p-2 bg-purple-500 rounded-lg">
+                                                    <Filter className="h-4 w-4 text-white" />
+                                                </div>
+                                                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                                {t('filterByStatus')}
+                                            </label>
+                                            </div>
+                                            <Select value={statusFilter} onValueChange={(value: 'all' | 'active' | 'inactive') => setStatusFilter(value)}>
+                                                <SelectTrigger className="w-[160px] h-11 bg-white dark:bg-gray-900 border-2 border-purple-200 dark:border-purple-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-200 rounded-xl shadow-sm hover:shadow-md">
+                                                    <SelectValue />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="all">{t('all')}</SelectItem>
+                                                    <SelectItem value="active">{t('active')}</SelectItem>
+                                                    <SelectItem value="inactive">{t('inactive')}</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+
+                                        <Button
+                                            onClick={() => setShowCreateDialog(true)}
+                                            className="h-11 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-sm px-6 shadow-lg transition-all duration-200 hover:shadow-xl hover:scale-105 border-0"
+                                        >
+                                            <Plus className="h-5 w-5 mr-2" />
+                                            {t('newRole')}
+                                        </Button>
+                                    </div>
+                                </div>
+
+                                {/* Active Search Info */}
+                                {searchTerm && (
+                                    <div className="mt-4 pt-4 border-t border-blue-200 dark:border-blue-700">
+                                        <div className="flex items-center gap-2 bg-emerald-50 dark:bg-emerald-950/20 px-4 py-3 rounded-xl border border-emerald-200 dark:border-emerald-800">
+                                            <Search className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                                            <span className="text-sm font-medium text-emerald-700 dark:text-emerald-400">
+                                                &ldquo;{searchTerm}&rdquo; için arama yapılıyor
+                                            </span>
+                                            <button
+                                                onClick={() => setSearchTerm('')}
+                                                className="ml-auto p-1 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 rounded-lg transition-colors duration-150"
+                                            >
+                                                <X className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </CardHeader>
+                    <CardContent className="p-0">
+                        {loading ? (
+                            <div className="text-center py-12 bg-gray-50/30 dark:bg-gray-800/30">
+                                <div className="flex flex-col items-center">
+                                    <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-full mb-4">
+                                        <Shield className="h-8 w-8 text-gray-400 dark:text-gray-500 animate-spin" />
+                                    </div>
+                                    <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                                        {t('rolesLoading')}
+                                    </h3>
+                                    <p className="text-gray-600 dark:text-gray-400 text-sm">
+                                        {t('pleaseWait')}
+                                    </p>
+                                </div>
+                            </div>
+                        ) : filteredRoles.length === 0 ? (
+                            <div className="text-center py-12 bg-gray-50/30 dark:bg-gray-800/30">
+                                <div className="flex flex-col items-center">
+                                    <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-full mb-4">
+                                        <Shield className="h-8 w-8 text-gray-400 dark:text-gray-500" />
+                                    </div>
+                                    <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                                        {t('noRolesFound')}
+                                    </h3>
+                                    <p className="text-gray-600 dark:text-gray-400 text-sm max-w-sm">
+                                        {t('tryDifferentCriteria')}
+                                    </p>
+                                    <Button
+                                        onClick={() => {
+                                            setSearchTerm('');
+                                            setStatusFilter('all');
+                                        }}
+                                        variant="outline"
+                                        className="mt-4 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150"
+                                    >
+                                        <Filter className="h-4 w-4 mr-2" />
+                                        {t('clearFilters')}
+                                    </Button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+                                {filteredRoles.map((role) => {
+                                    const roleTypeInfo = getRoleTypeInfo(role);
+                                    const IconComponent = roleTypeInfo.icon;
+                                    const isProtected = role.name === 'super_admin' || role.name === 'customer';
+
+                                    return (
+                                        <Card key={role.id} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow duration-200 group overflow-hidden">
+                                            <CardHeader className="pb-4">
+                                                <div className="flex items-start justify-between gap-3">
+                                                    <div className="flex items-center space-x-3 min-w-0 flex-1">
+                                                        <div
+                                                            className="w-10 h-10 rounded-lg flex items-center justify-center shadow-md flex-shrink-0"
+                                                            style={{ backgroundColor: role.color || '#6366f1' }}
+                                                        >
+                                                            <IconComponent className="h-5 w-5 text-white" />
+                                                        </div>
+                                                        <div className="min-w-0 flex-1">
+                                                            <CardTitle className="text-lg font-bold text-gray-900 dark:text-gray-100 truncate" title={role.displayName}>{role.displayName}</CardTitle>
+                                                            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium truncate" title={role.name}>{role.name}</p>
+                                                        </div>
+                                                    </div>
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger asChild>
+                                                            <Button
+                                                                variant="ghost"
+                                                                className="h-9 w-9 p-0 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-150 rounded-lg"
+                                                            >
+                                                                <MoreHorizontal className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent
+                                                            align="end"
+                                                            className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-lg w-56"
+                                                        >
+                                                            <DropdownMenuItem
+                                                                onClick={() => handleRoleAction('details', role)}
+                                                                className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150 cursor-pointer"
+                                                            >
+                                                                <div className="flex items-center">
+                                                                    <div className="p-1.5 bg-blue-100 dark:bg-blue-900/20 rounded mr-3">
+                                                                        <Eye className="h-3 w-3 text-blue-600 dark:text-blue-400" />
+                                                                    </div>
+                                                                    <span className="text-gray-700 dark:text-gray-300 font-medium">
+                                                                        {t('details')}
+                                                                    </span>
+                                                                </div>
+                                                            </DropdownMenuItem>
+                                                            {!isProtected && (
+                                                                <>
+                                                                    <DropdownMenuItem
+                                                                        onClick={() => handleRoleAction('edit', role)}
+                                                                        className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150 cursor-pointer"
+                                                                    >
+                                                                        <div className="flex items-center">
+                                                                            <div className="p-1.5 bg-emerald-100 dark:bg-emerald-900/20 rounded mr-3">
+                                                                                <Edit2 className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
+                                                                            </div>
+                                                                            <span className="text-gray-700 dark:text-gray-300 font-medium">
+                                                                                {t('edit')}
+                                                                            </span>
+                                                                        </div>
+                                                                    </DropdownMenuItem>
+                                                                    <DropdownMenuItem
+                                                                        onClick={() => handleToggleRoleStatus(role)}
+                                                                        className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150 cursor-pointer"
+                                                                    >
+                                                                        {role.isActive ? (
+                                                                            <div className="flex items-center">
+                                                                                <div className="p-1.5 bg-red-100 dark:bg-red-900/20 rounded mr-3">
+                                                                                    <XCircle className="h-3 w-3 text-red-600 dark:text-red-400" />
+                                                                                </div>
+                                                                                <span className="text-red-700 dark:text-red-400 font-medium">
+                                                                                    {t('deactivate')}
+                                                                                </span>
+                                                                            </div>
+                                                                        ) : (
+                                                                            <div className="flex items-center">
+                                                                                <div className="p-1.5 bg-emerald-100 dark:bg-emerald-900/20 rounded mr-3">
+                                                                                    <CheckCircle className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
+                                                                                </div>
+                                                                                <span className="text-emerald-700 dark:text-emerald-400 font-medium">
+                                                                                    {t('activate')}
+                                                                                </span>
+                                                                            </div>
+                                                                        )}
+                                                                    </DropdownMenuItem>
+                                                                    <DropdownMenuSeparator className="bg-gray-200 dark:bg-gray-700" />
+                                                                    <DropdownMenuItem
+                                                                        onClick={() => handleRoleAction('delete', role)}
+                                                                        className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-150 cursor-pointer"
+                                                                    >
+                                                                        <div className="flex items-center">
+                                                                            <div className="p-1.5 bg-red-100 dark:bg-red-900/20 rounded mr-3">
+                                                                                <Trash2 className="h-3 w-3 text-red-600 dark:text-red-400" />
+                                                                            </div>
+                                                                            <span className="font-semibold">
+                                                                                {t('delete')}
+                                                                            </span>
+                                                                        </div>
+                                                                    </DropdownMenuItem>
+                                                                </>
+                                                            )}
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </div>
+                                            </CardHeader>
+                                            <CardContent className="space-y-4">
+                                                <div className="flex flex-wrap items-center gap-2 overflow-hidden">
+                                                    {/* Korumalı Badge */}
+                                                    {role.name === 'super_admin' || role.name === 'admin' || role.name === 'customer' ? (
+                                                        <Badge variant="destructive" className="text-xs px-2 py-0.5 flex-shrink-0">
+                                                            Korumalı
+                                                        </Badge>
+                                                    ) : null}
+
+                                                    {/* Layout Badge */}
+                                                    <Badge variant="outline" className="text-xs px-2 py-0.5 flex-shrink-0 border-blue-300 text-blue-700 dark:border-blue-600 dark:text-blue-300">
+                                                        {role.layoutType}
+                                                    </Badge>
+
+                                                    {/* Aktif/Pasif Badge */}
+                                                    <Badge variant={role.isActive ? "default" : "secondary"} className="text-xs px-2 py-0.5 flex-shrink-0">
+                                                        {role.isActive ? t('active') : t('inactive')}
+                                                    </Badge>
+                                                </div>
+
+                                                {role.description && (
+                                                    <CardDescription className="text-sm line-clamp-2 text-gray-600 dark:text-gray-400 leading-relaxed overflow-hidden">
+                                                        {role.description}
+                                                    </CardDescription>
+                                                )}
+
+                                                <div className="flex justify-between items-center bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="p-1.5 bg-blue-100 dark:bg-blue-900 rounded-md">
+                                                            <Users className="h-4 w-4 text-blue-600" />
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{role._count.users}</p>
+                                                            <p className="text-xs text-gray-500 dark:text-gray-400">{t('usersCount')}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="p-1.5 bg-green-100 dark:bg-green-900 rounded-md">
+                                                            <Shield className="h-4 w-4 text-green-600" />
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{role.permissions?.length || 0}</p>
+                                                            <p className="text-xs text-gray-500 dark:text-gray-400">{t('permissionsCount')}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex gap-3">
+                                                    {!isProtected && (
+                                                        <Button
+                                                            size="sm"
+                                                            className="flex-1 h-10 rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-md transition-all duration-200 hover:shadow-lg"
+                                                            onClick={() => handleRoleAction('edit', role)}
+                                                        >
+                                                            <Edit2 className="mr-2 h-4 w-4" />
+                                                            {t('edit')}
+                                                        </Button>
+                                                    )}
+                                                    <Button
+                                                        size="sm"
+                                                        className="flex-1 h-10 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-150"
+                                                        onClick={() => handleRoleAction('details', role)}
+                                                    >
+                                                        <Eye className="mr-2 h-4 w-4" />
+                                                        {t('view')}
+                                                    </Button>
+                                                </div>
+                                            </CardContent>
+                                        </Card>
+                                    );
+                                })}
+                            </div>
+                        )}
                     </CardContent>
                 </Card>
 
-                {/* Roller Grid */}
-                {loading ? (
-                    <Card>
-                        <CardContent className="text-center py-12">
-                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-                            <p className="text-muted-foreground">{t('rolesLoading')}</p>
-                        </CardContent>
-                    </Card>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {filteredRoles.map((role) => {
-                            const roleTypeInfo = getRoleTypeInfo(role);
-                            const IconComponent = roleTypeInfo.icon;
-                            const isProtected = role.name === 'super_admin' || role.name === 'customer';
-
-                            return (
-                                <Card key={role.id} className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
-                                    <CardHeader className="pb-3">
-                                        <div className="flex items-start justify-between">
-                                            <div className="flex items-center space-x-3">
-                                                <div
-                                                    className="w-8 h-8 rounded-lg flex items-center justify-center"
-                                                    style={{ backgroundColor: role.color || '#6366f1' }}
-                                                >
-                                                    <IconComponent className="h-4 w-4 text-white" />
-                                                </div>
-                                                <div>
-                                                    <CardTitle className="text-lg">{role.displayName}</CardTitle>
-                                                    <p className="text-xs text-muted-foreground">{role.name}</p>
-                                                </div>
-                                            </div>
-                                            <DropdownMenu>
-                                                <DropdownMenuTrigger asChild>
-                                                    <Button variant="ghost" size="sm">
-                                                        <MoreHorizontal className="h-4 w-4" />
-                                                    </Button>
-                                                </DropdownMenuTrigger>
-                                                <DropdownMenuContent align="end">
-                                                    <DropdownMenuItem onClick={() => handleRoleAction('details', role)}>
-                                                        <Eye className="mr-2 h-4 w-4" />
-                                                        {t('details')}
-                                                    </DropdownMenuItem>
-                                                    {!isProtected && (
-                                                        <>
-                                                            <DropdownMenuItem onClick={() => handleRoleAction('edit', role)}>
-                                                                <Edit2 className="mr-2 h-4 w-4" />
-                                                                {t('edit')}
-                                                            </DropdownMenuItem>
-                                                            <DropdownMenuItem onClick={() => handleToggleRoleStatus(role)}>
-                                                                {role.isActive ? (
-                                                                    <>
-                                                                        <XCircle className="mr-2 h-4 w-4" />
-                                                                        {t('deactivate')}
-                                                                    </>
-                                                                ) : (
-                                                                    <>
-                                                                        <CheckCircle className="mr-2 h-4 w-4" />
-                                                                        {t('activate')}
-                                                                    </>
-                                                                )}
-                                                            </DropdownMenuItem>
-                                                            <DropdownMenuSeparator />
-                                                            <DropdownMenuItem
-                                                                className="text-destructive"
-                                                                onClick={() => handleRoleAction('delete', role)}
-                                                            >
-                                                                <Trash2 className="mr-2 h-4 w-4" />
-                                                                {t('delete')}
-                                                            </DropdownMenuItem>
-                                                        </>
-                                                    )}
-                                                </DropdownMenuContent>
-                                            </DropdownMenu>
-                                        </div>
-                                    </CardHeader>
-                                    <CardContent className="space-y-4">
-                                        <div className="flex items-center gap-2">
-                                            <Badge variant={roleTypeInfo.variant}>
-                                                {roleTypeInfo.label}
-                                            </Badge>
-                                            <Badge variant={role.isActive ? "default" : "secondary"}>
-                                                {role.isActive ? t('active') : t('inactive')}
-                                            </Badge>
-                                            {isProtected && (
-                                                <Badge variant="outline" className="text-red-600 border-red-200">
-                                                    {t('protected')}
-                                                </Badge>
-                                            )}
-                                        </div>
-
-                                        {role.description && (
-                                            <CardDescription className="text-sm line-clamp-2">
-                                                {role.description}
-                                            </CardDescription>
-                                        )}
-
-                                        <div className="flex justify-between text-sm">
-                                            <div className="flex items-center gap-1">
-                                                <Users className="h-3 w-3" />
-                                                <span>{role._count.users} {t('usersCount')}</span>
-                                            </div>
-                                            <div className="flex items-center gap-1">
-                                                <Shield className="h-3 w-3" />
-                                                <span>{role.permissions?.length || 0} {t('permissionsCount')}</span>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex gap-2">
-                                            <Button
-                                                variant="outline"
-                                                size="sm"
-                                                className="flex-1"
-                                                onClick={() => handleRoleAction('details', role)}
-                                            >
-                                                <Eye className="mr-1 h-3 w-3" />
-                                                {t('view')}
-                                            </Button>
-                                            {!isProtected && (
-                                                <Button
-                                                    className="flex-1 inline-flex items-center justify-center whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 py-2 shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4"
-                                                    onClick={() => handleRoleAction('edit', role)}
-                                                >
-                                                    <Edit2 className="mr-1 h-3 w-3" />
-                                                    {t('edit')}
-                                                </Button>
-                                            )}
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            );
-                        })}
-                    </div>
-                )}
-
-                {!loading && filteredRoles.length === 0 && (
-                    <Card>
-                        <CardContent className="text-center py-12">
-                            <Shield className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                            <h3 className="text-lg font-semibold mb-2">{t('noRolesFound')}</h3>
-                            <p className="text-muted-foreground">
-                                {t('noRolesMatchCriteria')}
-                            </p>
-                        </CardContent>
-                    </Card>
-                )}
-
                 {/* Dialog'lar */}
-                <CreateRoleDialog
+                <CreateRoleDialogV3
                     open={showCreateDialog}
                     onOpenChange={setShowCreateDialog}
                     onRoleCreated={handleRefresh}

@@ -110,10 +110,7 @@ const createQueryClient = () => {
                     }
                 }
             },
-            onSuccess: (data, query) => {
-                // Global success handling for queries
-                console.log('✅ Query Success:', query.queryKey);
-            },
+        
         }),
         mutationCache: new MutationCache({
             onError: (error, variables, _context, _mutation) => {
@@ -154,9 +151,7 @@ const createQueryClient = () => {
                     }
                 }
             },
-            onSuccess: (data, variables, context, mutation) => {
-                console.log('✅ Mutation Success:', mutation.options.mutationKey);
-            },
+         
         }),
     });
 };
@@ -221,7 +216,7 @@ export const invalidateQueries = async (queryKey: unknown[]) => {
     try {
         const client = getQueryClient();
         await client.invalidateQueries({ queryKey });
-        console.log('🔄 Invalidated queries:', queryKey);
+
     } catch (error) {
         console.error('❌ Failed to invalidate queries:', error);
     }
@@ -245,7 +240,7 @@ export const prefetchQuery = async <T,>(
             staleTime: options?.staleTime || CACHE_CONFIG.DEFAULT_STALE_TIME,
             gcTime: options?.gcTime || CACHE_CONFIG.DEFAULT_CACHE_TIME,
         });
-        console.log('📥 Prefetched query:', queryKey);
+
     } catch (error) {
         console.error('❌ Failed to prefetch query:', error);
     }
@@ -256,7 +251,7 @@ export const setQueryData = <T,>(queryKey: unknown[], data: T) => {
     try {
         const client = getQueryClient();
         client.setQueryData(queryKey, data);
-        console.log('💾 Set query data:', queryKey);
+
     } catch (error) {
         console.error('❌ Failed to set query data:', error);
     }
@@ -278,7 +273,6 @@ export const removeQueries = async (queryKey: unknown[]) => {
     try {
         const client = getQueryClient();
         await client.removeQueries({ queryKey });
-        console.log('🗑️ Removed queries:', queryKey);
     } catch (error) {
         console.error('❌ Failed to remove queries:', error);
     }
@@ -289,7 +283,6 @@ export const clearQueryCache = async () => {
     try {
         const client = getQueryClient();
         await client.clear();
-        console.log('🧹 Cleared query cache');
     } catch (error) {
         console.error('❌ Failed to clear query cache:', error);
     }
@@ -302,25 +295,21 @@ export const clearQueryCache = async () => {
 // Enhanced user cache management
 export const invalidateUserQueries = async () => {
     await invalidateQueries(['users']);
-    console.log('👥 Invalidated user queries');
 };
 
 // Enhanced auth cache management
 export const invalidateAuthQueries = async () => {
     await invalidateQueries(['auth']);
-    console.log('🔐 Invalidated auth queries');
 };
 
 // Enhanced role cache management
 export const invalidateRoleQueries = async () => {
     await invalidateQueries(['roles']);
-    console.log('👑 Invalidated role queries');
 };
 
 // Enhanced permission cache management
 export const invalidatePermissionQueries = async () => {
     await invalidateQueries(['permissions']);
-    console.log('🔑 Invalidated permission queries');
 };
 
 // Enhanced all queries invalidation
@@ -328,7 +317,6 @@ export const invalidateAllQueries = async () => {
     try {
         const client = getQueryClient();
         await client.invalidateQueries();
-        console.log('🔄 Invalidated all queries');
     } catch (error) {
         console.error('❌ Failed to invalidate all queries:', error);
     }
@@ -399,11 +387,9 @@ export const warmUpCache = async () => {
         // Prefetch current user if not already cached
         const currentUserData = client.getQueryData(['auth', 'currentUser']);
         if (!currentUserData) {
-            console.log('🔥 Warming up auth cache...');
             // This would be called from the auth hook
         }
 
-        console.log('🔥 Cache warming completed');
     } catch (error) {
         console.error('❌ Failed to warm up cache:', error);
     }
@@ -426,7 +412,6 @@ export const clearAllCacheOnLogout = async () => {
         // Reset query client to fresh state
         client.invalidateQueries();
 
-        console.log('✅ All cache cleared on logout');
     } catch (error) {
         console.error('❌ Error clearing cache on logout:', error);
     }

@@ -1,4 +1,10 @@
 {
+  "UI": {
+    "common": {
+      "close": "Close",
+      "more": "More"
+    }
+  },
   "AdminDashboard": {
     "stats": {
       "totalUsers": "Total Users",
@@ -548,6 +554,7 @@
     "superAdmin": "Super Admin",
     "admin": "Admin",
     "user": "User",
+    "customer": "Customer",
     "custom": "Custom",
     "systemRole": "System Role",
     "customRole": "Custom Role",
@@ -563,6 +570,20 @@
     "usersCount": "users",
     "permissionsCount": "permissions",
     "view": "View",
+    "rolesList": "Role List",
+    "description": "Manage system roles and control user permissions",
+    "role": "role",
+    "roles": "roles",
+    "usersAssigned": "users assigned",
+    "totalPermissions": "total permissions",
+    "pleaseWait": "Please wait...",
+    "userNotFound": "User not found",
+    "tryDifferentCriteria": "Try different search criteria",
+    "clearFilters": "Clear Filters",
+    "search": {
+      "placeholder": "Search roles...",
+      "clearSelection": "Clear Selection"
+    },
     "noRolesMatchCriteria": "No roles match your search criteria.",
     "info": {
       "noViewPermission": "🚫 Role list API call not made - no permission",
