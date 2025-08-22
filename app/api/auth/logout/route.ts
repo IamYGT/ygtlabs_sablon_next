@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { AUTH_COOKIE_NAME, prisma } from "@/lib";
-import { sessionCache } from "@/lib/session-cache";
+import { cacheManager } from "@/lib/cache-manager";
 
 // POST /api/auth/logout
 export async function POST(request: NextRequest) {
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
           });
           
           // Clear all cache entries for this user
-          sessionCache.invalidateByUserId(session.userId);
+          cacheManager.invalidateByUserId(session.userId);
         }
       } else {
         // Sadece mevcut session'ı deaktif et
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
         });
         
         // Clear cache for this specific session
-        sessionCache.delete(sessionToken);
+        cacheManager.delete(sessionToken);
       }
     }
 
@@ -101,3 +101,4 @@ export async function OPTIONS() {
     },
   });
 }
+

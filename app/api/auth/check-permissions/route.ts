@@ -1,12 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getCurrentUserFromToken } from "@/lib/session-utils";
-import { headers } from "next/headers";
+import { getCurrentUser } from "@/lib/server-utils";
 
 export async function POST(request: NextRequest) {
   try {
-    const headersList = await headers();
-    const authorization = headersList.get("authorization") || "";
-    const currentUser = await getCurrentUserFromToken(authorization);
+    const currentUser = await getCurrentUser(request);
 
     if (!currentUser) {
       return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 });

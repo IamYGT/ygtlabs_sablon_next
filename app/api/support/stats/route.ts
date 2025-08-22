@@ -1,15 +1,15 @@
 import { prisma } from "@/lib/prisma";
-import { getServerSession } from "@/lib/session-utils";
+import { getCurrentUser } from "@/lib/server-utils";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(request);
-    if (!session?.user) {
+    const user = await getCurrentUser(request);
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const isAdmin = session.user.permissions?.includes("admin.layout");
+    const isAdmin = user.permissions?.includes("admin.layout");
     if (!isAdmin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getServerSession } from "@/lib/session-utils";
+import { getCurrentUser } from "@/lib/server-utils";
 import { z } from "zod";
 
 // Kategori oluşturma şeması
@@ -26,14 +26,14 @@ const updateCategorySchema = z.object({
 // Kategorileri getir
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(request);
-    if (!session?.user) {
+    const user = await getCurrentUser(request);
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
     const includeInactive = searchParams.get("includeInactive") === "true";
-    const isAdmin = session.user.permissions?.includes("admin.support.manage");
+    const isAdmin = user.permissions?.includes("admin.support.manage");
 
     // Müşteri için sadece aktif kategorileri göster
     const where = !isAdmin || !includeInactive ? { isActive: true } : {};
@@ -72,12 +72,12 @@ export async function GET(request: NextRequest) {
 // Yeni kategori oluştur (Admin only)
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(request);
-    if (!session?.user) {
+    const user = await getCurrentUser(request);
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const isAdmin = session.user.permissions?.includes("admin.support.manage");
+    const isAdmin = user.permissions?.includes("admin.support.manage");
     if (!isAdmin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
@@ -117,12 +117,12 @@ export async function POST(request: NextRequest) {
 // Kategori güncelle (Admin only)
 export async function PATCH(request: NextRequest) {
   try {
-    const session = await getServerSession(request);
-    if (!session?.user) {
+    const user = await getCurrentUser(request);
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const isAdmin = session.user.permissions?.includes("admin.support.manage");
+    const isAdmin = user.permissions?.includes("admin.support.manage");
     if (!isAdmin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
@@ -178,12 +178,12 @@ export async function PATCH(request: NextRequest) {
 // Kategori sil (Admin only)
 export async function DELETE(request: NextRequest) {
   try {
-    const session = await getServerSession(request);
-    if (!session?.user) {
+    const user = await getCurrentUser(request);
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const isAdmin = session.user.permissions?.includes("admin.support.manage");
+    const isAdmin = user.permissions?.includes("admin.support.manage");
     if (!isAdmin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }

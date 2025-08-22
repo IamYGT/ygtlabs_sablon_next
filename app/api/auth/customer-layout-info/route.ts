@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/lib/session-utils";
+import { getCurrentUser } from "@/lib/server-utils";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(_request: NextRequest) {

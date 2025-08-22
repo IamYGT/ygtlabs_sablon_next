@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getCurrentUser } from "@/lib/session-utils";
+import { getCurrentUser } from "@/lib/server-utils";
 
 // Profile stats API
 export async function GET() {

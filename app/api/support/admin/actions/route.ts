@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getServerSession } from "@/lib/session-utils";
+import { getCurrentUser } from "@/lib/server-utils";
 import { z } from "zod";
 
 // Ticket atama şeması
@@ -29,12 +29,12 @@ const bulkDeleteSchema = z.object({
 // Ticket atama
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(request);
-    if (!session?.user) {
+    const user = await getCurrentUser(request);
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const isAdmin = session.user.permissions?.includes("admin.support.manage");
+    const isAdmin = user.permissions?.includes("admin.support.manage");
     if (!isAdmin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
               data: {
                 ticketId: validatedData.ticketId,
                 assignedToId: validatedData.assigneeId,
-                assignedById: session.user.id
+                assignedById: user.id
               }
             });
 
@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
               data: {
                 ticketId: validatedData.ticketId,
                 assignedToId: null,
-                assignedById: session.user.id,
+                assignedById: user.id,
                 reason: "Unassigned"
               }
             });
@@ -149,7 +149,7 @@ export async function POST(request: NextRequest) {
                 data: {
                   ticketId,
                   assignedToId: validatedData.updates.assigneeId,
-                  assignedById: session.user.id,
+                  assignedById: user.id,
                   reason: "Bulk assignment"
                 }
               });
@@ -213,12 +213,12 @@ export async function POST(request: NextRequest) {
 // Admin için gelişmiş filtreleme ve arama
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(request);
-    if (!session?.user) {
+    const user = await getCurrentUser(request);
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const isAdmin = session.user.permissions?.includes("admin.support.manage");
+    const isAdmin = user.permissions?.includes("admin.support.manage");
     if (!isAdmin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }

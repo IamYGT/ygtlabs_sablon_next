@@ -5,7 +5,7 @@ import {
   hashPasswordPbkdf2,
 } from "@/lib";
 import { prisma } from "@/lib/prisma";
-import { sessionCache } from "@/lib/session-cache";
+import { cacheManager } from "@/lib/cache-manager";
 import { NextRequest, NextResponse } from "next/server";
 
 // Kullanıcı güncelleme işlemi için PUT metodu
@@ -174,7 +174,7 @@ export async function PUT(request: NextRequest) {
 
     // Invalidate cache for this user if role changed or password updated
     if (roleId !== undefined || password) {
-      sessionCache.invalidateByUserId(id);
+      cacheManager.invalidateByUserId(id);
     }
 
     return NextResponse.json({
@@ -192,3 +192,4 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: "Sunucu hatası" }, { status: 500 });
   }
 }
+

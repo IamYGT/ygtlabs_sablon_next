@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { getCurrentUser } from "@/lib/session-utils";
+import { getCurrentUser } from "@/lib/server-utils";
 import { NextRequest, NextResponse } from "next/server";
 
 /**

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getServerSession } from "@/lib/session-utils";
+import { getCurrentUser } from "@/lib/server-utils";
 import { z } from "zod";
 
 // Bildirim güncelleme şeması
@@ -11,8 +11,8 @@ const updateNotificationSchema = z.object({
 // Bildirimleri getir
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(request);
-    if (!session?.user) {
+    const user = await getCurrentUser(request);
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
       userId: string;
       isRead?: boolean;
     } = {
-      userId: session.user.id,
+      userId: user.id,
     };
 
     if (unreadOnly) {
@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
       prisma.ticketNotification.count({ where }),
       prisma.ticketNotification.count({
         where: {
-          userId: session.user.id,
+          userId: user.id,
           isRead: false,
         },
       }),
@@ -81,8 +81,8 @@ export async function GET(request: NextRequest) {
 // Bildirim okundu olarak işaretle
 export async function PATCH(request: NextRequest) {
   try {
-    const session = await getServerSession(request);
-    if (!session?.user) {
+    const user = await getCurrentUser(request);
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -94,7 +94,7 @@ export async function PATCH(request: NextRequest) {
       // Tüm bildirimleri okundu olarak işaretle
       await prisma.ticketNotification.updateMany({
         where: {
-          userId: session.user.id,
+          userId: user.id,
           isRead: false,
         },
         data: {
@@ -120,7 +120,7 @@ export async function PATCH(request: NextRequest) {
     const notification = await prisma.ticketNotification.findFirst({
       where: {
         id: notificationId,
-        userId: session.user.id,
+        userId: user.id,
       },
     });
 
@@ -158,8 +158,8 @@ export async function PATCH(request: NextRequest) {
 // Bildirim sil
 export async function DELETE(request: NextRequest) {
   try {
-    const session = await getServerSession(request);
-    if (!session?.user) {
+    const user = await getCurrentUser(request);
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -171,7 +171,7 @@ export async function DELETE(request: NextRequest) {
       // Tüm bildirimleri sil
       await prisma.ticketNotification.deleteMany({
         where: {
-          userId: session.user.id,
+          userId: user.id,
         },
       });
 
@@ -189,7 +189,7 @@ export async function DELETE(request: NextRequest) {
     const notification = await prisma.ticketNotification.findFirst({
       where: {
         id: notificationId,
-        userId: session.user.id,
+        userId: user.id,
       },
     });
 
@@ -217,8 +217,8 @@ export async function DELETE(request: NextRequest) {
 // Bildirim tercihleri
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(request);
-    if (!session?.user) {
+    const user = await getCurrentUser(request);
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 

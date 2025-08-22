@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getServerSession } from "@/lib/session-utils";
+import { getCurrentUser } from "@/lib/server-utils";
 import { z } from "zod";
 
 // Ticket güncelleme şeması
@@ -22,8 +22,8 @@ export async function GET(
 ) {
   try {
     const { ticketId } = await params;
-    const session = await getServerSession(request);
-    if (!session?.user) {
+    const user = await getCurrentUser(request);
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -94,8 +94,8 @@ export async function GET(
     }
 
     // Yetki kontrolü - Customer sadece kendi ticketlarını görebilir
-    const isAdmin = session.user.permissions?.includes("admin.support.manage");
-    if (!isAdmin && ticket.customerId !== session.user.id) {
+    const isAdmin = user.permissions?.includes("admin.support.manage");
+    if (!isAdmin && ticket.customerId !== user.id) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -108,7 +108,7 @@ export async function GET(
     // Okunmamış mesajları okundu olarak işaretle
     if (ticket.messages.length > 0) {
       const unreadMessageIds = ticket.messages
-        .filter(msg => !msg.isRead && msg.senderId !== session.user.id)
+        .filter(msg => !msg.isRead && msg.senderId !== user.id)
         .map(msg => msg.id);
 
       if (unreadMessageIds.length > 0) {
@@ -141,8 +141,8 @@ export async function PATCH(
 ) {
   try {
     const { ticketId } = await params;
-    const session = await getServerSession(request);
-    if (!session?.user) {
+    const user = await getCurrentUser(request);
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -159,8 +159,8 @@ export async function PATCH(
     }
 
     // Yetki kontrolü
-    const isAdmin = session.user.permissions?.includes("admin.support.manage");
-    if (!isAdmin && ticket.customerId !== session.user.id) {
+    const isAdmin = user.permissions?.includes("admin.support.manage");
+    if (!isAdmin && ticket.customerId !== user.id) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -215,7 +215,7 @@ export async function PATCH(
         data: {
           ticketId,
           assignedToId: validatedData.assignedToId,
-          assignedById: session.user.id,
+          assignedById: user.id,
         },
       });
       
@@ -278,13 +278,13 @@ export async function DELETE(
 ) {
   try {
     const { ticketId } = await params;
-    const session = await getServerSession(request);
-    if (!session?.user) {
+    const user = await getCurrentUser(request);
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Sadece admin silebilir
-    const isAdmin = session.user.permissions?.includes("admin.support.manage");
+    const isAdmin = user.permissions?.includes("admin.support.manage");
     if (!isAdmin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }

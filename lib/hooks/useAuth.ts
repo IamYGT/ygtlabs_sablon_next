@@ -6,7 +6,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
-import { authAPI } from "../api-client";
+import { authAPI } from "../api";
 import { QUERY_KEYS } from "../constants";
 import { clearAllCacheOnLogout } from "../providers/query-provider";
 import { authActions, useAuthStore } from "../stores/auth-store";
@@ -173,9 +173,9 @@ export function useLogout() {
   const locale = (params.locale as string) || "en";
 
   return useMutation<void, Error, boolean>({
-    mutationFn: async (logoutAllSessions = false): Promise<void> => {
+    mutationFn: async (_logoutAllSessions = false): Promise<void> => {
       try {
-        await authAPI.logout(logoutAllSessions);
+        await authAPI.logout();
       } catch (error) {
         console.error("❌ Logout API failed:", error);
         // API başarısız olsa bile client-side logout yap

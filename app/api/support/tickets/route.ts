@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getServerSession } from "@/lib/session-utils";
+import { getCurrentUser } from "@/lib/server-utils";
 import { z } from "zod";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
@@ -45,8 +45,8 @@ async function generateTicketNumber(): Promise<string> {
 // GET: Ticket listesi
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(request);
-    if (!session?.user) {
+    const user = await getCurrentUser(request);
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit;
 
     // Admin mi kontrol et
-    const isAdmin = session.user.permissions?.includes("admin.support.manage");
+    const isAdmin = user.permissions?.includes("admin.support.manage");
 
     // Filtreler
     const where: {
@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
     
     // Customer sadece kendi ticketlarını görebilir
     if (!isAdmin) {
-      where.customerId = session.user.id;
+      where.customerId = user.id;
     }
 
     if (status && status !== "all") {
@@ -139,8 +139,8 @@ export async function GET(request: NextRequest) {
 // POST: Yeni ticket oluştur
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(request);
-    if (!session?.user) {
+    const user = await getCurrentUser(request);
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -205,12 +205,12 @@ export async function POST(request: NextRequest) {
         description: validatedData.description,
         priority: validatedData.priority,
         categoryId: validatedData.categoryId,
-        customerId: session.user.id,
+        customerId: user.id,
         tags: validatedData.tags || [],
         attachments: {
           create: uploadedAttachments.map((attachment) => ({
             ...attachment,
-            uploadedById: session.user.id,
+            uploadedById: user.id,
           })),
         },
       },

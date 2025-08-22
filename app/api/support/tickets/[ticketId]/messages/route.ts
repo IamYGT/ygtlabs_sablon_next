@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getServerSession } from "@/lib/session-utils";
+import { getCurrentUser } from "@/lib/server-utils";
 import { z } from "zod";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
@@ -23,8 +23,8 @@ export async function POST(
 ) {
   try {
     const { ticketId } = await params;
-    const session = await getServerSession(request);
-    if (!session?.user) {
+    const user = await getCurrentUser(request);
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -38,8 +38,8 @@ export async function POST(
     }
 
     // Yetki kontrolü
-    const isAdmin = session.user.permissions?.includes("admin.support.manage");
-    if (!isAdmin && ticket.customerId !== session.user.id) {
+    const isAdmin = user.permissions?.includes("admin.support.manage");
+    if (!isAdmin && ticket.customerId !== user.id) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -105,7 +105,7 @@ export async function POST(
           fileSize: file.size,
           filePath: `/uploads/support/${ticketId}/${fileName}`,
           fileUrl: `/uploads/support/${ticketId}/${fileName}`,
-          uploadedById: session.user.id,
+          uploadedById: user.id,
         });
       }
     }
@@ -116,7 +116,7 @@ export async function POST(
       const newMessage = await tx.supportMessage.create({
         data: {
           ticketId,
-          senderId: session.user.id,
+          senderId: user.id,
           content: validatedData.content,
           messageType: validatedData.messageType || messageType,
           attachments: {
@@ -205,8 +205,8 @@ export async function GET(
 ) {
   try {
     const { ticketId } = await params;
-    const session = await getServerSession(request);
-    if (!session?.user) {
+    const user = await getCurrentUser(request);
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -220,8 +220,8 @@ export async function GET(
     }
 
     // Yetki kontrolü
-    const isAdmin = session.user.permissions?.includes("admin.support.manage");
-    if (!isAdmin && ticket.customerId !== session.user.id) {
+    const isAdmin = user.permissions?.includes("admin.support.manage");
+    if (!isAdmin && ticket.customerId !== user.id) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -251,7 +251,7 @@ export async function GET(
     // Okunmamış mesajları okundu olarak işaretle
     if (messages.length > 0) {
       const unreadMessageIds = messages
-        .filter(msg => !msg.isRead && msg.senderId !== session.user.id)
+        .filter(msg => !msg.isRead && msg.senderId !== user.id)
         .map(msg => msg.id);
 
       if (unreadMessageIds.length > 0) {

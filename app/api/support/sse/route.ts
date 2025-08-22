@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "@/lib/session-utils";
+import { getCurrentUser } from "@/lib/server-utils";
 import { addConnection, removeConnection } from "@/lib/support/sse-utils";
 
 export async function GET(request: NextRequest) {
   try {
     // Kullanıcı authentication kontrolü
-    const session = await getServerSession(request);
-    if (!session?.user) {
+    const user = await getCurrentUser(request);
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const userId = session.user.id;
-    const isAdmin = session.user.permissions?.includes("admin.support.manage");
+    const userId = user.id;
+    const isAdmin = user.permissions?.includes("admin.support.manage");
 
     // SSE için response stream oluştur
     const stream = new ReadableStream({

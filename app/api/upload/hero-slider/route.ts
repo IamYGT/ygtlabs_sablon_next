@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { writeFile, mkdir } from "fs/promises";
 import { existsSync } from "fs";
 import path from "path";
-import { getCurrentUser } from "@/lib/session-utils";
+import { getCurrentUser } from "@/lib/server-utils";
 
 export async function POST(request: NextRequest) {
   try {

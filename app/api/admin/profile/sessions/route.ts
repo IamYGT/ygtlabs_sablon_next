@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getCurrentUser } from "@/lib/session-utils";
+import { getCurrentUser } from "@/lib/server-utils";
 
 // Sessions API - Updated for custom session management
 export async function GET(request: Request) {

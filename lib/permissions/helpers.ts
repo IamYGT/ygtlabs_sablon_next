@@ -5,7 +5,7 @@
  * Tüm permission logic'i config.ts'den beslenir
  */
 
-import { getCurrentUser } from "@/lib/session-utils";
+import { getCurrentUser } from "@/lib/server-utils";
 import { NextRequest, NextResponse } from "next/server";
 import { ALL_PERMISSIONS, type PermissionName } from "./config";
 
@@ -256,3 +256,4 @@ export const PermissionHelpers = {
 
 // Type exports
 export type { UserWithPermissions };
+

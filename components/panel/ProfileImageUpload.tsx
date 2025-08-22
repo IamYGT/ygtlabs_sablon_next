@@ -11,7 +11,7 @@ import {
     Loader2
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { profileAPI, isSuccess, getErrorMessage } from '@/lib/api-client';
+import { profileAPI, isSuccess, getErrorMessage } from '@/lib/api';
 import { useTranslations } from 'next-intl';
 
 interface ProfileImageUploadProps {

@@ -1,7 +1,6 @@
 import { getCurrentUser, prisma } from "@/lib";
-import { permissionsCache } from "@/lib/permissions-cache";
+import { cacheManager } from "@/lib/cache-manager";
 import {
-  Permission,
   PermissionAction,
   PermissionCategory,
 } from "@prisma/client";
@@ -9,15 +8,16 @@ import { NextRequest, NextResponse } from "next/server";
 
 // Helper function for JSON parsing
 const parseLocalizedField = (
-  field: any,
+  field: unknown,
   locale: string,
   fallback: string
 ): string => {
   if (!field) return fallback;
   
   // If already an object, use it directly
-  if (typeof field === "object" && !Array.isArray(field)) {
-    return field[locale] || field.en || field.tr || fallback;
+  if (typeof field === "object" && field !== null && !Array.isArray(field)) {
+    const obj = field as Record<string, string>;
+    return obj[locale] || obj.en || obj.tr || fallback;
   }
   
   // If string, try to parse once
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
 
     // Check cache first
     if (useCache) {
-      const cachedData = permissionsCache.get({
+      const cachedData = cacheManager.get({
         category,
         page,
         limit,
@@ -206,7 +206,7 @@ export async function GET(request: NextRequest) {
 
     // Cache the response
     if (useCache) {
-      permissionsCache.set(
+      cacheManager.set(
         { category, page, limit, search, locale },
         responseData
       );
@@ -299,7 +299,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Invalidate cache after creating new permission
-    permissionsCache.invalidateAll();
+    cacheManager.invalidateAll();
 
     return NextResponse.json({
       message: "Yetki başarıyla oluşturuldu",
@@ -313,3 +313,4 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+

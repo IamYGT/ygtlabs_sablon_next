@@ -1,79 +1,80 @@
-// ============================================================================
-// @/lib - Modern Auth Library Export Hub
-// Zustand + TanStack Query Based System
-// ============================================================================
+// Optimized exports for Next.js 15.5 & TanStack Query
 
-// 🎯 Core Modern Exports
+// Core exports
 export * from "./constants";
 export * from "./types";
+export * from "./utils";
+export * from "./crypto";
+export * from "./prisma";
 
-// 🔐 Modern Authentication - Selective exports to avoid conflicts
+// Server utilities (for API routes)
+export { getCurrentUser, AUTH_COOKIE_NAME } from "./server-utils";
+
+// API exports
+export * from "./api";
+export { cacheManager } from "./cache-manager";
+
+// Hooks - selective export to avoid conflicts
 export {
-  useAdminAuth,
   useAuth,
   useCurrentUser,
-  useHasAdminAccess,
-  useHasPermission,
-  useHasUserAccess,
-  useIsAdmin,
   useLogin,
   useLogout,
+  useAdminAuth,
   useUserAuth,
+  useCustomerAuth,
+  useAuthGuard,
+  useSessionMonitoring,
+  useHasPermission,
+  useHasAdminAccess,
+  useHasUserAccess,
+  useIsAdmin,
+  useCurrentUserFromStore,
+  useAuthLoading,
+  useRefreshPermissions,
+  refreshAuthQueries
 } from "./hooks/useAuth";
 
 export {
-  useAssignRole,
-  useBulkDeleteUsers,
-  useCreateUser,
-  useDeleteUser,
-  usePrefetchUser,
-  useRemoveRole,
-  useSearchUsers,
-  useToggleUserStatus,
-  useUpdateUser,
-  useUserCount,
-  useUser as useUserDetails,
-  useUserExists,
   useUsers,
+  useUser,
+  useCreateUser,
+  useUpdateUser,
+  useDeleteUser,
+  useToggleUserStatus,
+  useAssignRole,
+  useRemoveRole,
+  useBulkDeleteUsers,
+  useUserCount,
+  useUserExists,
   useUsersByRole,
+  useSearchUsers,
+  usePrefetchUser
 } from "./hooks/useUsers";
 
-// Store exports with aliases to prevent conflicts
+// Stores - selective export to avoid conflicts
 export {
   authActions,
   canAccessAdmin,
   canAccessCustomer,
-  canAccessCustomer as canAccessUser, // Alias for backward compatibility
   formatUserDisplayName,
   getUserDashboardUrl,
   getUserInitials,
   getUserRoleDisplayName,
   useAuthError,
-  useAuthLoading as useAuthLoadingFromStore,
   useAuthStore,
-  useHasAnyPermission as useHasAnyPermissionFromStore,
-  useHasPermission as useHasPermissionFromStore,
-  useIsAdmin as useIsAdminFromStore,
-  useIsAuthenticated as useIsAuthenticatedFromStore,
+  useHasAnyPermission,
   useIsSuperAdmin,
-  useIsCustomer as useIsUserFromStore, // Alias for backward compatibility
   useIsCustomer,
   useSessionStatus,
-  useUser as useUserFromStore,
+  useUser as useUserFromStore
 } from "./stores/auth-store";
 
 export * from "./stores/ui-store";
 
-// 🌐 API & Providers
-export * from "./api-client";
+// Providers
 export * from "./providers/query-provider";
 export { PermissionsProvider } from "./providers/permissions-provider";
-
-// 🛠️ Core Utilities
-export * from "./crypto";
-export * from "./prisma";
-export * from "./session-utils";
-export * from "./utils";
 
 // 🎨 Re-export UI Components for convenience
 export { cn } from "./utils";
@@ -101,7 +102,7 @@ import type { SimpleUser } from "./types";
 
 // Temporary compatibility functions for API routes
 export async function verifyAdminAuth(_req: Request) {
-  const { getCurrentUser } = await import("./session-utils");
+  const { getCurrentUser } = await import("./server-utils");
   const user = await getCurrentUser();
 
   if (!user || !user.permissions?.includes("admin.layout")) {
@@ -195,7 +196,7 @@ export function parseDeviceInfo(_userAgent: string) {
 }
 
 export async function getUserLayoutInfo(_userId: string) {
-  const { getCurrentUser } = await import("./session-utils");
+  const { getCurrentUser } = await import("./server-utils");
   const user = await getCurrentUser();
 
   return {

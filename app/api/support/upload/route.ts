@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getServerSession } from "@/lib/session-utils";
+import { getCurrentUser } from "@/lib/server-utils";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
 import { randomUUID } from "crypto";
@@ -26,8 +26,8 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(request);
-    if (!session?.user) {
+    const user = await getCurrentUser(request);
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -64,12 +64,12 @@ export async function POST(request: NextRequest) {
       where: {
         id: ticketId,
         OR: [
-          { customerId: session.user.id },
+          { customerId: user.id },
           {
             // Admin kontrolü
-            AND: session.user.permissions?.includes("admin.support.manage")
+            AND: user.permissions?.includes("admin.support.manage")
               ? {}
-              : { customerId: session.user.id }
+              : { customerId: user.id }
           }
         ]
       }
@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
         fileType: file.type,
         filePath: `/uploads/support/${ticketId}/${uniqueFileName}`,
         fileUrl: `/uploads/support/${ticketId}/${uniqueFileName}`,
-        uploadedById: session.user.id
+        uploadedById: user.id
       },
       select: {
         id: true,
@@ -142,8 +142,8 @@ export async function POST(request: NextRequest) {
 // Dosyaları listele
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(request);
-    if (!session?.user) {
+    const user = await getCurrentUser(request);
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -163,11 +163,11 @@ export async function GET(request: NextRequest) {
       where: {
         id: ticketId,
         OR: [
-          { customerId: session.user.id },
+          { customerId: user.id },
           {
-            AND: session.user.permissions?.includes("admin.support.manage")
+            AND: user.permissions?.includes("admin.support.manage")
               ? {}
-              : { customerId: session.user.id }
+              : { customerId: user.id }
           }
         ]
       }
@@ -228,8 +228,8 @@ export async function GET(request: NextRequest) {
 // Dosya sil
 export async function DELETE(request: NextRequest) {
   try {
-    const session = await getServerSession(request);
-    if (!session?.user) {
+    const user = await getCurrentUser(request);
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -248,16 +248,16 @@ export async function DELETE(request: NextRequest) {
       where: {
         id: attachmentId,
         OR: [
-          { uploadedById: session.user.id },
+          { uploadedById: user.id },
           {
             ticket: {
-              customerId: session.user.id
+              customerId: user.id
             }
           },
           {
-            AND: session.user.permissions?.includes("admin.support.manage")
+            AND: user.permissions?.includes("admin.support.manage")
               ? {}
-              : { uploadedById: session.user.id }
+              : { uploadedById: user.id }
           }
         ]
       }
