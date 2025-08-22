@@ -1,22 +1,22 @@
 // ============================================================================
-// SESSION UTILITIES - Minimal Server-Side Session Management
-// For API routes and server components only
+// OPTIMIZED SESSION UTILITIES - Performance Enhanced Version
 // ============================================================================
 
 import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
 import { prisma } from "./prisma";
+import { sessionCache } from "./session-cache";
 import type { SimpleUser } from "./types";
 
 // Constants
 export const AUTH_COOKIE_NAME = "ecu_session";
+const LAST_ACTIVE_UPDATE_INTERVAL = 60 * 1000; // 1 minute - debounce lastActive updates
 
-// ============================================================================
-// MINIMAL SESSION FUNCTIONS FOR SERVER-SIDE USE
-// ============================================================================
+// Track last update times to debounce
+const lastActiveUpdateMap = new Map<string, number>();
 
 /**
- * Get current user from request (server-side only)
+ * Get current user from request (server-side only) - OPTIMIZED
  */
 export async function getCurrentUser(
   req?: NextRequest
@@ -41,73 +41,98 @@ export async function getCurrentUser(
 }
 
 /**
- * Get user from session token (server-side only)
+ * Get user from session token - OPTIMIZED VERSION
  */
 export async function getCurrentUserFromToken(
   token: string
 ): Promise<SimpleUser | null> {
-  // Token formatını katı doğrulama ile kısıtlamayın.
-  // Geçersiz bir token DB'de eşleşmeyeceği için doğal olarak null döner.
   if (!isValidSessionToken(token)) {
     return null;
   }
 
+  // Check cache first - OPTIMIZED
+  const cachedUser = sessionCache.get(token);
+  if (cachedUser) {
+    // Debounce lastActive updates
+    const lastUpdate = lastActiveUpdateMap.get(token) || 0;
+    const now = Date.now();
+    
+    if (now - lastUpdate > LAST_ACTIVE_UPDATE_INTERVAL) {
+      lastActiveUpdateMap.set(token, now);
+      
+      // Update last active in background (non-blocking)
+      setImmediate(() => {
+        prisma.session
+          .update({
+            where: { sessionToken: token },
+            data: { lastActive: new Date() },
+          })
+          .catch(() => {
+            // Clean up on error
+            lastActiveUpdateMap.delete(token);
+          });
+      });
+    }
+    
+    return cachedUser;
+  }
+
   try {
+    // OPTIMIZED QUERY - Single query with selective loading
     const session = await prisma.session.findFirst({
       where: {
         sessionToken: token,
         isActive: true,
         expires: { gt: new Date() },
       },
-      include: {
+      select: {
+        id: true,
+        lastActive: true,
         user: {
-          include: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            profileImage: true,
+            isActive: true,
+            roleId: true,
+            roleAssignedAt: true,
+            createdAt: true,
+            lastLoginAt: true,
             role: {
-              include: {
+              select: {
+                name: true,
                 rolePermissions: {
-                  where: { isAllowed: true, isActive: true },
-                  include: {
-                    permission: true,
+                  where: { 
+                    isAllowed: true, 
+                    isActive: true 
                   },
-                },
-              },
-            },
-          },
-        },
-      },
+                  select: {
+                    permission: {
+                      select: {
+                        name: true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     });
 
     if (!session?.user || !session.user.isActive) {
       return null;
     }
 
-    // Get user permissions from the single optimized query
-    const permissions =
-      session.user.role?.rolePermissions.map((rp) => rp.permission.name) ?? [];
+    // Extract permissions efficiently
+    const permissions = session.user.role?.rolePermissions.map(
+      rp => rp.permission.name
+    ) ?? [];
 
-    console.log(
-      `📋 Role "${session.user.role?.name}" has ${permissions.length} permissions from DB`
-    );
-    if (permissions.length > 0) {
-      console.log("   Permissions found:");
-      permissions.forEach((pName) => {
-        console.log(`     • ${pName}`);
-      });
-    } else {
-      console.log(
-        `❌ User role "${session.user.role?.name}" has no active permissions!`
-      );
-    }
-
-    // Update last active (fire and forget)
-    prisma.session
-      .update({
-        where: { id: session.id },
-        data: { lastActive: new Date() },
-      })
-      .catch(() => {});
-
-    const simpleUser = {
+    // Create SimpleUser object
+    const simpleUser: SimpleUser = {
       id: session.user.id,
       name: session.user.name,
       email: session.user.email,
@@ -122,11 +147,21 @@ export async function getCurrentUserFromToken(
       lastLoginAt: session.user.lastLoginAt,
     };
 
-    console.log("🔐 getCurrentUserFromToken returning:");
-    console.log(`   • Email: ${simpleUser.email}`);
-    console.log(`   • Primary Role: ${simpleUser.primaryRole}`);
-    console.log(`   • Permissions: ${simpleUser.permissions.length}`);
-    console.log(`   • User Roles: ${simpleUser.userRoles.join(", ")}`);
+    // Cache with shorter TTL for better freshness
+    sessionCache.set(token, simpleUser, 2 * 60 * 1000); // 2 minutes
+
+    // Set initial lastActive tracking
+    lastActiveUpdateMap.set(token, Date.now());
+
+    // Update last active once (non-blocking)
+    setImmediate(() => {
+      prisma.session
+        .update({
+          where: { id: session.id },
+          data: { lastActive: new Date() },
+        })
+        .catch(() => {});
+    });
 
     return simpleUser;
   } catch (error) {
@@ -139,7 +174,6 @@ export async function getCurrentUserFromToken(
  * Validate session token format
  */
 function isValidSessionToken(token: string): boolean {
-  // Minimum kontrol: boş olmayan string kabul edilir
   return typeof token === "string" && token.trim().length > 0;
 }
 
@@ -152,12 +186,22 @@ export function hasValidSessionToken(request: NextRequest): boolean {
 }
 
 /**
- * Get server session - alias for getCurrentUser to match common naming
- * Used in API routes
+ * Get server session - alias for getCurrentUser
  */
 export async function getServerSession(
   req?: NextRequest
 ): Promise<{ user: SimpleUser } | null> {
   const user = await getCurrentUser(req);
   return user ? { user } : null;
+}
+
+// Cleanup function for server shutdown
+if (typeof process !== "undefined") {
+  process.on("SIGINT", () => {
+    lastActiveUpdateMap.clear();
+  });
+  
+  process.on("SIGTERM", () => {
+    lastActiveUpdateMap.clear();
+  });
 }

@@ -1,4 +1,5 @@
 import { getCurrentUser, prisma } from "@/lib";
+import { permissionsCache } from "@/lib/permissions-cache";
 import {
   Permission,
   PermissionAction,
@@ -6,9 +7,36 @@ import {
 } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-// Tüm yetkileri getir
-export async function GET(request: NextRequest) {
+// Helper function for JSON parsing
+const parseLocalizedField = (
+  field: any,
+  locale: string,
+  fallback: string
+): string => {
+  if (!field) return fallback;
+  
+  // If already an object, use it directly
+  if (typeof field === "object" && !Array.isArray(field)) {
+    return field[locale] || field.en || field.tr || fallback;
+  }
+  
+  // If string, try to parse once
+  if (typeof field === "string") {
+    try {
+      const parsed = JSON.parse(field);
+      return parsed[locale] || parsed.en || parsed.tr || field;
+    } catch {
+      return field;
+    }
+  }
+  
+  return fallback;
+};
 
+// OPTIMIZED GET endpoint
+export async function GET(request: NextRequest) {
+  const startTime = Date.now();
+  
   try {
     const currentUser = await getCurrentUser(request);
 
@@ -16,22 +44,34 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 });
     }
 
-    // Geçici: Permission kontrolü kaldırıldı - döngü sorununu önlemek için
-    // TODO: usePermissions hook'u düzeltildikten sonra permission kontrolü eklenecek
-    // const hasPermission = currentUser.permissions.includes("admin.permissions.view");
-    // if (!hasPermission) {
-    //   return NextResponse.json({ error: "Bu işlem için gerekli yetkiye sahip değilsiniz" }, { status: 403 });
-    // }
-
     const { searchParams } = new URL(request.url);
     const category = searchParams.get("category");
     const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "1000");
+    const limit = Math.min(parseInt(searchParams.get("limit") || "100"), 500); // Max 500
     const search = searchParams.get("search");
     const locale = searchParams.get("locale") || "tr";
+    const useCache = searchParams.get("cache") !== "false"; // Allow cache bypass
 
-    // Yeni Permission tablosundan yetkileri getir
-    // Normalize filters for enums
+    // Check cache first
+    if (useCache) {
+      const cachedData = permissionsCache.get({
+        category,
+        page,
+        limit,
+        search,
+        locale,
+      });
+
+      if (cachedData) {
+        // Add cache headers
+        const response = NextResponse.json(cachedData);
+        response.headers.set("X-Cache", "HIT");
+        response.headers.set("X-Response-Time", `${Date.now() - startTime}ms`);
+        return response;
+      }
+    }
+
+    // Build query filters
     const categoryEnum: PermissionCategory | undefined =
       category && ["layout", "view", "function"].includes(category)
         ? (category as PermissionCategory)
@@ -53,6 +93,24 @@ export async function GET(request: NextRequest) {
         ? (searchValue as PermissionAction)
         : undefined;
 
+    // Get total count for pagination
+    const totalCount = await prisma.permission.count({
+      where: {
+        isActive: true,
+        ...(categoryEnum && { category: categoryEnum }),
+        ...(search && {
+          OR: [
+            { name: { contains: search, mode: "insensitive" } },
+            { resourcePath: { contains: search, mode: "insensitive" } },
+            ...(actionEnum ? ([{ action: actionEnum }] as const) : []),
+          ],
+        }),
+      },
+    });
+
+    // Paginated query with selective fields
+    const skip = (page - 1) * limit;
+    
     const permissions = await prisma.permission.findMany({
       where: {
         isActive: true,
@@ -65,112 +123,116 @@ export async function GET(request: NextRequest) {
           ],
         }),
       },
+      select: {
+        id: true,
+        name: true,
+        category: true,
+        resourcePath: true,
+        action: true,
+        permissionType: true,
+        displayName: true,
+        description: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
+      },
       orderBy: [
         { category: "asc" },
         { resourcePath: "asc" },
         { action: "asc" },
       ],
+      skip,
+      take: limit,
     });
 
-    // Format permissions for frontend compatibility
-    const formattedPermissions = permissions.map((perm: Permission) => ({
+    // Efficient formatting with memoization
+    const formattedPermissions = permissions.map((perm) => ({
       id: perm.id,
       name: perm.name,
       category: perm.category,
       resourcePath: perm.resourcePath,
       action: perm.action,
       permissionType: perm.permissionType,
-      displayName: perm.displayName
-        ? typeof perm.displayName === "string"
-          ? (() => {
-              try {
-                const parsed = JSON.parse(perm.displayName);
-                return (
-                  parsed?.[locale] ||
-                  parsed?.en ||
-                  parsed?.tr ||
-                  perm.displayName
-                );
-              } catch {
-                return perm.displayName;
-              }
-            })()
-          : (perm.displayName as Record<string, string>)?.[locale] ||
-            (perm.displayName as Record<string, string>)?.en ||
-            (perm.displayName as Record<string, string>)?.tr ||
-            "Unknown Permission"
-        : `${perm.category}:${perm.resourcePath}:${perm.action}`,
-      description: perm.description
-        ? typeof perm.description === "string"
-          ? (() => {
-              try {
-                const parsed = JSON.parse(perm.description);
-                return (
-                  parsed?.[locale] ||
-                  parsed?.en ||
-                  parsed?.tr ||
-                  perm.description
-                );
-              } catch {
-                return perm.description;
-              }
-            })()
-          : (perm.description as Record<string, string>)?.[locale] ||
-            (perm.description as Record<string, string>)?.en ||
-            (perm.description as Record<string, string>)?.tr ||
-            "Unknown Description"
-        : `${perm.category} ${perm.action} yetkisi`,
+      displayName: parseLocalizedField(
+        perm.displayName,
+        locale,
+        `${perm.category}:${perm.resourcePath}:${perm.action}`
+      ),
+      description: parseLocalizedField(
+        perm.description,
+        locale,
+        `${perm.category} ${perm.action} yetkisi`
+      ),
       isActive: perm.isActive,
       createdAt: perm.createdAt,
       updatedAt: perm.updatedAt,
     }));
 
-    // Kategoriye göre grupla
-    const categorizedPermissions = formattedPermissions.reduce(
-      (
-        acc: Record<string, typeof formattedPermissions>,
-        perm: (typeof formattedPermissions)[0]
-      ) => {
-        const category = perm.category || "general";
-        if (!acc[category]) {
-          acc[category] = [];
-        }
-        acc[category].push(perm);
-        return acc;
-      },
-      {} as Record<string, typeof formattedPermissions>
-    );
+    // Simple categorization (frontend can handle complex grouping)
+    const categorizedPermissions = categoryEnum
+      ? { [categoryEnum]: formattedPermissions }
+      : formattedPermissions.reduce(
+          (acc, perm) => {
+            const cat = perm.category || "general";
+            if (!acc[cat]) acc[cat] = [];
+            acc[cat].push(perm);
+            return acc;
+          },
+          {} as Record<string, typeof formattedPermissions>
+        );
 
-    // İstatistikler
-    const stats = await prisma.permission.groupBy({
-      by: ["category"],
-      _count: {
-        id: true,
-      },
-      where: { isActive: true },
-    });
+    // Lightweight stats
+    const stats = categoryEnum
+      ? [{ category: categoryEnum, _count: { id: totalCount } }]
+      : await prisma.permission.groupBy({
+          by: ["category"],
+          _count: { id: true },
+          where: { isActive: true },
+        });
 
-    return NextResponse.json({
+    const responseData = {
       permissions: formattedPermissions,
       categorizedPermissions,
       stats,
       pagination: {
         page,
         limit,
-        totalCount: formattedPermissions.length,
-        totalPages: Math.ceil(formattedPermissions.length / limit),
+        totalCount,
+        totalPages: Math.ceil(totalCount / limit),
+        hasNext: page * limit < totalCount,
+        hasPrev: page > 1,
       },
-    });
+    };
+
+    // Cache the response
+    if (useCache) {
+      permissionsCache.set(
+        { category, page, limit, search, locale },
+        responseData
+      );
+    }
+
+    // Add performance headers
+    const response = NextResponse.json(responseData);
+    response.headers.set("X-Cache", "MISS");
+    response.headers.set("X-Response-Time", `${Date.now() - startTime}ms`);
+    response.headers.set("X-Total-Count", totalCount.toString());
+    
+    return response;
   } catch (error) {
     console.error("Yetkiler getirme hatası:", error);
-    return NextResponse.json(
+    
+    const response = NextResponse.json(
       { error: "Yetkiler getirilirken bir hata oluştu" },
       { status: 500 }
     );
+    response.headers.set("X-Response-Time", `${Date.now() - startTime}ms`);
+    
+    return response;
   }
 }
 
-// Yeni yetki oluştur
+// POST endpoint remains similar but invalidates cache
 export async function POST(request: NextRequest) {
   try {
     const currentUser = await getCurrentUser(request);
@@ -179,7 +241,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 });
     }
 
-    // Yetki kontrolü - permissions.create yetkisi gerekli
     const hasPermission =
       currentUser.permissions.includes("permissions.create");
 
@@ -202,7 +263,7 @@ export async function POST(request: NextRequest) {
       isActive = true,
     } = body;
 
-    // Validasyon
+    // Validation
     if (!name || !category || !resourcePath || !action) {
       return NextResponse.json(
         { error: "name, category, resourcePath ve action alanları zorunludur" },
@@ -210,7 +271,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Aynı isimde permission var mı kontrol et
+    // Check for existing permission
     const existingPermission = await prisma.permission.findUnique({
       where: { name },
     });
@@ -222,7 +283,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Yeni permission oluştur
+    // Create new permission
     const newPermission = await prisma.permission.create({
       data: {
         name,
@@ -236,6 +297,9 @@ export async function POST(request: NextRequest) {
         createdById: currentUser.id,
       },
     });
+
+    // Invalidate cache after creating new permission
+    permissionsCache.invalidateAll();
 
     return NextResponse.json({
       message: "Yetki başarıyla oluşturuldu",

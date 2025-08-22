@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { AUTH_COOKIE_NAME, prisma } from "@/lib";
+import { sessionCache } from "@/lib/session-cache";
 
 // POST /api/auth/logout
 export async function POST(request: NextRequest) {
@@ -24,7 +25,9 @@ export async function POST(request: NextRequest) {
             where: { userId: session.userId },
             data: { isActive: false },
           });
-       
+          
+          // Clear all cache entries for this user
+          sessionCache.invalidateByUserId(session.userId);
         }
       } else {
         // Sadece mevcut session'ı deaktif et
@@ -32,7 +35,9 @@ export async function POST(request: NextRequest) {
           where: { sessionToken },
           data: { isActive: false },
         });
-   
+        
+        // Clear cache for this specific session
+        sessionCache.delete(sessionToken);
       }
     }
 

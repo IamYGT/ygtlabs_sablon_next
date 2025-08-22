@@ -40,9 +40,11 @@ export function AdminPageGuard({
 
 
 
-  // Server-side debug log
+  // Server-side debug log - DISABLED for performance
+  // Uncomment only when debugging permission issues
+  /*
   useEffect(() => {
-    if (user && !permissionsLoading) {
+    if (process.env.NODE_ENV === 'development' && user && !permissionsLoading) {
       fetch('/api/debug/admin-guard', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -53,6 +55,7 @@ export function AdminPageGuard({
       }).catch(() => {}); // Silent error handling
     }
   }, [user, permissionsLoading, requireLayout, requiredPermission]);
+  */
 
   useEffect(() => {
     // Sadece debug log'ları için - yönlendirme yok
@@ -67,38 +70,46 @@ export function AdminPageGuard({
 
     // Layout erişim kontrolü - sadece log
     if (!hasRequiredLayoutAccess) {
-      console.log(`❌ Layout access denied to ${requireLayout} for user ${user.email}`);
+      // Debug log removed for production
 
-      // Server-side log da gönder
-      fetch('/api/debug/admin-guard', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'LAYOUT_DENIED',
-          requireLayout,
-          requiredPermission,
-          userEmail: user.email
-        })
-      }).catch(() => {}); // Silent error handling
+      // Server-side log da gönder - DISABLED for performance
+      /*
+      if (process.env.NODE_ENV === 'development') {
+        fetch('/api/debug/admin-guard', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'LAYOUT_DENIED',
+            requireLayout,
+            requiredPermission,
+            userEmail: user.email
+          })
+        }).catch(() => {}); // Silent error handling
+      }
+      */
 
       return;
     }
 
     // View erişim kontrolü - sadece log
     if (requiredPermission && !hasRequiredViewAccess) {
-      console.log(`❌ View access denied to ${requiredPermission} for user ${user.email}`);
+      // Debug log removed for production
 
-      // Server-side log da gönder
-      fetch('/api/debug/admin-guard', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'VIEW_DENIED',
-          requireLayout,
-          requiredPermission,
-          userEmail: user.email
-        })
-      }).catch(() => {}); // Silent error handling
+      // Server-side log da gönder - DISABLED for performance
+      /*
+      if (process.env.NODE_ENV === 'development') {
+        fetch('/api/debug/admin-guard', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'VIEW_DENIED',
+            requireLayout,
+            requiredPermission,
+            userEmail: user.email
+          })
+        }).catch(() => {}); // Silent error handling
+      }
+      */
 
       return;
     }
@@ -291,7 +302,7 @@ export function SuperAdminGuard({
   useEffect(() => {
     // Sadece debug log'ları için - yönlendirme yok
     if (user && !isSuperAdmin) {
-      console.log(`❌ Super admin access denied for user ${user.email}`);
+      // Debug log removed for production
       return;
     }
   }, [user, isSuperAdmin]);

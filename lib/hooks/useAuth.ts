@@ -96,11 +96,11 @@ export function useCurrentUser() {
         return null;
       }
     },
-    staleTime: 60 * 1000, // Increased to 60 seconds to reduce API calls
-    gcTime: 5 * 60 * 1000, // Increased to 5 minutes cache
+    staleTime: 5 * 60 * 1000, // 5 minutes - significantly reduced API calls
+    gcTime: 15 * 60 * 1000, // 15 minutes cache
     retry: false,
     refetchOnWindowFocus: false, // Disabled to reduce unnecessary calls
-    refetchOnMount: false,
+    refetchOnMount: false, // Disabled to prevent duplicate calls
     refetchIntervalInBackground: false,
   });
 }

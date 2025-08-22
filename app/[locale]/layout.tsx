@@ -1,6 +1,7 @@
 import { ClientThemeProvider } from "@/components/panel/ClientThemeProvider";
 import { routing } from "@/lib/i18n/routing";
 import { QueryProvider } from "@/lib/providers/query-provider";
+import { PermissionsProvider } from "@/lib/providers/permissions-provider";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
@@ -28,9 +29,11 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider messages={messages} locale={locale}>
       <QueryProvider>
-        <HydrationErrorBoundary>
-          <ClientThemeProvider>{children}</ClientThemeProvider>
-        </HydrationErrorBoundary>
+        <PermissionsProvider>
+          <HydrationErrorBoundary>
+            <ClientThemeProvider>{children}</ClientThemeProvider>
+          </HydrationErrorBoundary>
+        </PermissionsProvider>
       </QueryProvider>
     </NextIntlClientProvider>
   );

@@ -67,6 +67,7 @@ export * from "./stores/ui-store";
 // 🌐 API & Providers
 export * from "./api-client";
 export * from "./providers/query-provider";
+export { PermissionsProvider } from "./providers/permissions-provider";
 
 // 🛠️ Core Utilities
 export * from "./crypto";

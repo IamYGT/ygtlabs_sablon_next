@@ -5,6 +5,7 @@ import {
   hashPasswordPbkdf2,
 } from "@/lib";
 import { prisma } from "@/lib/prisma";
+import { sessionCache } from "@/lib/session-cache";
 import { NextRequest, NextResponse } from "next/server";
 
 // Kullanıcı güncelleme işlemi için PUT metodu
@@ -16,12 +17,8 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 });
     }
 
-    console.log("🔍 Current user permissions:", currentUser.permissions);
-    console.log("🔍 Current user role:", currentUser.primaryRole);
-
     // Yetki kontrolü - users.update yetkisi gerekli
     if (!currentUser.permissions.includes("users.update")) {
-      console.log("🚫 Access denied. User needs users.update permission");
       return NextResponse.json(
         {
           error: "Bu işlem için gerekli yetkiye sahip değilsiniz",
@@ -148,13 +145,6 @@ export async function PUT(request: NextRequest) {
           );
         }
 
-        console.log("Role assignment check:", {
-          currentUserId: currentUser.id,
-          currentUserRoleId: currentUser.roleId,
-          targetRoleName: role.name,
-          currentUserPermissions: currentUser.permissions,
-        });
-
         // Super admin rolünü sadece super admin atayabilir
         if (role.name === "super_admin") {
           const isSuperAdmin =
@@ -181,6 +171,11 @@ export async function PUT(request: NextRequest) {
       where: { id },
       data: updateData,
     });
+
+    // Invalidate cache for this user if role changed or password updated
+    if (roleId !== undefined || password) {
+      sessionCache.invalidateByUserId(id);
+    }
 
     return NextResponse.json({
       success: true,

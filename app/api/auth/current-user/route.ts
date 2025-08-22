@@ -1,7 +1,10 @@
 import { AUTH_COOKIE_NAME, getCurrentUser } from "@/lib/session-utils";
 import { NextRequest, NextResponse } from "next/server";
+import { performanceMonitor } from "@/lib/performance-monitor";
 
 export async function GET(request: NextRequest) {
+  const startTime = Date.now();
+  
   try {
     const sessionToken = request.cookies.get("ecu_session")?.value;
 
@@ -45,9 +48,33 @@ export async function GET(request: NextRequest) {
       return response;
     }
 
-    return NextResponse.json({ user });
+    // Record performance metrics
+    const duration = Date.now() - startTime;
+    performanceMonitor.record({
+      endpoint: "/api/auth/current-user",
+      method: "GET",
+      duration,
+      statusCode: 200,
+      cacheHit: false, // Will be true if from cache
+      userId: user.id,
+    });
+
+    const response = NextResponse.json({ user });
+    response.headers.set("X-Response-Time", `${duration}ms`);
+    return response;
   } catch (error) {
     console.error("Current user API error:", error);
+    
+    const duration = Date.now() - startTime;
+    performanceMonitor.record({
+      endpoint: "/api/auth/current-user",
+      method: "GET",
+      duration,
+      statusCode: 500,
+      cacheHit: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    });
+    
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

@@ -13,18 +13,7 @@ export function DebugAuth() {
     loading: permissionsLoading
   } = usePermissions();
 
-  console.log("🔧 DebugAuth renders:", {
-    user: user ? {
-      email: user.email,
-      primaryRole: user.primaryRole,
-      permissions: user.permissions?.length || 0
-    } : null,
-    isAuthenticated,
-    isLoading,
-    userPermissions: userPermissions.size,
-    permissionsLoading,
-    isSuperAdmin: user?.primaryRole === ROLES.SUPER_ADMIN
-  });
+  // Debug logging removed for production
 
   const isSuperAdmin = user?.primaryRole === ROLES.SUPER_ADMIN;
   const hasAdminLayout = hasLayoutAccess('admin');
