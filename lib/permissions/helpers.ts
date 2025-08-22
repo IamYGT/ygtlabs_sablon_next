@@ -116,7 +116,7 @@ function _getRequiredPermissionForPath(path: string): PermissionName | null {
 
   // Layout permission for general admin access
   if (path.includes("/admin")) return "admin.layout";
-  if (path.includes("/customer")) return "user.layout";
+  if (path.includes("/customer")) return "customer.layout";
 
   return null;
 }
@@ -216,9 +216,9 @@ export function getPermissionUsageStats(userPermissions: string[]) {
     ).length,
     categories: {
       admin: userPermissions.filter((p) => p.startsWith("admin.")).length,
-      user: userPermissions.filter((p) => p.startsWith("user.")).length,
+      customer: userPermissions.filter((p) => p.startsWith("customer.")).length,
       other: userPermissions.filter(
-        (p) => !p.startsWith("admin.") && !p.startsWith("user.")
+        (p) => !p.startsWith("admin.") && !p.startsWith("customer.")
       ).length,
     },
   };

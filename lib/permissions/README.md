@@ -43,7 +43,7 @@ Tüm sistem **tek dosyada** yönetiliyor:
 ```typescript
 // 1. Permission'lar
 export const ALL_PERMISSIONS = [
-  ...LAYOUT_PERMISSIONS, // Panel erişimleri (admin.layout, user.layout)
+  ...LAYOUT_PERMISSIONS, // Panel erişimleri (admin.layout, customer.layout)
   ...VIEW_PERMISSIONS, // Sayfa görüntüleme (admin.dashboard.view)
   ...FUNCTION_PERMISSIONS, // CRUD işlemleri (users.create, roles.update)
 ];
@@ -56,7 +56,7 @@ export const ALL_PERMISSIONS = [
 
 ### 🎯 Permission Kategorileri
 
-1. **`layout`** - Panel erişim yetkisi (`admin.layout`, `user.layout`)
+1. **`layout`** - Panel erişim yetkisi (`admin.layout`, `customer.layout`)
 2. **`view`** - Sayfa görüntüleme (`admin.dashboard.view`, `admin.users.view`)
 3. **`function`** - CRUD operasyonları (`users.create`, `roles.update`)
 
@@ -64,7 +64,7 @@ export const ALL_PERMISSIONS = [
 
 - **Database Managed**: Tüm roller `AuthRole` tablosundan gelir
 - **isSystemDefault**: Sistem varsayılanı (true/false)
-- **layoutType**: 'admin' | 'user' layout kategorisi
+- **layoutType**: 'admin' | 'customer' layout kategorisi
 - **isActive**: Aktif/pasif durum kontrolü
 
 ## 🚀 Hızlı Başlangıç

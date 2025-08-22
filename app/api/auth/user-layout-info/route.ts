@@ -12,7 +12,7 @@ export async function GET(_request: NextRequest) {
     const layoutInfo = {
       hasAdminAccess:
         currentUser.permissions?.includes("admin.layout") || false,
-      hasUserAccess: currentUser.permissions?.includes("user.layout") || false,
+      hasUserAccess: currentUser.permissions?.includes("customer.layout") || false,
       permissions: currentUser.permissions || [],
     };
 
