@@ -123,10 +123,7 @@ export async function DELETE(
           targetRoleName: targetRole.displayName,
         });
 
-          `Kullanıcı ${user.name || user.email} ${role.displayName} rolünden ${
-            targetRole.displayName
-          } rolüne aktarıldı`
-        );
+      
       }
     } else if (hasUsers && !transferUsers) {
       // Transfer edilmiyorsa kullanıcıları user rolüne ata

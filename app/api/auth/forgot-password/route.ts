@@ -46,17 +46,7 @@ export async function POST(request: NextRequest) {
 
     // In a real application, you would send an email here
     // For now, we'll just log the reset link
-    const resetUrl = `${
-      process.env.NEXTAUTH_URL || "http://localhost:3001"
-    }/auth/reset-password?token=${resetToken}`;
 
-=== ŞİFRE SIFIRLAMA E-POSTASI ===
-Kime: ${user.email}
-İsim: ${user.name}
-Sıfırlama Bağlantısı: ${resetUrl}
-Geçerlilik Süresi: 15 dakika
-================================
-    `);
 
     // Simulate email sending delay
     await new Promise((resolve) => setTimeout(resolve, 1000));
