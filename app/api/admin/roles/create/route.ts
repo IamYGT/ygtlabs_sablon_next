@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!["admin", "user"].includes(layoutType)) {
+    if (!["admin", "customer"].includes(layoutType)) {
       return NextResponse.json(
         { error: t("roles.create.invalidLayout") },
         { status: 400 }
@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
 
     // Layout tipine göre otomatik yetki ekleme (VERİTABANI KONTROLÜ İLE)
     const layoutPermissionName =
-      layoutType === "admin" ? "admin.layout" : "user.layout";
+      layoutType === "admin" ? "admin.layout" : "customer.layout";
 
     // Layout yetkisinin veritabanında var olup olmadığını kontrol et
     const layoutPermissionExists = await prisma.permission.findUnique({

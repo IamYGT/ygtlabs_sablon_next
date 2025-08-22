@@ -34,7 +34,7 @@ export function useAuth() {
     // Permission helpers
     hasPermission: useAuthStore((state) => state.hasPermission),
     hasAdminAccess: useAuthStore((state) => state.hasAdminAccess),
-    hasUserAccess: useAuthStore((state) => state.hasUserAccess),
+    hasUserAccess: useAuthStore((state) => state.hasCustomerAccess), // Alias for backward compatibility
     hasCustomerAccess: useAuthStore((state) => state.hasCustomerAccess),
     isAdmin: useAuthStore((state) => state.isAdmin),
     // User info helpers
@@ -246,7 +246,7 @@ export function useAdminAuth(): SimpleUser | null {
  */
 export function useUserAuth(): SimpleUser | null {
   const { user, isAuthenticated } = useAuth();
-  const hasUserAccess = useAuthStore((state) => state.hasUserAccess());
+  const hasUserAccess = useAuthStore((state) => state.hasCustomerAccess()); // Use hasCustomerAccess
 
   if (!isAuthenticated || !user || !hasUserAccess) {
     return null;
@@ -347,7 +347,7 @@ export function useHasAdminAccess() {
 }
 
 export function useHasUserAccess() {
-  return useAuthStore((state) => state.hasUserAccess());
+  return useAuthStore((state) => state.hasCustomerAccess()); // Use hasCustomerAccess
 }
 
 export function useIsAdmin() {

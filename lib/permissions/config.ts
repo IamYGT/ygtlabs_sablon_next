@@ -21,7 +21,7 @@ export interface PermissionConfig {
     | "update"
     | "delete"
     | "manage";
-  permissionType: "admin" | "user";
+  permissionType: "admin" | "customer";
   displayName: {
     tr: string;
     en: string;
@@ -76,7 +76,7 @@ export const LAYOUT_PERMISSIONS: PermissionConfig[] = [
     category: "layout",
     resourcePath: "customer",
     action: "access",
-    permissionType: "user",
+    permissionType: "customer",
     displayName: {
       tr: "Müşteri Panel Erişimi",
       en: "Customer Panel Access",
@@ -302,7 +302,7 @@ export const VIEW_PERMISSIONS: PermissionConfig[] = [
     category: "view",
     resourcePath: "dashboard",
     action: "view",
-    permissionType: "user",
+    permissionType: "customer",
     displayName: {
       tr: "Müşteri Dashboard Görüntüleme",
       en: "Customer Dashboard View",
@@ -320,7 +320,7 @@ export const VIEW_PERMISSIONS: PermissionConfig[] = [
     category: "view",
     resourcePath: "profile",
     action: "view",
-    permissionType: "user",
+    permissionType: "customer",
     displayName: {
       tr: "Müşteri Profil Görüntüleme",
       en: "Customer Profile View",
@@ -339,7 +339,7 @@ export const VIEW_PERMISSIONS: PermissionConfig[] = [
     category: "view",
     resourcePath: "orders",
     action: "view",
-    permissionType: "user",
+    permissionType: "customer",
     displayName: {
       tr: "Siparişlerim Görüntüleme",
       en: "My Orders View",
@@ -357,7 +357,7 @@ export const VIEW_PERMISSIONS: PermissionConfig[] = [
     category: "view",
     resourcePath: "wishlist",
     action: "view",
-    permissionType: "user",
+    permissionType: "customer",
     displayName: {
       tr: "Favori Listem Görüntüleme",
       en: "My Wishlist View",
@@ -375,7 +375,7 @@ export const VIEW_PERMISSIONS: PermissionConfig[] = [
     category: "view",
     resourcePath: "cart",
     action: "view",
-    permissionType: "user",
+    permissionType: "customer",
     displayName: {
       tr: "Sepetim Görüntüleme",
       en: "My Cart View",
@@ -393,7 +393,7 @@ export const VIEW_PERMISSIONS: PermissionConfig[] = [
     category: "view",
     resourcePath: "loyalty",
     action: "view",
-    permissionType: "user",
+    permissionType: "customer",
     displayName: {
       tr: "Sadakat Programı Görüntüleme",
       en: "Loyalty Program View",
@@ -411,7 +411,7 @@ export const VIEW_PERMISSIONS: PermissionConfig[] = [
     category: "view",
     resourcePath: "payment",
     action: "view",
-    permissionType: "user",
+    permissionType: "customer",
     displayName: {
       tr: "Ödeme Yöntemlerim Görüntüleme",
       en: "My Payment Methods View",
@@ -429,7 +429,7 @@ export const VIEW_PERMISSIONS: PermissionConfig[] = [
     category: "view",
     resourcePath: "settings",
     action: "view",
-    permissionType: "user",
+    permissionType: "customer",
     displayName: {
       tr: "Hesap Ayarlarım Görüntüleme",
       en: "Account Settings View",
@@ -1025,7 +1025,7 @@ export const PERMISSION_STATS = {
   view: VIEW_PERMISSIONS.length,
   function: FUNCTION_PERMISSIONS.length,
   admin: ALL_PERMISSIONS.filter((p) => p.permissionType === "admin").length,
-  user: ALL_PERMISSIONS.filter((p) => p.permissionType === "user").length,
+  customer: ALL_PERMISSIONS.filter((p) => p.permissionType === "customer").length,
 };
 
 // 🚨 NAVIGATION SYSTEM REMOVED

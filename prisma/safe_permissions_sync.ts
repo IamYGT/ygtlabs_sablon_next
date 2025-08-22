@@ -10,7 +10,7 @@ async function main() {
   console.log(`   • View: ${PERMISSION_STATS.view}`);
   console.log(`   • Function: ${PERMISSION_STATS.function}`);
   console.log(`   • Admin: ${PERMISSION_STATS.admin}`);
-  console.log(`   • User: ${PERMISSION_STATS.user}`);
+  console.log(`   • Customer: ${PERMISSION_STATS.customer}`);
 
   // 1. Mevcut permission'ları al
   console.log("📋 Mevcut permission'lar kontrol ediliyor...");
@@ -87,11 +87,11 @@ async function main() {
       layoutType: "admin",
       permissions: "admin", // Sadece admin tipindeki permission'lar
     },
-    user: {
-      displayName: "User",
-      description: "Normal kullanıcı",
-      layoutType: "user",
-      permissions: "user", // Sadece user tipindeki permission'lar
+    customer: {
+      displayName: "Customer",
+      description: "Normal müşteri",
+      layoutType: "customer",
+      permissions: "customer", // Sadece customer tipindeki permission'lar
     },
   };
 
@@ -133,10 +133,10 @@ async function main() {
       rolePermissions = allPermissions.filter(
         (p) => p.permissionType === "admin"
       );
-    } else if (roleConfig.permissions === "user") {
-      // User - sadece user tipindeki permission'lar
+    } else if (roleConfig.permissions === "customer") {
+      // Customer - sadece customer tipindeki permission'lar
       rolePermissions = allPermissions.filter(
-        (p) => p.permissionType === "user"
+        (p) => p.permissionType === "customer"
       );
     }
 

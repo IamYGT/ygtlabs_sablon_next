@@ -256,7 +256,7 @@ export default function EditRoleDialog({
         displayName: role.displayName,
         description: role.description || "",
         color: role.color || "#6366f1",
-        layoutType: role.layoutType || "user",
+        layoutType: role.layoutType || "customer",
         isActive: role.isActive,
       });
       setSearchTerm("");
@@ -321,7 +321,7 @@ export default function EditRoleDialog({
     }
   };
 
-  const handleLayoutTypeChange = async (value: "admin" | "user") => {
+  const handleLayoutTypeChange = async (value: "admin" | "customer") => {
     setFormData((prev) => ({ ...prev, layoutType: value }));
 
     const newSelectedPermissions = new Set<string>();
@@ -337,7 +337,7 @@ export default function EditRoleDialog({
     });
 
     const layoutPermissionName =
-      value === "admin" ? "admin.layout" : "user.layout";
+      value === "admin" ? "admin.layout" : "customer.layout";
     const layoutPermission = permissions.find(
       (p) => p.name === layoutPermissionName
     );
@@ -512,7 +512,7 @@ export default function EditRoleDialog({
                   <Label>{t("accessType")}</Label>
                   <Select
                     value={formData.layoutType}
-                    onValueChange={(value: "admin" | "user") =>
+                    onValueChange={(value: "admin" | "customer") =>
                       handleLayoutTypeChange(value)
                     }
                     disabled={isProtectedRole}
@@ -527,10 +527,10 @@ export default function EditRoleDialog({
                           {t("adminAccess")}
                         </div>
                       </SelectItem>
-                      <SelectItem value="user">
+                      <SelectItem value="customer">
                         <div className="flex items-center gap-2">
                           <Users className="w-4 h-4" />
-                          {t("userAccess")}
+                          {t("customerAccess")}
                         </div>
                       </SelectItem>
                     </SelectContent>

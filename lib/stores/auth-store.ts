@@ -42,7 +42,7 @@ interface AuthStore extends AuthState {
   hasAnyRole: (roles: string[]) => boolean;
   isAdmin: () => boolean;
   isSuperAdmin: () => boolean;
-  isUser: () => boolean;
+  isCustomer: () => boolean;
 
   // Session management
   isSessionValid: () => boolean;
@@ -54,7 +54,6 @@ interface AuthStore extends AuthState {
 
   // New computed functions
   hasAdminAccess: () => boolean;
-  hasUserAccess: () => boolean;
   hasCustomerAccess: () => boolean;
   getUserInitials: () => string;
   getUserDisplayName: () => string;
@@ -166,9 +165,9 @@ export const useAuthStore = create<AuthStore>()(
         );
       },
 
-      isUser: () => {
+      isCustomer: () => {
         const { hasPermission } = get();
-        return hasPermission("user.layout");
+        return hasPermission("customer.layout");
       },
 
       // Enhanced Session management
@@ -215,10 +214,6 @@ export const useAuthStore = create<AuthStore>()(
         return hasPermission("admin.layout");
       },
 
-      hasUserAccess: () => {
-        const { hasPermission } = get();
-        return hasPermission("user.layout") || hasPermission("admin.layout");
-      },
 
       hasCustomerAccess: () => {
         const { hasPermission } = get();
@@ -290,7 +285,7 @@ export const useIsAdmin = () => useAuthStore((state) => state.isAdmin());
 export const useIsSuperAdmin = () =>
   useAuthStore((state) => state.isSuperAdmin());
 
-export const useIsUser = () => useAuthStore((state) => state.isUser());
+export const useIsCustomer = () => useAuthStore((state) => state.isCustomer());
 
 export const useSessionStatus = () =>
   useAuthStore((state) => ({
@@ -318,9 +313,9 @@ export const canAccessAdmin = (user: SimpleUser | null): boolean => {
   return user.permissions.includes("admin.layout");
 };
 
-export const canAccessUser = (user: SimpleUser | null): boolean => {
+export const canAccessCustomer = (user: SimpleUser | null): boolean => {
   if (!user || !user.permissions) return false;
-  return user.permissions.includes("user.layout");
+  return user.permissions.includes("customer.layout");
 };
 
 export const getUserDashboardUrl = (user: SimpleUser | null): string => {
@@ -330,8 +325,8 @@ export const getUserDashboardUrl = (user: SimpleUser | null): string => {
     return "/admin/dashboard";
   }
 
-  if (canAccessUser(user)) {
-    return "/users/dashboard";
+  if (canAccessCustomer(user)) {
+    return "/customer/dashboard";
   }
 
   return "/auth/forbidden";
@@ -363,8 +358,8 @@ export const getUserRoleDisplayName = (user: SimpleUser | null): string => {
       return "Süper Admin";
     case ROLES.ADMIN:
       return "Admin";
-    case ROLES.USER:
-      return "Kullanıcı";
+    case ROLES.CUSTOMER:
+      return "Müşteri";
     default:
       return user.primaryRole;
   }

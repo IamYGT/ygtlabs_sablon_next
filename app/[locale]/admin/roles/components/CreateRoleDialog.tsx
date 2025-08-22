@@ -192,18 +192,18 @@ export default function CreateRoleDialog({
         member: {
             name: t('templates.member'),
             description: t('templates.memberDesc'),
-            accessType: 'user' as const,
+            accessType: 'customer' as const,
             color: '#06b6d4',
             icon: Users,
-            permissions: ['user.dashboard.view', 'user.profile.view']
+            permissions: ['customer.dashboard.view', 'customer.profile.view']
         },
         vip: {
             name: t('templates.vipMember'),
             description: t('templates.vipMemberDesc'),
-            accessType: 'user' as const,
+            accessType: 'customer' as const,
             color: '#10b981',
             icon: Sparkles,
-            permissions: ['user.dashboard.view', 'user.profile.view']
+            permissions: ['customer.dashboard.view', 'customer.profile.view']
         }
     };
 
@@ -239,7 +239,7 @@ export default function CreateRoleDialog({
     const [formData, setFormData] = useState({
         displayName: '',
         description: '',
-        accessType: 'user' as 'admin' | 'user',
+        accessType: 'customer' as 'admin' | 'customer',
         color: '#6366f1',
     });
 
@@ -281,7 +281,7 @@ export default function CreateRoleDialog({
             setFormData({
                 displayName: '',
                 description: '',
-                accessType: 'user',
+                accessType: 'customer',
                 color: '#6366f1',
             });
             setSelectedPermissions(new Set());
@@ -303,7 +303,7 @@ export default function CreateRoleDialog({
             setFormData({
                 displayName: '',
                 description: '',
-                accessType: 'user',
+                accessType: 'customer',
                 color: '#6366f1',
             });
             setSelectedPermissions(new Set());
@@ -514,7 +514,7 @@ export default function CreateRoleDialog({
                         setFormData({
                             displayName: '',
                             description: '',
-                            accessType: 'user',
+                            accessType: 'customer',
                             color: '#6366f1',
                         });
                         setSelectedPermissions(new Set());
@@ -576,7 +576,7 @@ export default function CreateRoleDialog({
                         <Label>{t('layout')}</Label>
                         <Select
                             value={formData.accessType}
-                            onValueChange={(value: 'user' | 'admin') => {
+                            onValueChange={(value: 'customer' | 'admin') => {
                                 console.log(`🔄 Access type changed to: ${value}`);
                                 setFormData(prev => ({ ...prev, accessType: value }));
 
@@ -587,7 +587,7 @@ export default function CreateRoleDialog({
                                 selectedPermissions.forEach(permissionId => {
                                     const permission = availablePermissions.find(p => p.id === permissionId);
                                     if (permission) {
-                                        const permissionType = permission.permissionType || 'user';
+                                        const permissionType = permission.permissionType || 'customer';
                                         if (permission.category !== 'layout' && permissionType === value) {
                                             newSelectedPermissions.add(permissionId);
                                             keptCount++;
@@ -597,7 +597,7 @@ export default function CreateRoleDialog({
                                     }
                                 });
 
-                                const layoutPermissionName = value === 'admin' ? 'admin.layout' : 'user.layout';
+                                const layoutPermissionName = value === 'admin' ? 'admin.layout' : 'customer.layout';
                                 const layoutPermission = availablePermissions.find(p => p.name === layoutPermissionName);
 
                                 if (layoutPermission) {
@@ -615,10 +615,10 @@ export default function CreateRoleDialog({
                                 <SelectValue placeholder={t('layoutPlaceholder')} />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="user">
+                                <SelectItem value="customer">
                                     <div className="flex items-center gap-2">
                                         <Users className="w-4 h-4" />
-                                        <span>{t('user')}</span>
+                                        <span>{t('customer')}</span>
                                     </div>
                                 </SelectItem>
                                 <SelectItem value="admin">
@@ -726,11 +726,11 @@ export default function CreateRoleDialog({
                             </div>
                             <div className="grid grid-cols-2 gap-2">
                                 <Button
-                                    variant={formData.accessType === 'user' ? 'default' : 'outline'}
+                                    variant={formData.accessType === 'customer' ? 'default' : 'outline'}
                                     size="sm"
                                     onClick={() => {
-                                        console.log('🔄 Access type changed to: user');
-                                        setFormData(prev => ({ ...prev, accessType: 'user' }));
+                                        console.log('🔄 Access type changed to: customer');
+                                        setFormData(prev => ({ ...prev, accessType: 'customer' }));
 
                                         // Erişim tipi değiştiğinde uyumsuz yetkileri kaldır
                                         const newSelectedPermissions = new Set<string>();
@@ -740,14 +740,14 @@ export default function CreateRoleDialog({
                                         selectedPermissions.forEach(permissionId => {
                                             const permission = availablePermissions.find(p => p.id === permissionId);
                                             if (permission) {
-                                                const permissionType = permission.permissionType || 'user';
+                                                const permissionType = permission.permissionType || 'customer';
                                                 // Layout access yetkilerini koru
                                                 if (permission.category === 'layout') {
                                                     newSelectedPermissions.add(permissionId);
                                                     keptCount++;
                                                 }
-                                                // User yetkileri koru
-                                                else if (permissionType === 'user') {
+                                                // Customer yetkileri koru
+                                                else if (permissionType === 'customer') {
                                                     newSelectedPermissions.add(permissionId);
                                                     keptCount++;
                                                 } else {
@@ -757,10 +757,10 @@ export default function CreateRoleDialog({
                                         });
 
                                         // Otomatik layout access yetkisi ekle
-                                        const layoutPermission = availablePermissions.find(p => p.name === 'user.layout');
+                                        const layoutPermission = availablePermissions.find(p => p.name === 'customer.layout');
                                         if (layoutPermission && !newSelectedPermissions.has(layoutPermission.id)) {
                                             newSelectedPermissions.add(layoutPermission.id);
-                                            console.log('✅ Auto-added user.layout');
+                                            console.log('✅ Auto-added customer.layout');
                                         }
 
                                         setSelectedPermissions(newSelectedPermissions);
@@ -772,7 +772,7 @@ export default function CreateRoleDialog({
                                     className="flex items-center gap-2"
                                 >
                                     <Users className="w-4 h-4" />
-                                    User
+                                    Customer
                                 </Button>
                                 <Button
                                     variant={formData.accessType === 'admin' ? 'default' : 'outline'}
@@ -789,7 +789,7 @@ export default function CreateRoleDialog({
                                         selectedPermissions.forEach(permissionId => {
                                             const permission = availablePermissions.find(p => p.id === permissionId);
                                             if (permission) {
-                                                const permissionType = permission.permissionType || 'user';
+                                                const permissionType = permission.permissionType || 'customer';
                                                 // Layout access yetkilerini koru
                                                 if (permission.category === 'layout') {
                                                     newSelectedPermissions.add(permissionId);

@@ -34,13 +34,13 @@ enum PermissionAction {
 
 enum PermissionType {
   admin
-  user
+  customer
   @@schema("public")
 }
 
 enum LayoutType {
   admin
-  user
+  customer
   @@schema("public")
 }
 
@@ -230,7 +230,7 @@ model Permission {
   category       PermissionCategory
   resourcePath   String // 'admin', '/admin/users', 'users'
   action         PermissionAction
-  permissionType PermissionType @default(user) // 'admin', 'user' - Yetkinin türünü belirtir
+  permissionType PermissionType @default(customer) // 'admin', 'customer' - Yetkinin türünü belirtir
 
   // Çok dilli yetki detayları (JSON)
   displayName Json? // {"tr": "Admin Paneli Erişimi", "en": "Admin Panel Access"}
@@ -302,7 +302,7 @@ model AuthRole {
   updatedAt       DateTime            @updatedAt
   createdById     String?
   updatedById     String?
-  layoutType      LayoutType          @default(user)
+  layoutType      LayoutType          @default(customer)
   createdBy       User?               @relation("RoleCreatedBy", fields: [createdById], references: [id])
   updatedBy       User?               @relation("RoleUpdatedBy", fields: [updatedById], references: [id])
   users           User[]              @relation("UserRole")

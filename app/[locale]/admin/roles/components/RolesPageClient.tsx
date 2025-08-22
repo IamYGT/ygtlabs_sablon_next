@@ -159,7 +159,7 @@ export default function RolesPageClient({
     const getRoleTypeInfo = (role: Role) => {
         if (role.name === 'super_admin') return { label: t('superAdmin'), variant: 'destructive' as const, icon: Crown };
         if (role.name === 'admin') return { label: t('admin'), variant: 'default' as const, icon: Shield };
-        if (role.name === 'user') return { label: t('user'), variant: 'secondary' as const, icon: Users };
+        if (role.name === 'customer') return { label: t('customer'), variant: 'secondary' as const, icon: Users };
         return { label: t('custom'), variant: 'outline' as const, icon: Settings };
     };
 
@@ -392,7 +392,7 @@ export default function RolesPageClient({
                         {filteredRoles.map((role) => {
                             const roleTypeInfo = getRoleTypeInfo(role);
                             const IconComponent = roleTypeInfo.icon;
-                            const isProtected = role.name === 'super_admin' || role.name === 'user';
+                            const isProtected = role.name === 'super_admin' || role.name === 'customer';
 
                             return (
                                 <Card key={role.id} className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">

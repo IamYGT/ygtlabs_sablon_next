@@ -42,7 +42,8 @@ export {
 export {
   authActions,
   canAccessAdmin,
-  canAccessUser,
+  canAccessCustomer,
+  canAccessCustomer as canAccessUser, // Alias for backward compatibility
   formatUserDisplayName,
   getUserDashboardUrl,
   getUserInitials,
@@ -55,7 +56,8 @@ export {
   useIsAdmin as useIsAdminFromStore,
   useIsAuthenticated as useIsAuthenticatedFromStore,
   useIsSuperAdmin,
-  useIsUser as useIsUserFromStore,
+  useIsCustomer as useIsUserFromStore, // Alias for backward compatibility
+  useIsCustomer,
   useSessionStatus,
   useUser as useUserFromStore,
 } from "./stores/auth-store";
@@ -197,7 +199,7 @@ export async function getUserLayoutInfo(_userId: string) {
 
   return {
     hasAdminAccess: user?.permissions?.includes("admin.layout") || false,
-    hasUserAccess: user?.permissions?.includes("user.layout") || false,
+    hasUserAccess: user?.permissions?.includes("customer.layout") || false,
     permissions: user?.permissions || [],
   };
 }

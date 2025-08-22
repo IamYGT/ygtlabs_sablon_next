@@ -52,7 +52,7 @@ async function main() {
   console.log(`   • View: ${PERMISSION_STATS.view}`);
   console.log(`   • Function: ${PERMISSION_STATS.function}`);
   console.log(`   • Admin: ${PERMISSION_STATS.admin}`);
-  console.log(`   • User: ${PERMISSION_STATS.user}`);
+  console.log(`   • Customer: ${PERMISSION_STATS.customer}`);
 
   console.log("Database:");
   dbStats.forEach((stat) => {

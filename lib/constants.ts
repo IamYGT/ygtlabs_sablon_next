@@ -12,7 +12,7 @@ export const AUTH_ROUTES = {
   REGISTER: "/auth/register",
   FORBIDDEN: "/auth/forbidden",
   UNAUTHORIZED: "/auth/unauthorized",
-  USER_DASHBOARD: "/customer/dashboard",
+  CUSTOMER_DASHBOARD: "/customer/dashboard",
   ADMIN_DASHBOARD: "/admin/dashboard",
 } as const;
 
@@ -26,7 +26,7 @@ export const API_ENDPOINTS = {
   AUTH_REGISTER: "/api/auth/register",
   AUTH_CURRENT_USER: "/api/auth/current-user",
   AUTH_CHECK_PERMISSIONS: "/api/auth/check-permissions",
-  AUTH_USER_LAYOUT_INFO: "/api/auth/user-layout-info",
+  AUTH_CUSTOMER_LAYOUT_INFO: "/api/auth/customer-layout-info",
 
   // Admin endpoints
   ADMIN_PROFILE: "/api/admin/profile",
@@ -74,7 +74,7 @@ export const QUERY_KEYS = {
   CURRENT_USER: ["auth", "currentUser"] as const,
   USER_PERMISSIONS: (userId: string) =>
     ["auth", "permissions", userId] as const,
-  USER_LAYOUT_INFO: ["auth", "layoutInfo"] as const,
+  CUSTOMER_LAYOUT_INFO: ["auth", "layoutInfo"] as const,
 
   // User queries
   USERS: ["users"] as const,
@@ -137,7 +137,7 @@ export const QUERY_KEYS = {
 export const ROLES = {
   SUPER_ADMIN: "super_admin",
   ADMIN: "admin",
-  USER: "user",
+  CUSTOMER: "customer",
 } as const;
 
 // ============================================================================

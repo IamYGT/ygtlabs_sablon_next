@@ -67,7 +67,7 @@ export function AdminGuard({ children, fallback }: AuthGuardProps) {
     return <>{children}</>;
 }
 
-// User Guard - user.layout veya admin.layout (geriye dönük: layout.user.access/layout.admin.access)
+// User Guard - customer.layout veya admin.layout (geriye dönük: layout.customer.access/layout.admin.access)
 export function UserGuard({ children, fallback }: AuthGuardProps) {
     const { user, isAuthenticated, isLoading, hasUserAccess } = useAuth();
     const { isLoading: queryLoading } = useCurrentUser();
@@ -104,7 +104,7 @@ export function UserGuard({ children, fallback }: AuthGuardProps) {
         return fallback || <LoadingSpinner />;
     }
 
-    // layout.user.access veya layout.admin.access permission kontrolü
+    // layout.customer.access veya layout.admin.access permission kontrolü
     if (!hasUserAccess()) {
         return fallback || <LoadingSpinner />;
     }
