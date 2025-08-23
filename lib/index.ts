@@ -12,6 +12,8 @@ export { getCurrentUser, AUTH_COOKIE_NAME } from "./server-utils";
 
 // API exports
 export * from "./api";
+export { authAPI } from "./api/auth-api";
+export { profileAPI } from "./api/profile-api";
 export { cacheManager } from "./cache-manager";
 
 // Hooks - selective export to avoid conflicts

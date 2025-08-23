@@ -6,7 +6,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
-import { authAPI } from "../api";
+import { authAPI } from "../api/auth-api";
 import { QUERY_KEYS } from "../constants";
 import { clearAllCacheOnLogout } from "../providers/query-provider";
 import { authActions, useAuthStore } from "../stores/auth-store";

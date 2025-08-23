@@ -1,6 +1,7 @@
-// Simplified API client for TanStack Query & Next.js 15.5
+// Core API client for Next.js 15.5
+// Sadece temel HTTP metodları - özel API'ler kendi dosyalarında olmalı
 
-import type { ApiResponse, SimpleUser } from "./types";
+import type { ApiResponse } from "./types";
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL || "";
 
@@ -43,7 +44,7 @@ async function fetchAPI<T>(
   }
 }
 
-// API methods
+// Core API methods - sadece HTTP metodları
 export const api = {
   get: <T>(url: string) => fetchAPI<T>(url, { method: "GET" }),
   
@@ -78,67 +79,3 @@ export function isSuccess<T>(
 export function getErrorMessage(response: ApiResponse<unknown>): string {
   return response.error || "An error occurred";
 }
-
-// Auth API shortcuts
-export const authAPI = {
-  login: (data: { email: string; password: string }) =>
-    api.post("/api/auth/login", data),
-  
-  logout: () => api.post("/api/auth/logout"),
-  
-  register: (data: { name: string; email: string; password: string }) =>
-    api.post("/api/auth/register", data),
-  
-  getCurrentUser: () => api.get("/api/auth/current-user"),
-  
-  checkPermissions: (permissions: string[]) =>
-    api.post("/api/auth/check-permissions", { permissions }),
-};
-
-// Profile API for image upload
-export const profileAPI = {
-  uploadProfileImage: async (formData: FormData) => {
-    try {
-      const response = await fetch("/api/profile/upload", {
-        method: "POST",
-        body: formData,
-        credentials: "include",
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        return {
-          success: false,
-          error: data?.error || `Error: ${response.status}`,
-          data: null,
-        };
-      }
-      
-      return {
-        success: true,
-        data,
-        error: undefined,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : "Network error",
-        data: null,
-      };
-    }
-  },
-
-  deleteProfileImage: () =>
-    fetchAPI("/api/profile/delete", {
-      method: "DELETE",
-    }),
-
-  updateProfile: (data: Partial<SimpleUser>) =>
-    fetchAPI<SimpleUser>("/api/profile", {
-      method: "PUT",
-      body: JSON.stringify(data),
-    }),
-
-  getProfile: () => fetchAPI<SimpleUser>("/api/profile"),
-};
