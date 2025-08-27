@@ -247,6 +247,21 @@ export default function RolesPageClient({
     };
 
     const handleRoleAction = (action: string, role: Role) => {
+        // Güvenlik kontrolü - kullanıcı kendi rolünü düzenleyemez (süper admin hariç)
+        if (action === 'edit' || action === 'delete' || action === 'edit-permissions') {
+            const isSystemProtected = role.name === 'super_admin' || role.name === 'customer' || role.name === 'admin';
+            const isCurrentUserRole = currentUser?.primaryRole === role.name;
+            const isSuperAdmin = currentUser?.primaryRole === 'super_admin';
+            
+            if (isSystemProtected || (isCurrentUserRole && !isSuperAdmin)) {
+                const message = action === 'delete' ? 
+                    'Bu rol korumalı ve silinemez' : 
+                    'Kendi rolünüzü düzenleyemezsiniz';
+                toast.error(message);
+                return;
+            }
+        }
+
         setSelectedRole(role);
         switch (action) {
             case 'details':
@@ -563,7 +578,18 @@ export default function RolesPageClient({
                                 {filteredRoles.map((role) => {
                                     const roleTypeInfo = getRoleTypeInfo(role);
                                     const IconComponent = roleTypeInfo.icon;
-                                    const isProtected = role.name === 'super_admin' || role.name === 'customer';
+                                    
+                                    // Role koruması: sistem rolleri + kullanıcının kendi rolü (süper admin hariç)
+                                    const isSystemProtected = role.name === 'super_admin' || role.name === 'customer' || role.name === 'admin';
+                                    const isCurrentUserRole = currentUser?.primaryRole === role.name;
+                                    const isSuperAdmin = currentUser?.primaryRole === 'super_admin';
+                                    
+                                    // Permission kontrolü - sadece roles.delete yetkisi
+                                    const hasDeletePermission = currentUser?.permissions?.includes('roles.delete') || isSuperAdmin;
+                                    
+                                    // Süper admin değilse kendi rolünü düzenleyemez + permission kontrolü
+                                    const isProtected = isSystemProtected || (isCurrentUserRole && !isSuperAdmin);
+                                    const canDelete = hasDeletePermission && !isProtected;
 
                                     return (
                                         <Card key={role.id} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow duration-200 group overflow-hidden">
@@ -646,20 +672,24 @@ export default function RolesPageClient({
                                                                             </div>
                                                                         )}
                                                                     </DropdownMenuItem>
-                                                                    <DropdownMenuSeparator className="bg-gray-200 dark:bg-gray-700" />
-                                                                    <DropdownMenuItem
-                                                                        onClick={() => handleRoleAction('delete', role)}
-                                                                        className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-150 cursor-pointer"
-                                                                    >
-                                                                        <div className="flex items-center">
-                                                                            <div className="p-1.5 bg-red-100 dark:bg-red-900/20 rounded mr-3">
-                                                                                <Trash2 className="h-3 w-3 text-red-600 dark:text-red-400" />
-                                                                            </div>
-                                                                            <span className="font-semibold">
-                                                                                {t('delete')}
-                                                                            </span>
-                                                                        </div>
-                                                                    </DropdownMenuItem>
+                                                                    {canDelete && (
+                                                                        <>
+                                                                            <DropdownMenuSeparator className="bg-gray-200 dark:bg-gray-700" />
+                                                                            <DropdownMenuItem
+                                                                                onClick={() => handleRoleAction('delete', role)}
+                                                                                className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-150 cursor-pointer"
+                                                                            >
+                                                                                <div className="flex items-center">
+                                                                                    <div className="p-1.5 bg-red-100 dark:bg-red-900/20 rounded mr-3">
+                                                                                        <Trash2 className="h-3 w-3 text-red-600 dark:text-red-400" />
+                                                                                    </div>
+                                                                                    <span className="font-semibold">
+                                                                                        {t('delete')}
+                                                                                    </span>
+                                                                                </div>
+                                                                            </DropdownMenuItem>
+                                                                        </>
+                                                                    )}
                                                                 </>
                                                             )}
                                                         </DropdownMenuContent>

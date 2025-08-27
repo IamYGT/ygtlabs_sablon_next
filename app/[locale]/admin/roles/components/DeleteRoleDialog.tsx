@@ -121,7 +121,16 @@ export default function DeleteRoleDialog({
                 onOpenChange(false);
                 onRoleDeleted();
             } else {
-                toast.error(result.error || t('notifications.deleteError'));
+                // Özel hata mesajları
+                if (response.status === 403) {
+                    toast.error('Bu rolü silme yetkiniz yok. Admin ile iletişime geçin.');
+                } else if (response.status === 400 && result.error?.includes('protected')) {
+                    toast.error('Bu rol korumalı ve silinemez.');
+                } else if (response.status === 404) {
+                    toast.error('Silinecek rol bulunamadı.');
+                } else {
+                    toast.error(result.error || t('notifications.deleteError'));
+                }
             }
         } catch (error) {
             console.error('Role deletion error:', error);

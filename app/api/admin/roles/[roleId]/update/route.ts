@@ -1,6 +1,5 @@
 import { getCurrentUser } from "@/lib";
 import { prisma } from "@/lib/prisma";
-import { cacheManager } from "@/lib/cache-manager";
 import { getTranslations } from "next-intl/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -84,10 +83,6 @@ export async function PUT(
         updatedById: currentUser.id,
       },
     });
-
-    // Rol güncellendiğinde tüm cache'leri temizle
-    console.log(`🔄 Role updated: ${existingRole.name} - invalidating ALL caches`);
-    cacheManager.invalidateAll(); // Tüm cache'leri temizle
 
     return NextResponse.json({
       message: t("roles.update.success"),

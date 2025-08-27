@@ -21,13 +21,14 @@ export async function DELETE(
       );
     }
 
-    // Yetki kontrolü - roles.delete yetkisi gerekli
-    if (!currentUser.permissions.includes("roles.delete")) {
+    // Basit yetki kontrolü - sadece roles.delete permission
+    if (!currentUser.permissions.includes("roles.delete") && currentUser.primaryRole !== 'super_admin') {
       return NextResponse.json(
         { error: t("common.forbidden") },
         { status: 403 }
       );
     }
+    
 
     const { roleId } = await params;
 

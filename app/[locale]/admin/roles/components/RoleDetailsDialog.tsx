@@ -178,17 +178,17 @@ export default function RoleDetailsDialog({
     // Progress hesaplama
     const progress = ((currentStep + 1) / DIALOG_STEPS.length) * 100;
 
-    // Rol açıldığında yetkileri yükle
+    // Rol açıldığında yetkileri yükle - NO CACHE
     const loadPermissions = useCallback(async () => {
         if (!role) return;
 
         setLoading(true);
         try {
             const response = await fetch(`/api/admin/roles/${role.id}/permissions`);
+            
             if (response.ok) {
                 const data = await response.json();
                 const formattedPermissions = formatPermissionsList(data.permissions || [], undefined, t);
-
                 setPermissions(formattedPermissions);
             }
         } catch (error) {

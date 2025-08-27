@@ -5,7 +5,7 @@ import {
   hashPasswordPbkdf2,
 } from "@/lib";
 import { prisma } from "@/lib/prisma";
-import { cacheManager } from "@/lib/cache-manager";
+
 import { NextRequest, NextResponse } from "next/server";
 
 // Kullanıcı güncelleme işlemi için PUT metodu
@@ -172,11 +172,7 @@ export async function PUT(request: NextRequest) {
       data: updateData,
     });
 
-    // Aggressive cache invalidation for role changes - clear ALL caches
-    if (roleId !== undefined || password) {
-      console.log(`🔄 User role/password changed for ${targetUser.email} - invalidating ALL caches`);
-      cacheManager.invalidateAll(); // Tüm cache'leri temizle
-    }
+    // Kullanıcı güncellendi - client-side refresh'i tetikleyebilir
 
     return NextResponse.json({
       success: true,
