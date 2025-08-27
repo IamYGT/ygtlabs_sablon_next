@@ -56,11 +56,13 @@ async function main() {
     "/auth/forbidden",
     "/auth/unauthorized",
     "/auth/error",
+    "/admin",
     "/admin/dashboard",
     "/admin/users",
     "/admin/roles",
     "/admin/permissions",
     "/admin/profile",
+    "/customer",
     "/customer/dashboard",
   ];
 
@@ -87,11 +89,13 @@ async function main() {
     "/auth/forbidden": "/erisim-engellendi",
     "/auth/unauthorized": "/yetkisiz",
     "/auth/error": "/hata",
+    "/admin": "/admin",
     "/admin/dashboard": "/admin/panel",
     "/admin/users": "/admin/kullanicilar",
     "/admin/roles": "/admin/roller",
     "/admin/permissions": "/admin/yetkiler",
     "/admin/profile": "/admin/profil",
+    "/customer": "/musteri",
     "/customer/dashboard": "/musteri/panel",
   };
 

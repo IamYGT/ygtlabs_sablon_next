@@ -44,10 +44,10 @@ export function PermissionsProvider({ children }: { children: React.ReactNode })
       if (!response.ok) throw new Error('Failed to fetch permissions');
       return response.json();
     },
-    staleTime: 10 * 60 * 1000, // 10 minutes
-    gcTime: 30 * 60 * 1000, // 30 minutes cache
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    staleTime: 0, // Hiç cache yok - anlık permissions
+    gcTime: 60 * 1000, // 1 dakika cache
+    refetchOnWindowFocus: true, // Pencere odağında yenile
+    refetchOnMount: true, // Mount'ta yenile
     refetchInterval: false,
   });
 
@@ -59,10 +59,10 @@ export function PermissionsProvider({ children }: { children: React.ReactNode })
       if (!response.ok) throw new Error('Failed to fetch user');
       return response.json();
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 15 * 60 * 1000, // 15 minutes cache
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    staleTime: 0, // Hiç cache yok - anlık user data
+    gcTime: 30 * 1000, // 30 saniye cache
+    refetchOnWindowFocus: true, // Pencere odağında yenile
+    refetchOnMount: true, // Mount'ta yenile 
     refetchInterval: false,
   });
 

@@ -1,5 +1,6 @@
 import { getCurrentUser } from "@/lib";
 import { prisma } from "@/lib/prisma";
+import { cacheManager } from "@/lib/cache-manager";
 import { getTranslations } from "next-intl/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -126,7 +127,7 @@ export async function PUT(
     }
 
     // Korumalı rollerin yetkilerini değiştirmeyi engelle
-    if (role.name === "super_admin" || role.name === "user") {
+    if (role.name === "super_admin" || role.name === "user" || role.name === "admin") {
       return NextResponse.json(
         { error: t("roles.permissions.updateProtected") },
         { status: 400 }
@@ -191,6 +192,10 @@ export async function PUT(
         }
       }
     });
+
+    // Permission değişiklikleri tüm cache'leri etkiler - ALL cache'leri temizle
+    console.log(`🔄 Role permissions updated for ${role.name} - invalidating ALL caches`);
+    cacheManager.invalidateAll(); // Tüm cache'leri temizle
 
     return NextResponse.json({
       message: t("roles.permissions.updateSuccess", {

@@ -6,7 +6,8 @@ export const authAPI = {
   login: (data: { email: string; password: string }) =>
     api.post<{ user: SimpleUser }>("/api/auth/login", data),
   
-  logout: () => api.post("/api/auth/logout"),
+  logout: (logoutAllSessions = false) => 
+    api.post("/api/auth/logout", { logoutAllSessions }),
   
   register: (data: { name: string; email: string; password: string }) =>
     api.post("/api/auth/register", data),

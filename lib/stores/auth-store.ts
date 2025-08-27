@@ -253,13 +253,33 @@ export const useAuthStore = create<AuthStore>()(
     {
       name: STORAGE_KEYS.AUTH_USER,
       partialize: (state) => ({
-        user: state.user,
+        // Minimal persist - sadece gerekli olanlar
+        user: state.user ? {
+          id: state.user.id,
+          email: state.user.email,
+          name: state.user.name,
+        } : null,
         isAuthenticated: state.isAuthenticated,
-        lastActivity: state.lastActivity,
         sessionExpiry: state.sessionExpiry,
       }),
       onRehydrateStorage: () => (state) => {
-        state?.hydrate();
+        // Hydration'da cache geçerliliğini kontrol et
+        if (state) {
+          const now = new Date();
+          const expiry = state.sessionExpiry ? new Date(state.sessionExpiry) : null;
+          
+          // Session süresi dolmuşsa store'u temizle
+          if (expiry && now > expiry) {
+            console.log('🗑️ Session expired during hydration - clearing store');
+            state.reset();
+            return;
+          }
+          
+          // User data varsa minimal olduğu için fresh fetch gerekli
+          if (state.user && state.isAuthenticated) {
+            console.log('⚡ Minimal user data detected - will fetch fresh on next auth query');
+          }
+        }
       },
     }
   )

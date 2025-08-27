@@ -172,9 +172,10 @@ export async function PUT(request: NextRequest) {
       data: updateData,
     });
 
-    // Invalidate cache for this user if role changed or password updated
+    // Aggressive cache invalidation for role changes - clear ALL caches
     if (roleId !== undefined || password) {
-      cacheManager.invalidateByUserId(id);
+      console.log(`🔄 User role/password changed for ${targetUser.email} - invalidating ALL caches`);
+      cacheManager.invalidateAll(); // Tüm cache'leri temizle
     }
 
     return NextResponse.json({

@@ -96,11 +96,11 @@ export function useCurrentUser() {
         return null;
       }
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes - significantly reduced API calls
-    gcTime: 15 * 60 * 1000, // 15 minutes cache
+    staleTime: 0, // Hiç cache yok - anlık veri
+    gcTime: 30 * 1000, // 30 saniye cache
     retry: false,
-    refetchOnWindowFocus: false, // Disabled to reduce unnecessary calls
-    refetchOnMount: false, // Disabled to prevent duplicate calls
+    refetchOnWindowFocus: true, // Pencere odak aldığında yenile
+    refetchOnMount: true, // Mount'ta her zaman yenile
     refetchIntervalInBackground: false,
   });
 }
@@ -173,9 +173,9 @@ export function useLogout() {
   const locale = (params.locale as string) || "en";
 
   return useMutation<void, Error, boolean>({
-    mutationFn: async (_logoutAllSessions = false): Promise<void> => {
+    mutationFn: async (logoutAllSessions = false): Promise<void> => {
       try {
-        await authAPI.logout();
+        await authAPI.logout(logoutAllSessions);
       } catch (error) {
         console.error("❌ Logout API failed:", error);
         // API başarısız olsa bile client-side logout yap

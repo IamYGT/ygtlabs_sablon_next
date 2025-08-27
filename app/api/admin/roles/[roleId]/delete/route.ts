@@ -1,5 +1,6 @@
 import { getCurrentUser } from "@/lib";
 import { prisma } from "@/lib/prisma";
+import { cacheManager } from "@/lib/cache-manager";
 import { getTranslations } from "next-intl/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -51,8 +52,8 @@ export async function DELETE(
       );
     }
 
-    // Korumalı rolleri silmeyi engelle (super_admin ve user)
-    if (role.name === "super_admin" || role.name === "user") {
+    // Korumalı rolleri silmeyi engelle (super_admin, admin ve user)
+    if (role.name === "super_admin" || role.name === "user" || role.name === "admin") {
       return NextResponse.json(
         {
           error: t("roles.delete.protected", { roleName: role.displayName }),
@@ -158,6 +159,10 @@ export async function DELETE(
     await prisma.authRole.delete({
       where: { id: roleId },
     });
+
+    // Rol silindiğinde tüm cache'leri temizle
+    console.log(`🔄 Role deleted: ${role.name} - invalidating ALL caches`);
+    cacheManager.invalidateAll(); // Tüm cache'leri temizle
 
     // Transfer mesajını oluştur
     let transferMessage = "";

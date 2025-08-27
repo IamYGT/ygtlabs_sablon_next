@@ -29,12 +29,12 @@ export async function middleware(request: NextRequest) {
 
   const segments = pathname.split("/").filter(Boolean);
   const hasLocale =
-    segments.length > 0 && routing.locales.includes(segments[0] as any);
-  const locale = hasLocale ? segments[0] : routing.defaultLocale;
+    segments.length > 0 && routing.locales.includes(segments[0] as (typeof routing.locales)[number]);
+  const _locale = hasLocale ? segments[0] : routing.defaultLocale;
   const path = hasLocale ? "/" + segments.slice(1).join("/") || "/" : pathname;
 
   const token = request.cookies.get("ecu_session")?.value;
-  const isAuthenticated =
+  const _isAuthenticated =
     token &&
     token.trim() !== "" &&
     token !== "deleted" &&
@@ -49,20 +49,8 @@ export async function middleware(request: NextRequest) {
     return i18nResponse;
   }
 
-  // /admin yoluna erişim için otomatik yönlendirme kaldırıldı - AdminPageGuard kontrol edecek
-  // Bu yönlendirme yetkisiz kullanıcılar için döngü yaratıyordu
-
-  if (
-    (path.startsWith("/admin") || path.startsWith("/customer")) &&
-    !isAuthenticated
-  ) {
-    return NextResponse.redirect(
-      new URL(
-        `/${locale}/auth/login?callbackUrl=${encodeURIComponent(pathname)}`,
-        request.url
-      )
-    );
-  }
+  // /admin ve /customer yollarına erişim kontrolü PageGuard'larda yapılacak
+  // Middleware sadece routing'i handle ediyor
 
   return i18nResponse;
 }
