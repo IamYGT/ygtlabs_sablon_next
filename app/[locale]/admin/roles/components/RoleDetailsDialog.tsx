@@ -42,6 +42,7 @@ interface LocalizedValue {
     [key: string]: string | undefined;
 }
 
+
 function parseJSONField(value: string | LocalizedValue | null | undefined, locale: string = 'tr'): string {
     if (typeof value === 'string') {
         try {
@@ -546,16 +547,37 @@ export default function RoleDetailsDialog({
                     {/* Progress Bar */}
                     <div className="space-y-2">
                         <Progress value={progress} className="h-2" />
-                        <div className="flex justify-between text-xs text-muted-foreground">
+                        <div className="flex justify-between gap-1">
                             {DIALOG_STEPS.map((step, index) => (
-                                <span
+                                <button
                                     key={step.id}
-                                    className={`cursor-pointer transition-colors ${index <= currentStep ? 'text-primary font-medium' : ''
-                                        }`}
+                                    className={`
+                                        px-3 py-2 rounded-md text-xs font-medium transition-all duration-200 
+                                        border border-transparent hover:scale-105 hover:shadow-sm
+                                        ${index <= currentStep 
+                                            ? 'text-primary bg-primary/10 border-primary/20 hover:bg-primary/15' 
+                                            : 'text-muted-foreground hover:text-primary hover:bg-muted/50'
+                                        }
+                                        ${index === currentStep 
+                                            ? 'ring-2 ring-primary/20 bg-primary/15 text-primary font-semibold' 
+                                            : ''
+                                        }
+                                    `}
                                     onClick={() => setCurrentStep(index)}
                                 >
-                                    {step.title}
-                                </span>
+                                    <div className="flex items-center gap-1">
+                                        <span className={`
+                                            w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold
+                                            ${index <= currentStep 
+                                                ? 'bg-primary text-primary-foreground' 
+                                                : 'bg-muted text-muted-foreground'
+                                            }
+                                        `}>
+                                            {index + 1}
+                                        </span>
+                                        <span className="hidden sm:inline">{step.title}</span>
+                                    </div>
+                                </button>
                             ))}
                         </div>
                     </div>
