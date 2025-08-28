@@ -149,7 +149,7 @@ export default function CorporateClient() {
                 alt="Revv Tuned"
                 width={600}
                 height={400}
-                className="w-full h-full object-cover rounded-xl shadow-xl"
+                className="w-full h-full object-contain rounded-xl shadow-xl"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-xl"></div>
             </div>
@@ -289,7 +289,7 @@ export default function CorporateClient() {
                       alt={member.name}
                       width={96}
                       height={96}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                       onError={(e) => {
                         e.currentTarget.src = "/images/team/default-avatar.jpg";
                       }}

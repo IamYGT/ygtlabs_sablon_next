@@ -8,7 +8,7 @@ interface FlagWrapperProps {
     className?: string;
 }
 
-export function FlagWrapper({ locale, className = "w-5 h-3 rounded-sm object-cover shadow-sm" }: FlagWrapperProps) {
+export function FlagWrapper({ locale, className = "w-5 h-3 rounded-sm object-contain shadow-sm" }: FlagWrapperProps) {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {

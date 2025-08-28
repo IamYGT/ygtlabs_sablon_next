@@ -215,7 +215,7 @@ function DraggableRow({
                                 src={slider.backgroundImage}
                                 alt="Slider"
                                 fill
-                                className="object-cover transition-transform duration-300 group-hover/image:scale-110"
+                                className="object-contain transition-transform duration-300 group-hover/image:scale-105"
                                 sizes="80px"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover/image:opacity-100 transition-all duration-300 flex items-center justify-center">
@@ -536,13 +536,13 @@ export function HeroSliderPageClient() {
                                 <SelectContent className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-blue-200 dark:border-blue-800">
                                     <SelectItem value="tr">
                                         <div className="flex items-center gap-2">
-                                            <FlagWrapper locale="tr" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
+                                            <FlagWrapper locale="tr" className="w-5 h-3 rounded-sm object-contain shadow-sm" />
                                             {t('languages.tr')}
                                         </div>
                                     </SelectItem>
                                     <SelectItem value="en">
                                         <div className="flex items-center gap-2">
-                                            <FlagWrapper locale="en" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
+                                            <FlagWrapper locale="en" className="w-5 h-3 rounded-sm object-contain shadow-sm" />
                                             {t('languages.en')}
                                         </div>
                                     </SelectItem>
@@ -641,7 +641,7 @@ export function HeroSliderPageClient() {
                             </CardHeader>
                             <CardContent className="relative">
                                 <div className="text-2xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
-                                    <FlagWrapper locale={locale} className="w-8 h-5 rounded-md object-cover shadow-md" />
+                                    <FlagWrapper locale={locale} className="w-8 h-5 rounded-md object-contain shadow-md" />
                                     <span>{locale.toUpperCase()}</span>
                                 </div>
                                 <p className="text-xs text-gray-900 dark:text-gray-100">{t('stats.currentLanguageDesc')}</p>
@@ -662,7 +662,7 @@ export function HeroSliderPageClient() {
                                         {sliders.length} {t('slider')}
                                     </Badge>
                                     <Badge variant="outline" className="ml-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-950/50 flex items-center gap-1.5">
-                                        <FlagWrapper locale={locale} className="w-4 h-2.5 rounded-sm object-cover" />
+                                        <FlagWrapper locale={locale} className="w-4 h-2.5 rounded-sm object-contain" />
                                         {t(`languages.${locale}`)}
                                     </Badge>
                                 </div>

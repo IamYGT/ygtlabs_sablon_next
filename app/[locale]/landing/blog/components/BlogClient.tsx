@@ -128,7 +128,7 @@ export default function BlogClient() {
                     alt={blogPosts[0].title}
                     width={600}
                     height={400}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                     onError={(e) => {
                       e.currentTarget.src = '/images/blog/default-post.jpg';
                     }}

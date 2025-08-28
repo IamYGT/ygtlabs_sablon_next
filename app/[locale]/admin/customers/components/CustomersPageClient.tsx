@@ -245,7 +245,7 @@ export default function CustomersPageClient() {
                               }&background=random`}
                               alt={item.name}
                               fill
-                              className="rounded-full object-cover"
+                              className="rounded-full object-contain"
                             />
                           </div>
                           <span className="font-medium">{item.name}</span>

@@ -593,7 +593,7 @@ export default function UsersPageClient({
                               alt={user.name || t("name")}
                               width={48}
                               height={48}
-                              className="h-full w-full object-cover"
+                              className="h-full w-full object-contain"
                             />
                           ) : (
                             <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-emerald-500 to-blue-600 text-base font-semibold text-white">

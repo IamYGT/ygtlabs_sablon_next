@@ -1112,8 +1112,11 @@
     "title": "Profile Management",
     "description": "View and edit your personal information",
     "profileImageDescription": "Manage your profile picture.",
+    "profileDetails": "Profile Details",
     "edit": "Edit",
     "save": "Save",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
     "cancel": "Cancel",
     "profileImage": "Profile Image",
     "name": "Full Name",
@@ -1189,6 +1192,7 @@
     "profileIncomplete": "Profile information incomplete",
     "securityTips": "Security Tips",
     "createdAt": "Created At",
+    "lastLogin": "Last Login",
     "securityDescription": "Manage your account security and access settings",
     "profileDetailsDescription": "Update and manage your personal information",
     "timeAgo2Minutes": "2 minutes ago",
@@ -1510,6 +1514,21 @@
     "switchToLight": "Switch to light theme",
     "switchToDark": "Switch to dark theme",
     "system": "System"
+  },
+  "ProfileImageUpload": {
+    "profileImageAlt": "User profile image",
+    "uploadSuccess": "Profile image uploaded successfully.",
+    "uploadError": "Could not upload profile image.",
+    "deleteSuccess": "Profile image deleted.",
+    "deleteError": "Could not delete profile image.",
+    "errorFileSize": "File is too large. Max 5MB.",
+    "errorFileType": "Invalid file type. Use PNG, JPG, JPEG or WebP.",
+    "uploading": "Uploading...",
+    "deleting": "Deleting...",
+    "delete": "Delete",
+    "selectImage": "Select Image",
+    "fileDescription": "PNG, JPG, JPEG or WebP. Max size 5MB.",
+    "selectImageAria": "Select profile image"
   },
   "ApiMessages": {
     "common": {

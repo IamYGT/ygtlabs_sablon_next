@@ -67,7 +67,7 @@ export default function ProfileTabs({ profile, activeTab: externalActiveTab, onT
                             <div className="flex flex-col items-center text-center p-4 mb-4 border-b border-gray-200 dark:border-gray-700">
                                 <div className="relative group mb-3">
                                     <Avatar className="h-20 w-20 border-2 border-white dark:border-gray-700 shadow-md">
-                                        <AvatarImage src={profileImage || undefined} alt={profile.name || profile.email} className="object-cover" />
+                                        <AvatarImage src={profileImage || undefined} alt={profile.name || profile.email} className="object-contain" draggable={false} />
                                         <AvatarFallback className="text-lg font-bold bg-blue-600 text-white">{userInitials}</AvatarFallback>
                                     </Avatar>
                                     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

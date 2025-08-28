@@ -416,7 +416,8 @@ export default function UserEditModal({
                       {imageToDisplay && (
                         <AvatarImage
                           src={imageToDisplay}
-                          className="object-cover"
+                          className="object-contain"
+                          draggable={false}
                         />
                       )}
                       <AvatarFallback className="text-3xl bg-gradient-to-br from-blue-100 to-purple-100">

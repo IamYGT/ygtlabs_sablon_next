@@ -192,7 +192,7 @@ export default function Header() {
                       <div className="h-6 w-6 overflow-hidden rounded-full border-2 border-white/20 shadow-lg ring-1 ring-white/30 transition-all duration-200 hover:ring-2 hover:ring-white/50 hover:shadow-xl">
                         <Image
                           alt={currentLang.code}
-                          className="h-full w-full object-cover"
+                          className="h-full w-full object-contain"
                           src={currentLang.flag}
                           width={40}
                           height={40}
@@ -225,7 +225,7 @@ export default function Header() {
                             <div className="h-6 w-6 overflow-hidden rounded-full border-2 border-gray-200 shadow-md ring-1 ring-gray-100 transition-all duration-200 group-hover:ring-2 group-hover:ring-primary/20 group-hover:shadow-lg">
                               <Image
                                 alt={lang.code}
-                                className="h-full w-full object-cover"
+                                className="h-full w-full object-contain"
                                 src={lang.flag}
                                 width={40}
                                 height={40}
@@ -457,7 +457,7 @@ export default function Header() {
                                 <div className="h-6 w-6 overflow-hidden rounded-full border-2 border-gray-200 shadow-sm">
                                   <Image
                                     alt={lang.code}
-                                    className="h-full w-full object-cover"
+                                    className="h-full w-full object-contain"
                                     src={lang.flag}
                                     width={24}
                                     height={24}

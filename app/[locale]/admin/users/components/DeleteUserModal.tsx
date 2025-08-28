@@ -115,7 +115,7 @@ export default function DeleteUserModal({
                 alt={user.name || t("userAvatarAlt")}
                 fill
                 sizes="48px"
-                className="rounded-full object-cover"
+                className="rounded-full object-contain"
               />
             </div>
             <div className="flex-1">

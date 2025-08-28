@@ -131,7 +131,8 @@ export default function ProfileImageUpload({
                         <AvatarImage
                             src={currentImage}
                             alt={userName || t('profileImageAlt')}
-                            className="object-cover"
+                            className="object-contain"
+                            draggable={false}
                         />
                     ) : (
                         <AvatarFallback className="bg-gradient-to-br from-blue-400 to-purple-600 text-white font-semibold">

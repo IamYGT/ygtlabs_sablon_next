@@ -88,12 +88,21 @@ export default function ProfilePreferences() {
                             const IconComponent = option.icon;
                             const isSelected = preferences.theme === option.value;
                             return (
-                                <div
+                                <label
                                     key={option.value}
                                     className={`group flex items-center space-x-3 p-3 rounded-lg border transition-all duration-200 cursor-pointer ${isSelected
                                         ? 'border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20'
                                         : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700/30'
                                         }`}
+                                    htmlFor={option.value}
+                                    onClick={() => setPreferences({ ...preferences, theme: option.value })}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' || e.key === ' ') {
+                                            e.preventDefault();
+                                            setPreferences({ ...preferences, theme: option.value });
+                                        }
+                                    }}
+                                    tabIndex={0}
                                 >
                                     <RadioGroupItem value={option.value} id={option.value} className="mt-0.5" />
                                     <div className={`p-2 rounded-lg transition-colors duration-200 ${isSelected
@@ -106,15 +115,14 @@ export default function ProfilePreferences() {
                                             }`} />
                                     </div>
                                     <div className="flex-1">
-                                        <Label
-                                            htmlFor={option.value}
+                                        <span
                                             className={`font-medium cursor-pointer transition-colors duration-200 ${isSelected
                                                 ? 'text-blue-900 dark:text-blue-100'
                                                 : 'text-gray-700 dark:text-gray-300'
                                                 }`}
                                         >
                                             {option.label}
-                                        </Label>
+                                        </span>
                                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
                                             {option.description}
                                         </p>
@@ -122,7 +130,7 @@ export default function ProfilePreferences() {
                                     {isSelected && (
                                         <Check className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                                     )}
-                                </div>
+                                </label>
                             );
                         })}
                     </RadioGroup>

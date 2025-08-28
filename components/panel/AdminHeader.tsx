@@ -343,7 +343,8 @@ export function AdminHeader({
                     <AvatarImage
                       src={admin.profileImage}
                       alt={admin.name || "Admin"}
-                      className="object-cover"
+                      className="object-contain"
+                      draggable={false}
                     />
                   ) : (
                     <AvatarFallback className="bg-gradient-to-br from-blue-500 via-purple-500 to-purple-600 text-white font-semibold">

@@ -161,7 +161,7 @@ export default function QuickRoleAssignModal({
                   alt={user.name || ""}
                   width={40}
                   height={40}
-                  className="h-10 w-10 rounded-full object-cover"
+                  className="h-10 w-10 rounded-full object-contain"
                 />
               ) : (
                 <Users className="h-5 w-5 text-white" />

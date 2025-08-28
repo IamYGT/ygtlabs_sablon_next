@@ -74,7 +74,7 @@ export default function MainContent() {
                                 alt={t('imageAlt')}
                                 width={600}
                                 height={450}
-                                className="object-cover w-full h-full"
+                                className="object-contain w-full h-full"
                             />
                         </div>
 

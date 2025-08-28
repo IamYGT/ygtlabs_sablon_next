@@ -97,19 +97,23 @@ export default function LogoutButton({
     setItemClicked(true);
     setDropdownOpen(false);
 
-    // Modal'ı aç ve sidebar'ı kapat
-    showLogoutModal(logoutType);
-    if (!locked) {
-      setSidebarOpen(false);
-    }
+    // Aynı tıklama döngüsünde dropdown kapanırken modal tıklamayı yemesin diye defer et
+    setTimeout(() => {
+      showLogoutModal(logoutType);
+      if (!locked) {
+        setSidebarOpen(false);
+      }
+    }, 0);
   };
 
   const handleSimpleLogout = () => {
-    // Modal'ı aç ve sidebar'ı kapat
-    showLogoutModal("current");
-    if (!locked) {
-      setSidebarOpen(false);
-    }
+    // Modal'ı açmayı bir sonraki event loop'a ertele
+    setTimeout(() => {
+      showLogoutModal("current");
+      if (!locked) {
+        setSidebarOpen(false);
+      }
+    }, 0);
   };
 
   // Basit logout butonu (eski davranış)

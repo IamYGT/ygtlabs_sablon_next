@@ -41,7 +41,8 @@ export default function LogoutModal({
 
   const handleCancel = () => {
     if (logoutMutation.isPending) return;
-    onClose();
+    // Küçük bir gecikme ile tıklama çakışmalarını önle
+    setTimeout(() => onClose(), 0);
   };
 
   if (!mounted || !isOpen) return null;
@@ -55,16 +56,18 @@ export default function LogoutModal({
     <div
       className="fixed inset-0 z-[999999] flex items-center justify-center p-4"
       style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-      onClick={(e) => {
+      onMouseDown={(e) => {
+        // Mouse up başka elementte olsa bile dış tıklamada kapanması için mousedown dinle
         if (e.target === e.currentTarget) {
-          onClose();
+          e.stopPropagation();
+          setTimeout(() => onClose(), 0);
         }
       }}
       data-scope={dataScope}
     >
       <div
         className="bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700 w-full max-w-md p-6"
-        onClick={(e) => e.stopPropagation()}
+        onMouseDown={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center gap-3 mb-4">
@@ -103,6 +106,13 @@ export default function LogoutModal({
           </button>
           <button
             onClick={handleConfirmLogout}
+            onMouseDown={(e) => {
+              // İlk tıkta gecikme olmadan çalışması için mousedown'da da tetikle
+              if (!logoutMutation.isPending) {
+                e.preventDefault();
+                handleConfirmLogout();
+              }
+            }}
             disabled={logoutMutation.isPending}
             className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700 text-white rounded-md transition-colors flex items-center justify-center"
           >
