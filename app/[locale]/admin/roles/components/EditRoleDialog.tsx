@@ -93,8 +93,16 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
     staleTime: 5 * 60 * 1000,
   });
 
-  const { assignablePermissions, initialSelectedIds } = useMemo(() => {
-    if (!data || !currentUser) return { assignablePermissions: [], initialSelectedIds: new Set<string>() };
+  const { assignablePermissions, initialSelectedIds, canEditRole, cannotEditReason } = useMemo(() => {
+    if (!data?.allPermissions || !data?.rolePermissions || !currentUser) {
+      return {
+        assignablePermissions: [],
+        initialSelectedIds: new Set<string>(),
+        canEditRole: false,
+        cannotEditReason: "Veriler yükleniyor..."
+      };
+    }
+
     const formattedPermissions = data.allPermissions.map((p: Permission) => formatPermission(p, locale));
     const permissionsUserCanAssign = currentUser.primaryRole === 'super_admin'
       ? formattedPermissions
@@ -104,10 +112,28 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
       const permission = permissionsUserCanAssign.find((p: Permission) => p.name === perm.name);
       if (permission) selectedIds.add(permission.id);
     });
-    return { assignablePermissions: permissionsUserCanAssign, initialSelectedIds: selectedIds };
-  }, [data, currentUser, locale]);
 
-  const [currentSelectedPermissions, setCurrentSelectedPermissions] = useState(initialSelectedIds);
+    // Kullanıcı kendisinden çok yetki sayısına sahip bir rolü düzenleyememeli
+    const targetRolePermissionCount = data.rolePermissions.length;
+    const userPermissionCount = currentUser.permissions?.length || 0;
+    const canEdit = currentUser.primaryRole === 'super_admin' ||
+                   (userPermissionCount >= targetRolePermissionCount && !isProtectedRole);
+
+    const reason = !canEdit ?
+      (currentUser.primaryRole !== 'super_admin' && userPermissionCount < targetRolePermissionCount ?
+        "Bu rolü düzenlemek için yeterli yetkiye sahip değilsiniz" :
+        "Bu rol korunmaktadır") :
+      null;
+
+    return {
+      assignablePermissions: permissionsUserCanAssign,
+      initialSelectedIds: selectedIds,
+      canEditRole: canEdit,
+      cannotEditReason: reason
+    };
+  }, [data?.allPermissions, data?.rolePermissions, currentUser, locale, isProtectedRole]);
+
+  const [currentSelectedPermissions, setCurrentSelectedPermissions] = useState<Set<string>>(new Set());
 
   useEffect(() => { setCurrentSelectedPermissions(initialSelectedIds); }, [initialSelectedIds]);
 
@@ -129,7 +155,11 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
   };
 
   const handleSubmit = async () => {
-    if (!validateForm() || isProtectedRole) return;
+    if (!canEditRole) {
+      toast.error(cannotEditReason || "Bu rolü düzenlemek için yeterli yetkiye sahip değilsiniz");
+      return;
+    }
+    if (!validateForm()) return;
     setLoading(true);
     try {
       const roleUpdateData = { ...formData, name: generateRoleCode(formData.displayName) };
@@ -198,8 +228,14 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
         <DialogHeader className="border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/50 dark:to-indigo-950/50 p-3 rounded-t-lg">
           <DialogTitle className="flex items-center gap-2 md:gap-3 text-lg md:text-xl font-bold">
              <div className="p-2 md:p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg"><Edit className="h-4 w-4 md:h-5 md:w-5 text-blue-600 dark:text-blue-400" /></div>
-             <div className="flex-1 min-w-0"><span className="truncate block">{role.displayName} {t("title")}</span><p className="text-xs md:text-sm font-normal text-gray-600 dark:text-gray-400 mt-1 hidden md:block">{t("roleInfoDescription")}</p></div>
+             <div className="flex-1 min-w-0">
+               <span className="truncate block">{role.displayName} {t("title")}</span>
+               <p className="text-xs md:text-sm font-normal text-gray-600 dark:text-gray-400 mt-1 hidden md:block">
+                 {!canEditRole && cannotEditReason ? cannotEditReason : t("roleInfoDescription")}
+               </p>
+             </div>
              {isProtectedRole && (<Badge variant="outline" className="text-orange-600 border-orange-600 text-xs"><ShieldCheck className="w-3 h-3 mr-1" />{t("protectedRole")}</Badge>)}
+             {!canEditRole && cannotEditReason && (<Badge variant="destructive" className="text-xs"><Shield className="w-3 h-3 mr-1" />Yetki Sınırlaması</Badge>)}
           </DialogTitle>
         </DialogHeader>
         <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-6 p-2 md:p-6 overflow-y-auto scroll-smooth">
@@ -209,16 +245,16 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="displayName">{t("displayName")} *</Label>
-                  <Input id="displayName" value={formData.displayName} onChange={(e) => setFormData((prev) => ({...prev, displayName: e.target.value,}))} placeholder={t("displayNamePlaceholder")} disabled={isProtectedRole} className={errors.displayName ? "border-red-500" : ""} />
+                  <Input id="displayName" value={formData.displayName} onChange={(e) => setFormData((prev) => ({...prev, displayName: e.target.value,}))} placeholder={t("displayNamePlaceholder")} disabled={!canEditRole} className={errors.displayName ? "border-red-500" : ""} />
                   {errors.displayName && (<p className="text-xs text-red-500">{errors.displayName}</p>)}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="description">{t("description")}</Label>
-                  <Textarea id="description" value={formData.description} onChange={(e) => setFormData((prev) => ({...prev, description: e.target.value,}))} placeholder={t("descriptionPlaceholder")} disabled={isProtectedRole} rows={3} />
+                  <Textarea id="description" value={formData.description} onChange={(e) => setFormData((prev) => ({...prev, description: e.target.value,}))} placeholder={t("descriptionPlaceholder")} disabled={!canEditRole} rows={3} />
                 </div>
                 <div className="space-y-2">
                   <Label>{t("accessType")}</Label>
-                  <Select value={formData.layoutType} onValueChange={(value: "admin" | "customer") => handleLayoutTypeChange(value)} disabled={isProtectedRole}>
+                  <Select value={formData.layoutType} onValueChange={(value: "admin" | "customer") => handleLayoutTypeChange(value)} disabled={!canEditRole}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="admin"><div className="flex items-center gap-2"><Crown className="w-4 h-4" />{t("adminAccess")}</div></SelectItem>
@@ -229,14 +265,14 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
                 <div className="space-y-2">
                   <Label htmlFor="color">{t("color")}</Label>
                   <div className="flex gap-2 items-center">
-                    <Input id="color" type="color" value={formData.color} onChange={(e) => setFormData((prev) => ({...prev, color: e.target.value, }))} disabled={isProtectedRole} className="w-10 h-10 p-1 border rounded cursor-pointer" />
+                    <Input id="color" type="color" value={formData.color} onChange={(e) => setFormData((prev) => ({...prev, color: e.target.value, }))} disabled={!canEditRole} className="w-10 h-10 p-1 border rounded cursor-pointer" />
                     <div className="flex flex-wrap gap-1">
-                      {COLOR_PALETTE.map((c) => (<button key={c} type="button" className="w-6 h-6 rounded-full border-2" style={{backgroundColor: c, borderColor: formData.color === c ? "black" : "transparent",}} onClick={() => setFormData((prevState) => ({...prevState, color: c,}))} disabled={isProtectedRole} />))}
+                      {COLOR_PALETTE.map((c) => (<button key={c} type="button" className="w-6 h-6 rounded-full border-2" style={{backgroundColor: c, borderColor: formData.color === c ? "black" : "transparent",}} onClick={() => setFormData((prevState) => ({...prevState, color: c,}))} disabled={!canEditRole} />))}
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2 pt-2">
-                  <Switch id="isActive" checked={formData.isActive} onCheckedChange={(checked) => setFormData((prev) => ({ ...prev, isActive: checked }))} disabled={isProtectedRole} />
+                  <Switch id="isActive" checked={formData.isActive} onCheckedChange={(checked) => setFormData((prev) => ({ ...prev, isActive: checked }))} disabled={!canEditRole} />
                   <Label htmlFor="isActive">{t("isActive")}</Label>
                 </div>
               </CardContent>
@@ -246,7 +282,7 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
             <Card className="flex-1 flex flex-col bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm rounded-xl">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-sm md:text-base"><Shield className="h-4 w-4" />{t("permissionManagement")}</CardTitle>
-                <Input placeholder={t("searchPermissions")} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="max-w-sm" />
+                <Input placeholder={t("searchPermissions")} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="max-w-sm" disabled={!canEditRole} />
               </CardHeader>
               <CardContent className="flex-1 flex flex-col min-h-0">
                 {loadingPermissions ? (<div className="flex items-center justify-center h-full"><div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>) : (
@@ -256,7 +292,7 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
                         <h4 className="font-semibold text-sm text-blue-700 dark:text-blue-400">{t("availablePermissions")} ({availablePermissionsForUI.length})</h4>
                         <ScrollArea className="flex-1 max-h-[60vh] border rounded-lg p-2">
                           <div className="space-y-1.5">
-                            {availablePermissionsForUI.map((p: Permission) => (<div key={p.id} className="flex items-center justify-between p-1.5 bg-blue-50 dark:bg-blue-900/20 rounded-md"><span className="text-sm font-medium">{p.displayName}</span><Button size="icon" variant="ghost" onClick={() => { if (!isProtectedRole) addPermission(p.id);}} disabled={isProtectedRole} className="w-5 h-5 text-green-600"><Plus className="h-4 w-4" /></Button></div>))}
+                            {availablePermissionsForUI.map((p: Permission) => (<div key={p.id} className="flex items-center justify-between p-1.5 bg-blue-50 dark:bg-blue-900/20 rounded-md"><span className="text-sm font-medium">{p.displayName}</span><Button size="icon" variant="ghost" onClick={() => { if (canEditRole) addPermission(p.id);}} disabled={!canEditRole} className="w-5 h-5 text-green-600"><Plus className="h-4 w-4" /></Button></div>))}
                           </div>
                         </ScrollArea>
                       </div>
@@ -264,7 +300,7 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
                         <h4 className="font-semibold text-sm text-green-700 dark:text-green-400">{t("currentPermissions")} ({currentPermissionsForUI.length})</h4>
                         <ScrollArea className="flex-1 max-h-[60vh] border rounded-lg p-2">
                           <div className="space-y-1.5">
-                            {currentPermissionsForUI.filter((p) => p.displayName.toLowerCase().includes(searchTerm.toLowerCase())).map((p) => (<div key={p.id} className="flex items-center justify-between p-1.5 bg-green-50 dark:bg-green-900/20 rounded-md"><span className="text-sm font-medium">{p.displayName}</span><Button size="icon" variant="ghost" onClick={() => { if (!isProtectedRole) removePermission(p.id);}} disabled={isProtectedRole} className="w-5 h-5 text-red-600"><X className="h-4 w-4" /></Button></div>))}
+                            {currentPermissionsForUI.filter((p) => p.displayName.toLowerCase().includes(searchTerm.toLowerCase())).map((p) => (<div key={p.id} className="flex items-center justify-between p-1.5 bg-green-50 dark:bg-green-900/20 rounded-md"><span className="text-sm font-medium">{p.displayName}</span><Button size="icon" variant="ghost" onClick={() => { if (canEditRole) removePermission(p.id);}} disabled={!canEditRole} className="w-5 h-5 text-red-600"><X className="h-4 w-4" /></Button></div>))}
                           </div>
                         </ScrollArea>
                       </div>
@@ -296,7 +332,7 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
         <DialogFooter className="p-3 bg-gray-100/80 dark:bg-gray-800/80 border-t border-gray-200 dark:border-gray-700">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 w-full">
             <Button variant="outline" onClick={() => onOpenChange(false)} disabled={loading} className="order-2 sm:order-1">{tCommon("cancel")}</Button>
-            <Button onClick={handleSubmit} disabled={loading || !formData.displayName.trim() || isProtectedRole} className="order-1 sm:order-2">
+            <Button onClick={handleSubmit} disabled={loading || !formData.displayName.trim() || !canEditRole} className="order-1 sm:order-2">
               {loading ? (<><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div><span className="hidden sm:inline">{t("updating")}</span><span className="sm:hidden">Güncelleniyor...</span></>) : (<><Save className="w-4 h-4 mr-2" /><span className="hidden sm:inline">{t("updateRole")}</span><span className="sm:hidden">Güncelle</span></>)}
             </Button>
           </div>
