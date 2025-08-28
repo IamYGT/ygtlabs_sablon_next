@@ -1,7 +1,6 @@
 "use client";
 
 import { AdminStatusWidget } from "@/components/panel/AdminStatusWidget";
-import LogoutButton from "@/components/panel/LogoutButton";
 import { ThemeToggle, useTheme } from "@/components/panel/ThemeToggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -12,7 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { useSidebar } from "@/components/ui/sidebar";
@@ -31,10 +30,15 @@ import {
   Search,
   Sun,
   User,
+  LogOut,
+  Monitor,
+  Smartphone,
+  ChevronDown,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 import LanguageSwitcher from "./LanguageSwitcher";
+import { useLogoutModal } from "./LogoutModalProvider";
 
 interface AdminHeaderProps {
   title?: string;
@@ -60,10 +64,12 @@ export function AdminHeader({
   const { setOpen: setSidebarOpen } = useSidebar();
   const t = useTranslations("AdminHeader");
   const tLang = useTranslations("Language");
+  const tLogout = useTranslations("LogoutModal");
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
+  const { showLogoutModal } = useLogoutModal();
 
   const resolvedTitle = title || t("adminPanel");
 
@@ -83,6 +89,7 @@ export function AdminHeader({
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
+  const [logoutOpen, setLogoutOpen] = useState(false);
 
   // Static örnek bildirimler - API çağrısı devre dışı
   useEffect(() => {
@@ -332,7 +339,7 @@ export function AdminHeader({
           </div>
 
           {/* Admin Profil Menüsü */}
-          <DropdownMenu>
+          <DropdownMenu onOpenChange={(open) => { if (!open) setLogoutOpen(false); }}>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
@@ -455,15 +462,43 @@ export function AdminHeader({
                 </Button>
               </div>
               <DropdownMenuSeparator />
-              <div className="p-1">
-                <LogoutButton
-                  showMultiDeviceOptions={true}
-                  variant="ghost"
-                  size="sm"
-                  className="w-full justify-start transition-colors duration-200"
-                  dataScope="admin"
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onSelect={(e) => {
+                  e.preventDefault();
+                  setLogoutOpen((v) => !v);
+                }}
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>{t("logout")}</span>
+                <ChevronDown
+                  className={`ml-auto h-4 w-4 opacity-70 transition-transform ${
+                    logoutOpen ? "rotate-180" : ""
+                  }`}
                 />
-              </div>
+              </DropdownMenuItem>
+              {logoutOpen && (
+                <>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setTimeout(() => showLogoutModal("current"), 0);
+                    }}
+                    className="cursor-pointer pl-6"
+                  >
+                    <Monitor className="h-4 w-4 mr-2" />
+                    <span>{tLogout("confirmCurrent")}</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setTimeout(() => showLogoutModal("all"), 0);
+                    }}
+                    className="cursor-pointer pl-6 text-red-600 dark:text-red-400 focus:text-red-600 dark:focus:text-red-400"
+                  >
+                    <Smartphone className="h-4 w-4 mr-2" />
+                    <span>{tLogout("confirmAll")}</span>
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
