@@ -20,6 +20,12 @@ export interface SimpleUser {
   permissions: string[];
   userRoles: string[];
   primaryRole?: string;
+  currentRole?: {
+    id: string;
+    name: string;
+    displayName: string;
+    color?: string;
+  };
   createdAt?: Date;
   lastLoginAt?: Date | null;
 }

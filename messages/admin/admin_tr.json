@@ -87,125 +87,7 @@
     "low": "düşük",
     "admin": "Admin"
   },
-  "AdminUsers": {
-    "title": "Kullanıcı Yönetimi",
-    "subtitle": "Kullanıcıları görüntüleyin, düzenleyin ve rolleri yönetin.",
-    "description": "Tüm sistem kullanıcılarını yönetin ve izleyin",
-    "users": "Kullanıcılar",
-    "system": "Sistem",
-    "name": "Ad Soyad",
-    "email": "E-posta",
-    "roles": "Roller",
-    "status": "Durum",
-    "registrationDate": "Kayıt Tarihi",
-    "active": "Aktif",
-    "inactive": "Pasif",
-    "rolesAssigned": "Rol Atanmış",
-    "last30Days": "Son 30 Gün",
-    "new": "Yeni",
-    "selected": "seçili",
-    "user": "Kullanıcı",
-    "activeUsersRatio": "Aktif Kullanıcı Oranı",
-    "roleAssignmentRatio": "Rol Ataması Oranı",
-    "usersActive": "kullanıcı aktif",
-    "usersRoleAssigned": "kullanıcıya rol atanmış",
-    "search": {
-      "placeholder": "Kullanıcı adı, email veya role göre ara...",
-      "usersSelected": "{count} kullanıcı seçildi",
-      "clearSelection": "Seçimi Temizle",
-      "filters": "Filtreler"
-    },
-    "bulkActions": {
-      "selected": "{count} seçili",
-      "title": "Toplu İşlemler",
-      "userActions": "Kullanıcı İşlemleri",
-      "activateAll": "Hepsini Aktif Et",
-      "deactivateAll": "Hepsini Devre Dışı Bırak",
-      "exportCsv": "CSV Olarak Dışa Aktar",
-      "deleteSelected": "Seçilenleri Sil"
-    },
-    "actionsCell": {
-      "viewDetails": "Detayları Görüntüle",
-      "roleManagement": "Rol Yönetimi",
-      "deactivateUser": "Kullanıcıyı Pasifleştir",
-      "activateUser": "Kullanıcıyı Aktifleştir",
-      "userDetailsTitle": "Kullanıcı Detayları",
-      "unnamedUser": "İsimsiz Kullanıcı",
-      "name": "Ad",
-      "email": "E-posta",
-      "notSpecified": "Belirtilmemiş",
-      "registrationDate": "Kayıt Tarihi",
-      "lastLogin": "Son Giriş",
-      "neverLoggedIn": "Hiç giriş yapmamış",
-      "assignedRoles": "Atanmış Roller",
-      "noRolesAssigned": "Hiç rol atanmamış",
-      "roleManagementTitle": "Rol Yönetimi",
-      "roleManagementDesc": "\"{userName}\" için rol atama/kaldırma işlemleri",
-      "assignNewRole": "Yeni Rol Ata",
-      "selectRolePlaceholder": "Rol seçin...",
-      "assign": "Ata",
-      "roleAssignSuccess": "Rol başarıyla atandı",
-      "roleAssignError": "Rol atanırken bir hata oluştu",
-      "roleRemoveSuccess": "Rol başarıyla kaldırıldı",
-      "roleRemoveError": "Rol kaldırılırken hata oluştu",
-      "statusUpdateError": "Kullanıcı durumu güncellenirken hata oluştu",
-      "errorOccurred": "Bir hata oluştu"
-    },
-    "addUser": "Kullanıcı Ekle",
-    "editUser": "Kullanıcı Düzenle",
-    "deleteUser": "Kullanıcı Sil",
-    "userList": "Kullanıcı Listesi",
-    "userActive": "Aktif",
-    "userInactive": "Pasif",
-    "exportUsers": "Kullanıcıları Dışa Aktar",
-    "importUsers": "Kullanıcıları İçe Aktar",
-    "selectAtLeastOne": "Lütfen en az bir kullanıcı seçin",
-    "usersActivated": "kullanıcı aktif edildi",
-    "usersDeactivated": "kullanıcı devre dışı bırakıldı",
-    "operationSuccessful": "İşlem başarılı",
-    "deleteOperationFailed": "Silme işlemi başarısız oldu",
-    "userDataExported": "Kullanıcı verileri dışa aktarıldı",
-    "userActivated": "Kullanıcı aktif edildi",
-    "userDeactivated": "Kullanıcı pasif edildi",
-    "statusNotUpdated": "Durum güncellenemedi",
-    "userName": "İsim",
-    "userEmail": "Email",
-    "userStatus": "Durum",
-    "userRoles": "Roller",
-    "userRegistrationDate": "Kayıt Tarihi",
-    "noRoleAssigned": "Rol Atanmamış",
-    "actions": "İşlemler",
-    "assignRole": "Rol Ata",
-    "toggleStatus": "Durumu Değiştir",
-    "bulkDelete": "Toplu Sil",
-    "activate": "Aktif Et",
-    "deactivate": "Devre Dışı Bırak",
-    "export": "Dışa Aktar",
-    "selectAll": "Tümünü Seç",
-    "newUser": "Yeni Kullanıcı",
-    "editUserDetails": "Kullanıcı Detaylarını Düzenle",
-    "quickRoleAssign": {
-      "title": "Hızlı Rol Atama",
-      "description": "\"{userName}\" için rol atayın veya kaldırın.",
-      "unnamed": "İsimsiz",
-      "searchPlaceholder": "Rol ara...",
-      "currentRole": "Mevcut Rol",
-      "roles": "Roller ({count})",
-      "noRoleAssigned": {
-        "title": "Rol Atanmamış",
-        "description": "Kullanıcının rolü kaldırılır."
-      },
-      "summary": {
-        "title": "Değişiklik Özeti",
-        "noRole": "Rol Yok"
-      },
-      "cancel": "İptal",
-      "save": "Kaydet",
-      "saving": "Kaydediliyor...",
-      "updateSuccess": "Rol başarıyla güncellendi.",
-      "updateFailed": "Rol güncelleme başarısız oldu."
-    }
-  },
+
   "AdminSupport": {
     "title": "Destek Yönetimi",
     "dashboard": "Destek Paneli",
@@ -246,8 +128,6 @@
       "resolvedTickets": "Çözülen Talepler",
       "closedTickets": "Kapanan Talepler",
       "todayNew": "Bugün Açılan",
-      "todayResolved": "Bugün Çözülen",
-      "avgResponseTime": "Ort. Yanıt Süresi",
       "avgResolutionTime": "Ort. Çözüm Süresi",
       "satisfaction": "Müşteri Memnuniyeti",
       "byCategory": "Kategoriye Göre",
@@ -301,7 +181,6 @@
     "filterByPriority": "Önceliğe Göre Filtrele",
     "filterByAssignee": "Atanana Göre Filtrele",
     "unassigned": "Atanmamış",
-    "actions": "İşlemler",
     "view": "Görüntüle",
     "markInProgress": "Devam Ediyor Olarak İşaretle",
     "markResolved": "Çözüldü Olarak İşaretle",
@@ -362,12 +241,7 @@
   "deleteUsers": "Kullanıcıları Sil",
   "deleteUsersConfirm": "kullanıcıyı silmek istediğinize emin misiniz?",
   "actionCannotBeUndone": "Bu işlem geri alınamaz.",
-  "usersWithRoles": "{count} kullanıcıya rol atanmış",
-  "roleManagementLink": {
-    "text": "Rol yönetimi için",
-    "linkText": "Roller",
-    "suffix": "sayfasını ziyaret edin"
-  },
+
   "messages": {
     "deleteSuccess": "Kullanıcı başarıyla silindi.",
     "deleteError": "Kullanıcı silinemedi.",
@@ -408,6 +282,8 @@
     "systemDefault": "Sistem Varsayılanı",
     "createButton": "Kullanıcı Oluştur",
     "creatingButton": "Oluşturuluyor...",
+    "cancel": "İptal",
+    "creating": "Oluşturuluyor...",
     "successMessage": "Kullanıcı başarıyla oluşturuldu!",
     "errorMessage": "Kullanıcı oluşturulamadı. Lütfen bilgileri kontrol edin.",
     "genericError": "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.",
@@ -649,7 +525,6 @@
     "role": "rol",
     "roles": "roller",
     "usersAssigned": "atanan kullanıcı",
-    "totalPermissions": "toplam yetki",
     "pleaseWait": "Lütfen bekleyin...",
     "userNotFound": "Kullanıcı bulunamadı",
     "tryDifferentCriteria": "Farklı arama kriterleri deneyin",
@@ -1455,7 +1330,22 @@
       "primaryButtonRequired": "Ana buton metni zorunludur",
       "rememberRequired": "Zorunlu alanları doldurmayı unutmayın",
       "rememberSave": "Değişiklikleri kaydetmeyi unutmayın",
-      "idNotFound": "Slider güncellenemedi, ID bulunamadı"
+      "idNotFound": "Slider güncellenemedi, ID bulunamadı",
+      "perLanguage": {
+        "atLeastOneLanguage": "En az bir dilde içerik girmelisiniz",
+        "turkish": {
+          "titleRequired": "Türkçe içerik için başlık zorunludur",
+          "descriptionRequired": "Türkçe içerik için açıklama zorunludur",
+          "primaryButtonTextRequired": "Türkçe içerik için ana buton metni zorunludur",
+          "primaryButtonUrlRequired": "Buton metni girildiğinde URL zorunludur"
+        },
+        "english": {
+          "titleRequired": "İngilizce içerik için başlık zorunludur",
+          "descriptionRequired": "İngilizce içerik için açıklama zorunludur",
+          "primaryButtonTextRequired": "İngilizce içerik için ana buton metni zorunludur",
+          "primaryButtonUrlRequired": "Buton metni girildiğinde URL zorunludur"
+        }
+      }
     },
     "messages": {
       "createSuccess": "Slider başarıyla oluşturuldu",
@@ -1514,7 +1404,10 @@
       "newCustomer": "Yeni Müşteri",
       "view": "Görüntüle",
       "edit": "Düzenle",
-      "delete": "Sil"
+      "delete": "Sil",
+      "cancel": "İptal",
+      "saving": "Kaydediliyor...",
+      "save": "Kaydet"
     },
     "dialogs": {
       "create": {
@@ -1746,9 +1639,10 @@
     "pageTitle": "ECU Sistem",
     "pageSubtitle": "Yönetim Paneli"
   },
-  "UserManagement": {
+  "AdminUsers": {
     "title": "Kullanıcı Yönetimi",
-    "description": "Kullanıcıları, rolleri ve izinleri yönetin.",
+    "subtitle": "Kullanıcıları görüntüleyin, düzenleyin ve rolleri yönetin.",
+    "description": "Tüm sistem kullanıcılarını yönetin ve izleyin",
     "users": "Kullanıcılar",
     "system": "Sistem",
     "name": "Ad Soyad",
@@ -1810,7 +1704,6 @@
       "errorOccurred": "Bir hata oluştu"
     },
     "addUser": "Kullanıcı Ekle",
-    "editUser": "Kullanıcı Düzenle",
     "deleteUser": "Kullanıcı Sil",
     "userList": "Kullanıcı Listesi",
     "userActive": "Aktif",
@@ -1876,12 +1769,7 @@
     "deleteUsers": "Kullanıcıları Sil",
     "deleteUsersConfirm": "kullanıcıyı silmek istediğinize emin misiniz?",
     "actionCannotBeUndone": "Bu işlem geri alınamaz.",
-    "usersWithRoles": "{count} kullanıcıya rol atanmış",
-    "roleManagementLink": {
-      "text": "Rol yönetimi için",
-      "linkText": "Roller",
-      "suffix": "sayfasını ziyaret edin"
-    },
+
     "messages": {
       "deleteSuccess": "Kullanıcı başarıyla silindi.",
       "deleteError": "Kullanıcı silinemedi.",
@@ -1922,6 +1810,8 @@
       "systemDefault": "Sistem Varsayılanı",
       "createButton": "Kullanıcı Oluştur",
       "creatingButton": "Oluşturuluyor...",
+      "cancel": "İptal",
+      "creating": "Oluşturuluyor...",
       "successMessage": "Kullanıcı başarıyla oluşturuldu!",
       "errorMessage": "Kullanıcı oluşturulamadı. Lütfen bilgileri kontrol edin.",
       "genericError": "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.",
@@ -1938,7 +1828,7 @@
         "roleRequired": "Lütfen kullanıcı için bir rol seçin."
       }
     },
-    "editUserDialog": {
+    "editUser": {
       "title": "Kullanıcıyı Düzenle",
       "unnamedUser": "Kullanıcı",
       "description": "Kullanıcı bilgilerini, şifresini ve rollerini güncelleyin.",
@@ -1969,10 +1859,10 @@
         "namePlaceholder": "Kullanıcının adını girin",
         "emailLabel": "E-posta Adresi *",
         "emailPlaceholder": "kullanici@ornek.com",
-        "accountStatusLabel": "Hesap Durumu",
-        "accountStatusDescription": "Kullanıcının sisteme erişim durumu",
-        "accountActive": "Aktif",
-        "accountPassive": "Pasif"
+        "statusLabel": "Hesap Durumu",
+        "statusDescription": "Kullanıcının sisteme erişim durumu",
+        "active": "Aktif",
+        "passive": "Pasif"
       },
       "password": {
         "title": "Şifre Değiştir",
@@ -2111,6 +2001,12 @@
         "neverLogin": "Hiç Giriş Yapmayanlar"
       },
       "clearAll": "Tüm Filtreleri Temizle"
+    },
+    "usersWithRoles": "{count} kullanıcıya rol atanmış",
+    "roleManagementLink": {
+      "text": "Rol yönetimi için",
+      "linkText": "Roller",
+      "suffix": "sayfasını ziyaret edin"
     }
   }
 }

@@ -100,37 +100,72 @@ export default function RolesPageClient({
 
         setLoading(true);
         try {
-            // Rolleri ve permissions'ları paralel olarak yükle
+            // Force fresh data with proper cache-busting
+            const timestamp = Date.now();
+            const random = Math.random();
+            
             const [rolesResponse, permissionsResponse] = await Promise.all([
-                fetch('/api/admin/roles'),
-                fetch('/api/admin/permissions?limit=1000')
+                fetch(`/api/admin/roles?t=${timestamp}&_=${random}`, {
+                    method: 'GET',
+                    cache: 'no-store',
+                    headers: {
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    }
+                }),
+                fetch(`/api/admin/permissions?limit=1000&t=${timestamp}&_=${random}`, {
+                    method: 'GET',
+                    cache: 'no-store',
+                    headers: {
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    }
+                })
             ]);
 
             if (rolesResponse.ok) {
                 const rolesData = await rolesResponse.json();
                 setRoles(rolesData.roles || []);
+                console.log('Initial roles loaded:', rolesData.roles?.length || 0);
             }
 
             if (permissionsResponse.ok) {
                 const permissionsData = await permissionsResponse.json();
                 setPermissions(permissionsData.permissions || []);
+                console.log('Initial permissions loaded:', permissionsData.permissions?.length || 0);
             }
 
             // User permissions'ları currentUser'dan al
             setUserPermissions(currentUser.permissions || []);
         } catch (error) {
             console.error(t('error.errorLoadingInitial'), error);
+            toast.error(t('error.errorLoadingInitial'));
         } finally {
             setLoading(false);
         }
     }, [currentUser, t]);
 
-    // Client-side data fetching
+    // Client-side data fetching - always fetch fresh data on mount
     useEffect(() => {
-        if (currentUser && initialRoles.length === 0) {
+        if (currentUser) {
+            // Always load fresh data regardless of initial roles
             loadInitialData();
         }
-    }, [currentUser, initialRoles.length, loadInitialData]);
+    }, [currentUser]); // Remove loadInitialData from deps to prevent infinite loop
+
+    // Add interval to refresh data periodically (optional)
+    useEffect(() => {
+        if (!currentUser) return;
+        
+        // Refresh data every 30 seconds to ensure real-time updates
+        const intervalId = setInterval(() => {
+            loadRoles();
+        }, 30000);
+
+        return () => clearInterval(intervalId);
+    }, [currentUser]);
 
 
 
@@ -194,15 +229,28 @@ export default function RolesPageClient({
 
         setLoading(true);
         try {
-            const response = await fetch('/api/admin/roles');
+            // Force fresh data by adding timestamp and proper headers
+            const response = await fetch(`/api/admin/roles?t=${Date.now()}&_=${Math.random()}`, {
+                method: 'GET',
+                cache: 'no-store',
+                headers: {
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    'Pragma': 'no-cache',
+                    'Expires': '0'
+                }
+            });
             if (response.ok) {
                 const data = await response.json();
+                // Always set fresh data, don't merge with existing
                 setRoles(data.roles || []);
+                console.log('Roles refreshed:', data.roles?.length || 0, 'roles loaded');
             } else {
                 console.error(t('error.failedToLoad'), response.status);
+                toast.error(t('error.failedToLoad'));
             }
         } catch (error) {
             console.error(t('error.errorLoading'), error);
+            toast.error(t('error.errorLoading'));
         } finally {
             setLoading(false);
         }

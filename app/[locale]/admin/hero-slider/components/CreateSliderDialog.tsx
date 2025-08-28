@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from 'next-intl';
 import { Button } from "@/components/ui/button";
 import {
@@ -33,6 +33,10 @@ import {
 } from "lucide-react";
 import { FlagWrapper } from '@/components/ui/flag-wrapper';
 import { ImageUpload } from "@/components/ui/image-upload";
+import { validateHeroSliderByLanguage } from "@/app/api/admin/hero-slider/validations";
+import useSWR from 'swr';
+
+const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
 interface CreateSliderDialogProps {
     open: boolean;
@@ -41,13 +45,11 @@ interface CreateSliderDialogProps {
 }
 
 interface MultilingualField {
-    tr: string;
-    en: string;
+    [key: string]: string;
 }
 
 interface ButtonField {
-    tr: { text: string; url: string };
-    en: { text: string; url: string };
+    [key: string]: { text: string; url: string };
 }
 
 interface StatisticField {
@@ -55,24 +57,34 @@ interface StatisticField {
     label: string;
 }
 
+interface Language {
+    id: string;
+    code: string;
+    name: string;
+    nativeName: string | null;
+    isActive: boolean;
+    isDefault: boolean;
+}
+
 export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSliderDialogProps) {
     const t = useTranslations('HeroSlider');
     const [loading, setLoading] = useState(false);
+    
+    // Fetch languages from database
+    const { data: languagesData } = useSWR('/api/admin/i18n/languages', fetcher);
+    const languages = languagesData?.languages || [];
+    const activeLanguages = languages.filter((lang: Language) => lang.isActive);
+    const defaultLanguage = activeLanguages.find((lang: Language) => lang.isDefault) || activeLanguages[0];
+    const [selectedTab, setSelectedTab] = useState<string>('');
 
-    // Form verileri
-    const [title, setTitle] = useState<MultilingualField>({ tr: "", en: "" });
-    const [subtitle, setSubtitle] = useState<MultilingualField>({ tr: "", en: "" });
-    const [description, setDescription] = useState<MultilingualField>({ tr: "", en: "" });
-    const [badge, setBadge] = useState<MultilingualField>({ tr: "", en: "" });
+    // Initialize form data with dynamic language support
+    const [title, setTitle] = useState<MultilingualField>({});
+    const [subtitle, setSubtitle] = useState<MultilingualField>({});
+    const [description, setDescription] = useState<MultilingualField>({});
+    const [badge, setBadge] = useState<MultilingualField>({});
     const [backgroundImage, setBackgroundImage] = useState("");
-    const [primaryButton, setPrimaryButton] = useState<ButtonField>({
-        tr: { text: "", url: "" },
-        en: { text: "", url: "" }
-    });
-    const [secondaryButton, setSecondaryButton] = useState<ButtonField>({
-        tr: { text: "", url: "" },
-        en: { text: "", url: "" }
-    });
+    const [primaryButton, setPrimaryButton] = useState<ButtonField>({});
+    const [secondaryButton, setSecondaryButton] = useState<ButtonField>({});
     const [statistics, setStatistics] = useState<StatisticField[]>([
         { value: "", label: "" },
         { value: "", label: "" },
@@ -82,20 +94,47 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
     const [isActive, setIsActive] = useState(true);
     const [order, setOrder] = useState(0);
 
+    // Initialize fields when languages are loaded
+    useEffect(() => {
+        if (activeLanguages.length > 0 && Object.keys(title).length === 0) {
+            const emptyFields: MultilingualField = {};
+            const emptyButtons: ButtonField = {};
+            
+            activeLanguages.forEach((lang: Language) => {
+                emptyFields[lang.code] = "";
+                emptyButtons[lang.code] = { text: "", url: "" };
+            });
+            
+            setTitle(emptyFields);
+            setSubtitle(emptyFields);
+            setDescription(emptyFields);
+            setBadge(emptyFields);
+            setPrimaryButton(emptyButtons);
+            setSecondaryButton(emptyButtons);
+            
+            // Set default tab
+            if (defaultLanguage) {
+                setSelectedTab(defaultLanguage.code);
+            }
+        }
+    }, [activeLanguages, defaultLanguage, title]);
+
     const resetForm = () => {
-        setTitle({ tr: "", en: "" });
-        setSubtitle({ tr: "", en: "" });
-        setDescription({ tr: "", en: "" });
-        setBadge({ tr: "", en: "" });
+        const emptyFields: MultilingualField = {};
+        const emptyButtons: ButtonField = {};
+        
+        activeLanguages.forEach((lang: Language) => {
+            emptyFields[lang.code] = "";
+            emptyButtons[lang.code] = { text: "", url: "" };
+        });
+        
+        setTitle(emptyFields);
+        setSubtitle(emptyFields);
+        setDescription(emptyFields);
+        setBadge(emptyFields);
         setBackgroundImage("");
-        setPrimaryButton({
-            tr: { text: "", url: "" },
-            en: { text: "", url: "" }
-        });
-        setSecondaryButton({
-            tr: { text: "", url: "" },
-            en: { text: "", url: "" }
-        });
+        setPrimaryButton(emptyButtons);
+        setSecondaryButton(emptyButtons);
         setStatistics([
             { value: "", label: "" },
             { value: "", label: "" },
@@ -125,39 +164,86 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
     };
 
     const handleSubmit = async () => {
-        // Validasyon
-        if (!title.tr || !title.en) {
-            toast.error(t('validation.titleRequired'));
-            return;
-        }
+        // Validation using the validation function
+        const validationResult = validateHeroSliderByLanguage({
+            title,
+            subtitle,
+            description,
+            badge,
+            backgroundImage,
+            primaryButton,
+            secondaryButton: Object.values(secondaryButton).some(b => b?.text) ? secondaryButton : undefined,
+            statistics: statistics.filter(stat => stat.value && stat.label),
+            isActive,
+            order
+        });
 
-        if (!description.tr || !description.en) {
-            toast.error(t('validation.descriptionRequired'));
-            return;
-        }
-
-        if (!backgroundImage) {
-            toast.error(t('validation.imageRequired'));
-            return;
-        }
-
-        if (!primaryButton.tr.text || !primaryButton.en.text) {
-            toast.error(t('validation.primaryButtonRequired'));
+        if (!validationResult.isValid) {
+            // Show validation errors
+            const errorMessages = [];
+            if (validationResult.errors.general) {
+                errorMessages.push(...validationResult.errors.general);
+            }
+            
+            // Dynamic language error handling
+            activeLanguages.forEach((lang: Language) => {
+                if (validationResult.errors[lang.code] && validationResult.errors[lang.code].length > 0) {
+                    const langName = lang.nativeName || lang.name;
+                    errorMessages.push(`${langName}: ${validationResult.errors[lang.code].join(', ')}`);
+                }
+            });
+            
+            toast.error(errorMessages.join(' | '));
             return;
         }
 
         try {
             setLoading(true);
 
+            // Prepare statistics data in the format expected by backend
+            const preparedStatistics = statistics
+                .filter(stat => stat.value && stat.label)
+                .map(stat => {
+                    const multilingualStat: Record<string, { label: string; value: string }> = {};
+                    activeLanguages.forEach((lang: Language) => {
+                        multilingualStat[lang.code] = { label: stat.label, value: stat.value };
+                    });
+                    return multilingualStat;
+                });
+
+            // Prepare button data with proper URL format (href -> url)
+            const preparedPrimaryButton: Record<string, { text: string; href: string }> = {};
+            const preparedSecondaryButton: Record<string, { text: string; href: string }> = {};
+            let hasSecondary = false;
+            
+            activeLanguages.forEach((lang: Language) => {
+                preparedPrimaryButton[lang.code] = {
+                    text: primaryButton[lang.code]?.text || "",
+                    href: primaryButton[lang.code]?.url || ""
+                };
+                
+                if (secondaryButton[lang.code]?.text) {
+                    hasSecondary = true;
+                    preparedSecondaryButton[lang.code] = {
+                        text: secondaryButton[lang.code].text,
+                        href: secondaryButton[lang.code].url || ""
+                    };
+                }
+            });
+            
+            // Check if any subtitle or badge has content
+            const hasSubtitle = Object.values(subtitle).some(v => v);
+            const hasBadge = Object.values(badge).some(v => v);
+
             const sliderData = {
                 title,
-                subtitle: subtitle.tr || subtitle.en ? subtitle : null,
+                subtitle: hasSubtitle ? subtitle : undefined,
                 description,
-                badge: badge.tr || badge.en ? badge : null,
+                badge: hasBadge ? badge : undefined,
                 backgroundImage,
-                primaryButton,
-                secondaryButton: secondaryButton.tr.text || secondaryButton.en.text ? secondaryButton : null,
-                statistics: statistics.filter(stat => stat.value),
+                primaryButton: preparedPrimaryButton,
+                secondaryButton: hasSecondary ? preparedSecondaryButton : undefined,
+                statistics: preparedStatistics.length > 0 ? preparedStatistics : undefined,
                 isActive,
                 order
             };
@@ -168,9 +254,16 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                 body: JSON.stringify(sliderData),
             });
 
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || t('messages.createError'));
+            const result = await response.json();
+            if (!result.success) {
+                if (result.details && Array.isArray(result.details)) {
+                    // Handle validation errors from Zod
+                    const errorMessages = result.details.map((err: { path: (string | number)[]; message: string }) => 
+                        `${err.path.join('.')}: ${err.message}`
+                    ).join(', ');
+                    throw new Error(`Validation failed: ${errorMessages}`);
+                }
+                throw new Error(result.error || t('messages.createError'));
             }
 
             toast.success(t('messages.createSuccess'));
@@ -208,262 +301,164 @@ export function CreateSliderDialog({ open, onOpenChange, onSuccess }: CreateSlid
                 </DialogHeader>
 
                 <div className="flex-1 overflow-y-auto px-1">
-                    <Tabs defaultValue="tr" className="w-full mt-6">
-                        <TabsList className="grid w-full grid-cols-2 bg-gradient-to-r from-gray-100 to-slate-100 dark:from-gray-800 dark:to-slate-800 p-1 rounded-xl shadow-inner">
-                            <TabsTrigger
-                                value="tr"
-                                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-200 font-semibold"
-                            >
-                                <div className="flex items-center gap-2">
-                                    <FlagWrapper locale="tr" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
-                                    <span>{t('form.turkishContent')}</span>
-                                </div>
-                            </TabsTrigger>
-                            <TabsTrigger
-                                value="en"
-                                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-200 font-semibold"
-                            >
-                                <div className="flex items-center gap-2">
-                                    <FlagWrapper locale="en" className="w-5 h-3 rounded-sm object-cover shadow-sm" />
-                                    <span>{t('form.englishContent')}</span>
-                                </div>
-                            </TabsTrigger>
+                    <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full mt-6">
+                        <TabsList className={`grid w-full grid-cols-${activeLanguages.length} bg-gradient-to-r from-gray-100 to-slate-100 dark:from-gray-800 dark:to-slate-800 p-1 rounded-xl shadow-inner`}>
+                            {activeLanguages.map((lang: Language) => (
+                                <TabsTrigger
+                                    key={lang.code}
+                                    value={lang.code}
+                                    className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-200 font-semibold"
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <FlagWrapper locale={lang.code} className="w-5 h-3 rounded-sm object-cover shadow-sm" />
+                                        <span>{lang.nativeName || lang.name}</span>
+                                    </div>
+                                </TabsTrigger>
+                            ))}
                         </TabsList>
 
                         <div className="mt-6 space-y-6">
                             {/* İçerik Sekmeleri */}
-                            <TabsContent value="tr" className="space-y-6 mt-0">
-                                <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm rounded-xl">
-                                    <CardHeader className="pb-4">
-                                        <CardTitle className="flex items-center gap-3 text-blue-800 dark:text-blue-300">
-                                            <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
-                                                <Globe className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                                            </div>
-                                            {t('form.turkishContent')}
-                                            <Badge variant="outline" className="bg-blue-50 dark:bg-blue-950/50 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 flex items-center gap-1">
-                                                <FlagWrapper locale="tr" className="w-4 h-2.5 rounded-sm object-cover" />
-                                                {t('form.tr')}
-                                            </Badge>
-                                        </CardTitle>
-                                    </CardHeader>
-                                    <CardContent className="space-y-6">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <div className="space-y-2">
-                                                <Label htmlFor="title-tr">{t('form.title')} <span className="text-red-500">*</span></Label>
-                                                <Input id="title-tr" value={title.tr} onChange={(e) => setTitle({ ...title, tr: e.target.value })} placeholder={t('form.placeholders.titleTr')} />
-                                            </div>
-                                            <div className="space-y-2">
-                                                <Label htmlFor="subtitle-tr">{t('form.subtitle')}</Label>
-                                                <Input id="subtitle-tr" value={subtitle.tr} onChange={(e) => setSubtitle({ ...subtitle, tr: e.target.value })} placeholder={t('form.placeholders.subtitleTr')} />
-                                            </div>
-                                        </div>
-                                        <div className="space-y-2">
-                                            <Label htmlFor="description-tr">{t('form.description')} <span className="text-red-500">*</span></Label>
-                                            <Textarea id="description-tr" value={description.tr} onChange={(e) => setDescription({ ...description, tr: e.target.value })} placeholder={t('form.placeholders.descriptionTr')} rows={3} />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <Label htmlFor="badge-tr">{t('form.badge')}</Label>
-                                            <Input id="badge-tr" value={badge.tr} onChange={(e) => setBadge({ ...badge, tr: e.target.value })} placeholder={t('form.placeholders.badgeTr')} />
-                                        </div>
-                                    </CardContent>
-                                </Card>
-
-                                {/* Butonlar TR */}
-                                <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm rounded-xl">
-                                    <CardHeader className="pb-4">
-                                        <CardTitle className="flex items-center gap-3 text-emerald-800 dark:text-emerald-300">
-                                            <div className="p-2 bg-emerald-100 dark:bg-emerald-900/50 rounded-lg">
-                                                <Link className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-                                            </div>
-                                            {t('form.buttonSettings')}
-                                        </CardTitle>
-                                    </CardHeader>
-                                    <CardContent className="space-y-6">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <div className="space-y-4 p-4 bg-white/60 dark:bg-gray-900/60 rounded-lg border border-emerald-200 dark:border-emerald-800">
-                                                <div className="flex items-center gap-2 mb-3">
-                                                    <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                                                    <h4 className="font-semibold text-emerald-800 dark:text-emerald-300">{t('form.primaryButton')}</h4>
-                                                    <Badge variant="destructive" className="h-4 text-xs">{t('form.required')}</Badge>
+                            {activeLanguages.map((lang: Language) => (
+                                <TabsContent key={lang.code} value={lang.code} className="space-y-6 mt-0">
+                                    <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm rounded-xl">
+                                        <CardHeader className="pb-4">
+                                            <CardTitle className="flex items-center gap-3 text-blue-800 dark:text-blue-300">
+                                                <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
+                                                    <Globe className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                                                 </div>
+                                                {lang.code === 'tr' ? t('form.turkishContent') : t('form.englishContent')}
+                                                <Badge variant="outline" className="bg-blue-50 dark:bg-blue-950/50 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 flex items-center gap-1">
+                                                    <FlagWrapper locale={lang.code} className="w-4 h-2.5 rounded-sm object-cover" />
+                                                    {t(`form.${lang.code}`)}
+                                                </Badge>
+                                            </CardTitle>
+                                        </CardHeader>
+                                        <CardContent className="space-y-6">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                 <div className="space-y-2">
-                                                    <Label className="text-sm font-medium">{t('form.buttonText')}</Label>
-                                                    <Input
-                                                        value={primaryButton.tr.text}
-                                                        onChange={(e) => setPrimaryButton({
-                                                            ...primaryButton,
-                                                            tr: { ...primaryButton.tr, text: e.target.value }
-                                                        })}
-                                                        placeholder={t('form.placeholders.primaryButtonTr')}
-                                                        className="border-emerald-200 dark:border-emerald-800"
+                                                    <Label htmlFor={`title-${lang.code}`}>{lang.code === 'tr' ? t('form.title') : t('form.titleEn')} <span className="text-red-500">*</span></Label>
+                                                    <Input 
+                                                        id={`title-${lang.code}`} 
+                                                        value={title[lang.code]} 
+                                                        onChange={(e) => setTitle({ ...title, [lang.code]: e.target.value })} 
+                                                        placeholder={lang.code === 'tr' ? t('form.placeholders.titleTr') : t('form.placeholders.titleEn')} 
                                                     />
                                                 </div>
                                                 <div className="space-y-2">
-                                                    <Label className="text-sm font-medium">{t('form.url')}</Label>
-                                                    <Input
-                                                        value={primaryButton.tr.url}
-                                                        onChange={(e) => setPrimaryButton({
-                                                            ...primaryButton,
-                                                            tr: { ...primaryButton.tr, url: e.target.value }
-                                                        })}
-                                                        placeholder={t('form.placeholders.primaryButtonUrlTr')}
-                                                        className="border-emerald-200 dark:border-emerald-800"
+                                                    <Label htmlFor={`subtitle-${lang.code}`}>{lang.code === 'tr' ? t('form.subtitle') : t('form.subtitleEn')}</Label>
+                                                    <Input 
+                                                        id={`subtitle-${lang.code}`} 
+                                                        value={subtitle[lang.code]} 
+                                                        onChange={(e) => setSubtitle({ ...subtitle, [lang.code]: e.target.value })} 
+                                                        placeholder={lang.code === 'tr' ? t('form.placeholders.subtitleTr') : t('form.placeholders.subtitleEn')} 
                                                     />
                                                 </div>
-                                            </div>
-
-                                            <div className="space-y-4 p-4 bg-white/60 dark:bg-gray-900/60 rounded-lg border border-gray-200 dark:border-gray-700">
-                                                <div className="flex items-center gap-2 mb-3">
-                                                    <div className="w-3 h-3 bg-gray-400 rounded-full"></div>
-                                                    <h4 className="font-semibold text-gray-700 dark:text-gray-300">{t('form.secondaryButton')}</h4>
-                                                    <Badge variant="secondary" className="h-4 text-xs">{t('form.optional')}</Badge>
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <Label className="text-sm font-medium">{t('form.buttonText')}</Label>
-                                                    <Input
-                                                        value={secondaryButton.tr.text}
-                                                        onChange={(e) => setSecondaryButton({
-                                                            ...secondaryButton,
-                                                            tr: { ...secondaryButton.tr, text: e.target.value }
-                                                        })}
-                                                        placeholder={t('form.placeholders.secondaryButtonTr')}
-                                                        className="border-gray-200 dark:border-gray-700"
-                                                    />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <Label className="text-sm font-medium">{t('form.url')}</Label>
-                                                    <Input
-                                                        value={secondaryButton.tr.url}
-                                                        onChange={(e) => setSecondaryButton({
-                                                            ...secondaryButton,
-                                                            tr: { ...secondaryButton.tr, url: e.target.value }
-                                                        })}
-                                                        placeholder={t('form.placeholders.secondaryButtonUrlTr')}
-                                                        className="border-gray-200 dark:border-gray-700"
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            </TabsContent>
-
-                            {/* English Content Tab */}
-                            <TabsContent value="en" className="space-y-6 mt-0">
-                                <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm rounded-xl">
-                                    <CardHeader className="pb-4">
-                                        <CardTitle className="flex items-center gap-3 text-blue-800 dark:text-blue-300">
-                                            <div className="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
-                                                <Globe className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                                            </div>
-                                            {t('form.englishContent')}
-                                            <Badge variant="outline" className="bg-blue-50 dark:bg-blue-950/50 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 flex items-center gap-1">
-                                                <FlagWrapper locale="en" className="w-4 h-2.5 rounded-sm object-cover" />
-                                                {t('form.en')}
-                                            </Badge>
-                                        </CardTitle>
-                                    </CardHeader>
-                                    <CardContent className="space-y-6">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <div className="space-y-2">
-                                                <Label htmlFor="title-en">{t('form.titleEn')} <span className="text-red-500">*</span></Label>
-                                                <Input id="title-en" value={title.en} onChange={(e) => setTitle({ ...title, en: e.target.value })} placeholder={t('form.placeholders.titleEn')} />
                                             </div>
                                             <div className="space-y-2">
-                                                <Label htmlFor="subtitle-en">{t('form.subtitleEn')}</Label>
-                                                <Input id="subtitle-en" value={subtitle.en} onChange={(e) => setSubtitle({ ...subtitle, en: e.target.value })} placeholder={t('form.placeholders.subtitleEn')} />
+                                                <Label htmlFor={`description-${lang.code}`}>{lang.code === 'tr' ? t('form.description') : t('form.descriptionEn')} <span className="text-red-500">*</span></Label>
+                                                <Textarea 
+                                                    id={`description-${lang.code}`} 
+                                                    value={description[lang.code]} 
+                                                    onChange={(e) => setDescription({ ...description, [lang.code]: e.target.value })} 
+                                                    placeholder={lang.code === 'tr' ? t('form.placeholders.descriptionTr') : t('form.placeholders.descriptionEn')} 
+                                                    rows={3} 
+                                                />
                                             </div>
-                                        </div>
-                                        <div className="space-y-2">
-                                            <Label htmlFor="description-en">{t('form.descriptionEn')} <span className="text-red-500">*</span></Label>
-                                            <Textarea id="description-en" value={description.en} onChange={(e) => setDescription({ ...description, en: e.target.value })} placeholder={t('form.placeholders.descriptionEn')} rows={3} />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <Label htmlFor="badge-en">{t('form.badgeEn')}</Label>
-                                            <Input id="badge-en" value={badge.en} onChange={(e) => setBadge({ ...badge, en: e.target.value })} placeholder={t('form.placeholders.badgeEn')} />
-                                        </div>
-                                    </CardContent>
-                                </Card>
+                                            <div className="space-y-2">
+                                                <Label htmlFor={`badge-${lang.code}`}>{lang.code === 'tr' ? t('form.badge') : t('form.badgeEn')}</Label>
+                                                <Input 
+                                                    id={`badge-${lang.code}`} 
+                                                    value={badge[lang.code]} 
+                                                    onChange={(e) => setBadge({ ...badge, [lang.code]: e.target.value })} 
+                                                    placeholder={lang.code === 'tr' ? t('form.placeholders.badgeTr') : t('form.placeholders.badgeEn')} 
+                                                />
+                                            </div>
+                                        </CardContent>
+                                    </Card>
 
-                                {/* Butonlar EN */}
-                                <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm rounded-xl">
-                                    <CardHeader className="pb-4">
-                                        <CardTitle className="flex items-center gap-3 text-emerald-800 dark:text-emerald-300">
-                                            <div className="p-2 bg-emerald-100 dark:bg-emerald-900/50 rounded-lg">
-                                                <Link className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-                                            </div>
-                                            {t('form.buttonSettings')}
-                                        </CardTitle>
-                                    </CardHeader>
-                                    <CardContent className="space-y-6">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <div className="space-y-4 p-4 bg-white/60 dark:bg-gray-900/60 rounded-lg border border-emerald-200 dark:border-emerald-800">
-                                                <div className="flex items-center gap-2 mb-3">
-                                                    <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                                                    <h4 className="font-semibold text-emerald-800 dark:text-emerald-300">{t('form.primaryButton')}</h4>
-                                                    <Badge variant="destructive" className="h-4 text-xs">{t('form.required')}</Badge>
+                                    {/* Butonlar */}
+                                    <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm rounded-xl">
+                                        <CardHeader className="pb-4">
+                                            <CardTitle className="flex items-center gap-3 text-emerald-800 dark:text-emerald-300">
+                                                <div className="p-2 bg-emerald-100 dark:bg-emerald-900/50 rounded-lg">
+                                                    <Link className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
                                                 </div>
-                                                <div className="space-y-2">
-                                                    <Label className="text-sm font-medium">{t('form.buttonText')}</Label>
-                                                    <Input
-                                                        value={primaryButton.en.text}
-                                                        onChange={(e) => setPrimaryButton({
-                                                            ...primaryButton,
-                                                            en: { ...primaryButton.en, text: e.target.value }
-                                                        })}
-                                                        placeholder={t('form.placeholders.primaryButtonEn')}
-                                                        className="border-emerald-200 dark:border-emerald-800"
-                                                    />
+                                                {t('form.buttonSettings')}
+                                            </CardTitle>
+                                        </CardHeader>
+                                        <CardContent className="space-y-6">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <div className="space-y-4 p-4 bg-white/60 dark:bg-gray-900/60 rounded-lg border border-emerald-200 dark:border-emerald-800">
+                                                    <div className="flex items-center gap-2 mb-3">
+                                                        <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
+                                                        <h4 className="font-semibold text-emerald-800 dark:text-emerald-300">{t('form.primaryButton')}</h4>
+                                                        <Badge variant="destructive" className="h-4 text-xs">{t('form.required')}</Badge>
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                        <Label className="text-sm font-medium">{t('form.buttonText')}</Label>
+                                                        <Input
+                                                            value={primaryButton[lang.code].text}
+                                                            onChange={(e) => setPrimaryButton({
+                                                                ...primaryButton,
+                                                                [lang.code]: { ...primaryButton[lang.code], text: e.target.value }
+                                                            })}
+                                                            placeholder={lang.code === 'tr' ? t('form.placeholders.primaryButtonTr') : t('form.placeholders.primaryButtonEn')}
+                                                            className="border-emerald-200 dark:border-emerald-800"
+                                                        />
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                        <Label className="text-sm font-medium">{t('form.url')}</Label>
+                                                        <Input
+                                                            value={primaryButton[lang.code].url}
+                                                            onChange={(e) => setPrimaryButton({
+                                                                ...primaryButton,
+                                                                [lang.code]: { ...primaryButton[lang.code], url: e.target.value }
+                                                            })}
+                                                            placeholder={lang.code === 'tr' ? t('form.placeholders.primaryButtonUrlTr') : t('form.placeholders.primaryButtonUrlEn')}
+                                                            className="border-emerald-200 dark:border-emerald-800"
+                                                        />
+                                                    </div>
                                                 </div>
-                                                <div className="space-y-2">
-                                                    <Label className="text-sm font-medium">{t('form.url')}</Label>
-                                                    <Input
-                                                        value={primaryButton.en.url}
-                                                        onChange={(e) => setPrimaryButton({
-                                                            ...primaryButton,
-                                                            en: { ...primaryButton.en, url: e.target.value }
-                                                        })}
-                                                        placeholder={t('form.placeholders.primaryButtonUrlEn')}
-                                                        className="border-emerald-200 dark:border-emerald-800"
-                                                    />
-                                                </div>
-                                            </div>
 
-                                            <div className="space-y-4 p-4 bg-white/60 dark:bg-gray-900/60 rounded-lg border border-gray-200 dark:border-gray-700">
-                                                <div className="flex items-center gap-2 mb-3">
-                                                    <div className="w-3 h-3 bg-gray-400 rounded-full"></div>
-                                                    <h4 className="font-semibold text-gray-700 dark:text-gray-300">{t('form.secondaryButton')}</h4>
-                                                    <Badge variant="secondary" className="h-4 text-xs">{t('form.optional')}</Badge>
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <Label className="text-sm font-medium">{t('form.buttonText')}</Label>
-                                                    <Input
-                                                        value={secondaryButton.en.text}
-                                                        onChange={(e) => setSecondaryButton({
-                                                            ...secondaryButton,
-                                                            en: { ...secondaryButton.en, text: e.target.value }
-                                                        })}
-                                                        placeholder={t('form.placeholders.secondaryButtonEn')}
-                                                        className="border-gray-200 dark:border-gray-700"
-                                                    />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <Label className="text-sm font-medium">{t('form.url')}</Label>
-                                                    <Input
-                                                        value={secondaryButton.en.url}
-                                                        onChange={(e) => setSecondaryButton({
-                                                            ...secondaryButton,
-                                                            en: { ...secondaryButton.en, url: e.target.value }
-                                                        })}
-                                                        placeholder={t('form.placeholders.secondaryButtonUrlEn')}
-                                                        className="border-gray-200 dark:border-gray-700"
-                                                    />
+                                                <div className="space-y-4 p-4 bg-white/60 dark:bg-gray-900/60 rounded-lg border border-gray-200 dark:border-gray-700">
+                                                    <div className="flex items-center gap-2 mb-3">
+                                                        <div className="w-3 h-3 bg-gray-400 rounded-full"></div>
+                                                        <h4 className="font-semibold text-gray-700 dark:text-gray-300">{t('form.secondaryButton')}</h4>
+                                                        <Badge variant="secondary" className="h-4 text-xs">{t('form.optional')}</Badge>
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                        <Label className="text-sm font-medium">{t('form.buttonText')}</Label>
+                                                        <Input
+                                                            value={secondaryButton[lang.code].text}
+                                                            onChange={(e) => setSecondaryButton({
+                                                                ...secondaryButton,
+                                                                [lang.code]: { ...secondaryButton[lang.code], text: e.target.value }
+                                                            })}
+                                                            placeholder={lang.code === 'tr' ? t('form.placeholders.secondaryButtonTr') : t('form.placeholders.secondaryButtonEn')}
+                                                            className="border-gray-200 dark:border-gray-700"
+                                                        />
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                        <Label className="text-sm font-medium">{t('form.url')}</Label>
+                                                        <Input
+                                                            value={secondaryButton[lang.code].url}
+                                                            onChange={(e) => setSecondaryButton({
+                                                                ...secondaryButton,
+                                                                [lang.code]: { ...secondaryButton[lang.code], url: e.target.value }
+                                                            })}
+                                                            placeholder={lang.code === 'tr' ? t('form.placeholders.secondaryButtonUrlTr') : t('form.placeholders.secondaryButtonUrlEn')}
+                                                            className="border-gray-200 dark:border-gray-700"
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            </TabsContent>
+                                        </CardContent>
+                                    </Card>
+                                </TabsContent>
+                            ))}
+
+
 
                             <div className="space-y-6">
                                 <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm rounded-xl">

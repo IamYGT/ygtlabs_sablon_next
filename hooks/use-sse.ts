@@ -5,7 +5,14 @@ import { useToast } from "@/hooks/use-toast";
 
 export interface SSEEvent {
   type: string;
-  [key: string]: any;
+  ticketId?: string;
+  message?: string;
+  userId?: string;
+  isTyping?: boolean;
+  isOnline?: boolean;
+  assigneeId?: string;
+  ticketNumber?: string;
+  [key: string]: string | number | boolean | object | null | undefined;
 }
 
 interface UseSSEOptions {
@@ -140,12 +147,13 @@ export function useRealtimeTicket(ticketId?: string) {
         break;
 
       case "user-typing":
-        if (ticketId && event.ticketId === ticketId) {
+        if (ticketId && event.ticketId === ticketId && event.userId) {
+          const userId = event.userId; // Type guard için local variable
           setTypingUsers((prev) => {
-            if (event.isTyping && !prev.includes(event.userId)) {
-              return [...prev, event.userId];
+            if (event.isTyping && !prev.includes(userId)) {
+              return [...prev, userId];
             } else if (!event.isTyping) {
-              return prev.filter((id) => id !== event.userId);
+              return prev.filter((id) => id !== userId);
             }
             return prev;
           });
@@ -153,7 +161,7 @@ export function useRealtimeTicket(ticketId?: string) {
         break;
 
       case "ticket-assigned":
-        if (event.assigneeId === ticketId) {
+        if (event.assigneeId === ticketId && event.ticketNumber) {
           toast({
             title: "Ticket Atandı",
             description: `Ticket size atandı: #${event.ticketNumber}`,
@@ -161,7 +169,7 @@ export function useRealtimeTicket(ticketId?: string) {
         }
         break;
     }
-  }, [ticketId]);
+  }, [ticketId, toast]);
 
   const { isConnected, connectionError } = useSSE({
     url: "/api/support/sse",
@@ -181,13 +189,14 @@ export function useOnlineStatus() {
   const [onlineUsers, setOnlineUsers] = useState<Set<string>>(new Set());
 
   const handleMessage = useCallback((event: SSEEvent) => {
-    if (event.type === "user-online") {
+    if (event.type === "user-online" && event.userId) {
+      const userId = event.userId; // Type guard için local variable
       setOnlineUsers((prev) => {
         const newSet = new Set(prev);
         if (event.isOnline) {
-          newSet.add(event.userId);
+          newSet.add(userId);
         } else {
-          newSet.delete(event.userId);
+          newSet.delete(userId);
         }
         return newSet;
       });

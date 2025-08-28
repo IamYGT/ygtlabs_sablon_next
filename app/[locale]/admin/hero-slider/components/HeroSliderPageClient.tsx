@@ -375,9 +375,13 @@ export function HeroSliderPageClient() {
             }
 
             const data = await response.json();
-            // Sıralamaya göre düzenle
-            const sortedSliders = (data.sliders || []).sort((a: HeroSlider, b: HeroSlider) => a.order - b.order);
-            setSliders(sortedSliders);
+            if (data.success) {
+                // Sıralamaya göre düzenle
+                const sortedSliders = (data.data || []).sort((a: HeroSlider, b: HeroSlider) => a.order - b.order);
+                setSliders(sortedSliders);
+            } else {
+                throw new Error(data.error || t('messages.fetchError'));
+            }
         } catch (error) {
             console.error("Slider fetch error:", error);
             toast.error(t('messages.fetchError'));
@@ -400,9 +404,9 @@ export function HeroSliderPageClient() {
                 method: "DELETE",
             });
 
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || t('messages.deleteError'));
+            const result = await response.json();
+            if (!result.success) {
+                throw new Error(result.error || t('messages.deleteError'));
             }
 
             toast.success(t('messages.deleteSuccess'));
@@ -422,9 +426,9 @@ export function HeroSliderPageClient() {
                 body: JSON.stringify({ isActive: !currentStatus }),
             });
 
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || t('messages.updateError'));
+            const result = await response.json();
+            if (!result.success) {
+                throw new Error(result.error || t('messages.updateError'));
             }
 
             toast.success(!currentStatus ? t('messages.activateSuccess') : t('messages.deactivateSuccess'));

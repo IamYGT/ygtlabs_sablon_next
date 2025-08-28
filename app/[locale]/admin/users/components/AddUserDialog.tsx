@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { UserPlus } from 'lucide-react';
+import { UserPlus, AlertCircle } from 'lucide-react';
 import {
     Dialog,
     DialogContent,
@@ -25,6 +25,7 @@ import { useTranslations } from 'next-intl';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
+import { useAuth } from '@/lib/hooks/useAuth';
 
 interface Role {
     id: string;
@@ -49,8 +50,11 @@ interface UserFormData {
 
 export default function AddUserDialog({ availableRoles, onUserAdded }: AddUserDialogProps) {
     const t = useTranslations('AdminUsers.addUserDialog');
+    const { user: currentUser } = useAuth();
     const [open, setOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [assignableRoles, setAssignableRoles] = useState<Role[]>([]);
+    const [loadingRoles, setLoadingRoles] = useState(false);
 
     const form = useForm<UserFormData>({
         defaultValues: {
@@ -61,6 +65,47 @@ export default function AddUserDialog({ availableRoles, onUserAdded }: AddUserDi
             isActive: true,
         },
     });
+
+    // Check which roles the current user can assign
+    useEffect(() => {
+        async function checkAssignableRoles() {
+            if (!open || !currentUser || availableRoles.length === 0) {
+                setAssignableRoles([]);
+                return;
+            }
+
+            setLoadingRoles(true);
+            try {
+                // Check role assignment permissions via API
+                const roleNames = availableRoles.map(role => role.name);
+                const response = await fetch('/api/auth/check-role-permissions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ roleNames }),
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const filteredRoles = availableRoles.filter(role => 
+                        data.results?.[role.name] === true
+                    );
+                    setAssignableRoles(filteredRoles);
+                } else {
+                    // If API fails, fallback to showing no roles
+                    console.error('Failed to check role permissions');
+                    setAssignableRoles([]);
+                }
+            } catch (error) {
+                console.error('Error checking role permissions:', error);
+                setAssignableRoles([]);
+            } finally {
+                setLoadingRoles(false);
+            }
+        }
+
+        checkAssignableRoles();
+    }, [open, currentUser, availableRoles]);
 
     const onSubmit = async (data: UserFormData) => {
         // Manual validation
@@ -184,29 +229,44 @@ export default function AddUserDialog({ availableRoles, onUserAdded }: AddUserDi
                             render={() => (
                                 <FormItem>
                                     <FormLabel>{t('form.rolesLabel')}</FormLabel>
-                                    <div className="space-y-3 max-h-40 overflow-y-auto">
-                                        {availableRoles.map((role) => (
-                                            <div key={role.id} className="flex items-center space-x-2">
-                                                <Checkbox
-                                                    id={role.id}
-                                                    checked={form.watch('roleIds').includes(role.id)}
-                                                    onCheckedChange={(checked) =>
-                                                        handleRoleToggle(role.id, checked as boolean)
-                                                    }
-                                                />
-                                                <label
-                                                    htmlFor={role.id}
-                                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2"
-                                                >
-                                                    <div
-                                                        className="w-3 h-3 rounded-full"
-                                                        style={{ backgroundColor: role.color || '#6366f1' }}
+                                    {loadingRoles ? (
+                                        <div className="flex items-center justify-center py-4">
+                                            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+                                        </div>
+                                    ) : assignableRoles.length === 0 ? (
+                                        <div className="flex items-center gap-2 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                                            <AlertCircle className="w-4 h-4 text-yellow-600" />
+                                            <span className="text-sm text-yellow-700 dark:text-yellow-300">
+                                                {currentUser?.permissions?.includes('admin.roles.assign') 
+                                                    ? t('form.noAssignableRoles')
+                                                    : t('form.noRolePermission')}
+                                            </span>
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-3 max-h-40 overflow-y-auto">
+                                            {assignableRoles.map((role) => (
+                                                <div key={role.id} className="flex items-center space-x-2">
+                                                    <Checkbox
+                                                        id={role.id}
+                                                        checked={form.watch('roleIds').includes(role.id)}
+                                                        onCheckedChange={(checked) =>
+                                                            handleRoleToggle(role.id, checked as boolean)
+                                                        }
                                                     />
-                                                    {role.displayName}
-                                                </label>
-                                            </div>
-                                        ))}
-                                    </div>
+                                                    <label
+                                                        htmlFor={role.id}
+                                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2"
+                                                    >
+                                                        <div
+                                                            className="w-3 h-3 rounded-full"
+                                                            style={{ backgroundColor: role.color || '#6366f1' }}
+                                                        />
+                                                        {role.displayName}
+                                                    </label>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </FormItem>
                             )}
                         />

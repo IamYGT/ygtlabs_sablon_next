@@ -2,6 +2,50 @@ import type { UserWithPermissions } from "@/lib/permissions";
 import { withPermission } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+
+// Validation schemas for update
+const LocalizedContentSchema = z.object({
+  tr: z.string().min(1, "Turkish content is required"),
+  en: z.string().min(1, "English content is required"),
+});
+
+const ButtonConfigSchema = z.object({
+  tr: z.object({
+    text: z.string().min(1, "Button text is required"),
+    href: z.string().url("Valid URL is required"),
+  }),
+  en: z.object({
+    text: z.string().min(1, "Button text is required"),
+    href: z.string().url("Valid URL is required"),
+  }),
+});
+
+const StatisticItemSchema = z.object({
+  tr: z.object({
+    label: z.string().min(1, "Label is required"),
+    value: z.string().min(1, "Value is required"),
+    icon: z.string().optional(),
+  }),
+  en: z.object({
+    label: z.string().min(1, "Label is required"),
+    value: z.string().min(1, "Value is required"),
+    icon: z.string().optional(),
+  }),
+});
+
+const UpdateSliderSchema = z.object({
+  title: LocalizedContentSchema.optional(),
+  subtitle: LocalizedContentSchema.optional(),
+  description: LocalizedContentSchema.optional(),
+  badge: LocalizedContentSchema.optional(),
+  backgroundImage: z.string().url("Valid background image URL is required").optional(),
+  primaryButton: ButtonConfigSchema.optional(),
+  secondaryButton: ButtonConfigSchema.optional(),
+  statistics: z.array(StatisticItemSchema).optional(),
+  isActive: z.boolean().optional(),
+  order: z.number().int().min(0).optional(),
+});
 
 // GET - Tek bir hero slider'ı getir
 export async function GET(
@@ -29,13 +73,22 @@ export async function GET(
           );
         }
 
-        return NextResponse.json(slider, {
-          headers: { "Content-Type": "application/json; charset=utf-8" },
-        });
+        return NextResponse.json(
+          {
+            success: true,
+            data: slider,
+          },
+          {
+            headers: { "Content-Type": "application/json; charset=utf-8" },
+          }
+        );
       } catch (error) {
         console.error("Hero slider fetch error:", error);
         return NextResponse.json(
-          { error: "Hero slider getirilemedi" },
+          {
+            success: false,
+            error: "Failed to fetch hero slider",
+          },
           { status: 500 }
         );
       }
@@ -49,40 +102,62 @@ export async function PUT(
   { params }: { params: Promise<{ sliderId: string }> }
 ) {
   return withPermission(
-    "hero-slider.update",
+    "admin.hero-slider.update",
     async (request: NextRequest, user: UserWithPermissions) => {
       try {
         const { sliderId } = await params;
         const body = await request.json();
-        const {
-          title,
-          subtitle,
-          description,
-          badge,
-          backgroundImage,
-          primaryButton,
-          secondaryButton,
-          statistics,
-          isActive,
-          order,
-        } = body;
 
-        const dataToUpdate: Record<string, unknown> = {};
+        // Validate request body
+        const validationResult = UpdateSliderSchema.safeParse(body);
+        if (!validationResult.success) {
+          return NextResponse.json(
+            {
+              success: false,
+              error: "Validation failed",
+              details: validationResult.error.errors,
+            },
+            { status: 400 }
+          );
+        }
 
-        if (title !== undefined) dataToUpdate.title = title;
-        if (subtitle !== undefined) dataToUpdate.subtitle = subtitle;
-        if (description !== undefined) dataToUpdate.description = description;
-        if (badge !== undefined) dataToUpdate.badge = badge;
-        if (backgroundImage !== undefined)
-          dataToUpdate.backgroundImage = backgroundImage;
-        if (primaryButton !== undefined)
-          dataToUpdate.primaryButton = primaryButton;
-        if (secondaryButton !== undefined)
-          dataToUpdate.secondaryButton = secondaryButton;
-        if (statistics !== undefined) dataToUpdate.statistics = statistics;
-        if (isActive !== undefined) dataToUpdate.isActive = isActive;
-        if (order !== undefined) dataToUpdate.order = order;
+        const validatedData = validationResult.data;
 
+        // Check if slider exists
+        const existingSlider = await prisma.heroSlider.findUnique({
+          where: { id: sliderId },
+        });
+
+        if (!existingSlider) {
+          return NextResponse.json(
+            {
+              success: false,
+              error: "Slider not found",
+            },
+            { status: 404 }
+          );
+        }
+
+        // Check if order is already taken by another slider
+        if (validatedData.order !== undefined && validatedData.order !== existingSlider.order) {
+          const conflictingSlider = await prisma.heroSlider.findFirst({
+            where: {
+              order: validatedData.order,
+              id: { not: sliderId },
+            },
+          });
+          if (conflictingSlider) {
+            return NextResponse.json(
+              {
+                success: false,
+                error: "Order position is already taken by another slider",
+              },
+              { status: 400 }
+            );
+          }
+        }
+
+        const dataToUpdate: Record<string, unknown> = { ...validatedData };
         dataToUpdate.updatedById = user.id;
 
         const updatedSlider = await prisma.heroSlider.update({
@@ -96,8 +171,9 @@ export async function PUT(
 
         return NextResponse.json(
           {
-            message: "Hero slider başarıyla güncellendi",
-            slider: updatedSlider,
+            success: true,
+            message: "Hero slider updated successfully",
+            data: updatedSlider,
           },
           {
             headers: {
@@ -108,7 +184,10 @@ export async function PUT(
       } catch (error) {
         console.error("Hero slider update error:", error);
         return NextResponse.json(
-          { error: "Hero slider güncellenemedi" },
+          {
+            success: false,
+            error: "Failed to update hero slider",
+          },
           { status: 500 }
         );
       }
@@ -122,17 +201,35 @@ export async function DELETE(
   { params }: { params: Promise<{ sliderId: string }> }
 ) {
   return withPermission(
-    "hero-slider.delete",
+    "admin.hero-slider.delete",
     async (_request: NextRequest, _user: UserWithPermissions) => {
       try {
         const { sliderId } = await params;
+
+        // Check if slider exists
+        const existingSlider = await prisma.heroSlider.findUnique({
+          where: { id: sliderId },
+        });
+
+        if (!existingSlider) {
+          return NextResponse.json(
+            {
+              success: false,
+              error: "Slider not found",
+            },
+            { status: 404 }
+          );
+        }
 
         await prisma.heroSlider.delete({
           where: { id: sliderId },
         });
 
         return NextResponse.json(
-          { message: "Hero slider başarıyla silindi" },
+          {
+            success: true,
+            message: "Hero slider deleted successfully",
+          },
           {
             headers: {
               "Content-Type": "application/json; charset=utf-8",
@@ -142,7 +239,10 @@ export async function DELETE(
       } catch (error) {
         console.error("Hero slider delete error:", error);
         return NextResponse.json(
-          { error: "Hero slider silinemedi" },
+          {
+            success: false,
+            error: "Failed to delete hero slider",
+          },
           { status: 500 }
         );
       }

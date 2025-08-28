@@ -235,15 +235,46 @@ export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: Edit
         try {
             setLoading(true);
 
+            // Convert button data to match backend schema (href instead of url)
+            const preparedPrimaryButton = {
+                tr: {
+                    text: primaryButton.tr.text,
+                    href: primaryButton.tr.url
+                },
+                en: {
+                    text: primaryButton.en.text,
+                    href: primaryButton.en.url
+                }
+            };
+
+            const preparedSecondaryButton = (secondaryButton.tr.text || secondaryButton.en.text) ? {
+                tr: {
+                    text: secondaryButton.tr.text,
+                    href: secondaryButton.tr.url
+                },
+                en: {
+                    text: secondaryButton.en.text,
+                    href: secondaryButton.en.url
+                }
+            } : undefined;
+
+            // Filter and prepare statistics
+            const preparedStatistics = statistics
+                .filter(stat => (stat.tr.value && stat.tr.label) || (stat.en.value && stat.en.label))
+                .map(stat => ({
+                    tr: { label: stat.tr.label, value: stat.tr.value },
+                    en: { label: stat.en.label, value: stat.en.value }
+                }));
+
             const sliderData = {
                 title,
-                subtitle: subtitle.tr || subtitle.en ? subtitle : null,
+                subtitle: (subtitle.tr || subtitle.en) ? subtitle : undefined,
                 description,
-                badge: badge.tr || badge.en ? badge : null,
+                badge: (badge.tr || badge.en) ? badge : undefined,
                 backgroundImage,
-                primaryButton,
-                secondaryButton: secondaryButton.tr.text || secondaryButton.en.text ? secondaryButton : null,
-                statistics: statistics.filter(stat => stat.tr.value || stat.en.value),
+                primaryButton: preparedPrimaryButton,
+                secondaryButton: preparedSecondaryButton,
+                statistics: preparedStatistics.length > 0 ? preparedStatistics : undefined,
                 isActive,
                 order
             };
@@ -254,13 +285,20 @@ export function EditSliderDialog({ open, onOpenChange, slider, onSuccess }: Edit
                 body: JSON.stringify(sliderData),
             });
 
-            if (response.ok) {
+            const result = await response.json();
+            if (result.success) {
                 toast.success(t('messages.updateSuccess'));
                 onSuccess();
                 onOpenChange(false);
             } else {
-                const error = await response.json();
-                toast.error(error.message || t('messages.updateError'));
+                if (result.details && Array.isArray(result.details)) {
+                    // Handle validation errors from Zod
+                    const errorMessages = result.details.map((err: { path: (string | number)[]; message: string }) => 
+                        `${err.path.join('.')}: ${err.message}`
+                    ).join(', ');
+                    throw new Error(`Validation failed: ${errorMessages}`);
+                }
+                throw new Error(result.error || t('messages.updateError'));
             }
 
         } catch (error) {

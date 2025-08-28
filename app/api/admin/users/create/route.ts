@@ -1,6 +1,7 @@
 import { getCurrentUser, hashPasswordPbkdf2 } from "@/lib";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { canAssignRole } from "@/lib/utils/role-hierarchy";
 
 export async function POST(request: NextRequest) {
   try {
@@ -44,6 +45,7 @@ export async function POST(request: NextRequest) {
     const cleanRoleId = roleId ? String(roleId).trim() : null;
 
     // Rolün varlığını ve aktifliğini kontrol et, eğer roleId gönderilmişse
+    let roleToAssign = null;
     if (cleanRoleId) {
       const validRole = await prisma.authRole.findFirst({
         where: {
@@ -58,6 +60,17 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         );
       }
+
+      // Check if current user has permission to assign this role
+      const currentUserRole = currentUser.primaryRole || currentUser.userRoles?.[0];
+      if (currentUserRole && !canAssignRole(currentUserRole, validRole.name)) {
+        return NextResponse.json(
+          { error: "Bu rolü atama yetkiniz bulunmamaktadır" },
+          { status: 403 }
+        );
+      }
+
+      roleToAssign = validRole;
     }
 
     // Şifreyi PBKDF2 ile hash'le
@@ -70,7 +83,15 @@ export async function POST(request: NextRequest) {
         where: { name: "user", isActive: true },
       });
       if (defaultUserRole) {
-        finalRoleId = defaultUserRole.id;
+        // Check if current user can assign the default role
+        const currentUserRole = currentUser.primaryRole || currentUser.userRoles?.[0];
+        if (currentUserRole && canAssignRole(currentUserRole, defaultUserRole.name)) {
+          finalRoleId = defaultUserRole.id;
+        } else {
+          // If they can't assign the default role, create user without any role
+          console.log("Current user cannot assign default 'user' role, creating user without role");
+          finalRoleId = null;
+        }
       }
     }
 

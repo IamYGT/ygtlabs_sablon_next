@@ -575,10 +575,8 @@
     "role": "role",
     "roles": "roles",
     "usersAssigned": "users assigned",
-    "totalPermissions": "total permissions",
     "pleaseWait": "Please wait...",
     "userNotFound": "User not found",
-    "tryDifferentCriteria": "Try different search criteria",
     "clearFilters": "Clear Filters",
     "search": {
       "placeholder": "Search roles...",
@@ -1363,7 +1361,22 @@
       "primaryButtonRequired": "Primary button text is required",
       "rememberRequired": "Don't forget to fill required fields",
       "rememberSave": "Don't forget to save changes",
-      "idNotFound": "Could not update slider, ID not found"
+      "idNotFound": "Could not update slider, ID not found",
+      "perLanguage": {
+        "atLeastOneLanguage": "You must enter content in at least one language",
+        "turkish": {
+          "titleRequired": "Title is required for Turkish content",
+          "descriptionRequired": "Description is required for Turkish content",
+          "primaryButtonTextRequired": "Primary button text is required for Turkish content",
+          "primaryButtonUrlRequired": "URL is required when button text is provided"
+        },
+        "english": {
+          "titleRequired": "Title is required for English content",
+          "descriptionRequired": "Description is required for English content",
+          "primaryButtonTextRequired": "Primary button text is required for English content",
+          "primaryButtonUrlRequired": "URL is required when button text is provided"
+        }
+      }
     },
     "messages": {
       "createSuccess": "Slider created successfully",
@@ -1422,7 +1435,10 @@
       "newCustomer": "New Customer",
       "view": "View",
       "edit": "Edit",
-      "delete": "Delete"
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "saving": "Saving...",
+      "save": "Save"
     },
     "dialogs": {
       "create": {

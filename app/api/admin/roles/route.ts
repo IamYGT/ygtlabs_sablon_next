@@ -77,10 +77,18 @@ export async function GET(request: NextRequest) {
       _count: role._count,
     }));
 
-    return NextResponse.json({
+    // Response'a cache control header'ları ekle
+    const response = NextResponse.json({
       roles: formattedRoles,
       totalCount: formattedRoles.length,
     });
+    
+    // Cache'i disable et - her zaman güncel veri döndür
+    response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    response.headers.set('Pragma', 'no-cache');
+    response.headers.set('Expires', '0');
+    
+    return response;
   } catch (error) {
     console.error("Roller getirme hatası:", error);
     return NextResponse.json({ error: t("roles.get.error") }, { status: 500 });
