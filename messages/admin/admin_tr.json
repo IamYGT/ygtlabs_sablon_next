@@ -666,6 +666,8 @@
         "updateErrorGeneric": "Rol güncellenirken bir hata oluştu.",
         "protectedError": "Super Admin rolü düzenlenemez.",
         "protectedErrorGeneric": "Bu rol düzenlenemez.",
+        "protectedRole": "Bu rol sistem tarafından korunmaktadır.",
+        "insufficientPermissions": "Bu rolü düzenlemek için en az {roleCount} yetkiniz olmalı (sizde {yourCount} yetki var).",
         "permissionsLoadError": "Yetkiler yüklenemedi",
         "rolePermissionsLoadError": "Rol yetkileri yüklenemedi",
         "updateErrorWithMessage": "Rol güncellenemedi: {message}",

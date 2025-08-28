@@ -98,6 +98,33 @@ export async function POST(request: NextRequest) {
           name: true,
         },
       });
+      
+      // Super admin değilse, sadece kendisinde olan yetkileri ekleyebilir
+      if (currentUser.primaryRole !== "super_admin") {
+        const userHasAllPermissions = permissionRecords.every(
+          (p) => currentUser.permissions.includes(p.name)
+        );
+        
+        if (!userHasAllPermissions) {
+          const attemptedPermissions = permissionRecords.map(p => p.name);
+          const missingPermissions = attemptedPermissions.filter(
+            (permName: string) => !currentUser.permissions.includes(permName)
+          );
+          
+          console.warn(
+            `⚠️ User ${currentUser.name} tried to assign permissions they don't have to new role: ${missingPermissions.join(", ")}`
+          );
+          
+          return NextResponse.json(
+            { 
+              error: t("roles.permissions.cannotAssignPermissionsYouDontHave"),
+              missingPermissions 
+            },
+            { status: 403 }
+          );
+        }
+      }
+      
       permissionRecords.forEach((p) => permissionsToAdd.add(p.name));
     }
 

@@ -720,6 +720,8 @@
         "updateErrorGeneric": "An error occurred while updating the role.",
         "protectedError": "Super Admin role cannot be edited.",
         "protectedErrorGeneric": "This role cannot be edited.",
+        "protectedRole": "This role is protected by the system.",
+        "insufficientPermissions": "You need at least {roleCount} permissions to edit this role (you have {yourCount}).",
         "permissionsLoadError": "Could not load permissions",
         "rolePermissionsLoadError": "Could not load role permissions",
         "updateErrorWithMessage": "Could not update role: {message}",

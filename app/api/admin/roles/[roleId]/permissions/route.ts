@@ -96,8 +96,9 @@ export async function PUT(
       );
     }
 
-    // Yetki kontrolü - yeni permission sistemi
-    const hasPermission = currentUser.permissions.includes("roles.update");
+    // Yetki kontrolü - roles.assign-permissions yetkisi gerekli
+    const hasPermission = currentUser.permissions.includes("roles.assign-permissions") || 
+                         currentUser.permissions.includes("roles.update");
 
     if (!hasPermission) {
       return NextResponse.json(
@@ -112,10 +113,17 @@ export async function PUT(
 
     console.log("🔄 Updating permissions for role:", roleId);
     console.log("📋 Received permission names:", incomingPermissionNames);
+    console.log("👤 Current user:", currentUser.name, "with role:", currentUser.primaryRole);
 
     // Rolü bul
     const role = await prisma.authRole.findUnique({
       where: { id: roleId },
+      include: {
+        rolePermissions: {
+          where: { isActive: true, isAllowed: true },
+          include: { permission: true }
+        }
+      }
     });
 
     if (!role) {
@@ -131,6 +139,73 @@ export async function PUT(
         { error: t("roles.permissions.updateProtected") },
         { status: 400 }
       );
+    }
+
+    // Super admin her şeyi yapabilir
+    if (currentUser.primaryRole !== "super_admin") {
+      // 1. Kullanıcı sadece kendisinde olan yetkileri atayabilir
+      const userHasAllPermissions = incomingPermissionNames.every(
+        (permName: string) => currentUser.permissions.includes(permName)
+      );
+
+      if (!userHasAllPermissions) {
+        const missingPermissions = incomingPermissionNames.filter(
+          (permName: string) => !currentUser.permissions.includes(permName)
+        );
+        console.warn(
+          `⚠️ User ${currentUser.name} tried to assign permissions they don't have: ${missingPermissions.join(", ")}`
+        );
+        return NextResponse.json(
+          { 
+            error: t("roles.permissions.cannotAssignPermissionsYouDontHave"),
+            missingPermissions 
+          },
+          { status: 403 }
+        );
+      }
+
+      // 2. Kullanıcı kendinden fazla veya eşit sayıda yetkiye sahip bir rolü düzenleyemez
+      const targetRolePermissionCount = role.rolePermissions.length;
+      const userPermissionCount = currentUser.permissions.length;
+      
+      if (targetRolePermissionCount >= userPermissionCount) {
+        console.warn(
+          `⚠️ User ${currentUser.name} (${userPermissionCount} permissions) tried to edit role ${role.name} (${targetRolePermissionCount} permissions)`
+        );
+        return NextResponse.json(
+          { 
+            error: t("roles.permissions.cannotEditRoleWithEqualOrMorePermissions"),
+            details: {
+              yourPermissions: userPermissionCount,
+              rolePermissions: targetRolePermissionCount
+            }
+          },
+          { status: 403 }
+        );
+      }
+
+      // 3. Rolün mevcut yetkilerinin hepsine kullanıcı sahip olmalı
+      // Aksi halde kullanıcı bilmediği/sahip olmadığı yetkileri kaybettirebilir
+      const rolePermissionNames = role.rolePermissions.map(rp => rp.permission.name);
+      const userCanManageAllExistingPermissions = rolePermissionNames.every(
+        (permName: string) => currentUser.permissions.includes(permName)
+      );
+
+      if (!userCanManageAllExistingPermissions) {
+        const unmanageablePermissions = rolePermissionNames.filter(
+          (permName: string) => !currentUser.permissions.includes(permName)
+        );
+        console.warn(
+          `⚠️ User ${currentUser.name} cannot edit role ${role.name} because the role has permissions the user doesn't have: ${unmanageablePermissions.join(", ")}`
+        );
+        return NextResponse.json(
+          { 
+            error: t("roles.permissions.roleHasPermissionsYouDontHave"),
+            unmanageablePermissions 
+          },
+          { status: 403 }
+        );
+      }
     }
 
     // Transaction kullanarak atomik işlem yap
@@ -158,20 +233,39 @@ export async function PUT(
           existingPermissions.map((p) => p.name)
         );
 
-        // 2. Sadece geçerli (veritabanında var olan) yetkileri ekle
-        const permissionsToCreate = incomingPermissionNames.filter(
+        // 2. Super admin değilse, sadece kendisinde olan yetkileri filtrele
+        let permissionsToCreate = incomingPermissionNames.filter(
           (name: string) => validPermissionNames.has(name)
         );
+        
+        if (currentUser.primaryRole !== "super_admin") {
+          // Kullanıcı sadece kendisinde olan yetkileri atayabilir
+          permissionsToCreate = permissionsToCreate.filter(
+            (name: string) => currentUser.permissions.includes(name)
+          );
+          
+          const filteredOutPermissions = incomingPermissionNames.filter(
+            (name: string) => validPermissionNames.has(name) && !currentUser.permissions.includes(name)
+          );
+          
+          if (filteredOutPermissions.length > 0) {
+            console.warn(
+              `⚠️ Filtered out permissions user doesn't have: ${filteredOutPermissions.join(", ")}`
+            );
+          }
+        }
 
         if (incomingPermissionNames.length !== permissionsToCreate.length) {
           const invalidPermissions = incomingPermissionNames.filter(
             (name: string) => !validPermissionNames.has(name)
           );
-          console.warn(
-            `[Role Update] DİKKAT: Aşağıdaki geçersiz yetkiler role eklenemedi çünkü veritabanında bulunmuyorlar: ${invalidPermissions.join(
-              ", "
-            )}`
-          );
+          if (invalidPermissions.length > 0) {
+            console.warn(
+              `[Role Update] DİKKAT: Aşağıdaki geçersiz yetkiler role eklenemedi çünkü veritabanında bulunmuyorlar: ${invalidPermissions.join(
+                ", "
+              )}`
+            );
+          }
         }
 
         if (permissionsToCreate.length > 0) {
@@ -189,6 +283,8 @@ export async function PUT(
             data: rolePermissionData,
           });
         }
+        
+        console.log(`✅ Successfully updated role ${role.name} with ${permissionsToCreate.length} permissions`);
       }
     });
 

@@ -92,7 +92,6 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
     enabled: open,
     staleTime: 5 * 60 * 1000,
   });
-
   const { assignablePermissions, initialSelectedIds, canEditRole, cannotEditReason } = useMemo(() => {
     if (!data?.allPermissions || !data?.rolePermissions || !currentUser) {
       return {
@@ -104,26 +103,55 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
     }
 
     const formattedPermissions = data.allPermissions.map((p: Permission) => formatPermission(p, locale));
+    
+    // Super admin tüm yetkileri atayabilir, diğerleri sadece kendi yetkilerini
     const permissionsUserCanAssign = currentUser.primaryRole === 'super_admin'
       ? formattedPermissions
       : formattedPermissions.filter((p: Permission) => currentUser.permissions.includes(p.name));
+    
     const selectedIds = new Set<string>();
     data.rolePermissions.forEach((perm: Permission) => {
       const permission = permissionsUserCanAssign.find((p: Permission) => p.name === perm.name);
       if (permission) selectedIds.add(permission.id);
     });
 
-    // Kullanıcı kendisinden çok yetki sayısına sahip bir rolü düzenleyememeli
+    // Rol düzenleme kontrolleri
     const targetRolePermissionCount = data.rolePermissions.length;
     const userPermissionCount = currentUser.permissions?.length || 0;
-    const canEdit = currentUser.primaryRole === 'super_admin' ||
-                   (userPermissionCount >= targetRolePermissionCount && !isProtectedRole);
-
-    const reason = !canEdit ?
-      (currentUser.primaryRole !== 'super_admin' && userPermissionCount < targetRolePermissionCount ?
-        "Bu rolü düzenlemek için yeterli yetkiye sahip değilsiniz" :
-        "Bu rol korunmaktadır") :
-      null;
+    
+    // Rolün mevcut yetkilerini kontrol et
+    const rolePermissionNames = data.rolePermissions.map((p: Permission) => p.name);
+    const userHasAllRolePermissions = rolePermissionNames.every(
+      (permName: string) => currentUser.permissions.includes(permName)
+    );
+    
+    let canEdit = false;
+    let reason = null;
+    
+    if (currentUser.primaryRole === 'super_admin') {
+      canEdit = true;
+    } else if (isProtectedRole) {
+      canEdit = false;
+      reason = t('notifications.protectedRole');
+    } else if (targetRolePermissionCount >= userPermissionCount) {
+      // Eşit veya fazla yetkiye sahip rolleri düzenleyemez
+      canEdit = false;
+      reason = t('notifications.cannotEditEqualOrMorePermissions', { 
+        yourCount: userPermissionCount, 
+        roleCount: targetRolePermissionCount 
+      });
+    } else if (!userHasAllRolePermissions) {
+      // Rolün sahip olduğu ama kullanıcının sahip olmadığı yetkiler varsa düzenleyemez
+      canEdit = false;
+      const missingPermissions = rolePermissionNames.filter(
+        (permName: string) => !currentUser.permissions.includes(permName)
+      );
+      reason = t('notifications.roleHasPermissionsYouDontHave', {
+        count: missingPermissions.length
+      });
+    } else {
+      canEdit = true;
+    }
 
     return {
       assignablePermissions: permissionsUserCanAssign,
@@ -131,7 +159,7 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
       canEditRole: canEdit,
       cannotEditReason: reason
     };
-  }, [data?.allPermissions, data?.rolePermissions, currentUser, locale, isProtectedRole]);
+  }, [data?.allPermissions, data?.rolePermissions, currentUser, locale, isProtectedRole, t]);
 
   const [currentSelectedPermissions, setCurrentSelectedPermissions] = useState<Set<string>>(new Set());
 
