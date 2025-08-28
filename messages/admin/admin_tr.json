@@ -293,6 +293,8 @@
     "roleSearchPlaceholder": "Rol ara...",
     "roleNotFound": "Aramanıza uygun rol bulunamadı.",
     "selectedRoleLabel": "Seçili Rol",
+    "rolesLoadError": "Roller yüklenirken bir hata oluştu.",
+    "noAssignableRoles": "Atanabilir rol bulunamadı veya rol atama yetkiniz yok.",
     "validation": {
       "nameRequired": "Ad soyad zorunludur.",
       "emailRequired": "Geçerli bir e-posta adresi zorunludur.",
@@ -1821,6 +1823,8 @@
       "roleSearchPlaceholder": "Rol ara...",
       "roleNotFound": "Aramanıza uygun rol bulunamadı.",
       "selectedRoleLabel": "Seçili Rol",
+      "rolesLoadError": "Roller yüklenirken bir hata oluştu.",
+      "noAssignableRoles": "Atanabilir rol bulunamadı veya rol atama yetkiniz yok.",
       "validation": {
         "nameRequired": "Ad soyad zorunludur.",
         "emailRequired": "Geçerli bir e-posta adresi zorunludur.",

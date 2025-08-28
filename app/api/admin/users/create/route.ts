@@ -1,12 +1,12 @@
 import { getCurrentUser, hashPasswordPbkdf2 } from "@/lib";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { canAssignRole } from "@/lib/utils/role-hierarchy";
 
 export async function POST(request: NextRequest) {
   try {
     // Yetki kontrolü - yeni permission sistemi
     const currentUser = await getCurrentUser(request);
+
     if (!currentUser || !currentUser.permissions.includes("users.create")) {
       return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 403 });
     }
@@ -44,8 +44,9 @@ export async function POST(request: NextRequest) {
     // Rol ID'sini temizle ve doğrula
     const cleanRoleId = roleId ? String(roleId).trim() : null;
 
+    let finalRoleId = null;
+
     // Rolün varlığını ve aktifliğini kontrol et, eğer roleId gönderilmişse
-    let roleToAssign = null;
     if (cleanRoleId) {
       const validRole = await prisma.authRole.findFirst({
         where: {
@@ -61,41 +62,39 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      // Check if current user has permission to assign this role
-      const currentUserRole = currentUser.primaryRole || currentUser.userRoles?.[0];
-      if (currentUserRole && !canAssignRole(currentUserRole, validRole.name)) {
-        return NextResponse.json(
-          { error: "Bu rolü atama yetkiniz bulunmamaktadır" },
-          { status: 403 }
-        );
-      }
+      // Super admin can assign any role, otherwise check permission count
+      if (currentUser.primaryRole !== "super_admin") {
+        const targetRolePermissionCount = await prisma.roleHasPermission.count({
+          where: { roleName: validRole.name, isActive: true, isAllowed: true },
+        });
 
-      roleToAssign = validRole;
+        if (currentUser.permissions.length <= targetRolePermissionCount) {
+          return NextResponse.json(
+            { error: "Bu rolü atamak için yeterli yetkiniz yok." },
+            { status: 403 }
+          );
+        }
+      }
+      finalRoleId = validRole.id;
     }
 
     // Şifreyi PBKDF2 ile hash'le
     const hashedPassword = await hashPasswordPbkdf2(password);
 
-    // Eğer rol belirtilmemişse varsayılan 'user' rolünü al
-    let finalRoleId = cleanRoleId;
+    // Eğer rol belirtilmemişse varsayılan 'user' rolünü ata (eğer yetki varsa)
     if (!finalRoleId) {
+      // `roles.assign` kontrolü burada da gereksiz.
+      // Eğer kullanıcı `users.create` yetkisine sahipse,
+      // varsayılan rolü atayabilmelidir.
       const defaultUserRole = await prisma.authRole.findFirst({
         where: { name: "user", isActive: true },
       });
       if (defaultUserRole) {
-        // Check if current user can assign the default role
-        const currentUserRole = currentUser.primaryRole || currentUser.userRoles?.[0];
-        if (currentUserRole && canAssignRole(currentUserRole, defaultUserRole.name)) {
-          finalRoleId = defaultUserRole.id;
-        } else {
-          // If they can't assign the default role, create user without any role
-          console.log("Current user cannot assign default 'user' role, creating user without role");
-          finalRoleId = null;
-        }
+        finalRoleId = defaultUserRole.id;
       }
     }
 
-    // Kullanıcıyı oluştur - her zaman bir rol ata
+    // Kullanıcıyı oluştur
     const user = await prisma.user.create({
       data: {
         name,

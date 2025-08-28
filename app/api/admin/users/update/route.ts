@@ -1,11 +1,9 @@
 import {
   canEditUser,
   getCurrentUser,
-  hasAdminAccess,
   hashPasswordPbkdf2,
 } from "@/lib";
 import { prisma } from "@/lib/prisma";
-import { canAssignRole } from "@/lib/utils/role-hierarchy";
 
 import { NextRequest, NextResponse } from "next/server";
 
@@ -129,16 +127,28 @@ export async function PUT(request: NextRequest) {
       // Rol atama permission kontrolü
 
       if (roleId === null || roleId === "") {
-        // Rolü kaldır - Rol kaldırma için de yetki kontrolü gerekebilir
-        const currentUserRole = currentUser.primaryRole || currentUser.userRoles?.[0];
-        const targetUserRole = targetUser.primaryRole;
+        // Rolü kaldır - Rol kaldırma için de yetki kontrolü
+        const hasRoleAssignPermission = 
+          currentUser.permissions.includes("admin.roles.assign") || 
+          currentUser.permissions.includes("roles.assign") ||
+          currentUser.primaryRole === "super_admin";
         
-        // Kullanıcı kendi rolünden yüksek bir rolü kaldıramaz
-        if (currentUserRole && targetUserRole && !canAssignRole(currentUserRole, targetUserRole)) {
+        if (!hasRoleAssignPermission) {
           return NextResponse.json(
-            { error: "Bu kullanıcının rolünü kaldırma yetkiniz yok" },
+            { error: "Rol atama/kaldırma yetkiniz bulunmamaktadır" },
             { status: 403 }
           );
+        }
+        
+        // Super admin can remove any role
+        if (currentUser.primaryRole !== "super_admin" && targetUser.primaryRole) {
+          // Hedef kullanıcının rolü super_admin ise kaldırılamaz
+          if(targetUser.primaryRole === "super_admin") {
+            return NextResponse.json(
+              { error: "super_admin rolünü sadece başka bir super_admin kaldırabilir." },
+              { status: 403 }
+            );
+          }
         }
         
         updateData.roleId = null;
@@ -157,24 +167,33 @@ export async function PUT(request: NextRequest) {
           );
         }
 
-        // Rol atama yetkisi kontrolü - role-hierarchy kullan
-        const currentUserRole = currentUser.primaryRole || currentUser.userRoles?.[0];
-        if (currentUserRole && !canAssignRole(currentUserRole, role.name)) {
+        // Rol atama yetkisi kontrolü
+        const hasRoleAssignPermission =
+          currentUser.permissions.includes("admin.roles.assign") ||
+          currentUser.permissions.includes("roles.assign") ||
+          currentUser.primaryRole === "super_admin";
+
+        if (!hasRoleAssignPermission) {
           return NextResponse.json(
-            { error: `${role.displayName} rolünü atama yetkiniz yok` },
+            { error: "Rol atama yetkiniz bulunmamaktadır" },
             { status: 403 }
           );
         }
 
-        // Eğer kullanıcının zaten bir rolü varsa, onu değiştirme yetkisi kontrolü
-        const targetUserRole = targetUser.primaryRole;
-        if (targetUserRole && currentUserRole && !canAssignRole(currentUserRole, targetUserRole)) {
-          return NextResponse.json(
-            { error: "Bu kullanıcının mevcut rolünü değiştirme yetkiniz yok" },
-            { status: 403 }
-          );
-        }
+        // Super admin her rolü atayabilir, diğerleri için yetki sayısı kontrolü
+        if (currentUser.primaryRole !== "super_admin") {
+            const targetRolePermissionCount = await prisma.roleHasPermission.count({
+                where: { roleName: role.name, isActive: true, isAllowed: true },
+            });
 
+            if (currentUser.permissions.length <= targetRolePermissionCount) {
+                return NextResponse.json(
+                    { error: "Bu rolü atamak için yeterli yetkiniz yok." },
+                    { status: 403 }
+                );
+            }
+        }
+        
         updateData.roleId = roleId;
         updateData.roleAssignedAt = new Date();
         updateData.roleAssignedById = currentUser.id;

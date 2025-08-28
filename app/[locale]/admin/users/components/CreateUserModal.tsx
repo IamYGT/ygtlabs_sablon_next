@@ -25,12 +25,12 @@ import {
   User,
   UserPlus,
   AlertCircle,
+  Loader,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { toast } from "react-hot-toast";
-import { getAssignableRoles, canAssignRole } from "@/lib/utils/role-hierarchy";
-import { useAuthStore } from "@/lib/stores/auth-store";
+import { useQuery } from "@tanstack/react-query";
 
 interface Role {
   id: string;
@@ -44,22 +44,39 @@ interface Role {
 interface CreateUserModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  roles: Role[];
   onUserCreated: () => void;
 }
+
+// Atanabilir rolleri getiren asenkron fonksiyon
+const fetchAssignableRoles = async (): Promise<Role[]> => {
+  const response = await fetch("/api/admin/roles/assignable");
+  if (!response.ok) {
+    throw new Error("Roller yüklenemedi");
+  }
+  return response.json();
+};
 
 export default function CreateUserModal({
   open,
   onOpenChange,
-  roles,
   onUserCreated,
 }: CreateUserModalProps) {
   const t = useTranslations("AdminUsers.createUser");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const { user: currentUser } = useAuthStore();
-  const [assignableRoles, setAssignableRoles] = useState<Role[]>([]);
+
+  const {
+    data: assignableRoles,
+    isLoading: rolesLoading,
+    error: rolesError,
+  } = useQuery<Role[]>({
+    queryKey: ["assignableRoles"],
+    queryFn: fetchAssignableRoles,
+    enabled: open, // Sadece modal açıkken veri çek
+    staleTime: 5 * 60 * 1000, // 5 dakika
+    gcTime: 10 * 60 * 1000, // 10 dakika
+  });
 
   const [formData, setFormData] = useState({
     name: "",
@@ -69,35 +86,16 @@ export default function CreateUserModal({
   });
   const [selectedRole, setSelectedRole] = useState<string>("");
 
-  // Kullanıcının atayabileceği rolleri filtrele
-  useEffect(() => {
-    if (currentUser?.currentRole?.name) {
-      const assignableRoleNames = getAssignableRoles(currentUser.currentRole.name);
-      const filteredAssignableRoles = roles.filter(
-        (role) => 
-          role.isActive && 
-          assignableRoleNames.includes(role.name)
-      );
-      setAssignableRoles(filteredAssignableRoles);
-    } else {
-      // Eğer kullanıcının rolü yoksa hiçbir rol atamasın
-      setAssignableRoles([]);
-    }
-  }, [currentUser, roles]);
-
-  // Filtrelenmiş roller (hem atanabilir hem de arama ile filtrelenmiş)
-  const filteredRoles = assignableRoles.filter(
-    (role) =>
-      role.displayName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Arama terimine göre rolleri filtrele
+  const filteredRoles =
+    assignableRoles?.filter(
+      (role) =>
+        role.isActive &&
+        role.displayName.toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
 
   const handleRoleSelect = (roleId: string) => {
-    const role = roles.find(r => r.id === roleId);
-    if (role && currentUser?.currentRole?.name && !canAssignRole(currentUser.currentRole.name, role.name)) {
-      toast.error("Bu rolü atama yetkiniz yok");
-      return;
-    }
-    setSelectedRole((prev) => (prev === roleId ? "" : roleId));
+    setSelectedRole(roleId);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -333,23 +331,21 @@ export default function CreateUserModal({
 
                 {/* Rol Listesi */}
                 <div className="max-h-48 overflow-y-auto space-y-2 border rounded-md p-2">
-                  {assignableRoles.length === 0 ? (
-                    <div className="text-center py-4">
-                      <AlertCircle className="h-5 w-5 text-amber-500 mx-auto mb-2" />
-                      <p className="text-sm text-muted-foreground">
-                        Rol atama yetkiniz bulunmuyor
-                      </p>
+                  {rolesLoading ? (
+                    <div className="flex justify-center items-center py-4">
+                      <Loader className="h-6 w-6 animate-spin text-primary" />
+                    </div>
+                  ) : rolesError ? (
+                    <div className="text-center py-4 text-destructive">
+                      <AlertCircle className="h-5 w-5 mx-auto mb-2" />
+                      <p className="text-sm">{t("rolesLoadError")}</p>
                     </div>
                   ) : filteredRoles.length > 0 ? (
-                    filteredRoles.map((role) => {
-                      const canAssign = currentUser?.currentRole?.name ? 
-                        canAssignRole(currentUser.currentRole.name, role.name) : false;
-                      return (
+                    filteredRoles.map((role) => (
                       <div
                         key={role.id}
-                        className={`flex items-center space-x-3 p-2 rounded-md ${
-                          !canAssign ? 'opacity-50 cursor-not-allowed' : ''
-                        }`}
+                        className="flex items-center space-x-3 p-2 rounded-md cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
+                        onClick={() => handleRoleSelect(role.id)}
                       >
                         <input
                           type="radio"
@@ -357,15 +353,11 @@ export default function CreateUserModal({
                           name="selectedRole"
                           checked={selectedRole === role.id}
                           onChange={() => handleRoleSelect(role.id)}
-                          disabled={!canAssign}
-                          className="h-4 w-4 text-primary disabled:opacity-50"
+                          className="h-4 w-4 text-primary"
                         />
                         <label
                           htmlFor={`role-${role.id}`}
-                          className={`flex-1 flex items-center gap-3 ${
-                            canAssign ? 'cursor-pointer' : 'cursor-not-allowed'
-                          }`}
-                          onClick={() => canAssign && handleRoleSelect(role.id)}
+                          className="flex-1 flex items-center gap-3 cursor-pointer"
                         >
                           <div
                             className="h-3 w-3 rounded-full flex-shrink-0"
@@ -386,10 +378,11 @@ export default function CreateUserModal({
                           )}
                         </label>
                       </div>
-                    );})
+                    ))
                   ) : (
                     <div className="text-center py-4 text-muted-foreground">
-                      {t("roleNotFound")}
+                      <AlertCircle className="h-5 w-5 mx-auto mb-2" />
+                      <p className="text-sm">{t("noAssignableRoles")}</p>
                     </div>
                   )}
                 </div>
@@ -400,7 +393,9 @@ export default function CreateUserModal({
                     <Label className="text-sm">{t("selectedRoleLabel")}</Label>
                     <div className="mt-2">
                       {(() => {
-                        const role = roles.find((r) => r.id === selectedRole);
+                        const role = assignableRoles?.find(
+                          (r) => r.id === selectedRole
+                        );
                         return role ? (
                           <Badge
                             variant="secondary"
