@@ -668,6 +668,8 @@
         "protectedErrorGeneric": "Bu rol düzenlenemez.",
         "protectedRole": "Bu rol sistem tarafından korunmaktadır.",
         "insufficientPermissions": "Bu rolü düzenlemek için en az {roleCount} yetkiniz olmalı (sizde {yourCount} yetki var).",
+        "cannotEditEqualOrMorePermissions": "Bu rolü düzenleyemezsiniz. Sizde {yourCount} yetki var, ancak bu rolde {roleCount} yetki bulunuyor.",
+        "roleHasPermissionsYouDontHave": "Bu rolün sahip olduğu {count} adet yetki sizde bulunmuyor. Bu rolü düzenlemek için önce bu yetkilere sahip olmalısınız.",
         "permissionsLoadError": "Yetkiler yüklenemedi",
         "rolePermissionsLoadError": "Rol yetkileri yüklenemedi",
         "updateErrorWithMessage": "Rol güncellenemedi: {message}",
