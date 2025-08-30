@@ -1416,19 +1416,37 @@
     "empty": "No records found.",
     "searchPlaceholder": "Search...",
     "filters": {
+      "filterButton": "Filter",
+      "clearAll": "Clear All",
+      "categories": {
+        "status": "Status",
+        "type": "Type",
+        "activity": "Activity"
+      },
       "status": {
         "placeholder": "Status",
         "all": "All",
-        "active": "Active",
-        "inactive": "Inactive"
+        "active": "Active Customers",
+        "inactive": "Inactive Customers"
+      },
+      "type": {
+        "premium": "Premium Customers",
+        "regular": "Regular Customers",
+        "new": "New Customers"
+      },
+      "activity": {
+        "recent": "Recent Activity",
+        "inactive_long": "Inactive Long Time"
       }
     },
     "table": {
       "name": "Name",
+      "contact": "Contact",
       "email": "Email",
       "phone": "Phone",
       "company": "Company",
       "status": "Status",
+      "createdAt": "Created",
       "actions": "Actions"
     },
     "status": {
@@ -1440,6 +1458,7 @@
       "view": "View",
       "edit": "Edit",
       "delete": "Delete",
+      "deleteSelected": "Delete Selected",
       "cancel": "Cancel",
       "saving": "Saving...",
       "save": "Save"
@@ -1498,6 +1517,10 @@
       "updateError": "Could not update customer",
       "deleteSuccess": "Customer deleted",
       "deleteError": "Could not delete customer",
+      "bulkDeleteSuccess": "{count} customers deleted successfully",
+      "bulkDeleteError": "Could not delete selected customers",
+      "bulkDeleteConfirmTitle": "Bulk Delete Confirmation",
+      "bulkDeleteConfirmText": "Are you sure you want to delete {count} customers? This action cannot be undone.",
       "activateSuccess": "Activated",
       "deactivateSuccess": "Deactivated",
       "statusUpdateError": "Could not update status"

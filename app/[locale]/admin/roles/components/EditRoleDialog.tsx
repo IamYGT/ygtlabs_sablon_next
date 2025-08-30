@@ -253,17 +253,19 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-[94vw] sm:max-w-[95vw] lg:max-w-6xl max-h-[92vh] sm:max-h-[95vh] overflow-y-auto bg-blue-50 dark:bg-slate-900 backdrop-blur-sm p-0 border border-gray-200 dark:border-gray-800">
-        <DialogHeader className="border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/50 dark:to-indigo-950/50 p-3 rounded-t-lg">
+        <DialogHeader className="border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/50 dark:to-indigo-950/50 p-3 pr-12 rounded-t-lg">
           <DialogTitle className="flex items-center gap-2 md:gap-3 text-lg md:text-xl font-bold">
              <div className="p-2 md:p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg"><Edit className="h-4 w-4 md:h-5 md:w-5 text-blue-600 dark:text-blue-400" /></div>
              <div className="flex-1 min-w-0">
-               <span className="truncate block">{role.displayName} {t("title")}</span>
+               <div className="flex items-center gap-2 flex-wrap">
+                 <span className="truncate">{role.displayName} {t("title")}</span>
+                 {isProtectedRole && (<Badge variant="outline" className="text-orange-600 border-orange-600 text-xs shrink-0"><ShieldCheck className="w-3 h-3 mr-1" />{t("protectedRole")}</Badge>)}
+                 {!canEditRole && cannotEditReason && (<Badge variant="destructive" className="text-xs shrink-0"><Shield className="w-3 h-3 mr-1" />Yetki Sınırlaması</Badge>)}
+               </div>
                <p className="text-xs md:text-sm font-normal text-gray-600 dark:text-gray-400 mt-1 hidden md:block">
                  {!canEditRole && cannotEditReason ? cannotEditReason : t("roleInfoDescription")}
                </p>
              </div>
-             {isProtectedRole && (<Badge variant="outline" className="text-orange-600 border-orange-600 text-xs"><ShieldCheck className="w-3 h-3 mr-1" />{t("protectedRole")}</Badge>)}
-             {!canEditRole && cannotEditReason && (<Badge variant="destructive" className="text-xs"><Shield className="w-3 h-3 mr-1" />Yetki Sınırlaması</Badge>)}
           </DialogTitle>
         </DialogHeader>
         <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-6 p-2 md:p-6 overflow-y-auto scroll-smooth">

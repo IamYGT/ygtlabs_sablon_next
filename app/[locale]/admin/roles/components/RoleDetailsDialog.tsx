@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dialog';
 import { useTranslations } from 'next-intl';
 import React, { useCallback, useState } from 'react';
+import { useAuth } from '@/lib/hooks/useAuth';
 
 import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';

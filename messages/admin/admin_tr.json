@@ -1387,19 +1387,37 @@
     "empty": "Kayıt bulunamadı.",
     "searchPlaceholder": "Ara...",
     "filters": {
+      "filterButton": "Filtrele",
+      "clearAll": "Tümünü Temizle",
+      "categories": {
+        "status": "Durum",
+        "type": "Tür",
+        "activity": "Aktivite"
+      },
       "status": {
         "placeholder": "Durum",
         "all": "Tümü",
-        "active": "Aktif",
-        "inactive": "Pasif"
+        "active": "Aktif Müşteriler",
+        "inactive": "Pasif Müşteriler"
+      },
+      "type": {
+        "premium": "Premium Müşteriler",
+        "regular": "Standart Müşteriler",
+        "new": "Yeni Müşteriler"
+      },
+      "activity": {
+        "recent": "Son Aktivite",
+        "inactive_long": "Uzun Süre Pasif"
       }
     },
     "table": {
       "name": "Ad",
+      "contact": "İletişim",
       "email": "E-posta",
       "phone": "Telefon",
       "company": "Firma",
       "status": "Durum",
+      "createdAt": "Oluşturulma",
       "actions": "İşlemler"
     },
     "status": {
@@ -1411,6 +1429,7 @@
       "view": "Görüntüle",
       "edit": "Düzenle",
       "delete": "Sil",
+      "deleteSelected": "Seçilenleri Sil",
       "cancel": "İptal",
       "saving": "Kaydediliyor...",
       "save": "Kaydet"
@@ -1469,6 +1488,10 @@
       "updateError": "Müşteri güncellenemedi",
       "deleteSuccess": "Müşteri silindi",
       "deleteError": "Müşteri silinemedi",
+      "bulkDeleteSuccess": "{count} müşteri başarıyla silindi",
+      "bulkDeleteError": "Seçili müşteriler silinemedi",
+      "bulkDeleteConfirmTitle": "Toplu Silme Onayı",
+      "bulkDeleteConfirmText": "{count} müşteriyi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
       "activateSuccess": "Aktifleştirildi",
       "deactivateSuccess": "Pasifleştirildi",
       "statusUpdateError": "Durum güncellenemedi"

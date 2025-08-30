@@ -54,6 +54,7 @@ import { DeleteCustomerDialog } from "./DeleteCustomerDialog";
 import { EditCustomerDialog } from "./EditCustomerDialog";
 import { ViewCustomerDialog } from "./ViewCustomerDialog";
 import type { Customer } from "./types";
+import { CustomerFilters } from "./CustomerFilters";
 
 export default function CustomersPageClient() {
   const t = useTranslations("Customers");
@@ -65,12 +66,13 @@ export default function CustomersPageClient() {
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
   const [selectedCustomers, setSelectedCustomers] = useState<string[]>([]);
+  const [activeFilters, setActiveFilters] = useState<string[]>([]);
+  const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
 
   const [isCreateOpen, setCreateOpen] = useState(false);
   const [editing, setEditing] = useState<Customer | null>(null);
   const [deleting, setDeleting] = useState<Customer | null>(null);
   const [viewing, setViewing] = useState<Customer | null>(null);
-  const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
 
   const dateLocale: Locale =
     (dfLocales as unknown as Record<string, Locale>)[locale] ?? dfLocales.enUS;
@@ -100,15 +102,61 @@ export default function CustomersPageClient() {
   }, []);
 
   const filtered = useMemo(() => {
-    if (!q) return items;
-    const f = q.toLowerCase();
-    return items.filter(
-      (x) =>
-        x.name.toLowerCase().includes(f) ||
-        x.email?.toLowerCase().includes(f) ||
-        x.company?.toLowerCase().includes(f)
-    );
-  }, [items, q]);
+    let result = items;
+
+    // Arama filtresi
+    if (q) {
+      const f = q.toLowerCase();
+      result = result.filter(
+        (x) =>
+          x.name.toLowerCase().includes(f) ||
+          x.email?.toLowerCase().includes(f) ||
+          x.company?.toLowerCase().includes(f)
+      );
+    }
+
+    // Durum filtreleri (OR mantığı)
+    if (activeFilters.length > 0) {
+      result = result.filter((customer) => 
+        activeFilters.some(filterId => {
+          switch (filterId) {
+            case 'active':
+              return customer.isActive;
+            case 'inactive':
+              return !customer.isActive;
+            case 'premium':
+              // Premium müşteriler için company alanı olan
+              return !!customer.company;
+            case 'regular':
+              // Regular müşteriler için company alanı olmayan
+              return !customer.company;
+            case 'new': {
+              // Son 7 gün içinde oluşturulan
+              const sevenDaysAgo = new Date();
+              sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+              return new Date(customer.createdAt) >= sevenDaysAgo;
+            }
+            case 'recent': {
+              // Son 30 gün içinde oluşturulan
+              const thirtyDaysAgo = new Date();
+              thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+              return new Date(customer.createdAt) >= thirtyDaysAgo;
+            }
+            case 'inactive_long': {
+              // 90 gün öncesinden eski ve aktif olmayan
+              const ninetyDaysAgo = new Date();
+              ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+              return new Date(customer.createdAt) < ninetyDaysAgo && !customer.isActive;
+            }
+            default:
+              return false;
+          }
+        })
+      );
+    }
+
+    return result;
+  }, [items, q, activeFilters]);
 
   const handleSelectCustomer = (customerId: string) => {
     setSelectedCustomers((prev) =>
@@ -127,10 +175,30 @@ export default function CustomersPageClient() {
   };
 
   const handleBulkDelete = async () => {
-    // Toplu silme API'si henüz yok, gelecekte eklenebilir.
-    // Bu fonksiyon şimdilik bir uyarı gösterecek.
-    toast.error("Toplu silme işlemi henüz desteklenmiyor.");
-    setBulkDeleteModalOpen(false);
+    try {
+      // Seçili müşterileri tek tek sil
+      const deletePromises = selectedCustomers.map(async (customerId) => {
+        const res = await fetch(`/api/admin/customers/${customerId}`, {
+          method: "DELETE",
+        });
+        if (!res.ok) {
+          throw new Error(`Failed to delete customer ${customerId}`);
+        }
+      });
+
+      await Promise.all(deletePromises);
+      
+      toast.success(
+        t("messages.bulkDeleteSuccess", { count: selectedCustomers.length })
+      );
+      setSelectedCustomers([]);
+      setBulkDeleteModalOpen(false);
+      load();
+      router.refresh();
+    } catch (error) {
+      console.error("Bulk delete error:", error);
+      toast.error(t("messages.bulkDeleteError"));
+    }
   };
 
   return (
@@ -161,8 +229,8 @@ export default function CustomersPageClient() {
         </div>
 
         {/* Customers Table */}
-        <Card className="bg-blue-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
-          <CardHeader className="border-b border-gray-200 dark:border-gray-700 p-4">
+        <Card className="bg-white dark:bg-gray-900 rounded-xl border-none shadow-sm overflow-hidden">
+          <CardHeader className="border-b border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-800/50">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="relative w-full sm:max-w-lg">
                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -172,26 +240,55 @@ export default function CustomersPageClient() {
                   placeholder={t("searchPlaceholder")}
                   value={q}
                   onChange={(e) => setQ(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all duration-200 text-base"
+                  className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 text-base rounded-lg"
                 />
               </div>
-              {selectedCustomers.length > 0 && (
-                <Button
-                  variant="destructive"
-                  onClick={() => setBulkDeleteModalOpen(true)}
-                >
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  {t("actions.deleteSelected", {
-                    count: selectedCustomers.length,
-                  })}
-                </Button>
-              )}
+              <div className="flex items-center gap-2">
+                <CustomerFilters
+                  activeFilters={activeFilters}
+                  onFiltersChange={setActiveFilters}
+                />
+                {selectedCustomers.length > 0 && (
+                  <Button
+                    variant="destructive"
+                    onClick={() => setBulkDeleteModalOpen(true)}
+                    className="h-8 text-xs px-4 rounded-lg"
+                  >
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    {t("actions.deleteSelected")} ({selectedCustomers.length})
+                  </Button>
+                )}
+              </div>
             </div>
+
+            {/* Filtre ve İstatistik Bilgileri */}
+            {(activeFilters.length > 0 || q) && (
+              <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    {q && (
+                      <span>
+                        &ldquo;{q}&rdquo; için arama yapılıyor
+                        {activeFilters.length > 0 && " ve "}
+                      </span>
+                    )}
+                    {activeFilters.length > 0 && (
+                      <span>
+                        {activeFilters.length} filtre uygulanıyor
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                    {filtered.length} sonuç bulundu
+                  </div>
+                </div>
+              </div>
+            )}
           </CardHeader>
           <CardContent className="p-0">
             <Table>
               <TableHeader>
-                <TableRow className="bg-white dark:bg-gray-900">
+                <TableRow className="bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-800/50">
                   <TableHead className="w-[50px] pl-6">
                     <Checkbox
                       checked={
@@ -228,7 +325,7 @@ export default function CustomersPageClient() {
                   filtered.map((item) => (
                     <TableRow
                       key={item.id}
-                      className="hover:bg-gray-50/70 dark:hover:bg-gray-800/50"
+                      className="hover:bg-gray-50/70 dark:hover:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800/50"
                     >
                       <TableCell className="pl-6">
                         <Checkbox
@@ -291,7 +388,7 @@ export default function CustomersPageClient() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent
                             align="end"
-                            className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-lg w-56"
+                            className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-lg w-56 rounded-lg overflow-hidden"
                           >
                             <DropdownMenuLabel className="text-gray-700 dark:text-gray-300 font-semibold">
                               {t("table.actions")}
@@ -363,6 +460,7 @@ export default function CustomersPageClient() {
           }}
         />
 
+        {/* Bulk Delete Modal */}
         <Dialog
           open={bulkDeleteModalOpen}
           onOpenChange={setBulkDeleteModalOpen}

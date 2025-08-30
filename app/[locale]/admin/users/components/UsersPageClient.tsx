@@ -61,6 +61,7 @@ import DeleteUserModal from "./DeleteUserModal";
 import QuickRoleAssignModal from "./QuickRoleAssignModal";
 import UserEditModal from "./UserEditModal";
 import UserStatsCards from "./UserStatsCards";
+import { UserFilters } from "./UserFilters";
 
 interface User {
   id: string;
@@ -110,6 +111,7 @@ export default function UsersPageClient({
   const locale = useLocale();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [activeFilters, setActiveFilters] = useState<string[]>([]);
   const admin = useAdminAuth();
 
   const dateLocale: Locale =
@@ -130,14 +132,44 @@ export default function UsersPageClient({
     null
   );
 
-  // Filter users based on search
+  // Filter users based on search and filters
   const filteredUsers = users.filter((user) => {
+    // Arama filtresi
     const term = searchTerm.toLowerCase();
-    return (
+    const matchesSearch = !term || (
       user.name?.toLowerCase().includes(term) ||
       user.email?.toLowerCase().includes(term) ||
       user.currentRole?.displayName.toLowerCase().includes(term)
     );
+
+    // Durum filtreleri (OR mantığı - herhangi bir filtreyle eşleşen kullanıcıları göster)
+    const matchesStatusFilters = activeFilters.length === 0 || 
+      activeFilters.some(filterId => {
+        switch (filterId) {
+          case 'active':
+            return user.isActive;
+          case 'inactive':
+            return !user.isActive;
+          case 'admin':
+            return user.currentRole?.name === 'admin' || user.currentRole?.name === 'super_admin';
+          case 'no_role':
+            return !user.currentRole;
+          case 'recent_login':
+            // Son 7 gün içinde kayıt olanlar (lastLoginAt yoksa createdAt kullan)
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+            return new Date(user.createdAt) >= sevenDaysAgo;
+          case 'never_login':
+            // Sadece kayıt tarihi eski olanları göster (login bilgisi olmadığı için yaklaşık)
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            return new Date(user.createdAt) < thirtyDaysAgo;
+          default:
+            return false;
+        }
+      });
+
+    return matchesSearch && matchesStatusFilters;
   });
 
   // Kullanıcı seçimi
@@ -504,13 +536,10 @@ export default function UsersPageClient({
                   />
                 </div>
                 <div className="flex items-center justify-start sm:justify-end gap-3 w-full sm:w-auto">
-                  <Button
-                    variant="outline"
-                    className="shadow h-8 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs px-4"
-                  >
-                    <Filter className="h-4 w-4 mr-2" />
-                    {t("search.filters")}
-                  </Button>
+                  <UserFilters 
+                    activeFilters={activeFilters}
+                    onFiltersChange={setActiveFilters}
+                  />
                   <BulkActionsDropdown
                     selectedCount={selectedUsers.length}
                     onBulkAction={handleBulkAction}
@@ -811,7 +840,10 @@ export default function UsersPageClient({
                     {t("tryDifferentCriteria")}
                   </p>
                   <Button
-                    onClick={() => setSearchTerm("")}
+                    onClick={() => {
+                      setSearchTerm("");
+                      setActiveFilters([]);
+                    }}
                     variant="outline"
                     className="mt-4 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
                   >

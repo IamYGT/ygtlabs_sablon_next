@@ -25,7 +25,7 @@ import { useCallback, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 
 import { useAuth } from '@/lib/hooks/useAuth';
-import CreateRoleDialogV3 from './CreateRoleDialogV3';
+import CreateRoleDialogV3 from './CreateRoleDialog';
 import DeleteRoleDialog from './DeleteRoleDialog';
 import EditRoleDialog from './EditRoleDialog';
 import RoleDetailsDialog from './RoleDetailsDialog';
@@ -210,8 +210,59 @@ export default function RolesPageClient({
 
 
 
-    // Filtreleme fonksiyonu
+    // Helper function to check if user can view/interact with a role
+    const canUserAccessRole = (role: Role) => {
+        if (!currentUser) return false;
+        
+        // Super admin can access all roles
+        if (currentUser.primaryRole === 'super_admin') {
+            return true;
+        }
+        
+        // Protected roles check
+        const isProtectedRole = role.name === 'super_admin' || role.name === 'customer' || role.name === 'admin';
+        
+        // Get role permissions from the role data
+        const rolePermissionNames = role.permissions?.map(p => p.permission.name) || [];
+        const userPermissionCount = currentUser.permissions?.length || 0;
+        const targetRolePermissionCount = rolePermissionNames.length;
+        
+        // Check if user has all permissions that the role has
+        const userHasAllRolePermissions = rolePermissionNames.every(
+            (permName: string) => currentUser.permissions?.includes(permName) || false
+        );
+        
+        // Access rules:
+        // 1. Can view protected roles (but not edit them)
+        // 2. Cannot view roles with more permissions than user has
+        // 3. Cannot view roles that have permissions user doesn't have
+        // 4. Can view their own role (but cannot edit it unless super admin)
+        
+        if (isProtectedRole) {
+            // Can view protected roles but with limited interaction
+            return true;
+        }
+        
+        if (targetRolePermissionCount > userPermissionCount) {
+            // Cannot access roles with more permissions
+            return false;
+        }
+        
+        if (!userHasAllRolePermissions) {
+            // Cannot access roles that have permissions user doesn't have
+            return false;
+        }
+        
+        return true;
+    };
+
+    // Filtreleme fonksiyonu with access control
     const filteredRoles = roles.filter(role => {
+        // First check if user can access this role
+        if (!canUserAccessRole(role)) {
+            return false;
+        }
+        
         const matchesSearch =
             role.displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||
             role.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -295,6 +346,12 @@ export default function RolesPageClient({
     };
 
     const handleRoleAction = (action: string, role: Role) => {
+        // First check if user can access this role at all
+        if (!canUserAccessRole(role)) {
+            toast.error('Bu rolü görüntüleme yetkiniz bulunmamaktadır.');
+            return;
+        }
+        
         // Güvenlik kontrolü - kullanıcı kendi rolünü düzenleyemez (süper admin hariç)
         if (action === 'edit' || action === 'delete' || action === 'edit-permissions') {
             const isSystemProtected = role.name === 'super_admin' || role.name === 'customer' || role.name === 'admin';
@@ -792,7 +849,7 @@ export default function RolesPageClient({
                                                 </div>
 
                                                 <div className="flex gap-3">
-                                                    {!isProtected && (
+                                                    {!isProtected ? (
                                                         <Button
                                                             size="sm"
                                                             className="flex-1 h-10 rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-md transition-all duration-200 hover:shadow-lg"
@@ -801,15 +858,16 @@ export default function RolesPageClient({
                                                             <Edit2 className="mr-2 h-4 w-4" />
                                                             {t('edit')}
                                                         </Button>
+                                                    ) : (
+                                                        <Button
+                                                            size="sm"
+                                                            className="flex-1 h-10 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-150"
+                                                            onClick={() => handleRoleAction('details', role)}
+                                                        >
+                                                            <Eye className="mr-2 h-4 w-4" />
+                                                            {t('view')}
+                                                        </Button>
                                                     )}
-                                                    <Button
-                                                        size="sm"
-                                                        className="flex-1 h-10 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-150"
-                                                        onClick={() => handleRoleAction('details', role)}
-                                                    >
-                                                        <Eye className="mr-2 h-4 w-4" />
-                                                        {t('view')}
-                                                    </Button>
                                                 </div>
                                             </CardContent>
                                         </Card>
