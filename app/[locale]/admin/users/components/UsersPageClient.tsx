@@ -835,7 +835,6 @@ export default function UsersPageClient({
         <CreateUserModal
           open={createUserModalOpen}
           onOpenChange={setCreateUserModalOpen}
-          roles={roles}
           onUserCreated={() => router.refresh()}
         />
 

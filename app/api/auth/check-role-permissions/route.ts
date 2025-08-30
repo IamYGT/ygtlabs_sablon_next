@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/server-utils";
-import { prisma } from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
   try {

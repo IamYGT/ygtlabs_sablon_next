@@ -147,13 +147,54 @@ export default function RolesPageClient({
         }
     }, [currentUser, t]);
 
+    // Rolleri yeniden yükle - sadece gerekli yetkiye sahipse API çağrısı yap
+    const loadRoles = useCallback(async () => {
+        // Rol görüntüleme yetkisi yoksa API çağrısı yapma
+        const hasViewPermission = userPermissions.some(perm =>
+            perm.includes('function.roles.view') || perm.includes('view./admin/roles')
+        );
+
+        if (!hasViewPermission) {
+            console.log(t('info.noViewPermission'));
+            return;
+        }
+
+        setLoading(true);
+        try {
+            // Force fresh data by adding timestamp and proper headers
+            const response = await fetch(`/api/admin/roles?t=${Date.now()}&_=${Math.random()}`, {
+                method: 'GET',
+                cache: 'no-store',
+                headers: {
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    'Pragma': 'no-cache',
+                    'Expires': '0'
+                }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                // Always set fresh data, don't merge with existing
+                setRoles(data.roles || []);
+                console.log('Roles refreshed:', data.roles?.length || 0, 'roles loaded');
+            } else {
+                console.error(t('error.failedToLoad'), response.status);
+                toast.error(t('error.failedToLoad'));
+            }
+        } catch (error) {
+            console.error(t('error.errorLoading'), error);
+            toast.error(t('error.errorLoading'));
+        } finally {
+            setLoading(false);
+        }
+    }, [userPermissions, t]);
+
     // Client-side data fetching - always fetch fresh data on mount
     useEffect(() => {
         if (currentUser) {
             // Always load fresh data regardless of initial roles
             loadInitialData();
         }
-    }, [currentUser]); // Remove loadInitialData from deps to prevent infinite loop
+    }, [currentUser, loadInitialData]);
 
     // Add interval to refresh data periodically (optional)
     useEffect(() => {
@@ -165,7 +206,7 @@ export default function RolesPageClient({
         }, 30000);
 
         return () => clearInterval(intervalId);
-    }, [currentUser]);
+    }, [currentUser, loadRoles]);
 
 
 
@@ -213,47 +254,6 @@ export default function RolesPageClient({
     const _getPermissionsByCategory = () => {
         // Placeholder function
         return {};
-    };
-
-    // Rolleri yeniden yükle - sadece gerekli yetkiye sahipse API çağrısı yap
-    const loadRoles = async () => {
-        // Rol görüntüleme yetkisi yoksa API çağrısı yapma
-        const hasViewPermission = userPermissions.some(perm =>
-            perm.includes('function.roles.view') || perm.includes('view./admin/roles')
-        );
-
-        if (!hasViewPermission) {
-            console.log(t('info.noViewPermission'));
-            return;
-        }
-
-        setLoading(true);
-        try {
-            // Force fresh data by adding timestamp and proper headers
-            const response = await fetch(`/api/admin/roles?t=${Date.now()}&_=${Math.random()}`, {
-                method: 'GET',
-                cache: 'no-store',
-                headers: {
-                    'Cache-Control': 'no-cache, no-store, must-revalidate',
-                    'Pragma': 'no-cache',
-                    'Expires': '0'
-                }
-            });
-            if (response.ok) {
-                const data = await response.json();
-                // Always set fresh data, don't merge with existing
-                setRoles(data.roles || []);
-                console.log('Roles refreshed:', data.roles?.length || 0, 'roles loaded');
-            } else {
-                console.error(t('error.failedToLoad'), response.status);
-                toast.error(t('error.failedToLoad'));
-            }
-        } catch (error) {
-            console.error(t('error.errorLoading'), error);
-            toast.error(t('error.errorLoading'));
-        } finally {
-            setLoading(false);
-        }
     };
 
     const handleRefresh = () => {
