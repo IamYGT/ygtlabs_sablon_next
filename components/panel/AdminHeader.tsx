@@ -13,11 +13,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import { useSidebar } from "@/components/ui/sidebar";
+import { useAdminNavigation } from "@/hooks/useAdminNavigation";
+import { useCustomerNavigation } from "@/hooks/useCustomerNavigation";
 import { useAdminAuth } from "@/lib/hooks/useAuth";
 import { usePathname, useRouter } from "@/lib/i18n/navigation";
 import { routing } from "@/lib/i18n/routing";
+import { pathnames } from "@/lib/i18n/routing.generated";
 import TR from "country-flag-icons/react/3x2/TR";
 import US from "country-flag-icons/react/3x2/US";
 import {
@@ -55,6 +65,12 @@ interface Notification {
   read: boolean;
 }
 
+interface SearchResult {
+  id: string;
+  title: string;
+  url: string;
+}
+
 export function AdminHeader({
   title = "Dashboard",
   subtitle: _subtitle,
@@ -87,9 +103,12 @@ export function AdminHeader({
   // setOpen prop'u varsa onu kullan, yoksa sidebar hook'undan al
   const handleMenuToggle = setOpen || setSidebarOpen;
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [logoutOpen, setLogoutOpen] = useState(false);
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+  const [searchResults, setSearchResults] = useState<Record<string, SearchResult[]>>({});
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [inputValue, setInputValue] = useState('');
 
   // Static örnek bildirimler - API çağrısı devre dışı
   useEffect(() => {
@@ -106,6 +125,76 @@ export function AdminHeader({
     ]);
     setLoading(false);
   }, [admin, t, locale]);
+
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setCommandPaletteOpen((open) => !open);
+      }
+    };
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, []);
+
+  const adminNavItems = useAdminNavigation();
+  const customerNavItems = useCustomerNavigation();
+
+  const allPages = React.useMemo(() => {
+    const adminPages = adminNavItems.map((item) => ({
+      id: item.key,
+      title: item.label,
+      url: item.href,
+    }));
+
+    const customerPages = customerNavItems.map((item) => ({
+      id: item.key,
+      title: item.label,
+      url: item.href,
+    }));
+
+    return [...adminPages, ...customerPages];
+  }, [adminNavItems, customerNavItems]);
+
+  useEffect(() => {
+    const staticSearchData = {
+      "Sayfalar": allPages,
+      "Aksiyonlar": [
+        { id: "8", title: "Yeni Kullanıcı Oluştur", url: "/admin/users/create" },
+        { id: "9", title: "Yeni Rol Oluştur", url: "/admin/roles/create" },
+        { id: "10", title: "Yeni Destek Talebi Oluştur", url: "/admin/support/new" },
+        { id: "11", title: "Çıkış Yap", url: "/logout" },
+      ],
+      "Sekmeler": [
+        { id: "12", title: "Genel Ayarlar (Profil)", url: "/admin/profile?tab=general" },
+        { id: "13", title: "Güvenlik Ayarları (Profil)", url: "/admin/profile?tab=security" },
+        { id: "14", title: "Bildirim Ayarları (Profil)", url: "/admin/profile?tab=notifications" },
+      ],
+    };
+
+    if (inputValue.length > 1) {
+      setSearchLoading(true);
+      const filteredResults: Record<string, SearchResult[]> = {};
+      for (const group in staticSearchData) {
+        const items = staticSearchData[group as keyof typeof staticSearchData];
+        const filteredItems = items.filter(item =>
+          item.title.toLowerCase().includes(inputValue.toLowerCase())
+        );
+        if (filteredItems.length > 0) {
+          filteredResults[group] = filteredItems;
+        }
+      }
+      setSearchResults(filteredResults);
+      setSearchLoading(false);
+    } else {
+      setSearchResults({});
+    }
+  }, [inputValue, allPages]);
+
+  const handleSelect = (url: string) => {
+    router.push(url);
+    setCommandPaletteOpen(false);
+  };
 
   // Okunmamış bildirim sayısı
   const unreadCount = notifications.filter((n) => !n.read).length;
@@ -137,16 +226,8 @@ export function AdminHeader({
     }
   };
 
-  // Arama fonksiyonu
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      console.log("Arama:", searchQuery);
-      // TODO: Implement search functionality
-    }
-  };
-
   return (
+    <>
     <header className="sticky top-0 z-50 w-full bg-blue-100 dark:bg-slate-900 backdrop-blur-xl supports-[backdrop-filter]:bg-gray-50/80 dark:supports-[backdrop-filter]:bg-slate-900/80 shadow-sm transition-all duration-300 md:rounded-tl-[1.5rem]">
       <div className="flex h-16 sm:h-18 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Sol Taraf - Hamburger Menu + Başlık */}
@@ -171,47 +252,30 @@ export function AdminHeader({
 
         {/* Orta - Arama (Desktop) */}
         <div className="hidden lg:flex flex-1 max-w-lg mx-8">
-          <form onSubmit={handleSearch} className="relative w-full group">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground/60 transition-all duration-300 group-focus-within:text-blue-500" />
-            <Input
-              placeholder={t("searchPlaceholder")}
-              className="pl-12 pr-4 h-10 bg-background/50 border-border/60 rounded-xl transition-all duration-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 focus:bg-background hover:bg-background/80 placeholder:text-muted-foreground/60"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </form>
+          <Button
+            variant="outline"
+            className="relative w-full justify-start text-sm text-muted-foreground h-10 bg-background/50 border-border/60 rounded-xl transition-all duration-300 hover:bg-background/80"
+            onClick={() => setCommandPaletteOpen(true)}
+          >
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4" />
+            <span className="pl-8">{t("searchPlaceholder")}</span>
+            <kbd className="pointer-events-none absolute right-4 top-1/2 transform -translate-y-1/2 hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+              <span className="text-xs">⌘</span>K
+            </kbd>
+          </Button>
         </div>
 
         {/* Sağ Taraf - Kontroller */}
         <div className="flex items-center space-x-2 sm:space-x-3">
           {/* Mobil Arama */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="lg:hidden transition-all duration-200 hover:scale-105 hover:bg-accent/50 rounded-lg h-9 w-9"
-              >
-                <Search className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="end"
-              className="w-72 sm:w-80 p-4 border-border/60 shadow-xl"
-              data-scope="admin"
-            >
-              <form onSubmit={handleSearch} className="relative w-full group">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground/60 transition-all duration-300 group-focus-within:text-blue-500" />
-                <Input
-                  placeholder={t("searchPlaceholder")}
-                  className="pl-12 pr-4 h-10 bg-background/50 border-border/60 rounded-xl transition-all duration-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  autoFocus
-                />
-              </form>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="lg:hidden transition-all duration-200 hover:scale-105 hover:bg-accent/50 rounded-lg h-9 w-9"
+            onClick={() => setCommandPaletteOpen(true)}
+          >
+            <Search className="h-4 w-4" />
+          </Button>
 
           {/* Bildirimler */}
           <DropdownMenu>
@@ -504,5 +568,35 @@ export function AdminHeader({
         </div>
       </div>
     </header>
+    <CommandDialog open={commandPaletteOpen} onOpenChange={setCommandPaletteOpen}>
+        <CommandInput
+          placeholder="Bir komut yazın veya arama yapın..."
+          value={inputValue}
+          onValueChange={setInputValue}
+        />
+        <CommandList>
+          {searchLoading && <div className="p-4 text-center text-sm">Yükleniyor...</div>}
+          {!searchLoading && Object.keys(searchResults).length === 0 && inputValue.length > 1 && (
+            <CommandEmpty>Sonuç bulunamadı.</CommandEmpty>
+          )}
+          
+          {Object.entries(searchResults).map(([group, items]) => (
+            items.length > 0 && (
+              <CommandGroup key={group} heading={group}>
+                {items.map((item) => (
+                  <CommandItem
+                    key={item.id}
+                    onSelect={() => handleSelect(item.url)}
+                    value={`${group}-${item.title}`}
+                  >
+                    {item.title}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )
+          ))}
+        </CommandList>
+      </CommandDialog>
+    </>
   );
 }

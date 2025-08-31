@@ -1,134 +1,130 @@
 "use client";
 
-import { useAuth } from "@/lib/hooks/useAuth";
-import { 
-  Home, 
-  Package, 
-  Heart, 
-  ShoppingCart, 
-  CreditCard, 
-  User, 
-  Settings, 
-  Star,
-  Clock,
-  MapPin
+import { usePermissions } from "@/hooks/usePermissions";
+import { type PermissionName } from "@/lib/permissions";
+import {
+  LayoutDashboard,
+  User,
+  Calendar,
+  Activity,
+  LifeBuoy,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useMemo } from "react";
+import React from "react";
 
-export interface CustomerNavigationItem {
+// Navigation config interface
+interface NavigationConfig {
+  icon: keyof typeof LUCIDE_ICONS;
+  translationKey: string;
+  href: string;
+  order: number;
+  requiredPermission: PermissionName;
+}
+
+// Navigation item for UI
+interface NavigationItem {
   key: string;
   label: string;
   href: string;
   icon: React.ComponentType<{ className?: string }>;
-  requiredPermission?: string;
-  badge?: string;
+  order: number;
 }
 
-export function useCustomerNavigation() {
-  const { hasPermission } = useAuth();
+// Sidebar'ın tek gerçek kaynağı (Single Source of Truth)
+const NAVIGATION_CONFIG: Record<string, NavigationConfig> = {
+  dashboard: {
+    icon: "LayoutDashboard",
+    translationKey: "dashboard",
+    href: "/customer/dashboard",
+    order: 1,
+    requiredPermission: "customer.dashboard.view",
+  },
+  profile: {
+    icon: "User",
+    translationKey: "profileSettings",
+    href: "/customer/profile",
+    order: 2,
+    requiredPermission: "customer.profile.view",
+  },
+  activity: {
+    icon: "Activity",
+    translationKey: "activityReport",
+    href: "/customer/activity",
+    order: 3,
+    requiredPermission: "customer.activity.view",
+  },
+  calendar: {
+    icon: "Calendar",
+    translationKey: "calendar",
+    href: "/customer/calendar",
+    order: 4,
+    requiredPermission: "customer.calendar.view",
+  },
+  support: {
+    icon: "LifeBuoy",
+    translationKey: "support",
+    href: "/customer/support",
+    order: 5,
+    requiredPermission: "customer.support.view",
+  },
+};
+
+// Lucide icon mapping
+const LUCIDE_ICONS = {
+  LayoutDashboard,
+  User,
+  Calendar,
+  Activity,
+  LifeBuoy,
+} as const;
+
+/**
+ * 🚀 CUSTOMER NAVIGATION HOOK
+ *
+ * Customer sidebar navigasyonunu oluşturur.
+ * Tüm yetki kontrolleri için merkezi `usePermissions` hook'unu kullanır.
+ */
+export function useCustomerNavigation(): NavigationItem[] {
   const t = useTranslations("CustomerNavigation");
+  const { has } = usePermissions();
 
-  const allLinks: CustomerNavigationItem[] = useMemo(
-    () => [
-      {
-        key: "dashboard",
-        label: t("dashboard"),
-        href: "/customer/dashboard",
-        icon: Home,
-        requiredPermission: "customer.dashboard.view",
-      },
-      {
-        key: "orders",
-        label: t("orders"),
-        href: "/customer/orders",
-        icon: Package,
-        requiredPermission: "customer.orders.view",
-      },
-      {
-        key: "order-history",
-        label: t("orderHistory"),
-        href: "/customer/order-history",
-        icon: Clock,
-        requiredPermission: "customer.orders.view",
-      },
-      {
-        key: "track-order",
-        label: t("trackOrder"),
-        href: "/customer/track-order",
-        icon: MapPin,
-        requiredPermission: "customer.orders.view",
-      },
-      {
-        key: "wishlist",
-        label: t("wishlist"),
-        href: "/customer/wishlist",
-        icon: Heart,
-        requiredPermission: "customer.wishlist.view",
-        badge: "12",
-      },
-      {
-        key: "cart",
-        label: t("cart"),
-        href: "/customer/cart",
-        icon: ShoppingCart,
-        requiredPermission: "customer.cart.view",
-        badge: "3",
-      },
-      {
-        key: "loyalty",
-        label: t("loyalty"),
-        href: "/customer/loyalty",
-        icon: Star,
-        requiredPermission: "customer.loyalty.view",
-      },
-      {
-        key: "payment",
-        label: t("payment"),
-        href: "/customer/payment",
-        icon: CreditCard,
-        requiredPermission: "customer.payment.view",
-      },
-      {
-        key: "profile",
-        label: t("profile"),
-        href: "/customer/profile",
-        icon: User,
-        requiredPermission: "customer.profile.view",
-      },
-      {
-        key: "settings",
-        label: t("settings"),
-        href: "/customer/settings",
-        icon: Settings,
-        requiredPermission: "customer.settings.view",
-      },
-    ],
-    [t]
-  );
+  const navItems = React.useMemo(() => {
+    return Object.entries(NAVIGATION_CONFIG)
+      .filter(([, config]) => has(config.requiredPermission))
+      .sort(([, a], [, b]) => a.order - b.order)
+      .map(([key, config]) => {
+        const IconComponent = LUCIDE_ICONS[config.icon] || User;
+        return {
+          key,
+          label: t(config.translationKey),
+          href: config.href,
+          order: config.order,
+          icon: IconComponent,
+        };
+      });
+  }, [has, t]);
 
-  // Filter links based on permissions
-  const filteredLinks = useMemo(() => {
-    return allLinks.filter((link) => {
-      // If no permission required, show the link
-      if (!link.requiredPermission) return true;
-      
-      // Check if user has the required permission
-      return hasPermission(link.requiredPermission);
-    });
-  }, [allLinks, hasPermission]);
-
-  return filteredLinks;
+  return navItems;
 }
 
-// Helper hook to check if user has access to a specific customer page
-export function useHasCustomerPageAccess(pageKey: string) {
-  const links = useCustomerNavigation();
-  return links.some((link) => link.key === pageKey);
-}
+/**
+ * 🎯 SAYFA YETKİSİ KONTROLÜ
+ *
+ * Bir kullanıcının belirli bir müşteri sayfasına erişim yetkisi olup olmadığını kontrol eder.
+ * @param pageName - `NAVIGATION_CONFIG` içerisindeki sayfa anahtarı.
+ */
+export function useHasCustomerPageAccess(
+  pageName: keyof typeof NAVIGATION_CONFIG
+): boolean {
+  const { has } = usePermissions();
+  const requiredPermission = NAVIGATION_CONFIG[pageName]?.requiredPermission;
 
-// Helper hook to get all accessible customer pages
-export function useCustomerAccessiblePages() {
-  const links = useCustomerNavigation();
-  return links.map((link) => link.key);
+  if (!requiredPermission) {
+    console.warn(
+      `[useHasCustomerPageAccess] No navigation config found for page: ${pageName}`
+    );
+    return false;
+  }
+
+  return has(requiredPermission);
 }

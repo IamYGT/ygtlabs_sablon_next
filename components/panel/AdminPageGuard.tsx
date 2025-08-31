@@ -38,89 +38,29 @@ export function AdminPageGuard({
   const hasRequiredLayoutAccess = isSuperAdmin || hasLayoutAccess(requireLayout);
   const hasRequiredViewAccess = !requiredPermission || isSuperAdmin || hasViewAccess(requiredPermission);
 
-
-
-  // Server-side debug log - DISABLED for performance
-  // Uncomment only when debugging permission issues
-  /*
   useEffect(() => {
-    if (process.env.NODE_ENV === 'development' && user && !permissionsLoading) {
-      fetch('/api/debug/admin-guard', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          requireLayout,
-          requiredPermission
-        })
-      }).catch(() => {}); // Silent error handling
-    }
-  }, [user, permissionsLoading, requireLayout, requiredPermission]);
-  */
-
-  useEffect(() => {
-    // Sadece debug log'ları için - yönlendirme yok
-    if (!user || permissionsLoading) {
-      return; // Yüklenme durumu
+    if (permissionsLoading || !user) {
+      return; // Veriler yüklenene kadar bekle
     }
 
-    // super_admin için hiçbir kısıtlama yok
+    // super_admin her zaman erişebilir
     if (isSuperAdmin) {
       return;
     }
 
-    // Layout erişim kontrolü - sadece log
-    if (!hasRequiredLayoutAccess) {
-      // Debug log removed for production
-
-      // Server-side log da gönder - DISABLED for performance
-      /*
-      if (process.env.NODE_ENV === 'development') {
-        fetch('/api/debug/admin-guard', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            action: 'LAYOUT_DENIED',
-            requireLayout,
-            requiredPermission,
-            userEmail: user.email
-          })
-        }).catch(() => {}); // Silent error handling
-      }
-      */
-
-      return;
-    }
-
-    // View erişim kontrolü - sadece log
-    if (requiredPermission && !hasRequiredViewAccess) {
-      // Debug log removed for production
-
-      // Server-side log da gönder - DISABLED for performance
-      /*
-      if (process.env.NODE_ENV === 'development') {
-        fetch('/api/debug/admin-guard', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            action: 'VIEW_DENIED',
-            requireLayout,
-            requiredPermission,
-            userEmail: user.email
-          })
-        }).catch(() => {}); // Silent error handling
-      }
-      */
-
-      return;
+    // Yetki kontrolleri ve yönlendirme
+    if (!hasRequiredLayoutAccess || (requiredPermission && !hasRequiredViewAccess)) {
+      router.push(`/${locale}/auth/forbidden`);
     }
   }, [
     user,
     permissionsLoading,
+    isSuperAdmin,
     hasRequiredLayoutAccess,
     hasRequiredViewAccess,
-    isSuperAdmin,
-    requireLayout,
-    requiredPermission
+    requiredPermission,
+    router,
+    locale
   ]);
 
   // Giriş yapmamış kullanıcı durumu
@@ -158,83 +98,12 @@ export function AdminPageGuard({
     return <>{children}</>;
   }
 
-  // Layout erişim kontrolü - akıllı yönlendirme ile
-  if (!hasRequiredLayoutAccess) {
-    // Eğer admin paneli isteniyor ama kullanıcının user erişimi varsa yönlendir
-    if (requireLayout === 'admin' && hasLayoutAccess('user')) {
-      router.push(`/${locale}/customer/dashboard`);
-      return (
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">{t('redirectingUserPanel')}</p>
-          </div>
-        </div>
-      );
-    }
-
-    return fallback || (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center max-w-md mx-auto">
-          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
-            </svg>
-          </div>
-          <h1 className="text-2xl font-bold text-red-600 mb-4">{t('accessDeniedTitle')}</h1>
-          <p className="text-gray-600 mb-4">{t('accessDeniedDesc')}</p>
-          <div className="bg-gray-50 p-4 rounded-lg mb-4">
-            <p className="text-sm text-gray-600">
-              <strong>{t('requiredPermission')}</strong> {requireLayout === 'admin' ? t('adminPanel') : t('userPanel')} erişimi
-            </p>
-          </div>
-          <div className="space-y-2">
-            {hasLayoutAccess('user') && (
-              <button
-                onClick={() => router.push(`/${locale}/customer/dashboard`)}
-                className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                {t('goToUserPanel')}
-              </button>
-            )}
-            <button
-              onClick={() => router.push(`/${locale}`)}
-              className="w-full bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
-            >
-              {t('backToHome')}
-            </button>
-          </div>
-          <p className="text-sm text-gray-500 mt-4">
-            {t('contactAdmin')}
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  // View erişim kontrolü
-  if (requiredPermission && !hasRequiredViewAccess) {
-    return fallback || (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center max-w-md mx-auto">
-          <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L8.464 8.464m1.414 1.414L12 12l2.122-2.121m0 0l1.415-1.414M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-          <h1 className="text-2xl font-bold text-orange-600 mb-4">{t('pageAccessRestrictedTitle')}</h1>
-          <p className="text-gray-600 mb-4">{t('pageAccessRestrictedDesc')}</p>
-          <div className="bg-gray-50 p-4 rounded-lg mb-4">
-            <p className="text-sm text-gray-600">
-              <strong>{t('requiredPermission')}</strong> <code className="bg-gray-200 px-1 rounded text-xs">{requiredPermission}</code>
-            </p>
-          </div>
-          <p className="text-sm text-gray-500">
-            {t('contactAdmin')}
-          </p>
-        </div>
-      </div>
-    );
+  // Yetki kontrolleri useEffect içinde yapıldığı için,
+  // burada sadece yükleme ve super_admin durumlarını kontrol edip çocuk bileşenleri render ediyoruz.
+  // Yönlendirme gerçekleşene kadar bu kısım render edilebilir, bu yüzden bir fallback göstermek önemlidir.
+  if (!isSuperAdmin && (!hasRequiredLayoutAccess || (requiredPermission && !hasRequiredViewAccess))) {
+    // Yönlendirme gerçekleşirken boş bir fragment veya fallback göster
+    return fallback || null;
   }
 
   return <>{children}</>;
