@@ -42,7 +42,7 @@ export default function ChangePasswordForm() {
         setIsLoading(true);
         try {
             const response = await fetch('/api/admin/change-password', {
-                method: 'POST',
+                method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     currentPassword: data.currentPassword,

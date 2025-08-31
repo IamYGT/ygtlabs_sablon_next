@@ -77,6 +77,10 @@
   },
   "CustomerNavigation": {
     "dashboard": "Dashboard",
+    "profileSettings": "Profile Settings",
+    "activityReport": "Activity Report",
+    "calendar": "Calendar",
+    "support": "Support",
     "orders": "My Orders",
     "orderHistory": "Order History",
     "trackOrder": "Track Order",

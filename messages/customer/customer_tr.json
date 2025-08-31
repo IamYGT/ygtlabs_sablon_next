@@ -152,6 +152,10 @@
   },
   "CustomerNavigation": {
     "dashboard": "Ana Sayfa",
+    "profileSettings": "Profil Ayarları",
+    "activityReport": "Aktivite Raporu",
+    "calendar": "Takvim",
+    "support": "Destek",
     "orders": "Siparişlerim",
     "orderHistory": "Sipariş Geçmişi",
     "trackOrder": "Sipariş Takibi",

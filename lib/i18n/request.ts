@@ -36,6 +36,30 @@ export default getRequestConfig(async ({ requestLocale }) => {
       ).default;
     }
   })();
+  const customerMessages = await (async () => {
+    try {
+      return (await import(`../../messages/customer/customer_${locale}.json`))
+        .default;
+    } catch {
+      return (
+        await import(
+          `../../messages/customer/customer_${routing.defaultLocale}.json`
+        )
+      ).default;
+    }
+  })();
+  const landingMessages = await (async () => {
+    try {
+      return (await import(`../../messages/landing/landing_${locale}.json`))
+        .default;
+    } catch {
+      return (
+        await import(
+          `../../messages/landing/landing_${routing.defaultLocale}.json`
+        )
+      ).default;
+    }
+  })();
 
   return {
     locale,
@@ -43,6 +67,8 @@ export default getRequestConfig(async ({ requestLocale }) => {
       ...baseMessages,
       ...adminMessages,
       ...authMessages,
+      ...customerMessages,
+      ...landingMessages,
     },
   };
 });
