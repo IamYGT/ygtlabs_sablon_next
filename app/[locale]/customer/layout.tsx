@@ -1,3 +1,4 @@
+import './styles/calendar.css';
 import { CustomerGuard } from "@/components/panel/AuthGuards";
 import { CustomerHeader } from "@/components/panel/CustomerHeader";
 import { CustomerSidebar } from "@/components/panel/CustomerSidebar";

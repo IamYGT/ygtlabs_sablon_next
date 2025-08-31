@@ -39,7 +39,6 @@ import {
   Calendar,
   CheckCircle,
   Edit,
-  Filter,
   Mail,
   MoreHorizontal,
   Search,
@@ -154,16 +153,18 @@ export default function UsersPageClient({
             return user.currentRole?.name === 'admin' || user.currentRole?.name === 'super_admin';
           case 'no_role':
             return !user.currentRole;
-          case 'recent_login':
+          case 'recent_login': {
             // Son 7 gün içinde kayıt olanlar (lastLoginAt yoksa createdAt kullan)
             const sevenDaysAgo = new Date();
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
             return new Date(user.createdAt) >= sevenDaysAgo;
-          case 'never_login':
+          }
+          case 'never_login': {
             // Sadece kayıt tarihi eski olanları göster (login bilgisi olmadığı için yaklaşık)
             const thirtyDaysAgo = new Date();
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
             return new Date(user.createdAt) < thirtyDaysAgo;
+          }
           default:
             return false;
         }

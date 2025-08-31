@@ -134,7 +134,13 @@
     "memberSince": "Member Since",
     "accountStatus": "Account Status",
     "active": "Active",
-    "verified": "Verified"
+    "verified": "Verified",
+    "profileSettings": "Profile Settings",
+    "profileSettingsDesc": "Update your profile information",
+    "activityReport": "Activity Report",
+    "activityReportDesc": "View your account activities",
+    "calendar": "Calendar",
+    "calendarDesc": "Manage your events"
   },
   "CustomerHeader": {
     "customerPanel": "Customer Panel",

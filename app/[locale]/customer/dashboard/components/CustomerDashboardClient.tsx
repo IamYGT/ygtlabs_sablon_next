@@ -9,11 +9,13 @@ import { Link } from "@/lib/i18n/navigation";
 import {
   ArrowRight,
   Award,
+  BarChart3,
   Calendar,
   Clock,
   CreditCard,
   Heart,
   Package,
+  Settings,
   ShoppingBag,
   ShoppingCart,
   Star,
@@ -28,6 +30,27 @@ type TFunction = ReturnType<typeof useTranslations<"CustomerDashboard">>;
 // Customer quick actions
 function getQuickActions(t: TFunction): QuickActionProps[] {
   return [
+    {
+      title: t("profileSettings"),
+      description: t("profileSettingsDesc"),
+      href: "/customer/profile",
+      icon: Settings,
+      color: "blue" as const,
+    },
+    {
+      title: t("activityReport"),
+      description: t("activityReportDesc"),
+      href: "/customer/activity",
+      icon: BarChart3,
+      color: "emerald" as const,
+    },
+    {
+      title: t("calendar"),
+      description: t("calendarDesc"),
+      href: "/customer/calendar",
+      icon: Calendar,
+      color: "purple" as const,
+    },
     {
       title: t("myOrders"),
       description: t("myOrdersDesc"),
@@ -69,7 +92,7 @@ type QuickActionProps = {
   description: string;
   href: string;
   icon: React.ComponentType<{ className?: string }>;
-  color: "purple" | "pink" | "indigo" | "emerald";
+  color: "purple" | "pink" | "indigo" | "emerald" | "blue";
   stats?: string;
 };
 
@@ -83,16 +106,26 @@ function QuickAction({
   stats,
 }: QuickActionProps) {
   const colorStyles = {
-    purple: {
-      gradient:
-        "bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20",
-      border: "border-purple-200/50 dark:border-purple-700/30",
-      icon: "bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-purple-500/25",
-      hover:
-        "hover:from-purple-100 hover:to-purple-150 dark:hover:from-purple-900/30 dark:hover:to-purple-800/30",
-      ring: "hover:ring-2 hover:ring-purple-500/20",
-      stats: "text-purple-600 dark:text-purple-400",
-    },
+      blue: {
+        gradient:
+          "bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20",
+        border: "border-blue-200/50 dark:border-blue-700/30",
+        icon: "bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-blue-500/25",
+        hover:
+          "hover:from-blue-100 hover:to-blue-150 dark:hover:from-blue-900/30 dark:hover:to-blue-800/30",
+        ring: "hover:ring-2 hover:ring-blue-500/20",
+        stats: "text-blue-600 dark:text-blue-400",
+      },
+      purple: {
+        gradient:
+          "bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20",
+        border: "border-purple-200/50 dark:border-purple-700/30",
+        icon: "bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-purple-500/25",
+        hover:
+          "hover:from-purple-100 hover:to-purple-150 dark:hover:from-purple-900/30 dark:hover:to-purple-800/30",
+        ring: "hover:ring-2 hover:ring-purple-500/20",
+        stats: "text-purple-600 dark:text-purple-400",
+      },
     pink: {
       gradient:
         "bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900/20 dark:to-pink-800/20",

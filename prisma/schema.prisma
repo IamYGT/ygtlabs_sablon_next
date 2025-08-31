@@ -156,6 +156,7 @@ model User {
   assignmentTargets      TicketAssignment[]   @relation("AssignmentTarget")
   assignmentCreators     TicketAssignment[]   @relation("AssignmentCreator")
   ticketNotifications    TicketNotification[] @relation("TicketNotifications")
+  calendarEvents         CalendarEvent[]
 
   @@index([roleId])
   @@schema("public")
@@ -704,5 +705,30 @@ model I18nRouteTranslation {
   route I18nRoute @relation(fields: [routeName], references: [name], onDelete: Cascade)
 
   @@unique([routeName, localeCode])
+  @@schema("public")
+}
+
+
+// ==========================
+// CALENDAR SYSTEM MODELS
+// ==========================
+
+model CalendarEvent {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  startDate   DateTime
+  endDate     DateTime
+  allDay      Boolean   @default(false)
+  color       String?
+  userId      String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([startDate])
   @@schema("public")
 }

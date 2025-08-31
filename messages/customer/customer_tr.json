@@ -209,7 +209,13 @@
     "memberSince": "Üyelik Tarihi",
     "accountStatus": "Hesap Durumu",
     "active": "Aktif",
-    "verified": "Onaylı"
+    "verified": "Onaylı",
+    "profileSettings": "Profil Ayarları",
+    "profileSettingsDesc": "Profil bilgilerinizi güncelleyin",
+    "activityReport": "Aktivite Raporu",
+    "activityReportDesc": "Hesap aktivitelerinizi görüntüleyin",
+    "calendar": "Takvim",
+    "calendarDesc": "Etkinliklerinizi yönetin"
   },
   "CustomerHeader": {
     "customerPanel": "Müşteri Paneli",

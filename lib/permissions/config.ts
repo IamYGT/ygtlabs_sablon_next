@@ -442,6 +442,40 @@ export const VIEW_PERMISSIONS: PermissionConfig[] = [
     dependencies: ["customer.layout"],
     usedIn: ["CustomerSettingsClient", "/api/customer/settings"],
   },
+  {
+    name: "customer.activity.view",
+    category: "view",
+    resourcePath: "activity",
+    action: "view",
+    permissionType: "customer",
+    displayName: {
+      tr: "Aktivite Raporu Görüntüleme",
+      en: "Activity Report View",
+    },
+    description: {
+      tr: "Müşterinin kendi aktivite raporunu görüntüleme yetkisi",
+      en: "Permission to view own activity report",
+    },
+    dependencies: ["customer.layout"],
+    usedIn: ["CustomerActivityClient", "/api/customer/activity"],
+  },
+  {
+    name: "customer.calendar.view",
+    category: "view",
+    resourcePath: "calendar",
+    action: "view",
+    permissionType: "customer",
+    displayName: {
+      tr: "Takvim Görüntüleme",
+      en: "Calendar View",
+    },
+    description: {
+      tr: "Müşterinin kendi takvimini görüntüleme yetkisi",
+      en: "Permission to view own calendar",
+    },
+    dependencies: ["customer.layout"],
+    usedIn: ["CustomerCalendarClient", "/api/customer/calendar"],
+  },
 ];
 
 /**
@@ -936,6 +970,97 @@ export const FUNCTION_PERMISSIONS: PermissionConfig[] = [
   },
 
   // PROFILE MANAGEMENT FUNCTIONS
+  {
+    name: "customer.profile.update",
+    category: "function",
+    resourcePath: "profile",
+    action: "update",
+    permissionType: "customer",
+    displayName: {
+      tr: "Müşteri Profil Güncelleme",
+      en: "Update Customer Profile",
+    },
+    description: {
+      tr: "Kendi profil bilgilerini (isim, e-posta) güncelleme yetkisi.",
+      en: "Permission to update own profile information (name, email).",
+    },
+    dependencies: ["customer.profile.view"],
+    usedIn: ["CustomerProfileClient", "/api/customer/profile (PUT)"],
+  },
+  {
+    name: "customer.profile.changePassword",
+    category: "function",
+    resourcePath: "profile",
+    action: "update",
+    permissionType: "customer",
+    displayName: {
+      tr: "Müşteri Şifre Değiştirme",
+      en: "Customer Change Password",
+    },
+    description: {
+      tr: "Kendi şifresini değiştirme yetkisi.",
+      en: "Permission to change own password.",
+    },
+    dependencies: ["customer.profile.view"],
+    usedIn: [
+      "CustomerProfileClient",
+      "/api/customer/profile/change-password (POST)",
+    ],
+  },
+  {
+    name: "customer.calendar.create",
+    category: "function",
+    resourcePath: "calendar",
+    action: "create",
+    permissionType: "customer",
+    displayName: {
+      tr: "Takvim Etkinliği Oluşturma",
+      en: "Create Calendar Event",
+    },
+    description: {
+      tr: "Kendi takvimine yeni etkinlik ekleme yetkisi.",
+      en: "Permission to add new events to own calendar.",
+    },
+    dependencies: ["customer.calendar.view"],
+    usedIn: ["CustomerCalendarClient", "/api/customer/calendar (POST)"],
+  },
+  {
+    name: "customer.calendar.update",
+    category: "function",
+    resourcePath: "calendar",
+    action: "update",
+    permissionType: "customer",
+    displayName: {
+      tr: "Takvim Etkinliği Güncelleme",
+      en: "Update Calendar Event",
+    },
+    description: {
+      tr: "Kendi takvimindeki etkinlikleri güncelleme yetkisi.",
+      en: "Permission to update events in own calendar.",
+    },
+    dependencies: ["customer.calendar.view"],
+    usedIn: ["CustomerCalendarClient", "/api/customer/calendar/[eventId] (PUT)"],
+  },
+  {
+    name: "customer.calendar.delete",
+    category: "function",
+    resourcePath: "calendar",
+    action: "delete",
+    permissionType: "customer",
+    displayName: {
+      tr: "Takvim Etkinliği Silme",
+      en: "Delete Calendar Event",
+    },
+    description: {
+      tr: "Kendi takvimindeki etkinlikleri silme yetkisi.",
+      en: "Permission to delete events from own calendar.",
+    },
+    dependencies: ["customer.calendar.view"],
+    usedIn: [
+      "CustomerCalendarClient",
+      "/api/customer/calendar/[eventId] (DELETE)",
+    ],
+  },
   {
     name: "admin.profile.update",
     category: "function",
