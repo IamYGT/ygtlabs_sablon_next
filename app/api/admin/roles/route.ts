@@ -24,7 +24,26 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    if (typeof currentUser.power !== "number") {
+      const response = NextResponse.json({
+        roles: [],
+        totalCount: 0,
+      });
+      response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+      response.headers.set('Pragma', 'no-cache');
+      response.headers.set('Expires', '0');
+      return response;
+    }
+
     const roles = await prisma.authRole.findMany({
+      where: {
+        name: {
+          not: "super_admin",
+        },
+        power: {
+          lte: currentUser.power,
+        },
+      },
       include: {
         rolePermissions: {
           where: { isActive: true },

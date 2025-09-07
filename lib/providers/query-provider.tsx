@@ -18,9 +18,9 @@ const createQueryClient = () => {
     return new QueryClient({
         defaultOptions: {
             queries: {
-                // Enhanced cache configuration
-                staleTime: CACHE_CONFIG.DEFAULT_STALE_TIME,
-                gcTime: CACHE_CONFIG.DEFAULT_CACHE_TIME,
+                // Enhanced cache configuration - cache disabled
+                staleTime: 0, // Always stale
+                gcTime: 0, // No garbage collection time
 
                 // Enhanced error handling
                 retry: (failureCount, error) => {
@@ -39,7 +39,7 @@ const createQueryClient = () => {
                 retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
 
                 // Enhanced refetch configuration
-                refetchOnWindowFocus: false,
+                refetchOnWindowFocus: true, // Always refetch on focus
                 refetchOnReconnect: true,
                 refetchOnMount: true,
                 refetchInterval: false,

@@ -50,6 +50,7 @@ export async function getCurrentUser(req?: NextRequest): Promise<SimpleUser | nu
             role: {
               select: {
                 name: true,
+                power: true,
                 rolePermissions: {
                   where: { isAllowed: true, isActive: true },
                   select: {
@@ -80,6 +81,7 @@ export async function getCurrentUser(req?: NextRequest): Promise<SimpleUser | nu
       permissions,
       userRoles: session.user.role ? [session.user.role.name] : [],
       primaryRole: session.user.role?.name,
+      power: session.user.role?.power,
       createdAt: session.user.createdAt,
       lastLoginAt: session.user.lastLoginAt,
     };

@@ -128,13 +128,11 @@ export default function RolesPageClient({
             if (rolesResponse.ok) {
                 const rolesData = await rolesResponse.json();
                 setRoles(rolesData.roles || []);
-                console.log('Initial roles loaded:', rolesData.roles?.length || 0);
             }
 
             if (permissionsResponse.ok) {
                 const permissionsData = await permissionsResponse.json();
                 setPermissions(permissionsData.permissions || []);
-                console.log('Initial permissions loaded:', permissionsData.permissions?.length || 0);
             }
 
             // User permissions'ları currentUser'dan al
@@ -175,7 +173,6 @@ export default function RolesPageClient({
                 const data = await response.json();
                 // Always set fresh data, don't merge with existing
                 setRoles(data.roles || []);
-                console.log('Roles refreshed:', data.roles?.length || 0, 'roles loaded');
             } else {
                 console.error(t('error.failedToLoad'), response.status);
                 toast.error(t('error.failedToLoad'));

@@ -206,8 +206,8 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
       );
       if (!permissionsResponse.ok) throw new Error((await permissionsResponse.json()).error);
       toast.success(t("notifications.updateSuccess"));
-      onRoleUpdated();
       onOpenChange(false);
+      onRoleUpdated();
     } catch (error) {
       toast.error((error as Error).message || t("notifications.genericUpdateError"));
     } finally {

@@ -52,7 +52,7 @@ import {
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import BulkActionsDropdown from "./BulkActionsDropdown";
 import CreateUserModal from "./CreateUserModal";
@@ -112,6 +112,8 @@ export default function UsersPageClient({
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
   const admin = useAdminAuth();
+  const [assignableRoles, setAssignableRoles] = useState<Role[]>([]);
+  const [loadingRoles, setLoadingRoles] = useState(false);
 
   const dateLocale: Locale =
     (dfLocales as unknown as Record<string, Locale>)[locale] ?? dfLocales.enUS;
@@ -130,6 +132,33 @@ export default function UsersPageClient({
   const [selectedUserForEdit, setSelectedUserForEdit] = useState<User | null>(
     null
   );
+  
+  // Atanabilir rolleri getir
+  const fetchAssignableRoles = async () => {
+    setLoadingRoles(true);
+    try {
+      const response = await fetch('/api/admin/roles/assignable');
+      if (response.ok) {
+        const assignableRolesData = await response.json();
+        setAssignableRoles(assignableRolesData);
+      } else {
+        console.error('Failed to fetch assignable roles');
+        // Fallback to all roles if API fails
+        setAssignableRoles(roles);
+      }
+    } catch (error) {
+      console.error('Error fetching assignable roles:', error);
+      // Fallback to all roles if API fails
+      setAssignableRoles(roles);
+    } finally {
+      setLoadingRoles(false);
+    }
+  };
+  
+  // Component mount edildiğinde assignable roles'leri getir
+  useEffect(() => {
+    fetchAssignableRoles();
+  }, []);
 
   // Filter users based on search and filters
   const filteredUsers = users.filter((user) => {
@@ -861,8 +890,11 @@ export default function UsersPageClient({
           open={roleAssignModalOpen}
           onOpenChange={setRoleAssignModalOpen}
           user={selectedUserForRole}
-          roles={roles}
-          onRoleAssigned={() => router.refresh()}
+          roles={loadingRoles ? [] : assignableRoles}
+          onRoleAssigned={() => {
+            router.refresh();
+            fetchAssignableRoles(); // Rolleri yeniden yükle
+          }}
         />
 
         <CreateUserModal
@@ -875,8 +907,11 @@ export default function UsersPageClient({
           open={editUserModalOpen}
           onOpenChange={setEditUserModalOpen}
           user={selectedUserForEdit}
-          roles={roles}
-          onUserUpdated={() => router.refresh()}
+          roles={loadingRoles ? [] : assignableRoles}
+          onUserUpdated={() => {
+            router.refresh();
+            fetchAssignableRoles(); // Rolleri yeniden yükle
+          }}
         />
 
         <DeleteUserModal

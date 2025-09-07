@@ -43,8 +43,8 @@ export const ROLES = {
 
 // CACHE CONFIG for TanStack Query
 export const CACHE_CONFIG = {
-  DEFAULT_STALE_TIME: 5 * 60 * 1000, // 5 minutes
-  DEFAULT_CACHE_TIME: 10 * 60 * 1000, // 10 minutes
+  DEFAULT_STALE_TIME: 0, // 0ms - anında stale
+  DEFAULT_CACHE_TIME: 0, // 0ms - cache yok
 } as const;
 
 // DEFAULTS

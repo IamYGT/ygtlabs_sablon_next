@@ -128,9 +128,8 @@ export async function PUT(request: NextRequest) {
 
       if (roleId === null || roleId === "") {
         // Rolü kaldır - Rol kaldırma için de yetki kontrolü
-        const hasRoleAssignPermission = 
-          currentUser.permissions.includes("admin.roles.assign") || 
-          currentUser.permissions.includes("roles.assign") ||
+        const hasRoleAssignPermission =
+          currentUser.permissions.includes("users.assign-role") ||
           currentUser.primaryRole === "super_admin";
         
         if (!hasRoleAssignPermission) {
@@ -169,8 +168,7 @@ export async function PUT(request: NextRequest) {
 
         // Rol atama yetkisi kontrolü
         const hasRoleAssignPermission =
-          currentUser.permissions.includes("admin.roles.assign") ||
-          currentUser.permissions.includes("roles.assign") ||
+          currentUser.permissions.includes("users.assign-role") ||
           currentUser.primaryRole === "super_admin";
 
         if (!hasRoleAssignPermission) {

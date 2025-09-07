@@ -28,6 +28,7 @@ export interface SimpleUser {
   };
   createdAt?: Date;
   lastLoginAt?: Date | null;
+  power?: number;
 }
 
 export interface LoginData {

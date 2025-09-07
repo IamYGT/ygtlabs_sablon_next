@@ -284,7 +284,23 @@ export async function PUT(
           });
         }
         
+        // Rolün gücünü güncelle
+        const newPermissionCount = permissionsToCreate.length;
+        await tx.authRole.update({
+          where: { name: role.name },
+          data: { power: newPermissionCount },
+        });
+
         console.log(`✅ Successfully updated role ${role.name} with ${permissionsToCreate.length} permissions`);
+        console.log(`⚡️ Updated power for role ${role.name} to ${newPermissionCount}`);
+      } else {
+        // Eğer tüm yetkiler kaldırılıyorsa, gücü sıfırla
+        await tx.authRole.update({
+          where: { name: role.name },
+          data: { power: 0 },
+        });
+        console.log(`✅ Successfully removed all permissions from role ${role.name}`);
+        console.log(`⚡️ Updated power for role ${role.name} to 0`);
       }
     });
 

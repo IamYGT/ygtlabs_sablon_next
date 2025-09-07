@@ -27,7 +27,6 @@ import { useCustomerNavigation } from "@/hooks/useCustomerNavigation";
 import { useAdminAuth } from "@/lib/hooks/useAuth";
 import { usePathname, useRouter } from "@/lib/i18n/navigation";
 import { routing } from "@/lib/i18n/routing";
-import { pathnames } from "@/lib/i18n/routing.generated";
 import TR from "country-flag-icons/react/3x2/TR";
 import US from "country-flag-icons/react/3x2/US";
 import {

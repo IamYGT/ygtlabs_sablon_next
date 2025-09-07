@@ -11,11 +11,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { FlagWrapper } from "@/components/ui/flag-wrapper";
 import { Input } from "@/components/ui/input";
-import { ChevronDown, Filter, Globe } from "lucide-react";
+import { ChevronDown, Filter, Globe, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import useSWR from "swr";
+import { CreateRouteDialog } from "./components/CreateRouteDialog";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
@@ -83,20 +84,43 @@ export default function RoutesClient({ title }: RoutesClientProps) {
     const translations = items
       .map((it) => {
         const base = it.base === "/" ? "" : it.base;
-        const suffix = it.suffix.replace(/^\//, "");
+        const suffix = it.suffix.replace(/^\//,"");
         const path = `${base}/${suffix}`.replace(/\/+/g, "/");
         return { localeCode: it.localeCode, path };
       })
       .filter((x) => x.path && x.localeCode);
+    
+    // Translations objesine çevir
+    const translationsObj = translations.reduce((acc, t) => {
+      acc[t.localeCode] = t.path;
+      return acc;
+    }, {} as Record<string, string>);
+    
     try {
       const res = await fetch(`/api/admin/i18n/routes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: routeName, translations }),
+        body: JSON.stringify({ name: routeName, translations: translationsObj }),
       });
       if (!res.ok) throw new Error(await res.text());
       toast.success(t("saved"));
       setOpenRouteName(null);
+      await mutate();
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : t("failed");
+      toast.error(message);
+    }
+  };
+
+  const handleDelete = async (routeName: string) => {
+    if (!confirm(t("confirmDelete"))) return;
+    
+    try {
+      const res = await fetch(`/api/admin/i18n/routes?name=${encodeURIComponent(routeName)}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) throw new Error(await res.text());
+      toast.success(t("deleted"));
       await mutate();
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : t("failed");
@@ -142,18 +166,24 @@ export default function RoutesClient({ title }: RoutesClientProps) {
             {title}
           </h1>
         </div>
-        <Button
-          variant="outline"
-          onClick={() =>
-            fetch(`/api/admin/i18n/routing`, { method: "POST" }).then(() => {
-              toast.success(t("routingGenerated"));
-              mutate();
-            })
-          }
-          className="hidden md:inline-flex"
-        >
-          {t("generateRouting")}
-        </Button>
+        <div className="flex items-center gap-2">
+          <CreateRouteDialog 
+            locales={data?.locales || ['en', 'tr']} 
+            onSuccess={mutate}
+          />
+          <Button
+            variant="outline"
+            onClick={() =>
+              fetch(`/api/admin/i18n/routing`, { method: "POST" }).then(() => {
+                toast.success(t("routingGenerated"));
+                mutate();
+              })
+            }
+            className="hidden md:inline-flex"
+          >
+            {t("generateRouting")}
+          </Button>
+        </div>
       </div>
 
       {/* Var olan rotalar */}
@@ -241,7 +271,20 @@ export default function RoutesClient({ title }: RoutesClientProps) {
                     onClick={() => toggleOpen(r)}
                     className="border rounded-md p-3 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/60"
                   >
-                    <div className="font-mono text-sm">{r.name}</div>
+                    <div className="flex items-center justify-between">
+                      <div className="font-mono text-sm">{r.name}</div>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        className="h-8 w-8 text-destructive hover:text-destructive"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(r.name);
+                        }}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                     <div className="text-xs text-muted-foreground flex flex-wrap gap-2 mt-1">
                       {r.translations.map(
                         (t: { localeCode: string; path: string }) => (

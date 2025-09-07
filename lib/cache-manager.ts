@@ -12,8 +12,8 @@ interface CacheEntry<T> {
 
 class CacheManager {
   private cache = new Map<string, CacheEntry<unknown>>();
-  private readonly SESSION_TTL = 30 * 1000; // 30 seconds - çok kısa TTL
-  private readonly PERMISSION_TTL = 60 * 1000; // 1 minute - çok kısa TTL
+  private readonly SESSION_TTL = 1; // 1ms - neredeyse cache yok
+  private readonly PERMISSION_TTL = 1; // 1ms - neredeyse cache yok
   
   // Session Cache Methods
   getSession(key: string): SimpleUser | null {

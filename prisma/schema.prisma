@@ -308,7 +308,9 @@ model AuthRole {
   updatedBy       User?               @relation("RoleUpdatedBy", fields: [updatedById], references: [id])
   users           User[]              @relation("UserRole")
   rolePermissions RoleHasPermission[]
+  power           Int                 @default(0)
 
+  @@index([power])
   @@schema("public")
 }
 

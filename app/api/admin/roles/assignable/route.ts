@@ -22,6 +22,12 @@ export async function GET(request: NextRequest) {
     if (!currentUser) {
       return NextResponse.json({ error: "Yetkisiz erişim" }, { status: 401 });
     }
+    
+    // users.assign-role yetkisi kontrolü
+    const hasAssignRolePermission = currentUser.permissions?.includes('users.assign-role');
+    if (!hasAssignRolePermission) {
+      return NextResponse.json({ error: "Rol atama yetkisi bulunmuyor" }, { status: 403 });
+    }
 
     const allRoles = await prisma.authRole.findMany({
       where: { isActive: true },
