@@ -143,7 +143,21 @@ export async function PUT(
 
     // Super admin her şeyi yapabilir
     if (currentUser.primaryRole !== "super_admin") {
-      // 1. Kullanıcı sadece kendisinde olan yetkileri atayabilir
+      // 1. Kullanıcı kendi gücünden daha düşük veya eşit güce sahip rolleri yönetebilir
+      if (typeof currentUser.power !== 'number' || role.power >= currentUser.power) {
+        return NextResponse.json(
+          { 
+            error: t("roles.permissions.cannotEditRoleWithEqualOrHigherPower"),
+            details: {
+              yourPower: currentUser.power,
+              rolePower: role.power
+            }
+          },
+          { status: 403 }
+        );
+      }
+
+      // 2. Kullanıcı sadece kendisinde olan yetkileri atayabilir
       const userHasAllPermissions = incomingPermissionNames.every(
         (permName: string) => currentUser.permissions.includes(permName)
       );
@@ -159,49 +173,6 @@ export async function PUT(
           { 
             error: t("roles.permissions.cannotAssignPermissionsYouDontHave"),
             missingPermissions 
-          },
-          { status: 403 }
-        );
-      }
-
-      // 2. Kullanıcı kendinden fazla veya eşit sayıda yetkiye sahip bir rolü düzenleyemez
-      const targetRolePermissionCount = role.rolePermissions.length;
-      const userPermissionCount = currentUser.permissions.length;
-      
-      if (targetRolePermissionCount >= userPermissionCount) {
-        console.warn(
-          `⚠️ User ${currentUser.name} (${userPermissionCount} permissions) tried to edit role ${role.name} (${targetRolePermissionCount} permissions)`
-        );
-        return NextResponse.json(
-          { 
-            error: t("roles.permissions.cannotEditRoleWithEqualOrMorePermissions"),
-            details: {
-              yourPermissions: userPermissionCount,
-              rolePermissions: targetRolePermissionCount
-            }
-          },
-          { status: 403 }
-        );
-      }
-
-      // 3. Rolün mevcut yetkilerinin hepsine kullanıcı sahip olmalı
-      // Aksi halde kullanıcı bilmediği/sahip olmadığı yetkileri kaybettirebilir
-      const rolePermissionNames = role.rolePermissions.map(rp => rp.permission.name);
-      const userCanManageAllExistingPermissions = rolePermissionNames.every(
-        (permName: string) => currentUser.permissions.includes(permName)
-      );
-
-      if (!userCanManageAllExistingPermissions) {
-        const unmanageablePermissions = rolePermissionNames.filter(
-          (permName: string) => !currentUser.permissions.includes(permName)
-        );
-        console.warn(
-          `⚠️ User ${currentUser.name} cannot edit role ${role.name} because the role has permissions the user doesn't have: ${unmanageablePermissions.join(", ")}`
-        );
-        return NextResponse.json(
-          { 
-            error: t("roles.permissions.roleHasPermissionsYouDontHave"),
-            unmanageablePermissions 
           },
           { status: 403 }
         );
@@ -284,23 +255,10 @@ export async function PUT(
           });
         }
         
-        // Rolün gücünü güncelle
-        const newPermissionCount = permissionsToCreate.length;
-        await tx.authRole.update({
-          where: { name: role.name },
-          data: { power: newPermissionCount },
-        });
-
         console.log(`✅ Successfully updated role ${role.name} with ${permissionsToCreate.length} permissions`);
-        console.log(`⚡️ Updated power for role ${role.name} to ${newPermissionCount}`);
       } else {
         // Eğer tüm yetkiler kaldırılıyorsa, gücü sıfırla
-        await tx.authRole.update({
-          where: { name: role.name },
-          data: { power: 0 },
-        });
         console.log(`✅ Successfully removed all permissions from role ${role.name}`);
-        console.log(`⚡️ Updated power for role ${role.name} to 0`);
       }
     });
 

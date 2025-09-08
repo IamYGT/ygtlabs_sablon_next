@@ -113,3 +113,64 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: t("roles.get.error") }, { status: 500 });
   }
 }
+
+// Yeni rol oluştur
+export async function POST(request: NextRequest) {
+  const t = await getTranslations("ApiMessages");
+  try {
+    const currentUser = await getCurrentUser(request);
+
+    if (!currentUser) {
+      return NextResponse.json({ error: t("common.unauthorized") }, { status: 401 });
+    }
+
+    if (!currentUser.permissions.includes("roles.create")) {
+      return NextResponse.json({ error: t("common.forbidden") }, { status: 403 });
+    }
+    
+    const body = await request.json();
+    const { name, displayName, description, color, layoutType, power } = body;
+
+    if (!name || !displayName) {
+      return NextResponse.json({ error: t("roles.create.missingFields") }, { status: 400 });
+    }
+
+    // Power değeri kontrolü
+    if (typeof power !== 'number' || power < 0) {
+        return NextResponse.json({ error: t("roles.create.invalidPower") }, { status: 400 });
+    }
+    
+    // Hiyerarşi kontrolü: super_admin hariç kimse kendinden güçlü veya eşit rol oluşturamaz
+    if (currentUser.primaryRole !== 'super_admin') {
+        if (typeof currentUser.power !== 'number' || power >= currentUser.power) {
+            return NextResponse.json({ error: t("roles.create.powerTooHigh") }, { status: 403 });
+        }
+    }
+
+    const existingRole = await prisma.authRole.findFirst({
+      where: { OR: [{ name }, { displayName }] },
+    });
+
+    if (existingRole) {
+      return NextResponse.json({ error: t("roles.create.roleExists") }, { status: 409 });
+    }
+
+    const newRole = await prisma.authRole.create({
+      data: {
+        name,
+        displayName,
+        description,
+        color: color || '#64748b',
+        layoutType: layoutType || 'customer',
+        power,
+        createdById: currentUser.id,
+        updatedById: currentUser.id,
+      },
+    });
+
+    return NextResponse.json({ message: t("roles.create.success"), role: newRole }, { status: 201 });
+  } catch (error) {
+    console.error("Rol oluşturma hatası:", error);
+    return NextResponse.json({ error: t("roles.create.error") }, { status: 500 });
+  }
+}

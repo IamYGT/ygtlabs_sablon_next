@@ -29,6 +29,20 @@ import CreateRoleDialogV3 from './CreateRoleDialog';
 import DeleteRoleDialog from './DeleteRoleDialog';
 import EditRoleDialog from './EditRoleDialog';
 import RoleDetailsDialog from './RoleDetailsDialog';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface Role {
     id: string;
@@ -40,6 +54,7 @@ interface Role {
     isActive: boolean;
     isSystemDefault: boolean;
     createdAt: Date;
+    power: number;
     permissions: Array<{
         permission: {
             id: string;
@@ -393,7 +408,7 @@ export default function RolesPageClient({
     return (
         <AdminPageGuard requiredPermission="admin.roles.view">
             <Toaster position="top-right" />
-            <div className="space-y-8 max-w-7xl mx-auto px-4 md:px-6 lg:px-8 min-h-full">
+            <div className="space-y-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-full pb-8">
 
 
                 {/* Header */}
@@ -635,7 +650,7 @@ export default function RolesPageClient({
                             </div>
                         </div>
                     </CardHeader>
-                    <CardContent className="p-0">
+                    <CardContent className="p-4 md:p-6">
                         {loading ? (
                             <div className="text-center py-12 bg-gray-50/30 dark:bg-gray-800/30">
                                 <div className="flex flex-col items-center">
@@ -676,201 +691,102 @@ export default function RolesPageClient({
                                 </div>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-                                {filteredRoles.map((role) => {
-                                    const roleTypeInfo = getRoleTypeInfo(role);
-                                    const IconComponent = roleTypeInfo.icon;
-                                    
-                                    // Role koruması: sistem rolleri + kullanıcının kendi rolü (süper admin hariç)
-                                    const isSystemProtected = role.name === 'super_admin' || role.name === 'customer' || role.name === 'admin';
-                                    const isCurrentUserRole = currentUser?.primaryRole === role.name;
-                                    const isSuperAdmin = currentUser?.primaryRole === 'super_admin';
-                                    
-                                    // Permission kontrolü - sadece roles.delete yetkisi
-                                    const hasDeletePermission = currentUser?.permissions?.includes('roles.delete') || isSuperAdmin;
-                                    
-                                    // Süper admin değilse kendi rolünü düzenleyemez + permission kontrolü
-                                    const isProtected = isSystemProtected || (isCurrentUserRole && !isSuperAdmin);
-                                    const canDelete = hasDeletePermission && !isProtected;
+                            <Table>
+                                <TableHeader>
+                                    <TableRow className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow duration-200 p-4">
+                                        <TableHead className="w-[100px] px-6 py-3 font-semibold text-gray-700 dark:text-gray-300">#</TableHead>
+                                        <TableHead className="px-6 py-3 font-semibold text-gray-700 dark:text-gray-300">{t('roleName')}</TableHead>
+                                        <TableHead className="px-6 py-3 font-semibold text-gray-700 dark:text-gray-300">{t('layoutType')}</TableHead>
+                                        <TableHead className="px-6 py-3 font-semibold text-gray-700 dark:text-gray-300">{t('users')}</TableHead>
+                                        <TableHead className="px-6 py-3 font-semibold text-gray-700 dark:text-gray-300">{t('permissions')}</TableHead>
+                                        <TableHead className="px-6 py-3 font-semibold text-gray-700 dark:text-gray-300">{t('status')}</TableHead>
+                                        <TableHead className="text-right px-6 py-3 font-semibold text-gray-700 dark:text-gray-300">{t('actions')}</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {filteredRoles.sort((a, b) => b.power - a.power).map((role, index) => {
+                                        const roleTypeInfo = getRoleTypeInfo(role);
+                                        const IconComponent = roleTypeInfo.icon;
+                                        const isSystemProtected = role.isSystemDefault;
+                                        const isCurrentUserRole = currentUser?.primaryRole === role.name;
+                                        const isSuperAdmin = currentUser?.primaryRole === 'super_admin';
+                                        const isProtected = isSystemProtected || (isCurrentUserRole && !isSuperAdmin);
+                                        const hasDeletePermission = (currentUser?.permissions?.includes('roles.delete') || isSuperAdmin) && !isProtected;
 
-                                    return (
-                                        <Card key={role.id} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow duration-200 group overflow-hidden">
-                                            <CardHeader className="pb-4">
-                                                <div className="flex items-start justify-between gap-3">
-                                                    <div className="flex items-center space-x-3 min-w-0 flex-1">
-                                                        <div
+                                        return (
+                                            <TableRow key={role.id}>
+                                                <TableCell className="font-medium px-6 py-4">{index + 1}</TableCell>
+                                                <TableCell className="px-6 py-4">
+                                                    <div className="flex items-center space-x-3">
+                                                         <div
                                                             className="w-10 h-10 rounded-lg flex items-center justify-center shadow-md flex-shrink-0"
                                                             style={{ backgroundColor: role.color || '#6366f1' }}
                                                         >
                                                             <IconComponent className="h-5 w-5 text-white" />
                                                         </div>
-                                                        <div className="min-w-0 flex-1">
-                                                            <CardTitle className="text-lg font-bold text-gray-900 dark:text-gray-100 truncate" title={role.displayName}>{role.displayName}</CardTitle>
-                                                            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium truncate" title={role.name}>{role.name}</p>
+                                                        <div>
+                                                            <div className="font-bold">{role.displayName}</div>
+                                                            <div className="text-sm text-muted-foreground">{role.name}</div>
                                                         </div>
                                                     </div>
-                                                    <DropdownMenu>
-                                                        <DropdownMenuTrigger asChild>
-                                                            <Button
-                                                                variant="ghost"
-                                                                className="h-9 w-9 p-0 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-150 rounded-lg"
-                                                            >
-                                                                <MoreHorizontal className="h-4 w-4 text-gray-600 dark:text-gray-400" />
-                                                            </Button>
-                                                        </DropdownMenuTrigger>
-                                                        <DropdownMenuContent
-                                                            align="end"
-                                                            className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-lg w-56"
-                                                        >
-                                                            <DropdownMenuItem
-                                                                onClick={() => handleRoleAction('details', role)}
-                                                                className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150 cursor-pointer"
-                                                            >
-                                                                <div className="flex items-center">
-                                                                    <div className="p-1.5 bg-blue-100 dark:bg-blue-900/20 rounded mr-3">
-                                                                        <Eye className="h-3 w-3 text-blue-600 dark:text-blue-400" />
-                                                                    </div>
-                                                                    <span className="text-gray-700 dark:text-gray-300 font-medium">
-                                                                        {t('details')}
-                                                                    </span>
-                                                                </div>
-                                                            </DropdownMenuItem>
-                                                            {!isProtected && (
-                                                                <>
-                                                                    <DropdownMenuItem
-                                                                        onClick={() => handleRoleAction('edit', role)}
-                                                                        className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150 cursor-pointer"
-                                                                    >
-                                                                        <div className="flex items-center">
-                                                                            <div className="p-1.5 bg-emerald-100 dark:bg-emerald-900/20 rounded mr-3">
-                                                                                <Edit2 className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
-                                                                            </div>
-                                                                            <span className="text-gray-700 dark:text-gray-300 font-medium">
-                                                                                {t('edit')}
-                                                                            </span>
-                                                                        </div>
-                                                                    </DropdownMenuItem>
-                                                                    <DropdownMenuItem
-                                                                        onClick={() => handleToggleRoleStatus(role)}
-                                                                        className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150 cursor-pointer"
-                                                                    >
-                                                                        {role.isActive ? (
-                                                                            <div className="flex items-center">
-                                                                                <div className="p-1.5 bg-red-100 dark:bg-red-900/20 rounded mr-3">
-                                                                                    <XCircle className="h-3 w-3 text-red-600 dark:text-red-400" />
-                                                                                </div>
-                                                                                <span className="text-red-700 dark:text-red-400 font-medium">
-                                                                                    {t('deactivate')}
-                                                                                </span>
-                                                                            </div>
-                                                                        ) : (
-                                                                            <div className="flex items-center">
-                                                                                <div className="p-1.5 bg-emerald-100 dark:bg-emerald-900/20 rounded mr-3">
-                                                                                    <CheckCircle className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
-                                                                                </div>
-                                                                                <span className="text-emerald-700 dark:text-emerald-400 font-medium">
-                                                                                    {t('activate')}
-                                                                                </span>
-                                                                            </div>
-                                                                        )}
-                                                                    </DropdownMenuItem>
-                                                                    {canDelete && (
-                                                                        <>
-                                                                            <DropdownMenuSeparator className="bg-gray-200 dark:bg-gray-700" />
-                                                                            <DropdownMenuItem
-                                                                                onClick={() => handleRoleAction('delete', role)}
-                                                                                className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-150 cursor-pointer"
-                                                                            >
-                                                                                <div className="flex items-center">
-                                                                                    <div className="p-1.5 bg-red-100 dark:bg-red-900/20 rounded mr-3">
-                                                                                        <Trash2 className="h-3 w-3 text-red-600 dark:text-red-400" />
-                                                                                    </div>
-                                                                                    <span className="font-semibold">
-                                                                                        {t('delete')}
-                                                                                    </span>
-                                                                                </div>
-                                                                            </DropdownMenuItem>
-                                                                        </>
-                                                                    )}
-                                                                </>
-                                                            )}
-                                                        </DropdownMenuContent>
-                                                    </DropdownMenu>
-                                                </div>
-                                            </CardHeader>
-                                            <CardContent className="space-y-4">
-                                                <div className="flex flex-wrap items-center gap-2 overflow-hidden">
-                                                    {/* Korumalı Badge */}
-                                                    {role.name === 'super_admin' || role.name === 'admin' || role.name === 'customer' ? (
-                                                        <Badge variant="destructive" className="text-xs px-2 py-0.5 flex-shrink-0">
-                                                            Korumalı
-                                                        </Badge>
-                                                    ) : null}
-
-                                                    {/* Layout Badge */}
-                                                    <Badge variant="outline" className="text-xs px-2 py-0.5 flex-shrink-0 border-blue-300 text-blue-700 dark:border-blue-600 dark:text-blue-300">
-                                                        {role.layoutType}
-                                                    </Badge>
-
-                                                    {/* Aktif/Pasif Badge */}
-                                                    <Badge variant={role.isActive ? "default" : "secondary"} className="text-xs px-2 py-0.5 flex-shrink-0">
+                                                </TableCell>
+                                                <TableCell className="px-6 py-4">
+                                                    <Badge variant="outline">{role.layoutType}</Badge>
+                                                </TableCell>
+                                                <TableCell className="px-6 py-4">{role._count.users}</TableCell>
+                                                <TableCell className="px-6 py-4">{role.permissions?.length || 0}</TableCell>
+                                                <TableCell className="px-6 py-4">
+                                                    <Badge variant={role.isActive ? "default" : "secondary"}>
                                                         {role.isActive ? t('active') : t('inactive')}
                                                     </Badge>
-                                                </div>
+                                                </TableCell>
+                                                <TableCell className="text-right px-6 py-4">
+                                                     <TooltipProvider>
+                                                        <div className="flex items-center justify-end gap-2">
+                                                            <Tooltip>
+                                                                <TooltipTrigger asChild>
+                                                                    <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleRoleAction('details', role)}>
+                                                                        <Eye className="h-4 w-4" />
+                                                                    </Button>
+                                                                </TooltipTrigger>
+                                                                <TooltipContent>
+                                                                    <p>{t('details')}</p>
+                                                                </TooltipContent>
+                                                            </Tooltip>
+                                                            
+                                                            {!isProtected && (
+                                                                <Tooltip>
+                                                                    <TooltipTrigger asChild>
+                                                                         <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleRoleAction('edit', role)}>
+                                                                            <Edit2 className="h-4 w-4" />
+                                                                        </Button>
+                                                                    </TooltipTrigger>
+                                                                    <TooltipContent>
+                                                                        <p>{t('edit')}</p>
+                                                                    </TooltipContent>
+                                                                </Tooltip>
+                                                            )}
 
-                                                {role.description && (
-                                                    <CardDescription className="text-sm line-clamp-2 text-gray-600 dark:text-gray-400 leading-relaxed overflow-hidden">
-                                                        {role.description}
-                                                    </CardDescription>
-                                                )}
-
-                                                <div className="flex justify-between items-center bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
-                                                    <div className="flex items-center gap-2">
-                                                        <div className="p-1.5 bg-blue-100 dark:bg-blue-900 rounded-md">
-                                                            <Users className="h-4 w-4 text-blue-600" />
+                                                            {hasDeletePermission && (
+                                                                 <Tooltip>
+                                                                    <TooltipTrigger asChild>
+                                                                        <Button variant="destructive" size="icon" className="h-8 w-8" onClick={() => handleRoleAction('delete', role)}>
+                                                                            <Trash2 className="h-4 w-4" />
+                                                                        </Button>
+                                                                    </TooltipTrigger>
+                                                                    <TooltipContent>
+                                                                        <p>{t('delete')}</p>
+                                                                    </TooltipContent>
+                                                                </Tooltip>
+                                                            )}
                                                         </div>
-                                                        <div>
-                                                            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{role._count.users}</p>
-                                                            <p className="text-xs text-gray-500 dark:text-gray-400">{t('usersCount')}</p>
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex items-center gap-2">
-                                                        <div className="p-1.5 bg-green-100 dark:bg-green-900 rounded-md">
-                                                            <Shield className="h-4 w-4 text-green-600" />
-                                                        </div>
-                                                        <div>
-                                                            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{role.permissions?.length || 0}</p>
-                                                            <p className="text-xs text-gray-500 dark:text-gray-400">{t('permissionsCount')}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="flex gap-3">
-                                                    {!isProtected ? (
-                                                        <Button
-                                                            size="sm"
-                                                            className="flex-1 h-10 rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-md transition-all duration-200 hover:shadow-lg"
-                                                            onClick={() => handleRoleAction('edit', role)}
-                                                        >
-                                                            <Edit2 className="mr-2 h-4 w-4" />
-                                                            {t('edit')}
-                                                        </Button>
-                                                    ) : (
-                                                        <Button
-                                                            size="sm"
-                                                            className="flex-1 h-10 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-150"
-                                                            onClick={() => handleRoleAction('details', role)}
-                                                        >
-                                                            <Eye className="mr-2 h-4 w-4" />
-                                                            {t('view')}
-                                                        </Button>
-                                                    )}
-                                                </div>
-                                            </CardContent>
-                                        </Card>
-                                    );
-                                })}
-                            </div>
+                                                    </TooltipProvider>
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                </TableBody>
+                            </Table>
                         )}
                     </CardContent>
                 </Card>

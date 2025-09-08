@@ -299,6 +299,10 @@
       "close": "Close",
       "more": "More"
     },
+    "command": {
+      "paletteTitle": "Command Palette",
+      "paletteDescription": "Search for a command to execute..."
+    },
     "Contact": {
       "badge": "# CONTACT",
       "title": "Get in Touch",

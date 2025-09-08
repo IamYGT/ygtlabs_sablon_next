@@ -29,7 +29,7 @@ export async function PUT(
 
     const { roleId } = await params;
     const body = await request.json();
-    const { name, displayName, description, color, layoutType, isActive } =
+    const { name, displayName, description, color, layoutType, isActive, power } =
       body;
 
     // Rol varlığını kontrol et
@@ -44,8 +44,27 @@ export async function PUT(
       );
     }
 
+    // Hiyerarşi kontrolü: Kullanıcı kendinden daha güçlü veya eşit bir rolü düzenleyemez
+    // Super admin bu kuralın dışındadır
+    if (currentUser.primaryRole !== "super_admin") {
+      if (typeof currentUser.power !== 'number' || existingRole.power >= currentUser.power) {
+        return NextResponse.json(
+          { error: t("roles.update.cannotEditHigherOrEqualPower") },
+          { status: 403 }
+        );
+      }
+      
+      // Kullanıcı bir rolün gücünü kendisininkinden daha yüksek veya eşit yapamaz
+      if (typeof power === 'number' && power >= currentUser.power) {
+        return NextResponse.json(
+          { error: t("roles.update.cannotSetPowerHigherThanOwn") },
+          { status: 403 }
+        );
+      }
+    }
+
     // Korumalı rolleri düzenlemeyi engelle
-    if (existingRole.name === "super_admin" || existingRole.name === "user" || existingRole.name === "admin") {
+    if (existingRole.isSystemDefault && currentUser.primaryRole !== 'super_admin') {
       return NextResponse.json(
         { error: t("roles.update.protected") },
         { status: 400 }
@@ -79,6 +98,7 @@ export async function PUT(
         ...(color && { color }),
         ...(layoutType && { layoutType }),
         ...(isActive !== undefined && { isActive }),
+        ...(typeof power === 'number' && { power }),
         updatedAt: new Date(),
         updatedById: currentUser.id,
       },

@@ -412,7 +412,7 @@ export default function UsersPageClient({
 
   return (
     <AdminPageGuard requiredPermission="admin.users.view">
-      <div className="space-y-8">
+      <div className="space-y-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-full pb-8">
         <Toaster />
         {/* Header */}
         <div className="flex flex-col items-center md:flex-row md:items-center md:justify-between gap-4">

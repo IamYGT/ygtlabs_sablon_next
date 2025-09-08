@@ -578,6 +578,11 @@
     "pleaseWait": "Please wait...",
     "userNotFound": "User not found",
     "clearFilters": "Clear Filters",
+    "tryDifferentCriteria": "Try different criteria or clear filters.",
+    "roleName": "Role Name",
+    "layoutType": "Layout Type",
+    "status": "Status",
+    "actions": "Actions",
     "search": {
       "placeholder": "Search roles...",
       "clearSelection": "Clear Selection"

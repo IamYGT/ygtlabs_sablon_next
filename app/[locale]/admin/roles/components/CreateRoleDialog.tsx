@@ -80,6 +80,7 @@ import { useParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState, Fragment } from 'react';
 import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '@/lib/hooks/useAuth';
 
 // Permission interface
 interface Permission {
@@ -257,6 +258,7 @@ export default function CreateRoleDialogV3({
     const t = useTranslations('AdminRoles.createDialog');
     const params = useParams();
     const locale = (params?.locale as string) || 'tr';
+    const { user: currentUser } = useAuth();
 
     // State
     const [loading, setLoading] = useState(false);
@@ -275,11 +277,27 @@ export default function CreateRoleDialogV3({
         description: '',
         layoutType: 'customer' as 'admin' | 'customer',
         color: '#6366f1',
+        power: 0,
     });
     
     // Permissions
     const [availablePermissions, setAvailablePermissions] = useState<Permission[]>([]);
     const [selectedPermissions, setSelectedPermissions] = useState<Set<string>>(new Set());
+    
+    // Auto-calculate power
+    useEffect(() => {
+        if (!currentUser) return;
+
+        const newPower = selectedPermissions.size * 10;
+        
+        if (currentUser.primaryRole === 'super_admin') {
+            setFormData(prev => ({ ...prev, power: newPower }));
+        } else {
+            const cappedPower = Math.min(newPower, (currentUser.power || 1) - 1);
+            setFormData(prev => ({ ...prev, power: cappedPower }));
+        }
+
+    }, [selectedPermissions, currentUser]);
     
     // Form validation
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -396,6 +414,7 @@ export default function CreateRoleDialogV3({
             description: template.description,
             layoutType: template.layoutType,
             color: template.color,
+            power: 0, // Reset power for quick templates
         });
         
         // Update permissions
@@ -481,7 +500,11 @@ export default function CreateRoleDialogV3({
         if (selectedPermissions.size === 0) {
             newErrors.permissions = 'At least one permission must be selected';
         }
-        
+
+        if (formData.power < 0) {
+            newErrors.power = 'Power cannot be negative';
+        }
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -502,7 +525,7 @@ export default function CreateRoleDialogV3({
                 .map(id => availablePermissions.find(p => p.id === id)?.name)
                 .filter(Boolean);
             
-            const response = await fetch('/api/admin/roles/create', {
+            const response = await fetch('/api/admin/roles', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -511,6 +534,7 @@ export default function CreateRoleDialogV3({
                     description: formData.description,
                     layoutType: formData.layoutType,
                     color: formData.color,
+                    power: formData.power,
                     permissions: permissionNames,
                 }),
             });
@@ -537,6 +561,7 @@ export default function CreateRoleDialogV3({
             description: '',
             layoutType: 'customer',
             color: '#6366f1',
+            power: 0,
         });
         setSelectedPermissions(new Set());
         setErrors({});
@@ -1262,6 +1287,10 @@ export default function CreateRoleDialogV3({
                                                             <span className="text-xs">{formData.color}</span>
                                                         </div>
                                                     </div>
+                                                    <div className="flex items-center justify-between">
+                                                        <span className="text-sm text-muted-foreground">Power:</span>
+                                                        <Badge variant="outline">{formData.power}</Badge>
+                                                    </div>
                                                 </CardContent>
                                             </Card>
 
@@ -1370,6 +1399,12 @@ export default function CreateRoleDialogV3({
                                             <div className="flex items-center gap-2 p-3 bg-red-50 dark:bg-red-950/20 rounded-lg">
                                                 <AlertCircle className="w-4 h-4 text-red-500" />
                                                 <span className="text-sm text-red-600">{errors.permissions}</span>
+                                            </div>
+                                        )}
+                                        {errors.power && (
+                                            <div className="flex items-center gap-2 p-3 bg-red-50 dark:bg-red-950/20 rounded-lg">
+                                                <AlertCircle className="w-4 h-4 text-red-500" />
+                                                <span className="text-sm text-red-600">{errors.power}</span>
                                             </div>
                                         )}
                                 </div>

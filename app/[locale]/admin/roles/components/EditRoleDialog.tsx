@@ -22,6 +22,7 @@ import { toast } from "react-hot-toast";
 interface Role {
   id: string; name: string; displayName: string; description: string | null;
   color: string | null; layoutType: string; isActive: boolean; isSystemDefault: boolean;
+  power: number;
 }
 
 interface Permission {
@@ -58,10 +59,6 @@ const COLOR_PALETTE = [
   "#f43f5e", "#64748b", "#374151",
 ];
 
-const generateRoleCode = (displayName: string): string => {
-  return displayName.toLowerCase().replace(/[^a-z0-9]/g, "_").replace(/_+/g, "_").replace(/^_|_$/g, "");
-};
-
 export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated }: EditRoleDialogProps) {
   const t = useTranslations("AdminRoles.editDialog");
   const tCommon = useTranslations("AdminCommon");
@@ -75,9 +72,10 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
   const [formData, setFormData] = useState({
     displayName: role.displayName, description: role.description || "",
     color: role.color || "#6366f1", layoutType: role.layoutType || "user", isActive: role.isActive,
+    power: role.power || 0,
   });
 
-  const isProtectedRole = role.name === "super_admin" || role.name === "user";
+  const isProtectedRole = role.isSystemDefault;
 
   const fetchData = useCallback(async () => {
     const permissionsPromise = fetch(`/api/admin/permissions?limit=1000&locale=${locale}`).then((res) => res.json());
@@ -116,15 +114,6 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
     });
 
     // Rol düzenleme kontrolleri
-    const targetRolePermissionCount = data.rolePermissions.length;
-    const userPermissionCount = currentUser.permissions?.length || 0;
-    
-    // Rolün mevcut yetkilerini kontrol et
-    const rolePermissionNames = data.rolePermissions.map((p: Permission) => p.name);
-    const userHasAllRolePermissions = rolePermissionNames.every(
-      (permName: string) => currentUser.permissions.includes(permName)
-    );
-    
     let canEdit = false;
     let reason = null;
     
@@ -133,22 +122,9 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
     } else if (isProtectedRole) {
       canEdit = false;
       reason = t('notifications.protectedRole');
-    } else if (targetRolePermissionCount >= userPermissionCount) {
-      // Eşit veya fazla yetkiye sahip rolleri düzenleyemez
+    } else if (typeof currentUser.power !== 'number' || role.power >= currentUser.power) {
       canEdit = false;
-      reason = t('notifications.cannotEditEqualOrMorePermissions', { 
-        yourCount: userPermissionCount, 
-        roleCount: targetRolePermissionCount 
-      });
-    } else if (!userHasAllRolePermissions) {
-      // Rolün sahip olduğu ama kullanıcının sahip olmadığı yetkiler varsa düzenleyemez
-      canEdit = false;
-      const missingPermissions = rolePermissionNames.filter(
-        (permName: string) => !currentUser.permissions.includes(permName)
-      );
-      reason = t('notifications.roleHasPermissionsYouDontHave', {
-        count: missingPermissions.length
-      });
+      reason = t('notifications.cannotEditHigherOrEqualPower');
     } else {
       canEdit = true;
     }
@@ -159,17 +135,33 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
       canEditRole: canEdit,
       cannotEditReason: reason
     };
-  }, [data?.allPermissions, data?.rolePermissions, currentUser, locale, isProtectedRole, t]);
+  }, [data?.allPermissions, data?.rolePermissions, currentUser, locale, isProtectedRole, t, role.power]);
 
   const [currentSelectedPermissions, setCurrentSelectedPermissions] = useState<Set<string>>(new Set());
 
   useEffect(() => { setCurrentSelectedPermissions(initialSelectedIds); }, [initialSelectedIds]);
+
+  // Auto-calculate power based on permissions
+  useEffect(() => {
+    if (!currentUser) return;
+
+    const newPower = currentSelectedPermissions.size * 10;
+
+    // Super admin can set any power. Others are capped.
+    if (currentUser.primaryRole === 'super_admin') {
+        setFormData(prev => ({ ...prev, power: newPower }));
+    } else {
+        const cappedPower = Math.min(newPower, (currentUser.power || 1) - 1);
+        setFormData(prev => ({ ...prev, power: cappedPower }));
+    }
+  }, [currentSelectedPermissions, currentUser]);
 
   useEffect(() => {
     if (open) {
       setFormData({
         displayName: role.displayName, description: role.description || "",
         color: role.color || "#6366f1", layoutType: role.layoutType || "customer", isActive: role.isActive,
+        power: role.power || 0,
       });
       setSearchTerm("");
     }
@@ -190,11 +182,11 @@ export default function EditRoleDialog({ open, onOpenChange, role, onRoleUpdated
     if (!validateForm()) return;
     setLoading(true);
     try {
-      const roleUpdateData = { ...formData, name: generateRoleCode(formData.displayName) };
+      const roleUpdateData = { ...formData, name: role.name }; // Name'i değiştirmemeye dikkat
       const roleResponse = await fetch(`/api/admin/roles/${role.id}/update`, {
         method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(roleUpdateData),
       });
-      if (!roleResponse.ok) throw new Error((await roleResponse.json()).message);
+      if (!roleResponse.ok) throw new Error((await roleResponse.json()).error || t("notifications.updateError"));
 
       const permissionNames = Array.from(currentSelectedPermissions)
         .map((id) => assignablePermissions.find((p: Permission) => p.id === id)?.name)

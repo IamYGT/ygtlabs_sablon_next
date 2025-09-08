@@ -23,7 +23,6 @@ import {
 } from "@/components/ui/command";
 import { useSidebar } from "@/components/ui/sidebar";
 import { useAdminNavigation } from "@/hooks/useAdminNavigation";
-import { useCustomerNavigation } from "@/hooks/useCustomerNavigation";
 import { useAdminAuth } from "@/lib/hooks/useAuth";
 import { usePathname, useRouter } from "@/lib/i18n/navigation";
 import { routing } from "@/lib/i18n/routing";
@@ -137,7 +136,6 @@ export function AdminHeader({
   }, []);
 
   const adminNavItems = useAdminNavigation();
-  const customerNavItems = useCustomerNavigation();
 
   const allPages = React.useMemo(() => {
     const adminPages = adminNavItems.map((item) => ({
@@ -146,14 +144,8 @@ export function AdminHeader({
       url: item.href,
     }));
 
-    const customerPages = customerNavItems.map((item) => ({
-      id: item.key,
-      title: item.label,
-      url: item.href,
-    }));
-
-    return [...adminPages, ...customerPages];
-  }, [adminNavItems, customerNavItems]);
+    return adminPages;
+  }, [adminNavItems]);
 
   useEffect(() => {
     const staticSearchData = {
