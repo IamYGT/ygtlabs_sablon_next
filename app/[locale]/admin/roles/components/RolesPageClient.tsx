@@ -408,7 +408,7 @@ export default function RolesPageClient({
     return (
         <AdminPageGuard requiredPermission="admin.roles.view">
             <Toaster position="top-right" />
-            <div className="space-y-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-full pb-8">
+            <div className="space-y-8 px-4 sm:px-6 lg:px-8 min-h-full pb-8">
 
 
                 {/* Header */}

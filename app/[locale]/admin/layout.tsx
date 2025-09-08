@@ -74,7 +74,7 @@ export default async function AdminLayout({
               </div>
 
               {/* Ana İçerik Alanı - Rounded Design */}
-              <div className="flex flex-1 flex-col overflow-hidden md:rounded-tl-[1.5rem] md:rounded-bl-[1.5rem] bg-blue-100 dark:bg-neutral-900 relative z-10">
+              <div className="flex flex-1 flex-col overflow-hidden md:rounded-tl-[1.5rem] md:rounded-bl-[1.5rem] bg-gray-50/50 dark:bg-slate-900 relative z-10">
                 {/* Header - Responsive */}
                 <AdminHeader
                   title={t("subtitle")}
@@ -82,7 +82,7 @@ export default async function AdminLayout({
                 />
 
                 {/* Sayfa İçeriği - Corporate Professional Padding */}
-                <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-8 lg:p-10 bg-gray-50/50 dark:bg-slate-900 scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-gray-100 dark:scrollbar-thumb-blue-600 dark:scrollbar-track-gray-800" style={{ scrollBehavior: 'smooth' }}>
+                <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-8 lg:p-10 scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-gray-100 dark:scrollbar-thumb-blue-600 dark:scrollbar-track-gray-800" style={{ scrollBehavior: 'smooth' }}>
                   <div className="max-w-7xl mx-auto h-full">{children}</div>
                 </main>
               </div>
