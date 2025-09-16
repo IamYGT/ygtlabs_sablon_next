@@ -108,7 +108,7 @@ export function AboutPageClient({ messages }: AboutPageClientProps) {
 
   return (
     <AdminPageGuard requiredPermission="admin.about.view">
-      <div className="space-y-8">
+      <div className="space-y-9">
         {/* Header */}
         <div className="flex flex-col items-center md:flex-row md:items-center md:justify-between gap-4">
           <div className="space-y-2">
