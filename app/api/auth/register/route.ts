@@ -48,7 +48,7 @@ export async function POST(req: Request) {
 
     // Default 'user' rolünü bul
     const userRole = await prisma.authRole.findFirst({
-      where: { name: "user" },
+      where: { name: "customer" },
     });
 
     if (!userRole) {

@@ -47,13 +47,7 @@ const NAVIGATION_CONFIG: Record<string, NavigationConfig> = {
     order: 2,
     requiredPermission: "admin.hero-slider.view",
   },
-  information: {
-    icon: "Monitor",
-    translationKey: "information",
-    href: "/admin/information",
-    order: 10,
-    requiredPermission: "admin.information.view",
-  },
+
   about: {
     icon: "Monitor",
     translationKey: "about",
@@ -89,20 +83,7 @@ const NAVIGATION_CONFIG: Record<string, NavigationConfig> = {
     order: 5,
     requiredPermission: "admin.permissions.view",
   },
-  i18nRoutes: {
-    icon: "Monitor",
-    translationKey: "i18nRoutes",
-    href: "/admin/i18n/routes",
-    order: 9,
-    requiredPermission: "admin.permissions.view",
-  },
-  i18nLanguages: {
-    icon: "Monitor",
-    translationKey: "i18nLanguages",
-    href: "/admin/i18n/languages",
-    order: 7,
-    requiredPermission: "admin.permissions.view",
-  },
+
   i18nMessages: {
     icon: "Monitor",
     translationKey: "i18nMessages",
