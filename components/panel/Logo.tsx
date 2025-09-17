@@ -19,8 +19,8 @@ export default function Logo({ width = 160, height = 50, href = "/", className =
     <div className="relative">
       {/* Main logo - Light theme */}
       <Image 
-        src="/logo/mems.png" 
-        alt="Memsidea Logo" 
+        src="/logo/.png" 
+        alt=" Logo" 
         width={width} 
         height={height}
         className={`w-auto h-auto dark:hidden ${className}`}
@@ -29,8 +29,8 @@ export default function Logo({ width = 160, height = 50, href = "/", className =
       
       {/* Main logo - Dark theme */}
       <Image 
-        src="/logo/memsbeyaz.png" 
-        alt="Memsidea Logo" 
+        src="/logo/.png" 
+        alt=" Logo" 
         width={width} 
         height={height}
         className={`w-auto h-auto hidden dark:block ${className}`}

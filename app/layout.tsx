@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "ECU Sistem",
-    description: "ECU Yönetim Sistemi",
+    title: "CRM Sistem",
+    description: "CRM Yönetim Sistemi",
 };
 
 export default function RootLayout({

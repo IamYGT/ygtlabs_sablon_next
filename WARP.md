@@ -4,7 +4,7 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 
 ## Project Overview
 
-**Memsidea Landing with Admin** - A comprehensive ECU management system for automotive chiptuning services built with Next.js 15 App Router, TypeScript, and modern web technologies.
+** Landing with Admin** - A comprehensive ECU management system for automotive chiptuning services built with Next.js 15 App Router, TypeScript, and modern web technologies.
 
 ### Business Domain
 - **ECU chiptuning and remapping services**

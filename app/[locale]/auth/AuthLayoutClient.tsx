@@ -96,7 +96,7 @@ export function AuthLayoutClient({ children }: AuthLayoutClientProps) {
                                 {/* Logo */}
                                 <div className="flex justify-center">
                                     <div className="relative">
-                                        <Logo width={140} height={45} href="https://memsidea.com" />
+                                        <Logo width={140} height={45} href="https://crm.com" />
                                     </div>
                                 </div>
                                 
@@ -121,7 +121,7 @@ export function AuthLayoutClient({ children }: AuthLayoutClientProps) {
                     transition={{ duration: 0.5, delay: 0.8 }}
                 >
                     <a 
-                        href="https://memsidea.com" 
+                        href="https://crm.com" 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="hover:text-primary transition-colors duration-200"

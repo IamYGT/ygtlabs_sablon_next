@@ -28,7 +28,7 @@
     "blog": "Blog",
     "home": "Home",
     "phone": "+90 XXX XXX XX XX",
-    "email": "info@revvtuned.com",
+    "email": "info@crmtest.com",
     "address": "Istanbul, Turkey",
     "copyright": "© 2025 Revv Tuned. All rights reserved.",
     "newsletter": "Newsletter",
@@ -142,7 +142,7 @@
   },
   "serviceInfo": {
     "badge": "Why Us?",
-    "title": "Why Should You Choose RevvTuned?",
+    "title": "Why Should You Choose crmtest?",
     "description": "We are at your service with our expert team, state-of-the-art equipment, and customer-oriented approach.",
     "features": [
       {
@@ -166,7 +166,7 @@
       {
         "name": "Ahmet Yılmaz",
         "role": "BMW F30 Owner",
-        "quote": "My car's performance has increased incredibly. Driving is now much more enjoyable. Thanks RevvTuned team!",
+        "quote": "My car's performance has increased incredibly. Driving is now much more enjoyable. Thanks crmtest team!",
         "image": "/images/team/default-avatar.jpg"
       },
       {
@@ -199,10 +199,10 @@
   },
   "seo": {
     "landing": {
-      "title": "RevvTuned - ECU Chip Tuning Services",
+      "title": "crmtest - ECU Chip Tuning Services",
       "description": "Increase your vehicle's performance with professional ECU chip tuning services. Safe tuning solutions with our expert team and cutting-edge technology.",
       "keywords": "ecu tuning, chip tuning, performance increase, engine tuning, car modification",
-      "ogTitle": "RevvTuned - ECU Chip Tuning Services",
+      "ogTitle": "crmtest - ECU Chip Tuning Services",
       "ogDescription": "Increase your vehicle's performance with professional ECU chip tuning services."
     }
   }

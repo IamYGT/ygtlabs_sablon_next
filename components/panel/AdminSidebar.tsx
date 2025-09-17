@@ -342,16 +342,16 @@ export const AdminLogo = () => {
         className="font-normal flex items-center text-sm text-black py-1 relative z-20"
       >
         <Image
-          src="/logo/mems.png"
-          alt="Memsidea Logo"
+          src="/logo/memghjfs.png"
+          alt=" Logo"
           width={160}
           height={40}
           priority
           className="dark:hidden"
         />
         <Image
-          src="/logo/memsbeyaz.png"
-          alt="Memsidea Logo"
+          src="/logo/dfgfd.png"
+          alt=" Logo"
           width={160}
           height={40}
           priority
@@ -391,8 +391,8 @@ export const AdminLogoIcon = () => {
       className="font-normal flex items-center justify-center text-sm text-black py-1 relative z-20 w-full"
     >
       <Image
-        src="/logo/memskucuk.png"
-        alt="Memsidea Logo Icon"
+        src="/logo/.png"
+        alt=" Logo Icon"
         width={48}
         height={48}
         priority

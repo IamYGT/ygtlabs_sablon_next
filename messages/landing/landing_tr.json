@@ -151,7 +151,7 @@
   },
   "serviceInfo": {
     "badge": "Neden Biz?",
-    "title": "Neden RevvTuned'i Seçmelisiniz?",
+    "title": "Neden crmtest'i Seçmelisiniz?",
     "description": "Uzman ekibimiz, son teknoloji ekipmanlarımız ve müşteri odaklı yaklaşımımızla hizmetinizdeyiz.",
     "features": [
       {
@@ -175,7 +175,7 @@
       {
         "name": "Ahmet Yılmaz",
         "role": "BMW F30 Sahibi",
-        "quote": "Aracımın performansı inanılmaz arttı. Artık araba kullanmak çok daha keyifli. Teşekkürler RevvTuned ekibi!",
+        "quote": "Aracımın performansı inanılmaz arttı. Artık araba kullanmak çok daha keyifli. Teşekkürler crmtest ekibi!",
         "image": "/images/team/default-avatar.jpg"
       },
       {
@@ -384,10 +384,10 @@
   },
   "seo": {
     "landing": {
-      "title": "RevvTuned - ECU Chip Tuning Hizmetleri",
+      "title": "crmtest - ECU Chip Tuning Hizmetleri",
       "description": "Profesyonel ECU chip tuning hizmetleri ile aracınızın performansını artırın. Uzman ekibimiz ve son teknoloji ile güvenli tuning çözümleri.",
       "keywords": "ecu tuning, chip tuning, performans artırma, motor tuning, araç modifikasyonu",
-      "ogTitle": "RevvTuned - ECU Chip Tuning Hizmetleri",
+      "ogTitle": "crmtest - ECU Chip Tuning Hizmetleri",
       "ogDescription": "Profesyonel ECU chip tuning hizmetleri ile aracınızın performansını artırın."
     }
   }

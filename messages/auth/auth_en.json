@@ -65,9 +65,9 @@
     "sendError": "An error occurred while sending the email"
   },
   "layout": {
-    "pageTitle": "Memsidea Admin Panel",
+    "pageTitle": " Admin Panel",
     "pageSubtitle": "Welcome to Management Panel",
-    "copyright": "© {year} Memsidea. All rights reserved."
+    "copyright": "© {year} . All rights reserved."
   },
   "logoutModal": {
     "title": "Are you sure you want to log out?",

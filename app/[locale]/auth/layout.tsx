@@ -7,8 +7,8 @@ import { AuthLayoutClient } from "./AuthLayoutClient";
 import "./styles/auth.css"; // Auth pages'e özel stil dosyası
 
 export const metadata: Metadata = {
-  title: "Giriş - ECU Sistem",
-  description: "ECU Sistem yönetim paneline giriş yapın",
+  title: "Giriş - CRM Sistem",
+  description: "CRM Sistem yönetim paneline giriş yapın",
   robots: {
     index: false,
     follow: false,

@@ -60,9 +60,9 @@
     }
   },
   "AuthLayout": {
-    "pageTitle": "Memsidea Admin Panel",
+    "pageTitle": " Admin Panel",
     "pageSubtitle": "Welcome to Management Panel",
-    "copyright": "© {year} Memsidea. All rights reserved."
+    "copyright": "© {year} . All rights reserved."
   },
   "Navigation": {
     "dashboard": "Dashboard",
@@ -193,7 +193,7 @@
     "blog": "Blog",
     "home": "Home",
     "phone": "+90 XXX XXX XX XX",
-    "email": "info@revvtuned.com",
+    "email": "info@crmtest.com",
     "address": "Istanbul, Turkey",
     "copyright": "© 2025 Revv Tuned. All rights reserved.",
     "newsletter": "Newsletter",
@@ -269,7 +269,7 @@
   },
   "ServiceInfo": {
     "badge": "Why Us?",
-    "title": "Why Should You Choose RevvTuned?",
+    "title": "Why Should You Choose crmtest?",
     "description": "We are at your service with our expert team, state-of-the-art equipment, and customer-oriented approach.",
     "features": "[object Object],[object Object],[object Object]"
   },
@@ -599,10 +599,10 @@
   },
   "SEO": {
     "landing": {
-      "title": "RevvTuned - ECU Chip Tuning Services",
+      "title": "crmtest",
       "description": "Increase your vehicle's performance with professional ECU chip tuning services. Safe tuning solutions with our expert team and cutting-edge technology.",
       "keywords": "ecu tuning, chip tuning, performance increase, engine tuning, car modification",
-      "ogTitle": "RevvTuned - ECU Chip Tuning Services",
+      "ogTitle": "crmtest",
       "ogDescription": "Increase your vehicle's performance with professional ECU chip tuning services."
     }
   },

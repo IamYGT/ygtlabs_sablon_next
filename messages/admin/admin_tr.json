@@ -39,7 +39,7 @@
       },
       "trend": "+18.7%"
     },
-    "title": "Admin Paneli - ECU Sistem",
+    "title": "Admin Paneli - CRM Sistem",
     "subtitle": "Kurumsal Yönetim Paneli",
     "description": "Finansal kontrol ve sistem yönetimi merkezi",
     "welcome": "Hoş geldiniz",
@@ -1301,10 +1301,10 @@
       "placeholders": {
         "titleTr": "Araç Performansının Zirvesi",
         "titleEn": "Peak of Vehicle Performance",
-        "subtitleTr": "Profesyonel ECU Tuning",
-        "subtitleEn": "Professional ECU Tuning",
-        "descriptionTr": "Aracınızın gerçek potansiyelini keşfedin. Uzman ekibimiz ile güvenli ve profesyonel ECU tuning hizmeti.",
-        "descriptionEn": "Discover your vehicle's true potential. Safe and professional ECU tuning service with our expert team.",
+        "subtitleTr": "Profesyonel CRM Tuning",
+        "subtitleEn": "Professional CRM Tuning",
+        "descriptionTr": "Aracınızın gerçek potansiyelini keşfedin. Uzman ekibimiz ile güvenli ve profesyonel CRM tuning hizmeti.",
+        "descriptionEn": "Discover your vehicle's true potential. Safe and professional CRM tuning service with our expert team.",
         "badgeTr": "✨ Yeni",
         "badgeEn": "✨ New",
         "primaryButtonTr": "Hemen Başlayın",
@@ -1669,7 +1669,7 @@
     }
   },
   "AuthLayout": {
-    "pageTitle": "ECU Sistem",
+    "pageTitle": "CRM Sistem",
     "pageSubtitle": "Yönetim Paneli"
   },
   "AdminUsers": {
