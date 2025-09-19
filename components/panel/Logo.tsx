@@ -18,20 +18,20 @@ export default function Logo({ width = 160, height = 50, href = "/", className =
   const LogoImage = (
     <div className="relative">
       {/* Main logo - Light theme */}
-      <Image 
-        src="/logo/.png" 
-        alt=" Logo" 
-        width={width} 
+      <Image
+        src="/logo/mems.png"
+        alt=" Logo"
+        width={width}
         height={height}
         className={`w-auto h-auto dark:hidden ${className}`}
         priority
       />
-      
+
       {/* Main logo - Dark theme */}
-      <Image 
-        src="/logo/.png" 
-        alt=" Logo" 
-        width={width} 
+      <Image
+        src="/logo/memsbeyaz.png"
+        alt=" Logo"
+        width={width}
         height={height}
         className={`w-auto h-auto hidden dark:block ${className}`}
         priority

@@ -197,7 +197,7 @@ export const useUIStore = create<UIStore>()(
       // Sidebar state
       sidebar: {
         isOpen: true,
-        isCollapsed: false,
+        isCollapsed: true, // Başlangıçta kilitli (daraltılmamış) olmalı
       },
       toggleSidebar: () => {
         set((state) => ({
@@ -240,7 +240,7 @@ export const useUIStore = create<UIStore>()(
           notifications: [],
           sidebar: {
             isOpen: true,
-            isCollapsed: false,
+            isCollapsed: true, // Başlangıçta kilitli (daraltılmamış) olmalı
           },
         });
       },
