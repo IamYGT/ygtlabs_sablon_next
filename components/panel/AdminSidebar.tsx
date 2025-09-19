@@ -261,7 +261,7 @@ export const AdminLogo = () => {
         className="font-normal flex items-center text-sm text-black py-1 relative z-20"
       >
         <Image
-          src="/logo/mems.png"
+          src="/logo/logo.png"
           alt=" Logo"
           width={160}
           height={40}
@@ -269,7 +269,7 @@ export const AdminLogo = () => {
           className="dark:hidden"
         />
         <Image
-          src="/logo/memsbeyaz.png"
+          src="/logo/logo.png"
           alt=" Logo"
           width={160}
           height={40}
@@ -310,7 +310,7 @@ export const AdminLogoIcon = () => {
       className="font-normal flex items-center justify-center text-sm text-black py-1 relative z-20 w-full"
     >
       <Image
-        src="/logo/memskucuk.png"
+        src="/logo/logo.png"
         alt=" Logo Icon"
         width={48}
         height={48}

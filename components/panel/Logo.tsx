@@ -19,7 +19,7 @@ export default function Logo({ width = 160, height = 50, href = "/", className =
     <div className="relative">
       {/* Main logo - Light theme */}
       <Image
-        src="/logo/mems.png"
+        src="/logo/logo.png"
         alt=" Logo"
         width={width}
         height={height}
@@ -29,7 +29,7 @@ export default function Logo({ width = 160, height = 50, href = "/", className =
 
       {/* Main logo - Dark theme */}
       <Image
-        src="/logo/memsbeyaz.png"
+        src="/logo/logo.png"
         alt=" Logo"
         width={width}
         height={height}
