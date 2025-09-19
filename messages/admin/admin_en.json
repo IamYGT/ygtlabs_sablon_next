@@ -85,7 +85,24 @@
     "high": "high",
     "medium": "medium",
     "low": "low",
-    "admin": "Admin"
+    "admin": "Admin",
+    "totalUsers": "Total Users",
+    "activeCustomers": "Active Customers",
+    "supportTickets": "Support Tickets",
+    "activeSessions": "Active Sessions",
+    "supportSystem": "Support System",
+    "totalTickets": "Total Tickets",
+    "resolutionRate": "Resolution Rate",
+    "ticketStatusDistribution": "Ticket Status Distribution",
+    "recentActivities": "Recent Activities",
+    "newCustomerAdded": "New customer added",
+    "customerAddedToDatabase": "{name} added to database",
+    "newUserRegistered": "New user registered",
+    "userJoinedSystem": "{name} joined the system",
+    "systemStatus": "System Status",
+    "permissions": "Permissions",
+    "crmPanel": "CRM Management Panel",
+    "panelDescription": "Customer lifecycle management, sales pipeline analysis and team performance tracking"
   },
   "AdminUsers": {
     "title": "User Management",
@@ -1015,8 +1032,11 @@
     "heroSlider": "Hero Slider Management",
     "information": "Knowledge Base",
     "customers": "Customers",
+    "support": "Support System",
     "users": "Users",
     "roles": "Roles",
+    "crmGroup": "Customer Management",
+    "systemGroup": "System Management",
     "permissions": "Permissions",
     "i18nLanguages": "Languages",
     "i18nMessages": "Messages",
@@ -1029,6 +1049,7 @@
     "maintenanceMode": "Maintenance Mode",
     "reports": "Reports",
     "logs": "System Logs",
+    "crmPanel": "CRM Panel",
     "logout": "Logout"
   },
   "AdminCommon": {
@@ -1531,6 +1552,10 @@
       "statusUpdateError": "Could not update status"
     }
   },
+  "AdminSidebar": {
+    "customerManagement": "Customer Management",
+    "systemManagement": "System Management"
+  },
   "AdminHeader": {
     "searchPlaceholder": "Search users, logs or settings...",
     "loading": "Loading...",
@@ -1561,7 +1586,12 @@
     "dark": "Dark",
     "switchToLight": "Switch to light theme",
     "switchToDark": "Switch to dark theme",
-    "system": "System"
+    "commandPaletteTitle": "Command Palette",
+    "commandPaletteDescription": "Search for a command to execute...",
+    "system": "System",
+    "logo": "Logo",
+    "crmTest": "crm test",
+    "corporateManagementPanel": "Corporate Management Panel"
   },
   "ProfileImageUpload": {
     "profileImageAlt": "User profile image",
@@ -1669,7 +1699,30 @@
     "notifications": {
       "success": "Password changed successfully (demo mode)",
       "error": "An error occurred while changing the password"
-    }
+    },
+    "crmPanel": "CRM Management Panel",
+    "panelDescription": "Customer lifecycle management, sales pipeline analysis and team performance tracking",
+    "totalRevenue": "Total Revenue",
+    "activeCustomers": "Active Customers",
+    "leadConversion": "Lead Conversion Rate",
+    "avgDealSize": "Average Deal Size",
+    "salesPipeline": "Sales Pipeline",
+    "deals": "deals",
+    "recentActivities": "Recent Activities",
+    "teamPerformance": "Team Performance",
+    "quickActions": "Quick Actions",
+    "addLead": "Add Lead",
+    "addLeadDesc": "Add new potential customer",
+    "createOpportunity": "Create Opportunity",
+    "createOpportunityDesc": "Define new sales opportunity",
+    "startCampaign": "Start Campaign",
+    "startCampaignDesc": "Create new marketing campaign",
+    "scheduleMeeting": "Schedule Meeting",
+    "scheduleMeetingDesc": "Schedule customer meeting",
+    "dealsClosed": "deals closed",
+    "openOpportunities": "Open Opportunities",
+    "activeCampaigns": "Active Campaigns",
+    "opportunityValue": "Opportunity Value"
   },
   "AdminGuard": {
     "loginRequiredTitle": "Login Required",
@@ -1712,5 +1765,33 @@
       "analytics": "Analytics",
       "backup": "Backup"
     }
+  },
+  "CrmPanel": {
+    "title": "CRM Management Panel",
+    "description": "Comprehensive customer management and sales analytics platform",
+    "crmPanel": "CRM Management Panel",
+    "panelDescription": "Customer lifecycle management, sales pipeline analysis and team performance tracking",
+    "totalRevenue": "Total Revenue",
+    "activeCustomers": "Active Customers",
+    "leadConversion": "Lead Conversion Rate",
+    "avgDealSize": "Average Deal Size",
+    "salesPipeline": "Sales Pipeline",
+    "deals": "deals",
+    "recentActivities": "Recent Activities",
+    "teamPerformance": "Team Performance",
+    "quickActions": "Quick Actions",
+    "addLead": "Add Lead",
+    "addLeadDesc": "Add new potential customer",
+    "createOpportunity": "Create Opportunity",
+    "createOpportunityDesc": "Define new sales opportunity",
+    "startCampaign": "Start Campaign",
+    "startCampaignDesc": "Create new marketing campaign",
+    "scheduleMeeting": "Schedule Meeting",
+    "scheduleMeetingDesc": "Schedule customer meeting",
+    "dealsClosed": "deals closed",
+    "teamPerformance": "Team Performance",
+    "openOpportunities": "Open Opportunities",
+    "activeCampaigns": "Active Campaigns",
+    "opportunityValue": "Opportunity Value"
   }
 }

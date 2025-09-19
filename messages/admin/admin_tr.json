@@ -993,6 +993,7 @@
     "heroSlider": "Hero Slider Yönetimi",
     "information": "Bilgi Merkezi",
     "customers": "Müşteriler",
+    "support": "Destek Sistemi",
     "users": "Kullanıcılar",
     "roles": "Roller",
     "permissions": "Yetkiler",
@@ -1003,6 +1004,7 @@
     "reports": "Raporlar",
     "logs": "Sistem Günlükleri",
     "profile": "Profil",
+    "crmPanel": "CRM Paneli",
     "logout": "Çıkış"
   },
   "AdminCommon": {
@@ -1501,6 +1503,10 @@
       "statusUpdateError": "Durum güncellenemedi"
     }
   },
+  "AdminSidebar": {
+    "customerManagement": "Müşteri Yönetimi",
+    "systemManagement": "Sistem Yönetimi"
+  },
   "AdminHeader": {
     "searchPlaceholder": "Kullanıcıları, logları veya ayarları ara...",
     "loading": "Yükleniyor...",
@@ -1531,7 +1537,32 @@
     "dark": "Koyu",
     "switchToLight": "Açık temaya geç",
     "switchToDark": "Koyu temaya geç",
-    "system": "Sistem"
+    "commandPaletteTitle": "Komut Paleti",
+    "commandPaletteDescription": "Çalıştırılacak bir komut arayın...",
+    "system": "Sistem",
+    "crmPanel": "CRM Yönetim Paneli",
+    "panelDescription": "Müşteri yaşam döngüsü yönetimi, satış pipeline analizi ve ekip performansı takibi",
+    "totalRevenue": "Toplam Gelir",
+    "activeCustomers": "Aktif Müşteriler",
+    "leadConversion": "Lead Dönüşüm Oranı",
+    "avgDealSize": "Ortalama Anlaşma Büyüklüğü",
+    "salesPipeline": "Satış Pipeline",
+    "deals": "anlaşma",
+    "recentActivities": "Son Aktiviteler",
+    "teamPerformance": "Ekip Performansı",
+    "quickActions": "Hızlı İşlemler",
+    "addLead": "Lead Ekle",
+    "addLeadDesc": "Yeni potansiyel müşteri ekleyin",
+    "createOpportunity": "Fırsat Oluştur",
+    "createOpportunityDesc": "Yeni satış fırsatı tanımlayın",
+    "startCampaign": "Kampanya Başlat",
+    "startCampaignDesc": "Yeni pazarlama kampanyası oluşturun",
+    "scheduleMeeting": "Toplantı Planla",
+    "scheduleMeetingDesc": "Müşteri toplantısı ayarlayın",
+    "dealsClosed": "anlaşma kapatıldı",
+    "openOpportunities": "Açık Fırsatlar",
+    "activeCampaigns": "Aktif Kampanyalar",
+    "opportunityValue": "Fırsat Değeri"
   },
   "AdminGuard": {
     "loginRequiredTitle": "Giriş Gerekli",
@@ -2043,5 +2074,33 @@
       "linkText": "Roller",
       "suffix": "sayfasını ziyaret edin"
     }
+  },
+  "CrmPanel": {
+    "title": "CRM Yönetim Paneli",
+    "description": "Kapsamlı müşteri yönetimi ve satış analizi platformu",
+    "crmPanel": "CRM Yönetim Paneli",
+    "panelDescription": "Müşteri yaşam döngüsü yönetimi, satış pipeline analizi ve ekip performansı takibi",
+    "totalRevenue": "Toplam Gelir",
+    "activeCustomers": "Aktif Müşteriler",
+    "leadConversion": "Lead Dönüşüm Oranı",
+    "avgDealSize": "Ortalama Anlaşma Büyüklüğü",
+    "salesPipeline": "Satış Pipeline",
+    "deals": "anlaşma",
+    "recentActivities": "Son Aktiviteler",
+    "teamPerformance": "Ekip Performansı",
+    "quickActions": "Hızlı İşlemler",
+    "addLead": "Lead Ekle",
+    "addLeadDesc": "Yeni potansiyel müşteri ekleyin",
+    "createOpportunity": "Fırsat Oluştur",
+    "createOpportunityDesc": "Yeni satış fırsatı tanımlayın",
+    "startCampaign": "Kampanya Başlat",
+    "startCampaignDesc": "Yeni pazarlama kampanyası oluşturun",
+    "scheduleMeeting": "Toplantı Planla",
+    "scheduleMeetingDesc": "Müşteri toplantısı ayarlayın",
+    "dealsClosed": "anlaşma kapatıldı",
+    "teamPerformance": "Ekip Performansı",
+    "openOpportunities": "Açık Fırsatlar",
+    "activeCampaigns": "Aktif Kampanyalar",
+    "opportunityValue": "Fırsat Değeri"
   }
 }

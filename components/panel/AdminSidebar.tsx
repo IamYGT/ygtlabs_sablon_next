@@ -8,11 +8,13 @@ import { useAdminAuth } from "@/lib/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Lock, Unlock } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   ChevronDown,
   ChevronRight,
   Building2,
+  Settings,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,6 +23,7 @@ import { useEffect, useMemo, useState } from "react";
 
 export function AdminSidebar() {
   const admin = useAdminAuth();
+  const t = useTranslations("AdminSidebar");
   const {
     open,
     locked: _locked,
@@ -31,6 +34,7 @@ export function AdminSidebar() {
   const isMobile = useIsMobile();
   const pathname = usePathname();
   const [crmOpen, setCrmOpen] = useState<boolean>(true);
+  const [systemOpen, setSystemOpen] = useState<boolean>(true);
 
   useEffect(() => {
     if (!isMobile) {
@@ -41,24 +45,27 @@ export function AdminSidebar() {
   }, [isMobile, setCollapsed, setOpen]);
 
   // 🚀 SÜPER BASİT! Tek satırda tüm navigation'ı hallettik
-  const { crmItems, otherItems } = useAdminNavigation();
+  const { crmItems, systemItems, otherItems } = useAdminNavigation();
 
   // Sadece dashboard ve profile'ı diğer öğeler olarak ayır
   const {
     finalOtherItems,
     isAnyCrmActive,
+    isAnySystemActive,
   } = useMemo(() => {
     // Sadece dashboard ve profile'ı diğer öğeler olarak bırak
     const otherKeys = new Set(["dashboard", "profile"]);
     const visibleLinks = otherItems.filter((l) => otherKeys.has(l.key));
 
     const crmActive = crmItems.some((l) => l.href === pathname);
+    const systemActive = systemItems.some((l) => l.href === pathname);
 
     return {
       finalOtherItems: visibleLinks,
       isAnyCrmActive: crmActive,
+      isAnySystemActive: systemActive,
     };
-  }, [otherItems, pathname, crmItems]);
+  }, [otherItems, pathname, crmItems, systemItems]);
 
   return (
     <div className="h-screen flex relative" data-sidebar="true">
@@ -107,7 +114,7 @@ export function AdminSidebar() {
                         : "text-slate-700 dark:text-slate-200"
                     )}
                   >
-                    Müşteri Yönetimi
+                    {t("customerManagement")}
                   </motion.span>
                   {open &&
                     (crmOpen ? (
@@ -121,6 +128,64 @@ export function AdminSidebar() {
                 {open && crmOpen && (
                   <div className="mt-1 ml-6 flex flex-col gap-1">
                     {crmItems.map((link) => (
+                      <SidebarLink
+                        key={link.key}
+                        link={link}
+                        className={cn("rounded-md", "py-1.5 px-2 w-full")}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Sistem Yönetimi Dropdown Group */}
+            {systemItems.length > 0 && (
+              <div className="mt-1">
+                {/* Parent trigger */}
+                <button
+                  type="button"
+                  onClick={() => setSystemOpen((s) => !s)}
+                  className={cn(
+                    "flex w-full items-center group/sidebar transition-colors duration-200 rounded-lg",
+                    open
+                      ? "justify-start gap-2 py-2 md:py-2.5 px-3"
+                      : "justify-center p-3",
+                    isAnySystemActive
+                      ? "text-slate-800 dark:text-slate-100 bg-slate-100 dark:bg-slate-800"
+                      : "text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+                  )}
+                >
+                  <Settings className="h-4 w-4 md:h-5 md:w-5 flex-shrink-0" />
+                  {open && (
+                    <motion.span
+                      initial={{ opacity: 0 }}
+                      animate={{
+                        opacity: open ? 1 : 0,
+                      }}
+                      transition={{ duration: 0.25, ease: "easeInOut" }}
+                      className={cn(
+                        "text-sm whitespace-pre overflow-hidden",
+                        isAnySystemActive
+                          ? "text-slate-800 dark:text-slate-100 font-semibold"
+                          : "text-slate-700 dark:text-slate-200"
+                      )}
+                    >
+                      {t("systemManagement")}
+                    </motion.span>
+                  )}
+                  {open &&
+                    (systemOpen ? (
+                      <ChevronDown className="ml-auto h-4 w-4 opacity-70" />
+                    ) : (
+                      <ChevronRight className="ml-auto h-4 w-4 opacity-70" />
+                    ))}
+                </button>
+
+                {/* Nested Sistem items */}
+                {open && systemOpen && (
+                  <div className="mt-1 ml-6 flex flex-col gap-1">
+                    {systemItems.map((link) => (
                       <SidebarLink
                         key={link.key}
                         link={link}

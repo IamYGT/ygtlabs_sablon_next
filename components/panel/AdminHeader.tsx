@@ -1,6 +1,5 @@
 "use client";
 
-import { AdminStatusWidget } from "@/components/panel/AdminStatusWidget";
 import { ThemeToggle, useTheme } from "@/components/panel/ThemeToggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -378,10 +377,6 @@ export function AdminHeader({
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Sistem Durumu Widget */}
-          <div className="hidden md:flex">
-            <AdminStatusWidget />
-          </div>
 
           {/* Dil Değiştirici */}
           <div className="hidden md:flex">
@@ -556,7 +551,12 @@ export function AdminHeader({
         </div>
       </div>
     </header>
-    <CommandDialog open={commandPaletteOpen} onOpenChange={setCommandPaletteOpen}>
+    <CommandDialog
+      open={commandPaletteOpen}
+      onOpenChange={setCommandPaletteOpen}
+      title={t("commandPaletteTitle")}
+      description={t("commandPaletteDescription")}
+    >
         <CommandInput
           placeholder="Bir komut yazın veya arama yapın..."
           value={inputValue}

@@ -7,6 +7,8 @@ import {
   Shield,
   User,
   Users,
+  Building2,
+  MessageSquare,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import React from "react";
@@ -39,39 +41,25 @@ const NAVIGATION_CONFIG: Record<string, NavigationConfig> = {
     order: 2,
     requiredPermission: "admin.customers.view",
   },
-  leads: {
-    icon: "Users",
-    translationKey: "leads",
-    href: "/admin/leads",
+  support: {
+    icon: "MessageSquare",
+    translationKey: "support",
+    href: "/admin/support",
     order: 3,
-    requiredPermission: "admin.leads.view",
-  },
-  opportunities: {
-    icon: "Users",
-    translationKey: "opportunities",
-    href: "/admin/opportunities",
-    order: 4,
-    requiredPermission: "admin.opportunities.view",
-  },
-  campaigns: {
-    icon: "Users",
-    translationKey: "campaigns",
-    href: "/admin/campaigns",
-    order: 5,
-    requiredPermission: "admin.campaigns.view",
+    requiredPermission: "admin.support.view",
   },
   users: {
     icon: "Users",
     translationKey: "users",
     href: "/admin/users",
-    order: 6,
+    order: 4,
     requiredPermission: "admin.users.view",
   },
   roles: {
     icon: "Shield",
     translationKey: "roles",
     href: "/admin/roles",
-    order: 7,
+    order: 5,
     requiredPermission: "admin.roles.view",
   },
 
@@ -82,6 +70,13 @@ const NAVIGATION_CONFIG: Record<string, NavigationConfig> = {
     order: 6,
     requiredPermission: "admin.profile.view",
   },
+  panel: {
+    icon: "Building2",
+    translationKey: "crmPanel",
+    href: "/admin/panel",
+    order: 7,
+    requiredPermission: "admin.dashboard.view",
+  },
 };
 
 // Lucide icon mapping
@@ -90,6 +85,8 @@ const LUCIDE_ICONS = {
   Users,
   Shield,
   User,
+  Building2,
+  MessageSquare,
 } as const;
 
 /**
@@ -102,9 +99,12 @@ export function useAdminNavigation() {
   const t = useTranslations("AdminNavigation");
   const { has } = usePermissions();
 
-  const { crmItems, otherItems } = React.useMemo(() => {
-    // CRM modüllerini ayır - tüm müşteri yönetimi ve satış süreçleri
-    const crmKeys = new Set(["customers", "leads", "opportunities", "campaigns", "users", "roles"]);
+  const { crmItems, systemItems, otherItems } = React.useMemo(() => {
+    // CRM modüllerini ayır - müşteri yönetimi ve destek
+    const crmKeys = new Set(["customers", "support"]);
+
+    // Sistem yönetimi modüllerini ayır - kullanıcı ve rol yönetimi
+    const systemKeys = new Set(["users", "roles"]);
 
     const allItems = Object.entries(NAVIGATION_CONFIG)
       .filter(([, config]) => has(config.requiredPermission))
@@ -121,15 +121,17 @@ export function useAdminNavigation() {
       });
 
     const crm = allItems.filter((item) => crmKeys.has(item.key));
-    const others = allItems.filter((item) => !crmKeys.has(item.key));
+    const system = allItems.filter((item) => systemKeys.has(item.key));
+    const others = allItems.filter((item) => !crmKeys.has(item.key) && !systemKeys.has(item.key));
 
     return {
       crmItems: crm,
+      systemItems: system,
       otherItems: others,
     };
   }, [has, t]);
 
-  return { crmItems, otherItems };
+  return { crmItems, systemItems, otherItems };
 }
 
 /**

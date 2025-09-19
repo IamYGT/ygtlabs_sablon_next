@@ -1,32 +1,29 @@
 "use client";
 
-import { DebugAuth } from "@/components/debug/DebugAuth";
 import { AdminPageGuard } from "@/components/panel/AdminPageGuard";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { type SimpleUser as AuthUser } from "@/lib";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/lib/hooks/useAuth";
-import { Link } from "@/lib/i18n/navigation";
 import {
-  ArrowRight,
-  BarChart3,
-  Calendar,
-  Clock,
-  Shield,
-  Users,
   Activity,
-  TrendingUp,
+  Users,
+  Clock,
+  Calendar,
+  UserCheck,
+  MessageSquare,
+  Database,
+  Eye,
+  UserPlus,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import React from "react";
 import { motion } from "framer-motion";
-import CountUp from "react-countup";
-import "../../styles/admin.css"; // Admin CSS'ini import ediyoruz
-import { DashboardSkeleton } from "./../components/DashboardSkeleton";
+import { useQuery } from "@tanstack/react-query";
 
-type TFunction = ReturnType<typeof useTranslations<"AdminDashboard">>;
-
-// Animation variants (simplified for TypeScript compatibility)
+// Animation variants
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -54,94 +51,122 @@ const itemVariants = {
   },
 } as const;
 
-const cardHoverVariants = {
-  hover: {
-    scale: 1.02,
-    y: -8,
-    transition: {
-      duration: 0.3,
-    },
-  },
-} as const;
+// Dashboard data types
+interface DashboardData {
+  overview: {
+    totalUsers: number;
+    totalCustomers: number;
+    totalTickets: number;
+    totalRoles: number;
+    totalPermissions: number;
+    activeSessions: number;
+  };
+  crmMetrics: {
+    totalRevenue: number;
+    monthlyGrowth: number;
+    activeCustomers: number;
+    customerGrowth: number;
+    totalLeads: number;
+    leadConversion: number;
+    openOpportunities: number;
+    opportunityValue: number;
+    activeCampaigns: number;
+    campaignROI: number;
+    teamPerformance: number;
+    avgDealSize: number;
+  };
+  supportSystem: {
+    totalTickets: number;
+    openTickets: number;
+    resolvedTickets: number;
+    ticketResolutionRate: number;
+    ticketStatusDistribution: Record<string, number>;
+    avgTicketsPerUser: number;
+  };
+  contentManagement: {
+    blogPosts: number;
+    faqItems: number;
+    infoArticles: number;
+    heroSliders: number;
+  };
+  recentActivities: Array<{
+    id: string;
+    type: string;
+    title: string;
+    description: string;
+    time: string;
+    status?: string;
+    priority?: string;
+  }>;
+  upcomingEvents: Array<{
+    id: string;
+    title: string;
+    startDate: Date;
+    endDate: Date;
+    user: string;
+  }>;
+  recentLogins: Array<{
+    id: string;
+    user: string;
+    loginTime: Date;
+    successful: boolean;
+    ipAddress?: string;
+    userAgent?: string;
+  }>;
+}
 
-// Stats data for CRM - Enhanced CRM Metrics
-const statsData = [
-  { label: "Toplam Müşteri", value: 1247, icon: Users, color: "blue" },
-  { label: "Aktif Leads", value: 342, icon: TrendingUp, color: "emerald" },
-  { label: "Açık Fırsatlar", value: 89, icon: BarChart3, color: "purple" },
-  { label: "Aktif Kampanyalar", value: 12, icon: Activity, color: "orange" },
-];
-
-// Stats Card Component
-function StatsCard({ label, value, icon: Icon, color, suffix }: {
-  label: string;
-  value: number;
+function MetricCard({
+  title,
+  value,
+  change,
+  changeType,
+  icon: Icon,
+  color,
+  suffix = "",
+}: {
+  title: string;
+  value: number | string;
+  change?: number;
+  changeType?: "positive" | "negative" | "neutral";
   icon: React.ComponentType<{ className?: string }>;
   color: string;
   suffix?: string;
 }) {
-  const colorStyles = {
-    blue: {
-      gradient: "bg-gradient-to-br from-blue-500/10 via-blue-600/5 to-cyan-500/10",
-      glass: "backdrop-blur-xl bg-white/10 dark:bg-slate-900/10 border border-white/20 dark:border-slate-700/30",
-      icon: "bg-gradient-to-br from-blue-500 to-cyan-500 text-white shadow-blue-500/40",
-      glow: "shadow-blue-500/20 hover:shadow-blue-500/40",
-      text: "text-blue-600 dark:text-blue-400",
-    },
-    emerald: {
-      gradient: "bg-gradient-to-br from-emerald-500/10 via-green-600/5 to-teal-500/10",
-      glass: "backdrop-blur-xl bg-white/10 dark:bg-slate-900/10 border border-white/20 dark:border-slate-700/30",
-      icon: "bg-gradient-to-br from-emerald-500 to-teal-500 text-white shadow-emerald-500/40",
-      glow: "shadow-emerald-500/20 hover:shadow-emerald-500/40",
-      text: "text-emerald-600 dark:text-emerald-400",
-    },
-    purple: {
-      gradient: "bg-gradient-to-br from-purple-500/10 via-violet-600/5 to-pink-500/10",
-      glass: "backdrop-blur-xl bg-white/10 dark:bg-slate-900/10 border border-white/20 dark:border-slate-700/30",
-      icon: "bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-purple-500/40",
-      glow: "shadow-purple-500/20 hover:shadow-purple-500/40",
-      text: "text-purple-600 dark:text-purple-400",
-    },
-    orange: {
-      gradient: "bg-gradient-to-br from-orange-500/10 via-amber-600/5 to-red-500/10",
-      glass: "backdrop-blur-xl bg-white/10 dark:bg-slate-900/10 border border-white/20 dark:border-slate-700/30",
-      icon: "bg-gradient-to-br from-orange-500 to-red-500 text-white shadow-orange-500/40",
-      glow: "shadow-orange-500/20 hover:shadow-orange-500/40",
-      text: "text-orange-600 dark:text-orange-400",
-    },
-  }[color as "blue" | "emerald" | "purple" | "orange"];
-
   return (
-    <motion.div
-      variants={itemVariants}
-      whileHover={{ scale: 1.02, y: -5 }}
-      transition={{ type: "spring", stiffness: 300 }}
-    >
-      <Card className={`${colorStyles.glass} ${colorStyles.glow} relative border-0 transition-all duration-500 hover:shadow-2xl hover:shadow-black/10`}>
+    <motion.div variants={itemVariants}>
+      <Card className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-white/80 to-white/40 dark:from-slate-900/80 dark:to-slate-900/40 backdrop-blur-sm">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div className="flex-1">
-              <p className="text-gray-600 dark:text-slate-400 text-sm font-medium mb-2">
-                {label}
+              <p className="text-sm font-medium text-muted-foreground mb-1">
+                {title}
               </p>
-              <div className={`text-3xl font-bold ${colorStyles.text}`}>
-                <CountUp
-                  end={value}
-                  duration={2}
-                  separator=","
-                  suffix={suffix}
-                  enableScrollSpy
-                  scrollSpyOnce
-                />
+              <div className="flex items-baseline gap-2">
+                <span className="text-2xl font-bold">
+                  {typeof value === "number" ? value.toLocaleString() : value}
+                  {suffix}
+                </span>
+                {change !== undefined && (
+                  <div className={`flex items-center gap-1 text-sm ${
+                    changeType === "positive"
+                      ? "text-green-600 dark:text-green-400"
+                      : changeType === "negative"
+                      ? "text-red-600 dark:text-red-400"
+                      : "text-gray-600 dark:text-gray-400"
+                  }`}>
+                    {changeType === "positive" ? (
+                      <ArrowUp className="h-3 w-3" />
+                    ) : changeType === "negative" ? (
+                      <ArrowDown className="h-3 w-3" />
+                    ) : null}
+                    {Math.abs(change)}%
+                  </div>
+                )}
               </div>
             </div>
-            <motion.div
-              className={`p-4 rounded-2xl ${colorStyles.icon} shadow-xl`}
-              whileHover={{ rotate: 5, scale: 1.1 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <Icon className="h-7 w-7" />
-            </motion.div>
+            <div className={`p-3 rounded-xl ${color} shadow-lg`}>
+              <Icon className="h-6 w-6 text-white" />
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -149,143 +174,168 @@ function StatsCard({ label, value, icon: Icon, color, suffix }: {
   );
 }
 
-// Management Center quick actions - CRM Focused
-function getQuickActions(_t: TFunction): QuickActionProps[] {
-  return [
-    {
-      title: "Müşteri Yönetimi",
-      description: "Tüm müşteri bilgilerini yönetin ve takip edin",
-      href: "/admin/customers",
-      icon: Users,
-      color: "blue" as const,
-    },
-    {
-      title: "Leads Yönetimi",
-      description: "Potansiyel müşterileri takip edin ve dönüştürün",
-      href: "/admin/leads",
-      icon: TrendingUp,
-      color: "emerald" as const,
-    },
-    {
-      title: "Fırsat Yönetimi",
-      description: "Satış fırsatlarını takip edin ve yönetin",
-      href: "/admin/opportunities",
-      icon: BarChart3,
-      color: "purple" as const,
-    },
-    {
-      title: "Kampanya Yönetimi",
-      description: "Pazarlama kampanyalarını planlayın ve yönetin",
-      href: "/admin/campaigns",
-      icon: Activity,
-      color: "orange" as const,
-    },
-  ];
-}
 
-// Type definitions
-type QuickActionProps = {
-  title: string;
-  description: string;
-  href: string;
-  icon: React.ComponentType<{ className?: string }>;
-  color: "blue" | "emerald" | "purple" | "orange";
-};
+function RecentActivities({ activities }: { activities: DashboardData['recentActivities'] }) {
 
-// Enhanced Quick action component with modern glassmorphism design and animations
-function QuickAction({
-  title,
-  description,
-  href,
-  icon: Icon,
-  color,
-}: QuickActionProps) {
-  const colorStyles = {
-    blue: {
-      gradient: "bg-gradient-to-br from-blue-500/10 via-blue-600/5 to-cyan-500/10",
-      glass: "backdrop-blur-xl bg-white/10 dark:bg-slate-900/10 border border-white/20 dark:border-slate-700/30",
-      icon: "bg-gradient-to-br from-blue-500 to-cyan-500 text-white shadow-blue-500/40",
-      hover: "hover:from-blue-500/20 hover:via-blue-600/10 hover:to-cyan-500/20",
-      glow: "shadow-blue-500/20 hover:shadow-blue-500/40",
-    },
-    emerald: {
-      gradient: "bg-gradient-to-br from-emerald-500/10 via-green-600/5 to-teal-500/10",
-      glass: "backdrop-blur-xl bg-white/10 dark:bg-slate-900/10 border border-white/20 dark:border-slate-700/30",
-      icon: "bg-gradient-to-br from-emerald-500 to-teal-500 text-white shadow-emerald-500/40",
-      hover: "hover:from-emerald-500/20 hover:via-green-600/10 hover:to-teal-500/20",
-      glow: "shadow-emerald-500/20 hover:shadow-emerald-500/40",
-    },
-    purple: {
-      gradient: "bg-gradient-to-br from-purple-500/10 via-violet-600/5 to-pink-500/10",
-      glass: "backdrop-blur-xl bg-white/10 dark:bg-slate-900/10 border border-white/20 dark:border-slate-700/30",
-      icon: "bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-purple-500/40",
-      hover: "hover:from-purple-500/20 hover:via-violet-600/10 hover:to-pink-500/20",
-      glow: "shadow-purple-500/20 hover:shadow-purple-500/40",
-    },
-    orange: {
-      gradient: "bg-gradient-to-br from-orange-500/10 via-amber-600/5 to-red-500/10",
-      glass: "backdrop-blur-xl bg-white/10 dark:bg-slate-900/10 border border-white/20 dark:border-slate-700/30",
-      icon: "bg-gradient-to-br from-orange-500 to-red-500 text-white shadow-orange-500/40",
-      hover: "hover:from-orange-500/20 hover:via-amber-600/10 hover:to-red-500/20",
-      glow: "shadow-orange-500/20 hover:shadow-orange-500/40",
-    },
-  }[color];
+  const getActivityIcon = (type: string) => {
+    switch (type) {
+      case 'ticket_created':
+        return <MessageSquare className="h-5 w-5 mt-0.5 text-blue-500" />;
+      case 'user_registered':
+        return <UserPlus className="h-5 w-5 mt-0.5 text-green-500" />;
+      case 'customer_added':
+        return <UserCheck className="h-5 w-5 mt-0.5 text-purple-500" />;
+      default:
+        return <Activity className="h-5 w-5 mt-0.5 text-gray-500" />;
+    }
+  };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const linkHref = href as any;
+  const getStatusBadge = (status?: string, priority?: string) => {
+    if (!status) return null;
+
+    const statusColors = {
+      open: "bg-blue-100 text-blue-800",
+      pending: "bg-yellow-100 text-yellow-800",
+      in_progress: "bg-orange-100 text-orange-800",
+      resolved: "bg-green-100 text-green-800",
+      closed: "bg-gray-100 text-gray-800",
+    };
+
+    const priorityColors = {
+      low: "bg-gray-100 text-gray-800",
+      medium: "bg-yellow-100 text-yellow-800",
+      high: "bg-orange-100 text-orange-800",
+      urgent: "bg-red-100 text-red-800",
+    };
+
+    return (
+      <div className="flex gap-1">
+        <Badge className={`text-xs ${statusColors[status as keyof typeof statusColors] || "bg-gray-100 text-gray-800"}`}>
+          {status}
+        </Badge>
+        {priority && (
+          <Badge className={`text-xs ${priorityColors[priority as keyof typeof priorityColors] || "bg-gray-100 text-gray-800"}`}>
+            {priority}
+          </Badge>
+        )}
+      </div>
+    );
+  };
 
   return (
     <motion.div variants={itemVariants}>
-      <Link href={linkHref} className="group block">
-        <motion.div
-          variants={cardHoverVariants}
-          whileHover="hover"
-          className="relative overflow-hidden rounded-2xl"
-        >
-          {/* Background gradient */}
-          <div className={`absolute inset-0 ${colorStyles.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-
-          {/* Glass morphism card */}
-          <Card className={`${colorStyles.glass} ${colorStyles.glow} relative border-0 transition-all duration-500 hover:shadow-2xl hover:shadow-black/10 group-hover:border-white/30`}>
-            <CardContent className="p-8">
-              <div className="flex items-start space-x-6">
-                <motion.div
-                  className={`p-5 rounded-2xl ${colorStyles.icon} shadow-xl group-hover:scale-110 transition-all duration-500`}
-                  whileHover={{ rotate: 5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  <Icon className="h-7 w-7" />
-                </motion.div>
+      <Card className="border-0 shadow-lg">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Activity className="h-5 w-5" />
+            Son Aktiviteler
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {activities.slice(0, 8).map((activity) => (
+              <div key={activity.id} className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors">
+                {getActivityIcon(activity.type)}
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-gray-900 dark:text-white text-xl mb-3 group-hover:text-gray-800 dark:group-hover:text-gray-100 transition-colors duration-300">
-                    {title}
-                  </h3>
-                  <p className="text-gray-600 dark:text-slate-300 leading-relaxed text-sm group-hover:text-gray-700 dark:group-hover:text-slate-200 transition-colors duration-300">
-                    {description}
-                  </p>
-                </div>
-                <motion.div
-                  className="flex-shrink-0"
-                  whileHover={{ x: 4 }}
-                  transition={{ type: "spring", stiffness: 400 }}
-                >
-                  <ArrowRight className="h-6 w-6 text-gray-400 dark:text-slate-500 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-all duration-300" />
-                </motion.div>
-              </div>
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1">
+                      <p className="font-medium text-sm">{activity.title}</p>
+                      <p className="text-sm text-muted-foreground">{activity.description}</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {(() => {
+                          const date = new Date(activity.time);
+                          const now = new Date();
+                          const diffMs = now.getTime() - date.getTime();
+                          const diffHours = diffMs / (1000 * 60 * 60);
+                          const diffDays = diffMs / (1000 * 60 * 60 * 24);
 
-              {/* Subtle bottom gradient */}
-              <div className={`absolute bottom-0 left-0 right-0 h-1 ${colorStyles.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-            </CardContent>
-          </Card>
-        </motion.div>
-      </Link>
+                          if (diffHours < 1) {
+                            return `${Math.floor(diffMs / (1000 * 60))} dk önce`;
+                          } else if (diffHours < 24) {
+                            return `${Math.floor(diffHours)} saat önce`;
+                          } else if (diffDays < 7) {
+                            return `${Math.floor(diffDays)} gün önce`;
+                          } else {
+                            return date.toLocaleDateString('tr-TR', {
+                              day: 'numeric',
+                              month: 'short',
+                              year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+                            });
+                          }
+                        })()}
+                      </p>
+                    </div>
+                    {getStatusBadge(activity.status, activity.priority)}
+                  </div>
+                </div>
+              </div>
+            ))}
+            {activities.length === 0 && (
+              <div className="text-center py-8 text-muted-foreground">
+                <Activity className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                <p>Henüz aktivite yok</p>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
     </motion.div>
   );
 }
 
-// Modern Welcome section with glassmorphism and animations
-function WelcomeSection({ admin, t }: { admin: AuthUser; t: TFunction }) {
+
+export default function AdminDashboardClient() {
+  const { user: admin } = useAuth();
+  const t = useTranslations("AdminDashboard");
   const locale = useLocale();
+
+  // Dashboard verilerini çek
+  const { data: dashboardData, isLoading, error } = useQuery<DashboardData>({
+    queryKey: ["admin-dashboard"],
+    queryFn: async () => {
+      const response = await fetch("/api/admin/dashboard");
+      if (!response.ok) {
+        throw new Error("Dashboard verileri alınamadı");
+      }
+      const result = await response.json();
+      return result.data;
+    },
+    refetchInterval: 30000, // 30 saniyede bir yenile
+    staleTime: 10000, // 10 saniye boyunca taze kabul et
+  });
+
+  if (!admin) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Yükleniyor...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isLoading || !dashboardData) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Dashboard yükleniyor...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="text-red-600 mb-4">Dashboard verileri yüklenirken hata oluştu</div>
+          <p className="text-gray-600">{error.message}</p>
+        </div>
+      </div>
+    );
+  }
 
   const currentTime = new Date().toLocaleTimeString(locale, {
     hour: "2-digit",
@@ -299,217 +349,147 @@ function WelcomeSection({ admin, t }: { admin: AuthUser; t: TFunction }) {
   });
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-    >
-      <Card className="relative overflow-hidden border-0 shadow-2xl backdrop-blur-xl bg-white/20 dark:bg-slate-900/20">
-        {/* Animated background patterns */}
-        <div className="absolute inset-0">
-          <motion.div
-            className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-500/15 via-purple-500/8 to-transparent rounded-full -translate-y-48 translate-x-48"
-            animate={{
-              scale: [1, 1.1, 1],
-              opacity: [0.5, 0.8, 0.5],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-          <motion.div
-            className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-emerald-500/15 via-blue-500/8 to-transparent rounded-full translate-y-32 -translate-x-32"
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.5, 0.7, 0.5],
-            }}
-            transition={{
-              duration: 10,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 2,
-            }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent dark:via-slate-800/30"></div>
-        </div>
-
-        <CardContent className="relative p-8 lg:p-12">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
-            <div className="flex-1">
-              <motion.div
-                className="flex items-start gap-6 mb-6"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
-              >
-                <motion.div
-                  className="p-5 rounded-3xl bg-gradient-to-br from-blue-500 to-cyan-500 shadow-2xl shadow-blue-500/30"
-                  whileHover={{ rotate: 5, scale: 1.05 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  <Shield className="h-10 w-10 text-white" />
-                </motion.div>
-                <div className="flex-1">
-                  <motion.h1
-                    className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-3 leading-tight"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4, duration: 0.6 }}
-                  >
-                    {t("welcome")},{" "}
-                    <motion.span
-                      className="bg-gradient-to-r from-blue-600 to-cyan-400 bg-clip-text text-transparent"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.6, duration: 0.6 }}
-                    >
-                      {admin.name || admin.email}
-                    </motion.span>
-                  </motion.h1>
-                  <motion.div
-                    className="flex items-center gap-4 text-gray-500 dark:text-slate-400 text-sm font-medium"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5, duration: 0.6 }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4" />
-                      <span>{currentDate}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="h-4 w-4" />
-                      <span>{currentTime}</span>
-                    </div>
-                  </motion.div>
-                </div>
-              </motion.div>
-
-              <motion.p
-                className="text-gray-700 dark:text-slate-300 mb-8 text-lg leading-relaxed max-w-2xl"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.7, duration: 0.6 }}
-              >
-                {t("welcomeMessage")}
-              </motion.p>
-
-              <motion.div
-                className="flex flex-wrap items-center gap-3"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8, duration: 0.6 }}
-              >
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ type: "spring", stiffness: 400 }}
-                >
-                  <Badge className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white border-0 px-5 py-3 text-sm font-semibold shadow-lg shadow-blue-500/30 backdrop-blur-sm">
-                    <Shield className="h-4 w-4 mr-2" />
-                    {admin.primaryRole || t("admin")} {t("authority")}
-                  </Badge>
-                </motion.div>
-                {admin.userRoles &&
-                  admin.userRoles.length > 0 &&
-                  admin.userRoles.map((roleName, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.9 + index * 0.1, duration: 0.4 }}
-                      whileHover={{ scale: 1.05 }}
-                    >
-                      <Badge
-                        variant="secondary"
-                        className="bg-white/60 dark:bg-slate-700/60 text-gray-700 dark:text-slate-300 border border-gray-200/50 dark:border-slate-600/50 px-4 py-2 text-sm font-medium backdrop-blur-sm shadow-sm"
-                      >
-                        {roleName}
-                      </Badge>
-                    </motion.div>
-                  ))}
-              </motion.div>
+    <AdminPageGuard requiredPermission="admin.dashboard.view">
+      <motion.div
+        className="space-y-8 p-6"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {/* Header */}
+        <motion.div
+          variants={itemVariants}
+          className="text-center space-y-4"
+        >
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent">
+            {t("crmPanel")}
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            {t("panelDescription")}
+          </p>
+          <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <Calendar className="h-4 w-4" />
+              <span>{currentDate}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Clock className="h-4 w-4" />
+              <span>{currentTime}</span>
             </div>
           </div>
-        </CardContent>
-      </Card>
-    </motion.div>
-  );
-}
-
-export default function AdminDashboardClient() {
-  const { user: admin } = useAuth();
-  const t = useTranslations("AdminDashboard");
-
-  if (!admin) {
-    return <DashboardSkeleton />;
-  }
-
-  return (
-    <>
-      <AdminPageGuard requiredPermission="admin.dashboard.view">
-        <motion.div
-          className="space-y-12"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {/* Welcome Section */}
-          <WelcomeSection admin={admin} t={t} />
-
-          {/* Stats Section */}
-          <motion.div
-            className="space-y-6"
-            variants={itemVariants}
-          >
-            <div className="text-center">
-              <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                CRM Performans Metrikleri
-              </h2>
-              <p className="text-gray-600 dark:text-slate-400 text-sm max-w-xl mx-auto">
-                Müşteri yönetimi, satış fırsatları ve pazarlama kampanyaları istatistikleri
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {statsData.map((stat) => (
-                <StatsCard key={stat.label} {...stat} />
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Management Center Section */}
-          <motion.div
-            className="space-y-8"
-            variants={itemVariants}
-          >
-            <div className="text-center">
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                CRM Yönetim Merkezi
-              </h2>
-              <p className="text-gray-600 dark:text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
-                Müşteri yönetimi, leads takibi, fırsat yönetimi ve kampanya koordinasyonu için entegre platform
-              </p>
-              <motion.div
-                className="w-24 h-1 rounded-full mx-auto mt-6 bg-gradient-to-r from-blue-500 to-cyan-400"
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ delay: 1.5, duration: 0.8, ease: "easeOut" }}
-              />
-            </div>
-
-            <motion.div
-              className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto"
-              variants={containerVariants}
-            >
-              {getQuickActions(t).map((action) => (
-                <QuickAction key={action.title} {...action} />
-              ))}
-            </motion.div>
-          </motion.div>
         </motion.div>
-      </AdminPageGuard>
-      <DebugAuth />
-    </>
+
+        {/* Sistem Genel Bakış */}
+        <motion.div
+          variants={itemVariants}
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
+        >
+          <MetricCard
+            title="Toplam Kullanıcı"
+            value={dashboardData.overview.totalUsers}
+            icon={Users}
+            color="bg-gradient-to-br from-blue-500 to-cyan-500"
+          />
+          <MetricCard
+            title="Aktif Müşteriler"
+            value={dashboardData.overview.totalCustomers}
+            icon={UserCheck}
+            color="bg-gradient-to-br from-green-500 to-emerald-500"
+          />
+          <MetricCard
+            title="Destek Talepleri"
+            value={dashboardData.overview.totalTickets}
+            icon={MessageSquare}
+            color="bg-gradient-to-br from-purple-500 to-pink-500"
+          />
+          <MetricCard
+            title="Aktif Oturumlar"
+            value={dashboardData.overview.activeSessions}
+            icon={Eye}
+            color="bg-gradient-to-br from-orange-500 to-red-500"
+          />
+        </motion.div>
+
+
+        {/* Ana İçerik */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
+          {/* Destek Sistemi İstatistikleri */}
+          <motion.div variants={itemVariants}>
+            <Card className="border-0 shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <MessageSquare className="h-5 w-5" />
+                  Destek Sistemi
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-blue-600">
+                      {dashboardData.supportSystem.totalTickets}
+                    </div>
+                    <div className="text-sm text-muted-foreground">Toplam Talep</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-green-600">
+                      {dashboardData.supportSystem.ticketResolutionRate}%
+                    </div>
+                    <div className="text-sm text-muted-foreground">Çözüm Oranı</div>
+                  </div>
+                </div>
+
+                  <Separator />
+
+                  <div className="space-y-2">
+                    <h4 className="font-medium text-sm">Talep Durum Dağılımı</h4>
+                    {Object.entries(dashboardData.supportSystem.ticketStatusDistribution).map(([status, count]) => (
+                      <div key={status} className="flex justify-between items-center">
+                        <span className="text-sm capitalize">{status.replace('_', ' ')}</span>
+                        <Badge variant="outline">{count}</Badge>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+        </div>
+
+        {/* Alt Kısım - Aktiviteler ve Sistem Durumu */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+          {/* Son Aktiviteler */}
+          <motion.div variants={itemVariants}>
+            <RecentActivities activities={dashboardData.recentActivities} />
+          </motion.div>
+
+          {/* Sistem Durumu */}
+          <motion.div variants={itemVariants}>
+            <Card className="border-0 shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Database className="h-5 w-5" />
+                  Sistem Durumu
+                </CardTitle>
+              </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="flex justify-between items-center p-4 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border border-blue-200/50 dark:border-blue-800/50">
+                      <span className="text-sm font-medium text-blue-900 dark:text-blue-100">Roller</span>
+                      <Badge variant="secondary" className="font-bold text-lg px-3 py-1 bg-blue-600 text-white">{dashboardData.overview.totalRoles}</Badge>
+                    </div>
+                    <div className="flex justify-between items-center p-4 rounded-lg bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 border border-purple-200/50 dark:border-purple-800/50">
+                      <span className="text-sm font-medium text-purple-900 dark:text-purple-100">Yetkiler</span>
+                      <Badge variant="secondary" className="font-bold text-lg px-3 py-1 bg-purple-600 text-white">{dashboardData.overview.totalPermissions}</Badge>
+                    </div>
+                  </div>
+                </CardContent>
+            </Card>
+          </motion.div>
+        </div>
+
+      </motion.div>
+    </AdminPageGuard>
   );
 }

@@ -154,57 +154,6 @@ export const VIEW_PERMISSIONS: PermissionConfig[] = [
     usedIn: ["CustomersPageClient", "/api/admin/customers (GET)"],
   },
   {
-    name: "admin.leads.view",
-    category: "view",
-    resourcePath: "leads",
-    action: "view",
-    permissionType: "admin",
-    displayName: {
-      tr: "Lead Yönetimi Görüntüleme",
-      en: "Lead Management View",
-    },
-    description: {
-      tr: "Lead listesi sayfasını görüntüleme ve potansiyel müşteri bilgilerini okuma yetkisi",
-      en: "Permission to view lead management page and read potential customer information",
-    },
-    dependencies: ["admin.layout"],
-    usedIn: ["LeadsPageClient", "/api/admin/leads (GET)"],
-  },
-  {
-    name: "admin.opportunities.view",
-    category: "view",
-    resourcePath: "opportunities",
-    action: "view",
-    permissionType: "admin",
-    displayName: {
-      tr: "Fırsat Yönetimi Görüntüleme",
-      en: "Opportunity Management View",
-    },
-    description: {
-      tr: "Fırsat listesi sayfasını görüntüleme ve satış fırsatlarını yönetme yetkisi",
-      en: "Permission to view opportunity management page and manage sales opportunities",
-    },
-    dependencies: ["admin.layout"],
-    usedIn: ["OpportunitiesPageClient", "/api/admin/opportunities (GET)"],
-  },
-  {
-    name: "admin.campaigns.view",
-    category: "view",
-    resourcePath: "campaigns",
-    action: "view",
-    permissionType: "admin",
-    displayName: {
-      tr: "Kampanya Yönetimi Görüntüleme",
-      en: "Campaign Management View",
-    },
-    description: {
-      tr: "Kampanya listesi sayfasını görüntüleme ve pazarlama kampanyalarını yönetme yetkisi",
-      en: "Permission to view campaign management page and manage marketing campaigns",
-    },
-    dependencies: ["admin.layout"],
-    usedIn: ["CampaignsPageClient", "/api/admin/campaigns (GET)"],
-  },
-  {
     name: "admin.roles.view",
     category: "view",
     resourcePath: "roles",
@@ -331,6 +280,40 @@ export const VIEW_PERMISSIONS: PermissionConfig[] = [
     dependencies: ["customer.layout"],
     usedIn: ["CustomerCalendarClient", "/api/customer/calendar"],
   },
+  {
+    name: "admin.support.view",
+    category: "view",
+    resourcePath: "support",
+    action: "view",
+    permissionType: "admin",
+    displayName: {
+      tr: "Destek Sistemi Görüntüleme",
+      en: "Support System View",
+    },
+    description: {
+      tr: "Destek taleplerini görüntüleme ve yönetme yetkisi",
+      en: "Permission to view and manage support tickets",
+    },
+    dependencies: ["admin.layout"],
+    usedIn: ["SupportDashboard", "/api/admin/support"],
+  },
+  {
+    name: "customer.support.view",
+    category: "view",
+    resourcePath: "support",
+    action: "view",
+    permissionType: "customer",
+    displayName: {
+      tr: "Destek Taleplerim Görüntüleme",
+      en: "My Support Tickets View",
+    },
+    description: {
+      tr: "Kendi destek taleplerini görüntüleme yetkisi",
+      en: "Permission to view own support tickets",
+    },
+    dependencies: ["customer.layout"],
+    usedIn: ["CustomerSupportClient", "/api/customer/support"],
+  },
 ];
 
 /**
@@ -338,6 +321,144 @@ export const VIEW_PERMISSIONS: PermissionConfig[] = [
  * CRUD operasyonları ve özel işlevler
  */
 export const FUNCTION_PERMISSIONS: PermissionConfig[] = [
+  // SUPPORT SYSTEM FUNCTIONS
+  {
+    name: "support.tickets.create",
+    category: "function",
+    resourcePath: "support/tickets",
+    action: "create",
+    permissionType: "admin",
+    displayName: {
+      tr: "Destek Talebi Oluşturma",
+      en: "Create Support Ticket",
+    },
+    description: {
+      tr: "Yeni destek talebi oluşturma yetkisi",
+      en: "Permission to create new support tickets",
+    },
+    dependencies: ["admin.support.view"],
+    usedIn: ["SupportTicketCreate", "/api/admin/support/tickets (POST)"],
+  },
+  {
+    name: "support.tickets.update",
+    category: "function",
+    resourcePath: "support/tickets",
+    action: "update",
+    permissionType: "admin",
+    displayName: {
+      tr: "Destek Talebi Güncelleme",
+      en: "Update Support Ticket",
+    },
+    description: {
+      tr: "Destek talebi bilgilerini güncelleme yetkisi",
+      en: "Permission to update support ticket information",
+    },
+    dependencies: ["admin.support.view"],
+    usedIn: ["SupportTicketEdit", "/api/admin/support/tickets/[id] (PUT)"],
+  },
+  {
+    name: "support.tickets.delete",
+    category: "function",
+    resourcePath: "support/tickets",
+    action: "delete",
+    permissionType: "admin",
+    displayName: {
+      tr: "Destek Talebi Silme",
+      en: "Delete Support Ticket",
+    },
+    description: {
+      tr: "Destek taleplerini silme yetkisi",
+      en: "Permission to delete support tickets",
+    },
+    dependencies: ["admin.support.view"],
+    usedIn: ["SupportTicketDelete", "/api/admin/support/tickets/[id] (DELETE)"],
+  },
+  {
+    name: "support.tickets.assign",
+    category: "function",
+    resourcePath: "support/tickets",
+    action: "manage",
+    permissionType: "admin",
+    displayName: {
+      tr: "Destek Talebi Atama",
+      en: "Assign Support Ticket",
+    },
+    description: {
+      tr: "Destek taleplerini personele atama yetkisi",
+      en: "Permission to assign support tickets to staff",
+    },
+    dependencies: ["admin.support.view"],
+    usedIn: ["SupportTicketAssign", "/api/admin/support/tickets/[id]/assign (POST)"],
+  },
+  {
+    name: "support.tickets.respond",
+    category: "function",
+    resourcePath: "support/tickets",
+    action: "update",
+    permissionType: "admin",
+    displayName: {
+      tr: "Destek Talebine Yanıt",
+      en: "Respond to Support Ticket",
+    },
+    description: {
+      tr: "Destek taleplerine yanıt verme yetkisi",
+      en: "Permission to respond to support tickets",
+    },
+    dependencies: ["admin.support.view"],
+    usedIn: ["SupportTicketRespond", "/api/admin/support/tickets/[id]/respond (POST)"],
+  },
+  {
+    name: "support.categories.manage",
+    category: "function",
+    resourcePath: "support/categories",
+    action: "manage",
+    permissionType: "admin",
+    displayName: {
+      tr: "Destek Kategorilerini Yönetme",
+      en: "Manage Support Categories",
+    },
+    description: {
+      tr: "Destek talebi kategorilerini oluşturma, güncelleme ve silme yetkisi",
+      en: "Permission to create, update and delete support ticket categories",
+    },
+    dependencies: ["admin.support.view"],
+    usedIn: ["SupportCategoryManager", "/api/admin/support/categories"],
+  },
+  {
+    name: "customer.support.create",
+    category: "function",
+    resourcePath: "support",
+    action: "create",
+    permissionType: "customer",
+    displayName: {
+      tr: "Destek Talebi Oluşturma",
+      en: "Create Support Ticket",
+    },
+    description: {
+      tr: "Yeni destek talebi oluşturma yetkisi",
+      en: "Permission to create new support tickets",
+    },
+    dependencies: ["customer.support.view"],
+    usedIn: ["CustomerSupportCreate", "/api/customer/support (POST)"],
+  },
+  {
+    name: "customer.support.update",
+    category: "function",
+    resourcePath: "support",
+    action: "update",
+    permissionType: "customer",
+    displayName: {
+      tr: "Destek Talebi Güncelleme",
+      en: "Update Support Ticket",
+    },
+    description: {
+      tr: "Kendi destek taleplerini güncelleme yetkisi",
+      en: "Permission to update own support tickets",
+    },
+    dependencies: ["customer.support.view"],
+    usedIn: ["CustomerSupportUpdate", "/api/customer/support/[id] (PUT)"],
+  },
+
   // USER MANAGEMENT FUNCTIONS
   {
     name: "users.create",
@@ -506,7 +627,7 @@ export const FUNCTION_PERMISSIONS: PermissionConfig[] = [
     },
     devNotes:
       "Role-Permission management API'lerini kapsar. Bulk assignment dahil",
-    dependencies: ["admin.roles.view", "admin.permissions.view"],
+    dependencies: ["admin.roles.view"],
     usedIn: [
       "RolePermissionMatrix",
       "/api/admin/roles/[roleId]/permissions",
@@ -515,164 +636,6 @@ export const FUNCTION_PERMISSIONS: PermissionConfig[] = [
   },
 
 
-    // LEAD MANAGEMENT FUNCTIONS
-  {
-    name: "leads.create",
-    category: "function",
-    resourcePath: "leads",
-    action: "create",
-    permissionType: "admin",
-    displayName: {
-      tr: "Lead Oluşturma",
-      en: "Create Lead",
-    },
-    description: {
-      tr: "Yeni lead oluşturma ve potansiyel müşteri bilgilerini kaydetme yetkisi",
-      en: "Permission to create new leads and save potential customer information",
-    },
-    dependencies: ["admin.leads.view"],
-    usedIn: ["LeadCreateDialog", "/api/admin/leads (POST)"],
-  },
-  {
-    name: "leads.update",
-    category: "function",
-    resourcePath: "leads",
-    action: "update",
-    permissionType: "admin",
-    displayName: {
-      tr: "Lead Güncelleme",
-      en: "Update Lead",
-    },
-    description: {
-      tr: "Mevcut lead bilgilerini güncelleme yetkisi",
-      en: "Permission to update existing lead information",
-    },
-    dependencies: ["admin.leads.view"],
-    usedIn: ["LeadEditDialog", "/api/admin/leads/[id] (PUT)"],
-  },
-  {
-    name: "leads.delete",
-    category: "function",
-    resourcePath: "leads",
-    action: "delete",
-    permissionType: "admin",
-    displayName: {
-      tr: "Lead Silme",
-      en: "Delete Lead",
-    },
-    description: {
-      tr: "Lead kaydını silme yetkisi",
-      en: "Permission to delete lead records",
-    },
-    dependencies: ["admin.leads.view"],
-    usedIn: ["LeadDeleteDialog", "/api/admin/leads/[id] (DELETE)"],
-  },
-
-  // OPPORTUNITY MANAGEMENT FUNCTIONS
-  {
-    name: "opportunities.create",
-    category: "function",
-    resourcePath: "opportunities",
-    action: "create",
-    permissionType: "admin",
-    displayName: {
-      tr: "Fırsat Oluşturma",
-      en: "Create Opportunity",
-    },
-    description: {
-      tr: "Yeni satış fırsatı oluşturma ve fırsat bilgilerini kaydetme yetkisi",
-      en: "Permission to create new sales opportunities and save opportunity information",
-    },
-    dependencies: ["admin.opportunities.view"],
-    usedIn: ["OpportunityCreateDialog", "/api/admin/opportunities (POST)"],
-  },
-  {
-    name: "opportunities.update",
-    category: "function",
-    resourcePath: "opportunities",
-    action: "update",
-    permissionType: "admin",
-    displayName: {
-      tr: "Fırsat Güncelleme",
-      en: "Update Opportunity",
-    },
-    description: {
-      tr: "Mevcut fırsat bilgilerini güncelleme yetkisi",
-      en: "Permission to update existing opportunity information",
-    },
-    dependencies: ["admin.opportunities.view"],
-    usedIn: ["OpportunityEditDialog", "/api/admin/opportunities/[id] (PUT)"],
-  },
-  {
-    name: "opportunities.delete",
-    category: "function",
-    resourcePath: "opportunities",
-    action: "delete",
-    permissionType: "admin",
-    displayName: {
-      tr: "Fırsat Silme",
-      en: "Delete Opportunity",
-    },
-    description: {
-      tr: "Fırsat kaydını silme yetkisi",
-      en: "Permission to delete opportunity records",
-    },
-    dependencies: ["admin.opportunities.view"],
-    usedIn: ["OpportunityDeleteDialog", "/api/admin/opportunities/[id] (DELETE)"],
-  },
-
-  // CAMPAIGN MANAGEMENT FUNCTIONS
-  {
-    name: "campaigns.create",
-    category: "function",
-    resourcePath: "campaigns",
-    action: "create",
-    permissionType: "admin",
-    displayName: {
-      tr: "Kampanya Oluşturma",
-      en: "Create Campaign",
-    },
-    description: {
-      tr: "Yeni pazarlama kampanyası oluşturma ve kampanya bilgilerini kaydetme yetkisi",
-      en: "Permission to create new marketing campaigns and save campaign information",
-    },
-    dependencies: ["admin.campaigns.view"],
-    usedIn: ["CampaignCreateDialog", "/api/admin/campaigns (POST)"],
-  },
-  {
-    name: "campaigns.update",
-    category: "function",
-    resourcePath: "campaigns",
-    action: "update",
-    permissionType: "admin",
-    displayName: {
-      tr: "Kampanya Güncelleme",
-      en: "Update Campaign",
-    },
-    description: {
-      tr: "Mevcut kampanya bilgilerini güncelleme yetkisi",
-      en: "Permission to update existing campaign information",
-    },
-    dependencies: ["admin.campaigns.view"],
-    usedIn: ["CampaignEditDialog", "/api/admin/campaigns/[id] (PUT)"],
-  },
-  {
-    name: "campaigns.delete",
-    category: "function",
-    resourcePath: "campaigns",
-    action: "delete",
-    permissionType: "admin",
-    displayName: {
-      tr: "Kampanya Silme",
-      en: "Delete Campaign",
-    },
-    description: {
-      tr: "Kampanya kaydını silme yetkisi",
-      en: "Permission to delete campaign records",
-    },
-    dependencies: ["admin.campaigns.view"],
-    usedIn: ["CampaignDeleteDialog", "/api/admin/campaigns/[id] (DELETE)"],
-  },
 
   // CUSTOMER MANAGEMENT FUNCTIONS
   {
