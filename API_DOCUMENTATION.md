@@ -4,7 +4,12 @@
 
 Bu API, CRM sistemindeki müşteri yönetimi için kullanılır. Tüm endpoint'ler authentication ve permission kontrolü gerektirir.
 
-**Base URL:** `http://localhost:3001/api/public/customers`
+**Base URL:** `https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers`
+
+
+tüm document vs. her şeyi url ile değiştir : 
+
+@https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/ 
 
 ## 🔐 Authentication
 
@@ -20,7 +25,7 @@ Authorization: Bearer crm-api-token-2025
 
 **Örnek İstek:**
 ```bash
-curl -X GET "http://localhost:3001/api/public/customers" \
+curl -X GET "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers" \
   -H "Authorization: Bearer crm-api-token-2025"
 ```
 
@@ -83,7 +88,7 @@ type ErrorResponse = {
 **Örnek İstek:**
 
 ```bash
-curl -X GET "http://localhost:3001/api/admin/customers?page=1&limit=10&q=ahmet&isActive=true" \
+curl -X GET "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/admin/customers?page=1&limit=10&q=ahmet&isActive=true" \
   -H "Cookie: ecu_session=your_session_token"
 ```
 
@@ -137,7 +142,7 @@ curl -X GET "http://localhost:3001/api/admin/customers?page=1&limit=10&q=ahmet&i
 **Örnek İstek:**
 
 ```bash
-curl -X POST "http://localhost:3001/api/admin/customers" \
+curl -X POST "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/admin/customers" \
   -H "Content-Type: application/json" \
   -H "Cookie: ecu_session=your_session_token" \
   -d '{
@@ -183,7 +188,7 @@ curl -X POST "http://localhost:3001/api/admin/customers" \
 **Örnek İstek:**
 
 ```bash
-curl -X GET "http://localhost:3001/api/admin/customers/clx2b3c4d5e6f7g8h9i0" \
+curl -X GET "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/admin/customers/clx2b3c4d5e6f7g8h9i0" \
   -H "Cookie: ecu_session=your_session_token"
 ```
 
@@ -230,7 +235,7 @@ curl -X GET "http://localhost:3001/api/admin/customers/clx2b3c4d5e6f7g8h9i0" \
 **Örnek İstek:**
 
 ```bash
-curl -X PUT "http://localhost:3001/api/admin/customers/clx2b3c4d5e6f7g8h9i0" \
+curl -X PUT "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/admin/customers/clx2b3c4d5e6f7g8h9i0" \
   -H "Content-Type: application/json" \
   -H "Cookie: ecu_session=your_session_token" \
   -d '{
@@ -273,7 +278,7 @@ curl -X PUT "http://localhost:3001/api/admin/customers/clx2b3c4d5e6f7g8h9i0" \
 **Örnek İstek:**
 
 ```bash
-curl -X DELETE "http://localhost:3001/api/admin/customers/clx2b3c4d5e6f7g8h9i0" \
+curl -X DELETE "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/admin/customers/clx2b3c4d5e6f7g8h9i0" \
   -H "Cookie: ecu_session=your_session_token"
 ```
 

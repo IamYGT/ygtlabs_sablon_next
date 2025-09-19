@@ -13,7 +13,7 @@ Bu API, CRM sistemindeki müşteri verilerini yönetmek için kullanılır. Dı�
 ## 🌐 Base URL
 
 ```
-http://localhost:3001/api/public/customers
+https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers
 ```
 
 ## 🔐 Access Token
@@ -54,10 +54,10 @@ Authorization: Bearer crm-api-token-2025
 ```bash
 # Müşteri Listele
 curl -H "Authorization: Bearer crm-api-token-2025" \
-  "http://localhost:3001/api/public/customers?page=1&limit=5"
+  "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers?page=1&limit=5"
 
 # Yeni Müşteri Ekle
-curl -X POST "http://localhost:3001/api/public/customers" \
+curl -X POST "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers" \
   -H "Authorization: Bearer crm-api-token-2025" \
   -H "Content-Type: application/json" \
   -d '{
@@ -68,7 +68,7 @@ curl -X POST "http://localhost:3001/api/public/customers" \
   }'
 
 # Müşteri Güncelle
-curl -X PUT "http://localhost:3001/api/public/customers/[ID]" \
+curl -X PUT "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers/[ID]" \
   -H "Authorization: Bearer crm-api-token-2025" \
   -H "Content-Type: application/json" \
   -d '{
@@ -76,7 +76,7 @@ curl -X PUT "http://localhost:3001/api/public/customers/[ID]" \
   }'
 
 # Müşteri Sil
-curl -X DELETE "http://localhost:3001/api/public/customers/[ID]" \
+curl -X DELETE "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers/[ID]" \
   -H "Authorization: Bearer crm-api-token-2025"
 ```
 
@@ -85,7 +85,7 @@ curl -X DELETE "http://localhost:3001/api/public/customers/[ID]" \
 ```javascript
 // Müşteri Listeleme
 async function getCustomers() {
-  const response = await fetch('http://localhost:3001/api/public/customers', {
+  const response = await fetch('https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers', {
     headers: {
       'Authorization': 'Bearer crm-api-token-2025'
     }
@@ -95,7 +95,7 @@ async function getCustomers() {
 
 // Yeni Müşteri Ekleme
 async function createCustomer(customerData) {
-  const response = await fetch('http://localhost:3001/api/public/customers', {
+  const response = await fetch('https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ async function createCustomer(customerData) {
 
 // Müşteri Güncelleme
 async function updateCustomer(id, updateData) {
-  const response = await fetch(`http://localhost:3001/api/public/customers/${id}`, {
+  const response = await fetch(`https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -121,7 +121,7 @@ async function updateCustomer(id, updateData) {
 
 // Müşteri Silme
 async function deleteCustomer(id) {
-  const response = await fetch(`http://localhost:3001/api/public/customers/${id}`, {
+  const response = await fetch(`https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers/${id}`, {
     method: 'DELETE',
     headers: {
       'Authorization': 'Bearer crm-api-token-2025'
@@ -148,15 +148,15 @@ Detaylı API dokümantasyonu için `API_DOCUMENTATION.md` dosyasını inceleyebi
 ## 🔐 Dokümantasyon Erişimi
 
 API dokümantasyonuna erişmek için:
-1. Tarayıcınızdan `http://localhost:3001/document` adresine gidin
+1. Tarayıcınızdan `https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/document` adresine gidin
 2. Şifre olarak `crm2024` girin
 3. Tam API dokümantasyonunu ve kullanım örneklerini görüntüleyin
 
 ## 🔗 İlgili Linkler
 
-- [CRM Admin Paneli](http://localhost:3001/admin/customers)
+- [CRM Admin Paneli](https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/admin/customers)
 - [API Detaylı Dokümantasyon](./API_DOCUMENTATION.md)
-- [Web Dokümantasyonu](http://localhost:3001/document)
+- [Web Dokümantasyonu](https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/document)
 
 ---
 
