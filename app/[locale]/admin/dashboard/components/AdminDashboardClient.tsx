@@ -12,7 +12,6 @@ import {
   BarChart3,
   Calendar,
   Clock,
-  FileText,
   Shield,
   Users,
   Activity,
@@ -65,12 +64,12 @@ const cardHoverVariants = {
   },
 } as const;
 
-// Stats data for demo
+// Stats data for CRM - Enhanced CRM Metrics
 const statsData = [
-  { label: "Toplam Kullanıcı", value: 1247, icon: Users, color: "blue" },
-  { label: "Aktif Oturum", value: 89, icon: Activity, color: "emerald" },
-  { label: "Bugünkü İşlem", value: 156, icon: TrendingUp, color: "purple" },
-  { label: "Sistem Durumu", value: 99.9, icon: Shield, color: "orange", suffix: "%" },
+  { label: "Toplam Müşteri", value: 1247, icon: Users, color: "blue" },
+  { label: "Aktif Leads", value: 342, icon: TrendingUp, color: "emerald" },
+  { label: "Açık Fırsatlar", value: 89, icon: BarChart3, color: "purple" },
+  { label: "Aktif Kampanyalar", value: 12, icon: Activity, color: "orange" },
 ];
 
 // Stats Card Component
@@ -150,35 +149,35 @@ function StatsCard({ label, value, icon: Icon, color, suffix }: {
   );
 }
 
-// Management Center quick actions
-function getQuickActions(t: TFunction): QuickActionProps[] {
+// Management Center quick actions - CRM Focused
+function getQuickActions(_t: TFunction): QuickActionProps[] {
   return [
     {
-      title: t("customerManagement"),
-      description: t("customerManagementDesc"),
-      href: "/admin/users",
+      title: "Müşteri Yönetimi",
+      description: "Tüm müşteri bilgilerini yönetin ve takip edin",
+      href: "/admin/customers",
       icon: Users,
       color: "blue" as const,
     },
     {
-      title: t("financialReports"),
-      description: t("financialReportsDesc"),
-      href: "/admin/roles",
-      icon: BarChart3,
+      title: "Leads Yönetimi",
+      description: "Potansiyel müşterileri takip edin ve dönüştürün",
+      href: "/admin/leads",
+      icon: TrendingUp,
       color: "emerald" as const,
     },
     {
-      title: t("securityCenter"),
-      description: t("securityCenterDesc"),
-      href: "/admin/permissions",
-      icon: Shield,
+      title: "Fırsat Yönetimi",
+      description: "Satış fırsatlarını takip edin ve yönetin",
+      href: "/admin/opportunities",
+      icon: BarChart3,
       color: "purple" as const,
     },
     {
-      title: t("transactionLogs"),
-      description: t("transactionLogsDesc"),
-      href: "/admin/hero-slider",
-      icon: FileText,
+      title: "Kampanya Yönetimi",
+      description: "Pazarlama kampanyalarını planlayın ve yönetin",
+      href: "/admin/campaigns",
+      icon: Activity,
       color: "orange" as const,
     },
   ];
@@ -465,10 +464,10 @@ export default function AdminDashboardClient() {
           >
             <div className="text-center">
               <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                Sistem İstatistikleri
+                CRM Performans Metrikleri
               </h2>
               <p className="text-gray-600 dark:text-slate-400 text-sm max-w-xl mx-auto">
-                Gerçek zamanlı sistem performans ve kullanım verileri
+                Müşteri yönetimi, satış fırsatları ve pazarlama kampanyaları istatistikleri
               </p>
             </div>
 
@@ -486,10 +485,10 @@ export default function AdminDashboardClient() {
           >
             <div className="text-center">
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                {t("managementCenter")}
+                CRM Yönetim Merkezi
               </h2>
               <p className="text-gray-600 dark:text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
-                {t("managementCenterDesc")}
+                Müşteri yönetimi, leads takibi, fırsat yönetimi ve kampanya koordinasyonu için entegre platform
               </p>
               <motion.div
                 className="w-24 h-1 rounded-full mx-auto mt-6 bg-gradient-to-r from-blue-500 to-cyan-400"

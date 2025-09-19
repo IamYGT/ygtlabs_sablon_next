@@ -101,19 +101,19 @@ export const VIEW_PERMISSIONS: PermissionConfig[] = [
     action: "view",
     permissionType: "admin",
     displayName: {
-      tr: "Admin Dashboard Görüntüleme",
-      en: "Admin Dashboard View",
+      tr: "CRM Dashboard Görüntüleme",
+      en: "CRM Dashboard View",
     },
     description: {
-      tr: "Admin dashboard sayfasını görüntüleme ve sistem istatistiklerini okuma yetkisi",
-      en: "Permission to view admin dashboard page and read system statistics",
+      tr: "CRM dashboard sayfasını görüntüleme ve müşteri istatistiklerini okuma yetkisi",
+      en: "Permission to view CRM dashboard page and read customer statistics",
     },
     devNotes:
-      "Dashboard API endpoint'lerini de kapsar: /api/admin/system-status, /api/admin/sessions",
+      "CRM Dashboard API endpoint'lerini kapsar: /api/admin/crm-stats, /api/admin/sessions",
     dependencies: ["admin.layout"],
     usedIn: [
       "AdminDashboardClient",
-      "/api/admin/system-status",
+      "/api/admin/crm-stats",
       "/api/admin/sessions",
     ],
   },
@@ -154,6 +154,57 @@ export const VIEW_PERMISSIONS: PermissionConfig[] = [
     usedIn: ["CustomersPageClient", "/api/admin/customers (GET)"],
   },
   {
+    name: "admin.leads.view",
+    category: "view",
+    resourcePath: "leads",
+    action: "view",
+    permissionType: "admin",
+    displayName: {
+      tr: "Lead Yönetimi Görüntüleme",
+      en: "Lead Management View",
+    },
+    description: {
+      tr: "Lead listesi sayfasını görüntüleme ve potansiyel müşteri bilgilerini okuma yetkisi",
+      en: "Permission to view lead management page and read potential customer information",
+    },
+    dependencies: ["admin.layout"],
+    usedIn: ["LeadsPageClient", "/api/admin/leads (GET)"],
+  },
+  {
+    name: "admin.opportunities.view",
+    category: "view",
+    resourcePath: "opportunities",
+    action: "view",
+    permissionType: "admin",
+    displayName: {
+      tr: "Fırsat Yönetimi Görüntüleme",
+      en: "Opportunity Management View",
+    },
+    description: {
+      tr: "Fırsat listesi sayfasını görüntüleme ve satış fırsatlarını yönetme yetkisi",
+      en: "Permission to view opportunity management page and manage sales opportunities",
+    },
+    dependencies: ["admin.layout"],
+    usedIn: ["OpportunitiesPageClient", "/api/admin/opportunities (GET)"],
+  },
+  {
+    name: "admin.campaigns.view",
+    category: "view",
+    resourcePath: "campaigns",
+    action: "view",
+    permissionType: "admin",
+    displayName: {
+      tr: "Kampanya Yönetimi Görüntüleme",
+      en: "Campaign Management View",
+    },
+    description: {
+      tr: "Kampanya listesi sayfasını görüntüleme ve pazarlama kampanyalarını yönetme yetkisi",
+      en: "Permission to view campaign management page and manage marketing campaigns",
+    },
+    dependencies: ["admin.layout"],
+    usedIn: ["CampaignsPageClient", "/api/admin/campaigns (GET)"],
+  },
+  {
     name: "admin.roles.view",
     category: "view",
     resourcePath: "roles",
@@ -171,25 +222,6 @@ export const VIEW_PERMISSIONS: PermissionConfig[] = [
       "Role list API'sini kapsar. Role CRUD işlemleri için ayrı function permission'lar gerekli",
     dependencies: ["admin.layout"],
     usedIn: ["RolesPageClient", "/api/admin/roles (GET)"],
-  },
-  {
-    name: "admin.permissions.view",
-    category: "view",
-    resourcePath: "permissions",
-    action: "view",
-    permissionType: "admin",
-    displayName: {
-      tr: "Yetki Yönetimi Görüntüleme",
-      en: "Permission Management View",
-    },
-    description: {
-      tr: "Yetki listesi sayfasını görüntüleme ve mevcut yetkileri okuma yetkisi",
-      en: "Permission to view permission management page and read existing permissions",
-    },
-    devNotes:
-      "Permission list API'sini kapsar. Permission CRUD işlemleri için ayrı function permission'lar gerekli",
-    dependencies: ["admin.layout"],
-    usedIn: ["PermissionsPageClient", "/api/admin/permissions (GET)"],
   },
   {
     name: "admin.profile.view",
@@ -210,94 +242,7 @@ export const VIEW_PERMISSIONS: PermissionConfig[] = [
     dependencies: ["admin.layout"],
     usedIn: ["AdminProfileClient", "/api/admin/profile (GET)"],
   },
-  {
-    name: "admin.hero-slider.view",
-    category: "view",
-    resourcePath: "hero-slider",
-    action: "view",
-    permissionType: "admin",
-    displayName: {
-      tr: "Hero Slider Yönetimi Görüntüleme",
-      en: "Hero Slider Management View",
-    },
-    description: {
-      tr: "Hero slider yönetimi sayfasını görüntüleme ve mevcut slider'ları okuma yetkisi",
-      en: "Permission to view hero slider management page and read existing sliders",
-    },
-    devNotes:
-      "Hero slider list API'sini kapsar. Slider CRUD işlemleri için ayrı function permission'lar gerekli",
-    dependencies: ["admin.layout"],
-    usedIn: ["HeroSliderPageClient", "/api/admin/hero-slider (GET)"],
-  },
-  {
-    name: "admin.information.view",
-    category: "view",
-    resourcePath: "information",
-    action: "view",
-    permissionType: "admin",
-    displayName: {
-      tr: "Bilgi Merkezi Görüntüleme",
-      en: "Knowledge Base View",
-    },
-    description: {
-      tr: "Bilgi Merkezi sayfasını görüntüleme ve içerikleri okuma yetkisi",
-      en: "Permission to view Knowledge Base page and read articles",
-    },
-    dependencies: ["admin.layout"],
-    usedIn: ["InformationPageClient", "/api/admin/information (GET)"],
-  },
-  {
-    name: "admin.information.blog.view",
-    category: "view",
-    resourcePath: "information/blog",
-    action: "view",
-    permissionType: "admin",
-    displayName: {
-      tr: "Blog Yönetimi Görüntüleme",
-      en: "Blog Management View",
-    },
-    description: {
-      tr: "Blog yönetimi sayfasını görüntüleme ve yazıları okuma yetkisi",
-      en: "Permission to view blog management page and read posts",
-    },
-    dependencies: ["admin.information.view"],
-    usedIn: ["InformationPageClient", "/api/admin/information/blog (GET)"],
-  },
-  {
-    name: "admin.information.faq.view",
-    category: "view",
-    resourcePath: "information/faq",
-    action: "view",
-    permissionType: "admin",
-    displayName: {
-      tr: "SSS Yönetimi Görüntüleme",
-      en: "FAQ Management View",
-    },
-    description: {
-      tr: "SSS yönetimi sayfasını görüntüleme ve maddeleri okuma yetkisi",
-      en: "Permission to view FAQ management page and read items",
-    },
-    dependencies: ["admin.information.view"],
-    usedIn: ["InformationPageClient", "/api/admin/information/faq (GET)"],
-  },
-  {
-    name: "admin.about.view",
-    category: "view",
-    resourcePath: "about",
-    action: "view",
-    permissionType: "admin",
-    displayName: {
-      tr: "Hakkımızda Yönetimi Görüntüleme",
-      en: "About Management View",
-    },
-    description: {
-      tr: "Hakkımızda sayfasını görüntüleme ve içeriği okuma yetkisi",
-      en: "Permission to view about page and read its content",
-    },
-    dependencies: ["admin.layout"],
-    usedIn: ["AboutPageClient", "/api/admin/about (GET)"],
-  },
-  {
+    {
     name: "customer.dashboard.view",
     category: "view",
     resourcePath: "dashboard",
@@ -334,97 +279,7 @@ export const VIEW_PERMISSIONS: PermissionConfig[] = [
     dependencies: ["customer.layout"],
     usedIn: ["CustomerProfileClient"],
   },
-  {
-    name: "customer.orders.view",
-    category: "view",
-    resourcePath: "orders",
-    action: "view",
-    permissionType: "customer",
-    displayName: {
-      tr: "Siparişlerim Görüntüleme",
-      en: "My Orders View",
-    },
-    description: {
-      tr: "Sipariş geçmişini ve sipariş detaylarını görüntüleme yetkisi",
-      en: "Permission to view order history and order details",
-    },
-    devNotes: "Customer orders API'lerini kapsar",
-    dependencies: ["customer.layout"],
-    usedIn: ["CustomerOrdersClient", "/api/customer/orders"],
-  },
-  {
-    name: "customer.wishlist.view",
-    category: "view",
-    resourcePath: "wishlist",
-    action: "view",
-    permissionType: "customer",
-    displayName: {
-      tr: "Favori Listem Görüntüleme",
-      en: "My Wishlist View",
-    },
-    description: {
-      tr: "Favori ürün listesini görüntüleme ve yönetme yetkisi",
-      en: "Permission to view and manage wishlist items",
-    },
-    devNotes: "Customer wishlist API'lerini kapsar",
-    dependencies: ["customer.layout"],
-    usedIn: ["CustomerWishlistClient", "/api/customer/wishlist"],
-  },
-  {
-    name: "customer.cart.view",
-    category: "view",
-    resourcePath: "cart",
-    action: "view",
-    permissionType: "customer",
-    displayName: {
-      tr: "Sepetim Görüntüleme",
-      en: "My Cart View",
-    },
-    description: {
-      tr: "Alışveriş sepetini görüntüleme ve yönetme yetkisi",
-      en: "Permission to view and manage shopping cart",
-    },
-    devNotes: "Customer cart API'lerini kapsar",
-    dependencies: ["customer.layout"],
-    usedIn: ["CustomerCartClient", "/api/customer/cart"],
-  },
-  {
-    name: "customer.loyalty.view",
-    category: "view",
-    resourcePath: "loyalty",
-    action: "view",
-    permissionType: "customer",
-    displayName: {
-      tr: "Sadakat Programı Görüntüleme",
-      en: "Loyalty Program View",
-    },
-    description: {
-      tr: "Sadakat puanı ve ödülleri görüntüleme yetkisi",
-      en: "Permission to view loyalty points and rewards",
-    },
-    devNotes: "Customer loyalty API'lerini kapsar",
-    dependencies: ["customer.layout"],
-    usedIn: ["CustomerLoyaltyClient", "/api/customer/loyalty"],
-  },
-  {
-    name: "customer.payment.view",
-    category: "view",
-    resourcePath: "payment",
-    action: "view",
-    permissionType: "customer",
-    displayName: {
-      tr: "Ödeme Yöntemlerim Görüntüleme",
-      en: "My Payment Methods View",
-    },
-    description: {
-      tr: "Kayıtlı ödeme yöntemlerini görüntüleme ve yönetme yetkisi",
-      en: "Permission to view and manage saved payment methods",
-    },
-    devNotes: "Customer payment methods API'lerini kapsar",
-    dependencies: ["customer.layout"],
-    usedIn: ["CustomerPaymentClient", "/api/customer/payment-methods"],
-  },
-  {
+    {
     name: "customer.settings.view",
     category: "view",
     resourcePath: "settings",
@@ -659,167 +514,166 @@ export const FUNCTION_PERMISSIONS: PermissionConfig[] = [
     ],
   },
 
-  // PERMISSION MANAGEMENT FUNCTIONS
+
+    // LEAD MANAGEMENT FUNCTIONS
   {
-    name: "permissions.create",
+    name: "leads.create",
     category: "function",
-    resourcePath: "permissions",
+    resourcePath: "leads",
     action: "create",
     permissionType: "admin",
     displayName: {
-      tr: "Yetki Oluşturma",
-      en: "Create Permission",
+      tr: "Lead Oluşturma",
+      en: "Create Lead",
     },
     description: {
-      tr: "Yeni sistem yetkileri oluşturma ve yetki kategorilerini tanımlama yetkisi",
-      en: "Permission to create new system permissions and define permission categories",
+      tr: "Yeni lead oluşturma ve potansiyel müşteri bilgilerini kaydetme yetkisi",
+      en: "Permission to create new leads and save potential customer information",
     },
-    devNotes:
-      "POST /api/admin/permissions endpoint'ini kapsar. Permission validation dahil",
-    dependencies: ["admin.permissions.view"],
-    usedIn: [
-      "CreatePermissionDialog",
-      "/api/admin/permissions (POST)",
-      "PermissionCreateForm",
-    ],
+    dependencies: ["admin.leads.view"],
+    usedIn: ["LeadCreateDialog", "/api/admin/leads (POST)"],
   },
   {
-    name: "permissions.update",
+    name: "leads.update",
     category: "function",
-    resourcePath: "permissions",
+    resourcePath: "leads",
     action: "update",
     permissionType: "admin",
     displayName: {
-      tr: "Yetki Güncelleme",
-      en: "Update Permission",
+      tr: "Lead Güncelleme",
+      en: "Update Lead",
     },
     description: {
-      tr: "Mevcut yetki bilgilerini güncelleme ve yetki açıklamalarını değiştirme yetkisi",
-      en: "Permission to update existing permission information and modify permission descriptions",
+      tr: "Mevcut lead bilgilerini güncelleme yetkisi",
+      en: "Permission to update existing lead information",
     },
-    devNotes:
-      "PATCH /api/admin/permissions/[permissionId] endpoint'ini kapsar. System permission koruma dahil",
-    dependencies: ["admin.permissions.view"],
-    usedIn: [
-      "EditPermissionDialog",
-      "/api/admin/permissions/[permissionId] (PATCH)",
-      "PermissionEditForm",
-    ],
+    dependencies: ["admin.leads.view"],
+    usedIn: ["LeadEditDialog", "/api/admin/leads/[id] (PUT)"],
   },
   {
-    name: "permissions.delete",
+    name: "leads.delete",
     category: "function",
-    resourcePath: "permissions",
+    resourcePath: "leads",
     action: "delete",
     permissionType: "admin",
     displayName: {
-      tr: "Yetki Silme",
-      en: "Delete Permission",
+      tr: "Lead Silme",
+      en: "Delete Lead",
     },
     description: {
-      tr: "Sistem yetkilerini silme ve bağlantılı rol ilişkilerini temizleme yetkisi",
-      en: "Permission to delete system permissions and clean related role connections",
+      tr: "Lead kaydını silme yetkisi",
+      en: "Permission to delete lead records",
     },
-    devNotes:
-      "DELETE /api/admin/permissions/[permissionId] endpoint'ini kapsar. Cascade delete dahil",
-    dependencies: ["admin.permissions.view"],
-    usedIn: [
-      "DeletePermissionDialog",
-      "/api/admin/permissions/[permissionId] (DELETE)",
-    ],
+    dependencies: ["admin.leads.view"],
+    usedIn: ["LeadDeleteDialog", "/api/admin/leads/[id] (DELETE)"],
   },
 
-  // HERO SLIDER MANAGEMENT FUNCTIONS
+  // OPPORTUNITY MANAGEMENT FUNCTIONS
   {
-    name: "hero-slider.create",
+    name: "opportunities.create",
     category: "function",
-    resourcePath: "hero-slider",
+    resourcePath: "opportunities",
     action: "create",
     permissionType: "admin",
     displayName: {
-      tr: "Hero Slider Oluşturma",
-      en: "Create Hero Slider",
+      tr: "Fırsat Oluşturma",
+      en: "Create Opportunity",
     },
     description: {
-      tr: "Yeni hero slider oluşturma ve medya yükleme yetkisi",
-      en: "Permission to create new hero sliders and upload media",
+      tr: "Yeni satış fırsatı oluşturma ve fırsat bilgilerini kaydetme yetkisi",
+      en: "Permission to create new sales opportunities and save opportunity information",
     },
-    devNotes:
-      "POST /api/admin/hero-slider endpoint'ini ve file upload API'sini kapsar",
-    dependencies: ["admin.hero-slider.view"],
-    usedIn: [
-      "CreateSliderDialog",
-      "/api/admin/hero-slider (POST)",
-      "SliderCreateForm",
-    ],
-  },
-  // INFORMATION CENTER FUNCTIONS
-  {
-    name: "information.create",
-    category: "function",
-    resourcePath: "information",
-    action: "create",
-    permissionType: "admin",
-    displayName: {
-      tr: "Bilgi Oluşturma",
-      en: "Create Information",
-    },
-    description: {
-      tr: "Bilgi Merkezi'ne yeni içerik ekleme yetkisi",
-      en: "Permission to create new Knowledge Base articles",
-    },
-    dependencies: ["admin.information.view"],
-    usedIn: [
-      "InformationCreateForm",
-      "/api/admin/information (POST)",
-      "/api/admin/information/blog (POST)",
-      "/api/admin/information/faq (POST)",
-    ],
+    dependencies: ["admin.opportunities.view"],
+    usedIn: ["OpportunityCreateDialog", "/api/admin/opportunities (POST)"],
   },
   {
-    name: "information.update",
+    name: "opportunities.update",
     category: "function",
-    resourcePath: "information",
+    resourcePath: "opportunities",
     action: "update",
     permissionType: "admin",
     displayName: {
-      tr: "Bilgi Güncelleme",
-      en: "Update Information",
+      tr: "Fırsat Güncelleme",
+      en: "Update Opportunity",
     },
     description: {
-      tr: "Bilgi Merkezi içeriklerini güncelleme yetkisi",
-      en: "Permission to update Knowledge Base articles",
+      tr: "Mevcut fırsat bilgilerini güncelleme yetkisi",
+      en: "Permission to update existing opportunity information",
     },
-    dependencies: ["admin.information.view"],
-    usedIn: [
-      "InformationEditForm",
-      "/api/admin/information/[id] (PUT)",
-      "/api/admin/information/blog/[postId] (PUT)",
-      "/api/admin/information/faq/[faqId] (PUT)",
-    ],
+    dependencies: ["admin.opportunities.view"],
+    usedIn: ["OpportunityEditDialog", "/api/admin/opportunities/[id] (PUT)"],
   },
   {
-    name: "information.delete",
+    name: "opportunities.delete",
     category: "function",
-    resourcePath: "information",
+    resourcePath: "opportunities",
     action: "delete",
     permissionType: "admin",
     displayName: {
-      tr: "Bilgi Silme",
-      en: "Delete Information",
+      tr: "Fırsat Silme",
+      en: "Delete Opportunity",
     },
     description: {
-      tr: "Bilgi Merkezi içeriklerini silme yetkisi",
-      en: "Permission to delete Knowledge Base articles",
+      tr: "Fırsat kaydını silme yetkisi",
+      en: "Permission to delete opportunity records",
     },
-    dependencies: ["admin.information.view"],
-    usedIn: [
-      "InformationDeleteDialog",
-      "/api/admin/information/[id] (DELETE)",
-      "/api/admin/information/blog/[postId] (DELETE)",
-      "/api/admin/information/faq/[faqId] (DELETE)",
-    ],
+    dependencies: ["admin.opportunities.view"],
+    usedIn: ["OpportunityDeleteDialog", "/api/admin/opportunities/[id] (DELETE)"],
   },
+
+  // CAMPAIGN MANAGEMENT FUNCTIONS
+  {
+    name: "campaigns.create",
+    category: "function",
+    resourcePath: "campaigns",
+    action: "create",
+    permissionType: "admin",
+    displayName: {
+      tr: "Kampanya Oluşturma",
+      en: "Create Campaign",
+    },
+    description: {
+      tr: "Yeni pazarlama kampanyası oluşturma ve kampanya bilgilerini kaydetme yetkisi",
+      en: "Permission to create new marketing campaigns and save campaign information",
+    },
+    dependencies: ["admin.campaigns.view"],
+    usedIn: ["CampaignCreateDialog", "/api/admin/campaigns (POST)"],
+  },
+  {
+    name: "campaigns.update",
+    category: "function",
+    resourcePath: "campaigns",
+    action: "update",
+    permissionType: "admin",
+    displayName: {
+      tr: "Kampanya Güncelleme",
+      en: "Update Campaign",
+    },
+    description: {
+      tr: "Mevcut kampanya bilgilerini güncelleme yetkisi",
+      en: "Permission to update existing campaign information",
+    },
+    dependencies: ["admin.campaigns.view"],
+    usedIn: ["CampaignEditDialog", "/api/admin/campaigns/[id] (PUT)"],
+  },
+  {
+    name: "campaigns.delete",
+    category: "function",
+    resourcePath: "campaigns",
+    action: "delete",
+    permissionType: "admin",
+    displayName: {
+      tr: "Kampanya Silme",
+      en: "Delete Campaign",
+    },
+    description: {
+      tr: "Kampanya kaydını silme yetkisi",
+      en: "Permission to delete campaign records",
+    },
+    dependencies: ["admin.campaigns.view"],
+    usedIn: ["CampaignDeleteDialog", "/api/admin/campaigns/[id] (DELETE)"],
+  },
+
   // CUSTOMER MANAGEMENT FUNCTIONS
   {
     name: "customers.create",
@@ -872,103 +726,7 @@ export const FUNCTION_PERMISSIONS: PermissionConfig[] = [
     dependencies: ["admin.customers.view"],
     usedIn: ["CustomerDeleteDialog", "/api/admin/customers/[id] (DELETE)"],
   },
-  {
-    name: "about.create",
-    category: "function",
-    resourcePath: "about",
-    action: "create",
-    permissionType: "admin",
-    displayName: {
-      tr: "Hakkımızda İçeriği Oluşturma",
-      en: "Create About Content",
-    },
-    description: {
-      tr: "Hakkımızda sayfası için içerik oluşturma yetkisi",
-      en: "Permission to create content for the about page",
-    },
-    dependencies: ["admin.about.view"],
-    usedIn: ["CreateAboutDialog", "/api/admin/about (POST)"],
-  },
-  {
-    name: "about.update",
-    category: "function",
-    resourcePath: "about",
-    action: "update",
-    permissionType: "admin",
-    displayName: {
-      tr: "Hakkımızda İçeriği Güncelleme",
-      en: "Update About Content",
-    },
-    description: {
-      tr: "Hakkımızda sayfası içeriğini güncelleme yetkisi",
-      en: "Permission to update content on the about page",
-    },
-    dependencies: ["admin.about.view"],
-    usedIn: ["EditAboutDialog", "/api/admin/about (PUT)"],
-  },
-  {
-    name: "about.delete",
-    category: "function",
-    resourcePath: "about",
-    action: "delete",
-    permissionType: "admin",
-    displayName: {
-      tr: "Hakkımızda İçeriği Silme",
-      en: "Delete About Content",
-    },
-    description: {
-      tr: "Hakkımızda sayfası içeriğini silme yetkisi",
-      en: "Permission to delete content from the about page",
-    },
-    dependencies: ["admin.about.view"],
-    usedIn: ["DeleteAboutDialog", "/api/admin/about (DELETE)"],
-  },
-  {
-    name: "hero-slider.update",
-    category: "function",
-    resourcePath: "hero-slider",
-    action: "update",
-    permissionType: "admin",
-    displayName: {
-      tr: "Hero Slider Güncelleme",
-      en: "Update Hero Slider",
-    },
-    description: {
-      tr: "Mevcut hero slider'ları güncelleme ve sıralama değiştirme yetkisi",
-      en: "Permission to update existing hero sliders and modify ordering",
-    },
-    devNotes:
-      "PATCH /api/admin/hero-slider/[sliderId] endpoint'ini kapsar. Order management dahil",
-    dependencies: ["admin.hero-slider.view"],
-    usedIn: [
-      "EditSliderDialog",
-      "/api/admin/hero-slider/[sliderId] (PATCH)",
-      "SliderEditForm",
-    ],
-  },
-  {
-    name: "hero-slider.delete",
-    category: "function",
-    resourcePath: "hero-slider",
-    action: "delete",
-    permissionType: "admin",
-    displayName: {
-      tr: "Hero Slider Silme",
-      en: "Delete Hero Slider",
-    },
-    description: {
-      tr: "Hero slider'ları silme ve ilişkili medya dosyalarını temizleme yetkisi",
-      en: "Permission to delete hero sliders and clean related media files",
-    },
-    devNotes:
-      "DELETE /api/admin/hero-slider/[sliderId] endpoint'ini kapsar. File cleanup dahil",
-    dependencies: ["admin.hero-slider.view"],
-    usedIn: [
-      "DeleteSliderDialog",
-      "/api/admin/hero-slider/[sliderId] (DELETE)",
-    ],
-  },
-
+  
   // PROFILE MANAGEMENT FUNCTIONS
   {
     name: "customer.profile.update",

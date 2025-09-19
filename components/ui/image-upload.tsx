@@ -29,7 +29,7 @@ export function ImageUpload({
     className,
     accept = "image/*",
     maxSize = 5,
-    uploadEndpoint = "/api/upload/hero-slider"
+    uploadEndpoint = "/api/upload/profile-images"
 }: ImageUploadProps) {
     const t = useTranslations('ImageUpload');
     const [isDragging, setIsDragging] = useState(false);

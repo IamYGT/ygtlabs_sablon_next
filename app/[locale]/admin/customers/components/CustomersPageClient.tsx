@@ -343,6 +343,7 @@ export default function CustomersPageClient() {
                               alt={item.name}
                               fill
                               className="rounded-full object-contain"
+                              unoptimized
                             />
                           </div>
                           <span className="font-medium">{item.name}</span>

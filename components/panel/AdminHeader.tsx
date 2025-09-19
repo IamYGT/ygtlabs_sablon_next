@@ -135,17 +135,17 @@ export function AdminHeader({
     return () => document.removeEventListener("keydown", down);
   }, []);
 
-  const adminNavItems = useAdminNavigation();
+  const { crmItems, otherItems } = useAdminNavigation();
 
   const allPages = React.useMemo(() => {
-    const adminPages = adminNavItems.map((item) => ({
+    const adminPages = [...crmItems, ...otherItems].map((item) => ({
       id: item.key,
       title: item.label,
       url: item.href,
     }));
 
     return adminPages;
-  }, [adminNavItems]);
+  }, [crmItems, otherItems]);
 
   useEffect(() => {
     const staticSearchData = {

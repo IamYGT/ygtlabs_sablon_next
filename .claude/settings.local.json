@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(claude mcp list:*)",
+      "Bash(claude mcp:*)",
+      "Bash(curl:*)",
+      "Bash(npx:*)",
+      "Read(//c/Users/ETETB/.claude/**)",
+      "Bash(npm run dev:*)",
+      "WebSearch",
+      "WebFetch(domain:localhost)",
+      "Bash(pkill:*)",
+      "Bash(for:*)",
+      "Bash(do echo:*)",
+      "Bash(done)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

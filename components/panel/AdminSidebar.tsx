@@ -7,15 +7,12 @@ import { useAdminNavigation } from "@/hooks/useAdminNavigation";
 import { useAdminAuth } from "@/lib/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { Lock, Shield, Unlock } from "lucide-react";
+import { Lock, Unlock } from "lucide-react";
 
 import {
   ChevronDown,
   ChevronRight,
-  Languages,
-  MessageSquareText,
-  Monitor,
-  Route,
+  Building2,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,61 +26,39 @@ export function AdminSidebar() {
     locked: _locked,
     setLocked: _setLocked,
     setCollapsed,
+    setOpen,
   } = useSidebar();
   const isMobile = useIsMobile();
   const pathname = usePathname();
-  const [i18nOpen, setI18nOpen] = useState<boolean>(true);
-  const [authOpen, setAuthOpen] = useState<boolean>(true);
-  const [websiteOpen, setWebsiteOpen] = useState<boolean>(true);
+  const [crmOpen, setCrmOpen] = useState<boolean>(true);
 
   useEffect(() => {
     if (!isMobile) {
-      setCollapsed(false);
+      // Başlangıçta sidebar'ı geniş ve kilitli yap
+      setCollapsed(true); // true = kilitli (sabit açık)
+      setOpen(true); // açık
     }
-  }, [isMobile, setCollapsed]);
+  }, [isMobile, setCollapsed, setOpen]);
 
   // 🚀 SÜPER BASİT! Tek satırda tüm navigation'ı hallettik
-  const links = useAdminNavigation();
+  const { crmItems, otherItems } = useAdminNavigation();
 
-  // i18n grubu, yetkilendirme grubu (users/roles) ve diğer linkleri ayır
+  // Sadece dashboard ve profile'ı diğer öğeler olarak ayır
   const {
-    i18nItems,
-    authItems,
-    websiteItems,
-    otherItems,
-    isAnyI18nActive,
-    isAnyAuthActive,
-    isAnyWebsiteActive,
+    finalOtherItems,
+    isAnyCrmActive,
   } = useMemo(() => {
-    const i18nKeys = new Set(["i18nLanguages", "i18nMessages", "i18nRoutes"]);
-    const authKeys = new Set(["users", "roles"]);
-    const websiteKeys = new Set(["hero-slider", "information", "about"]);
+    // Sadece dashboard ve profile'ı diğer öğeler olarak bırak
+    const otherKeys = new Set(["dashboard", "profile"]);
+    const visibleLinks = otherItems.filter((l) => otherKeys.has(l.key));
 
-    // permissions öğesini sidebar'dan tamamen kaldır
-    const visibleLinks = links.filter((l) => l.key !== "permissions");
-
-    const i18n = visibleLinks.filter((l) => i18nKeys.has(l.key));
-    const auth = visibleLinks.filter((l) => authKeys.has(l.key));
-    const website = visibleLinks.filter((l) => websiteKeys.has(l.key));
-    const others = visibleLinks.filter(
-      (l) =>
-        !i18nKeys.has(l.key) && !authKeys.has(l.key) && !websiteKeys.has(l.key)
-    );
-
-    const i18nActive = i18n.some((l) => l.href === pathname);
-    const authActive = auth.some((l) => l.href === pathname);
-    const websiteActive = website.some((l) => l.href === pathname);
+    const crmActive = crmItems.some((l) => l.href === pathname);
 
     return {
-      i18nItems: i18n,
-      authItems: auth,
-      websiteItems: website,
-      otherItems: others,
-      isAnyI18nActive: i18nActive,
-      isAnyAuthActive: authActive,
-      isAnyWebsiteActive: websiteActive,
+      finalOtherItems: visibleLinks,
+      isAnyCrmActive: crmActive,
     };
-  }, [links, pathname]);
+  }, [otherItems, pathname, crmItems]);
 
   return (
     <div className="h-screen flex relative" data-sidebar="true">
@@ -101,7 +76,63 @@ export function AdminSidebar() {
               open ? "px-2" : "items-center"
             )}
           >
-            {otherItems.map((link) => (
+            {/* CRM Dropdown Group */}
+            {crmItems.length > 0 && (
+              <div className="mt-1">
+                {/* Parent trigger */}
+                <button
+                  type="button"
+                  onClick={() => setCrmOpen((s) => !s)}
+                  className={cn(
+                    "flex w-full items-center group/sidebar transition-colors duration-200 rounded-lg",
+                    open
+                      ? "justify-start gap-2 py-2 md:py-2.5 px-3"
+                      : "justify-center p-3",
+                    isAnyCrmActive
+                      ? "bg-blue-200 dark:bg-slate-700"
+                      : "hover:bg-blue-100 dark:hover:bg-slate-700/50"
+                  )}
+                >
+                  <Building2 className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+                  <motion.span
+                    animate={{
+                      width: open ? "auto" : 0,
+                      opacity: open ? 1 : 0,
+                    }}
+                    transition={{ duration: 0.25, ease: "easeInOut" }}
+                    className={cn(
+                      "text-sm whitespace-pre overflow-hidden",
+                      isAnyCrmActive
+                        ? "text-slate-800 dark:text-slate-100 font-semibold"
+                        : "text-slate-700 dark:text-slate-200"
+                    )}
+                  >
+                    Müşteri Yönetimi
+                  </motion.span>
+                  {open &&
+                    (crmOpen ? (
+                      <ChevronDown className="ml-auto h-4 w-4 opacity-70" />
+                    ) : (
+                      <ChevronRight className="ml-auto h-4 w-4 opacity-70" />
+                    ))}
+                </button>
+
+                {/* Nested CRM items */}
+                {open && crmOpen && (
+                  <div className="mt-1 ml-6 flex flex-col gap-1">
+                    {crmItems.map((link) => (
+                      <SidebarLink
+                        key={link.key}
+                        link={link}
+                        className={cn("rounded-md", "py-1.5 px-2 w-full")}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {finalOtherItems.map((link) => (
               <SidebarLink
                 key={link.key}
                 link={link}
@@ -112,184 +143,7 @@ export function AdminSidebar() {
               />
             ))}
 
-            {/* WEBSITE YÖNETİMİ Dropdown Group */}
-            {websiteItems.length > 0 && (
-              <div className="mt-1">
-                {/* Parent trigger */}
-                <button
-                  type="button"
-                  onClick={() => setWebsiteOpen((s) => !s)}
-                  className={cn(
-                    "flex w-full items-center group/sidebar transition-colors duration-200 rounded-lg",
-                    open
-                      ? "justify-start gap-2 py-2 md:py-2.5 px-3"
-                      : "justify-center p-3",
-                    isAnyWebsiteActive
-                      ? "bg-blue-200 dark:bg-slate-700"
-                      : "hover:bg-blue-100 dark:hover:bg-slate-700/50"
-                  )}
-                >
-                  <Monitor className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-                  <motion.span
-                    animate={{
-                      width: open ? "auto" : 0,
-                      opacity: open ? 1 : 0,
-                    }}
-                    transition={{ duration: 0.25, ease: "easeInOut" }}
-                    className={cn(
-                      "text-sm whitespace-pre overflow-hidden",
-                      isAnyWebsiteActive
-                        ? "text-slate-800 dark:text-slate-100 font-semibold"
-                        : "text-slate-700 dark:text-slate-200"
-                    )}
-                  >
-                    Website Yönetimi
-                  </motion.span>
-                  {open &&
-                    (websiteOpen ? (
-                      <ChevronDown className="ml-auto h-4 w-4 opacity-70" />
-                    ) : (
-                      <ChevronRight className="ml-auto h-4 w-4 opacity-70" />
-                    ))}
-                </button>
-
-                {/* Nested items */}
-                {open && websiteOpen && (
-                  <div className="mt-1 ml-6 flex flex-col gap-1">
-                    {websiteItems.map((link) => (
-                      <SidebarLink
-                        key={link.key}
-                        link={link}
-                        className={cn("rounded-md", "py-1.5 px-2 w-full")}
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* YETKILENDIRME Dropdown Group */}
-            {authItems.length > 0 && (
-              <div className="mt-1">
-                {/* Parent trigger */}
-                <button
-                  type="button"
-                  onClick={() => setAuthOpen((s) => !s)}
-                  className={cn(
-                    "flex w-full items-center group/sidebar transition-colors duration-200 rounded-lg",
-                    open
-                      ? "justify-start gap-2 py-2 md:py-2.5 px-3"
-                      : "justify-center p-3",
-                    isAnyAuthActive
-                      ? "bg-blue-200 dark:bg-slate-700"
-                      : "hover:bg-blue-100 dark:hover:bg-slate-700/50"
-                  )}
-                >
-                  <Shield className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-                  <motion.span
-                    animate={{
-                      width: open ? "auto" : 0,
-                      opacity: open ? 1 : 0,
-                    }}
-                    transition={{ duration: 0.25, ease: "easeInOut" }}
-                    className={cn(
-                      "text-sm whitespace-pre overflow-hidden",
-                      isAnyAuthActive
-                        ? "text-slate-800 dark:text-slate-100 font-semibold"
-                        : "text-slate-700 dark:text-slate-200"
-                    )}
-                  >
-                    Yetkilendirme
-                  </motion.span>
-                  {open &&
-                    (authOpen ? (
-                      <ChevronDown className="ml-auto h-4 w-4 opacity-70" />
-                    ) : (
-                      <ChevronRight className="ml-auto h-4 w-4 opacity-70" />
-                    ))}
-                </button>
-
-                {/* Nested items */}
-                {open && authOpen && (
-                  <div className="mt-1 ml-6 flex flex-col gap-1">
-                    {authItems.map((link) => (
-                      <SidebarLink
-                        key={link.key}
-                        link={link}
-                        className={cn("rounded-md", "py-1.5 px-2 w-full")}
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* DİLLER Dropdown Group */}
-            {i18nItems.length > 0 && (
-              <div className="mt-1">
-                {/* Parent trigger */}
-                <button
-                  type="button"
-                  onClick={() => setI18nOpen((s) => !s)}
-                  className={cn(
-                    "flex w-full items-center group/sidebar transition-colors duration-200 rounded-lg",
-                    open
-                      ? "justify-start gap-2 py-2 md:py-2.5 px-3"
-                      : "justify-center p-3",
-                    isAnyI18nActive
-                      ? "bg-blue-200 dark:bg-slate-700"
-                      : "hover:bg-blue-100 dark:hover:bg-slate-700/50"
-                  )}
-                >
-                  <Languages className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-                  <motion.span
-                    animate={{
-                      width: open ? "auto" : 0,
-                      opacity: open ? 1 : 0,
-                    }}
-                    transition={{ duration: 0.25, ease: "easeInOut" }}
-                    className={cn(
-                      "text-sm whitespace-pre overflow-hidden",
-                      isAnyI18nActive
-                        ? "text-slate-800 dark:text-slate-100 font-semibold"
-                        : "text-slate-700 dark:text-slate-200"
-                    )}
-                  >
-                    Diller
-                  </motion.span>
-                  {open &&
-                    (i18nOpen ? (
-                      <ChevronDown className="ml-auto h-4 w-4 opacity-70" />
-                    ) : (
-                      <ChevronRight className="ml-auto h-4 w-4 opacity-70" />
-                    ))}
-                </button>
-
-                {/* Nested items */}
-                {open && i18nOpen && (
-                  <div className="mt-1 ml-6 flex flex-col gap-1">
-                    {i18nItems.map((link) => {
-                      const iconEl =
-                        link.key === "i18nLanguages" ? (
-                          <Languages className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-                        ) : link.key === "i18nMessages" ? (
-                          <MessageSquareText className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-                        ) : (
-                          <Route className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-                        );
-                      return (
-                        <SidebarLink
-                          key={link.key}
-                          link={{ ...link, icon: iconEl }}
-                          className={cn("rounded-md", "py-1.5 px-2 w-full")}
-                        />
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
+                      </div>
         </div>
 
         {/* Bottom Section - Responsive */}
@@ -301,7 +155,7 @@ export function AdminSidebar() {
           {/* Admin Info - Sadece görsel */}
           <div className="flex items-center gap-2 md:gap-3 py-2 px-2">
             <div className="h-6 w-6 md:h-7 md:w-7 flex-shrink-0 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
-              <Shield className="h-3 w-3 md:h-4 md:w-4 text-white" />
+              <Building2 className="h-3 w-3 md:h-4 md:w-4 text-white" />
             </div>
             {open && (
               <span className="text-slate-700 dark:text-slate-200 text-sm md:text-base font-medium">
@@ -342,7 +196,7 @@ export const AdminLogo = () => {
         className="font-normal flex items-center text-sm text-black py-1 relative z-20"
       >
         <Image
-          src="/logo/memghjfs.png"
+          src="/logo/mems.png"
           alt=" Logo"
           width={160}
           height={40}
@@ -350,7 +204,7 @@ export const AdminLogo = () => {
           className="dark:hidden"
         />
         <Image
-          src="/logo/dfgfd.png"
+          src="/logo/memsbeyaz.png"
           alt=" Logo"
           width={160}
           height={40}
@@ -391,7 +245,7 @@ export const AdminLogoIcon = () => {
       className="font-normal flex items-center justify-center text-sm text-black py-1 relative z-20 w-full"
     >
       <Image
-        src="/logo/.png"
+        src="/logo/memskucuk.png"
         alt=" Logo Icon"
         width={48}
         height={48}

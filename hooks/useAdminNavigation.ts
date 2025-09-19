@@ -3,9 +3,7 @@
 import { usePermissions } from "@/hooks/usePermissions";
 import { type PermissionName } from "@/lib/permissions";
 import {
-  Key,
   LayoutDashboard,
-  Monitor,
   Shield,
   User,
   Users,
@@ -22,14 +20,6 @@ interface NavigationConfig {
   requiredPermission: PermissionName;
 }
 
-// Navigation item for UI
-interface NavigationItem {
-  key: string;
-  label: string;
-  href: string;
-  icon: React.ComponentType<{ className?: string }>;
-  order: number;
-}
 
 // Sidebar'ın tek gerçek kaynağı (Single Source of Truth)
 const NAVIGATION_CONFIG: Record<string, NavigationConfig> = {
@@ -40,21 +30,8 @@ const NAVIGATION_CONFIG: Record<string, NavigationConfig> = {
     order: 1,
     requiredPermission: "admin.dashboard.view",
   },
-  "hero-slider": {
-    icon: "Monitor",
-    translationKey: "heroSlider",
-    href: "/admin/hero-slider",
-    order: 2,
-    requiredPermission: "admin.hero-slider.view",
-  },
 
-  about: {
-    icon: "Monitor",
-    translationKey: "about",
-    href: "/admin/about",
-    order: 11,
-    requiredPermission: "admin.about.view",
-  },
+  // CRM MODULES
   customers: {
     icon: "Users",
     translationKey: "customers",
@@ -62,35 +39,42 @@ const NAVIGATION_CONFIG: Record<string, NavigationConfig> = {
     order: 2,
     requiredPermission: "admin.customers.view",
   },
+  leads: {
+    icon: "Users",
+    translationKey: "leads",
+    href: "/admin/leads",
+    order: 3,
+    requiredPermission: "admin.leads.view",
+  },
+  opportunities: {
+    icon: "Users",
+    translationKey: "opportunities",
+    href: "/admin/opportunities",
+    order: 4,
+    requiredPermission: "admin.opportunities.view",
+  },
+  campaigns: {
+    icon: "Users",
+    translationKey: "campaigns",
+    href: "/admin/campaigns",
+    order: 5,
+    requiredPermission: "admin.campaigns.view",
+  },
   users: {
     icon: "Users",
     translationKey: "users",
     href: "/admin/users",
-    order: 3,
+    order: 6,
     requiredPermission: "admin.users.view",
   },
   roles: {
     icon: "Shield",
     translationKey: "roles",
     href: "/admin/roles",
-    order: 4,
+    order: 7,
     requiredPermission: "admin.roles.view",
   },
-  permissions: {
-    icon: "Key",
-    translationKey: "permissions",
-    href: "/admin/permissions",
-    order: 5,
-    requiredPermission: "admin.permissions.view",
-  },
 
-  i18nMessages: {
-    icon: "Monitor",
-    translationKey: "i18nMessages",
-    href: "/admin/i18n/messages",
-    order: 8,
-    requiredPermission: "admin.permissions.view",
-  },
   profile: {
     icon: "User",
     translationKey: "profile",
@@ -103,10 +87,8 @@ const NAVIGATION_CONFIG: Record<string, NavigationConfig> = {
 // Lucide icon mapping
 const LUCIDE_ICONS = {
   LayoutDashboard,
-  Monitor,
   Users,
   Shield,
-  Key,
   User,
 } as const;
 
@@ -116,12 +98,15 @@ const LUCIDE_ICONS = {
  * Sidebar navigasyonunu oluşturur.
  * Tüm yetki kontrolleri için merkezi `usePermissions` hook'unu kullanır.
  */
-export function useAdminNavigation(): NavigationItem[] {
+export function useAdminNavigation() {
   const t = useTranslations("AdminNavigation");
   const { has } = usePermissions();
 
-  const navItems = React.useMemo(() => {
-    return Object.entries(NAVIGATION_CONFIG)
+  const { crmItems, otherItems } = React.useMemo(() => {
+    // CRM modüllerini ayır - tüm müşteri yönetimi ve satış süreçleri
+    const crmKeys = new Set(["customers", "leads", "opportunities", "campaigns", "users", "roles"]);
+
+    const allItems = Object.entries(NAVIGATION_CONFIG)
       .filter(([, config]) => has(config.requiredPermission))
       .sort(([, a], [, b]) => a.order - b.order)
       .map(([key, config]) => {
@@ -134,9 +119,17 @@ export function useAdminNavigation(): NavigationItem[] {
           icon: IconComponent,
         };
       });
+
+    const crm = allItems.filter((item) => crmKeys.has(item.key));
+    const others = allItems.filter((item) => !crmKeys.has(item.key));
+
+    return {
+      crmItems: crm,
+      otherItems: others,
+    };
   }, [has, t]);
 
-  return navItems;
+  return { crmItems, otherItems };
 }
 
 /**
