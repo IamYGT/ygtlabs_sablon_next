@@ -12,7 +12,12 @@
       "Bash(pkill:*)",
       "Bash(for:*)",
       "Bash(do echo:*)",
-      "Bash(done)"
+      "Bash(done)",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_handle_dialog",
+      "mcp__playwright__browser_type"
     ],
     "deny": [],
     "ask": []

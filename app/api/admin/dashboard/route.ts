@@ -126,8 +126,11 @@ export const GET = withPermission("admin.dashboard.view", async (_req: NextReque
       ...recentTickets.map(ticket => ({
         id: `ticket-${ticket.id}`,
         type: 'ticket_created' as const,
-        title: `Yeni destek talebi: ${ticket.title}`,
-        description: `${ticket.customer.name} tarafından oluşturuldu`,
+        translationKey: 'newTicketCreated',
+        titleKey: 'newTicketCreatedTitle',
+        descriptionKey: 'ticketCreatedDescription',
+        titleParams: { title: ticket.title },
+        descriptionParams: { customer: ticket.customer.name },
         time: ticket.createdAt.toISOString(),
         status: ticket.status,
         priority: ticket.priority
@@ -135,15 +138,21 @@ export const GET = withPermission("admin.dashboard.view", async (_req: NextReque
       ...recentUsers.map(user => ({
         id: `user-${user.email}`,
         type: 'user_registered' as const,
-        title: 'Yeni kullanıcı kayıt oldu',
-        description: `${user.name || user.email} sisteme katıldı`,
+        translationKey: 'newUserRegistered',
+        titleKey: 'newUserRegisteredTitle',
+        descriptionKey: 'userJoinedSystem',
+        titleParams: {},
+        descriptionParams: { name: user.name || user.email },
         time: user.createdAt.toISOString()
       })),
       ...recentCustomers.map(customer => ({
         id: `customer-${customer.email}`,
         type: 'customer_added' as const,
-        title: 'Yeni müşteri eklendi',
-        description: `${customer.name} müşteri veritabanına eklendi`,
+        translationKey: 'newCustomerAdded',
+        titleKey: 'newCustomerAddedTitle',
+        descriptionKey: 'customerAddedToDatabase',
+        titleParams: {},
+        descriptionParams: { name: customer.name },
         time: customer.createdAt.toISOString()
       }))
     ].sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()).slice(0, 10);

@@ -3,6 +3,10 @@
     "common": {
       "close": "Close",
       "more": "More"
+    },
+    "command": {
+      "paletteTitle": "Command Palette",
+      "paletteDescription": "Search for a command to execute..."
     }
   },
   "AdminDashboard": {
@@ -102,7 +106,22 @@
     "systemStatus": "System Status",
     "permissions": "Permissions",
     "crmPanel": "CRM Management Panel",
-    "panelDescription": "Customer lifecycle management, sales pipeline analysis and team performance tracking"
+    "panelDescription": "Customer lifecycle management, sales pipeline analysis and team performance tracking",
+    "adminPanelTitle": "Admin Panel - CRM System",
+    "recentActivities": "Recent Activities",
+    "noActivitiesYet": "No activities yet",
+    "roles": "Roles",
+    "permissions": "Permissions",
+    "newTicketCreated": "New support ticket created",
+    "newTicketCreatedTitle": "New support ticket: {title}",
+    "ticketCreatedDescription": "Created by {customer}",
+    "newUserRegistered": "New user registered",
+    "newUserRegisteredTitle": "New user registered",
+    "userJoinedSystem": "{name} joined the system",
+    "newCustomerAdded": "New customer added",
+    "newCustomerAddedTitle": "New customer added",
+    "customerAddedToDatabase": "{name} added to database",
+    "timeAgo": "{time} {unit} ago"
   },
   "AdminUsers": {
     "title": "User Management",

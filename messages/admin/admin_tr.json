@@ -3,6 +3,10 @@
     "common": {
       "close": "Kapat",
       "more": "Daha fazla"
+    },
+    "command": {
+      "paletteTitle": "Komut Paleti",
+      "paletteDescription": "Çalıştırılacak bir komut arayın..."
     }
   },
   "AdminDashboard": {
@@ -85,7 +89,38 @@
     "high": "yüksek",
     "medium": "orta",
     "low": "düşük",
-    "admin": "Admin"
+    "admin": "Admin",
+    "totalUsers": "Toplam Kullanıcı",
+    "activeCustomers": "Aktif Müşteriler",
+    "supportTickets": "Destek Talepleri",
+    "activeSessions": "Aktif Oturumlar",
+    "supportSystem": "Destek Sistemi",
+    "totalTickets": "Toplam Talep",
+    "resolutionRate": "Çözüm Oranı",
+    "ticketStatusDistribution": "Talep Durum Dağılımı",
+    "recentActivities": "Son Aktiviteler",
+    "newCustomerAdded": "Yeni müşteri eklendi",
+    "customerAddedToDatabase": "{name} veritabanına eklendi",
+    "newUserRegistered": "Yeni kullanıcı kayıt oldu",
+    "userJoinedSystem": "{name} sisteme katıldı",
+    "systemStatus": "Sistem Durumu",
+    "permissions": "Yetkiler",
+    "crmPanel": "CRM Yönetim Paneli",
+    "panelDescription": "Müşteri yaşam döngüsü yönetimi, satış pipeline analizi ve ekip performansı takibi",
+    "adminPanelTitle": "Admin Paneli - CRM Sistem",
+    "recentActivities": "Son Aktiviteler",
+    "noActivitiesYet": "Henüz aktivite yok",
+    "roles": "Roller",
+    "newTicketCreated": "Yeni destek talebi oluşturuldu",
+    "newTicketCreatedTitle": "Yeni destek talebi: {title}",
+    "ticketCreatedDescription": "{customer} tarafından oluşturuldu",
+    "newUserRegistered": "Yeni kullanıcı kayıt oldu",
+    "newUserRegisteredTitle": "Yeni kullanıcı kayıt oldu",
+    "userJoinedSystem": "{name} sisteme katıldı",
+    "newCustomerAdded": "Yeni müşteri eklendi",
+    "newCustomerAddedTitle": "Yeni müşteri eklendi",
+    "customerAddedToDatabase": "{name} veritabanına eklendi",
+    "timeAgo": "{time} {unit} önce"
   },
 
   "AdminSupport": {

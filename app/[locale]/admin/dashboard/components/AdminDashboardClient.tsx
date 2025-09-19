@@ -175,7 +175,7 @@ function MetricCard({
 }
 
 
-function RecentActivities({ activities }: { activities: DashboardData['recentActivities'] }) {
+function RecentActivities({ activities, t, locale }: { activities: DashboardData['recentActivities'], t: any, locale: string }) {
 
   const getActivityIcon = (type: string) => {
     switch (type) {
@@ -228,19 +228,23 @@ function RecentActivities({ activities }: { activities: DashboardData['recentAct
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Activity className="h-5 w-5" />
-            Son Aktiviteler
+            {t("recentActivities")}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {activities.slice(0, 8).map((activity) => (
+            {activities.slice(0, 8).map((activity: any) => (
               <div key={activity.id} className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors">
                 {getActivityIcon(activity.type)}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1">
-                      <p className="font-medium text-sm">{activity.title}</p>
-                      <p className="text-sm text-muted-foreground">{activity.description}</p>
+                      <p className="font-medium text-sm">
+                        {activity.titleKey ? t(activity.titleKey, activity.titleParams) : activity.title}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {activity.descriptionKey ? t(activity.descriptionKey, activity.descriptionParams) : activity.description}
+                      </p>
                       <p className="text-xs text-muted-foreground mt-1">
                         {(() => {
                           const date = new Date(activity.time);
@@ -250,13 +254,13 @@ function RecentActivities({ activities }: { activities: DashboardData['recentAct
                           const diffDays = diffMs / (1000 * 60 * 60 * 24);
 
                           if (diffHours < 1) {
-                            return `${Math.floor(diffMs / (1000 * 60))} dk önce`;
+                            return t("timeAgo", { time: Math.floor(diffMs / (1000 * 60)), unit: locale === 'tr' ? "dk" : "min" });
                           } else if (diffHours < 24) {
-                            return `${Math.floor(diffHours)} saat önce`;
+                            return t("timeAgo", { time: Math.floor(diffHours), unit: locale === 'tr' ? "saat" : "hours" });
                           } else if (diffDays < 7) {
-                            return `${Math.floor(diffDays)} gün önce`;
+                            return t("timeAgo", { time: Math.floor(diffDays), unit: locale === 'tr' ? "gün" : "days" });
                           } else {
-                            return date.toLocaleDateString('tr-TR', {
+                            return date.toLocaleDateString(locale === 'tr' ? 'tr-TR' : 'en-US', {
                               day: 'numeric',
                               month: 'short',
                               year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
@@ -273,7 +277,7 @@ function RecentActivities({ activities }: { activities: DashboardData['recentAct
             {activities.length === 0 && (
               <div className="text-center py-8 text-muted-foreground">
                 <Activity className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                <p>Henüz aktivite yok</p>
+                <p>{t("noActivitiesYet")}</p>
               </div>
             )}
           </div>
@@ -385,25 +389,25 @@ export default function AdminDashboardClient() {
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
         >
           <MetricCard
-            title="Toplam Kullanıcı"
+            title={t("totalUsers")}
             value={dashboardData.overview.totalUsers}
             icon={Users}
             color="bg-gradient-to-br from-blue-500 to-cyan-500"
           />
           <MetricCard
-            title="Aktif Müşteriler"
+            title={t("activeCustomers")}
             value={dashboardData.overview.totalCustomers}
             icon={UserCheck}
             color="bg-gradient-to-br from-green-500 to-emerald-500"
           />
           <MetricCard
-            title="Destek Talepleri"
+            title={t("supportTickets")}
             value={dashboardData.overview.totalTickets}
             icon={MessageSquare}
             color="bg-gradient-to-br from-purple-500 to-pink-500"
           />
           <MetricCard
-            title="Aktif Oturumlar"
+            title={t("activeSessions")}
             value={dashboardData.overview.activeSessions}
             icon={Eye}
             color="bg-gradient-to-br from-orange-500 to-red-500"
@@ -419,7 +423,7 @@ export default function AdminDashboardClient() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <MessageSquare className="h-5 w-5" />
-                  Destek Sistemi
+                  {t("supportSystem")}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -429,20 +433,20 @@ export default function AdminDashboardClient() {
                     <div className="text-2xl font-bold text-blue-600">
                       {dashboardData.supportSystem.totalTickets}
                     </div>
-                    <div className="text-sm text-muted-foreground">Toplam Talep</div>
+                    <div className="text-sm text-muted-foreground">{t("totalTickets")}</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-green-600">
                       {dashboardData.supportSystem.ticketResolutionRate}%
                     </div>
-                    <div className="text-sm text-muted-foreground">Çözüm Oranı</div>
+                    <div className="text-sm text-muted-foreground">{t("resolutionRate")}</div>
                   </div>
                 </div>
 
                   <Separator />
 
                   <div className="space-y-2">
-                    <h4 className="font-medium text-sm">Talep Durum Dağılımı</h4>
+                    <h4 className="font-medium text-sm">{t("ticketStatusDistribution")}</h4>
                     {Object.entries(dashboardData.supportSystem.ticketStatusDistribution).map(([status, count]) => (
                       <div key={status} className="flex justify-between items-center">
                         <span className="text-sm capitalize">{status.replace('_', ' ')}</span>
@@ -461,7 +465,7 @@ export default function AdminDashboardClient() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           {/* Son Aktiviteler */}
           <motion.div variants={itemVariants}>
-            <RecentActivities activities={dashboardData.recentActivities} />
+            <RecentActivities activities={dashboardData.recentActivities} t={t} locale={locale} />
           </motion.div>
 
           {/* Sistem Durumu */}
@@ -470,17 +474,17 @@ export default function AdminDashboardClient() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Database className="h-5 w-5" />
-                  Sistem Durumu
+                  {t("systemStatus")}
                 </CardTitle>
               </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="flex justify-between items-center p-4 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border border-blue-200/50 dark:border-blue-800/50">
-                      <span className="text-sm font-medium text-blue-900 dark:text-blue-100">Roller</span>
+                      <span className="text-sm font-medium text-blue-900 dark:text-blue-100">{t("roles")}</span>
                       <Badge variant="secondary" className="font-bold text-lg px-3 py-1 bg-blue-600 text-white">{dashboardData.overview.totalRoles}</Badge>
                     </div>
                     <div className="flex justify-between items-center p-4 rounded-lg bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 border border-purple-200/50 dark:border-purple-800/50">
-                      <span className="text-sm font-medium text-purple-900 dark:text-purple-100">Yetkiler</span>
+                      <span className="text-sm font-medium text-purple-900 dark:text-purple-100">{t("permissions")}</span>
                       <Badge variant="secondary" className="font-bold text-lg px-3 py-1 bg-purple-600 text-white">{dashboardData.overview.totalPermissions}</Badge>
                     </div>
                   </div>
