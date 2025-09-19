@@ -8,6 +8,7 @@ Bu rehber, CRM Admin sisteminin API'lerini Postman kullanarak test etmek için k
 - ✅ **Postman** uygulaması ([İndir](https://www.postman.com/downloads/))
 - ✅ **CRM Admin** deployment URL'i
 - ✅ **API Token** (`crm-api-token-2025`)
+- ✅ **Vercel Bypass Token** (Deployment protection için)
 
 ---
 
@@ -97,6 +98,12 @@ Ana collection altında şu alt koleksiyonları oluşturun:
 5. Save butonuna tıklayın
 ```
 
+#### cURL Komutu
+```bash
+curl -X GET "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers" \
+  -H "Authorization: Bearer crm-api-token-2025"
+```
+
 #### Test Scripti Ekleyin
 ```
 Tests tab'ına aşağıdaki kodu ekleyin:
@@ -163,6 +170,24 @@ const jsonData = pm.response.json();
 pm.environment.set("customer_id", jsonData.id);
 ```
 
+#### cURL Komutu
+```bash
+curl -X POST "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers" \
+  -H "Authorization: Bearer crm-api-token-2025" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Ahmet Yılmaz",
+    "email": "ahmet.yilmaz@email.com",
+    "phone": "+905551234567",
+    "company": "ABC Şirketi",
+    "isActive": true,
+    "notes": {
+      "source": "website",
+      "priority": "high"
+    }
+  }'
+```
+
 ---
 
 ### 4.3 🔍 GET - Tek Müşteri Detayı
@@ -186,6 +211,14 @@ pm.test("Customer data is correct", function () {
     pm.expect(jsonData.name).to.eql("Ahmet Yılmaz");
     pm.expect(jsonData.email).to.eql("ahmet.yilmaz@email.com");
 });
+```
+
+#### cURL Komutu
+```bash
+# Önce POST isteği ile müşteri oluşturun, dönen ID'yi kullanın
+# Örnek ID: oluşturulan müşterinin ID'si
+curl -X GET "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers/clx2b3c4d5e6f7g8h9i0" \
+  -H "Authorization: Bearer crm-api-token-2025"
 ```
 
 ---
@@ -227,6 +260,23 @@ pm.test("Customer updated successfully", function () {
 });
 ```
 
+#### cURL Komutu
+```bash
+curl -X PUT "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers/clx2b3c4d5e6f7g8h9i0" \
+  -H "Authorization: Bearer crm-api-token-2025" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Ahmet Yılmaz (Güncellendi)",
+    "phone": "+905559876543",
+    "company": "XYZ Corporation",
+    "notes": {
+      "source": "website",
+      "priority": "high",
+      "updated": true
+    }
+  }'
+```
+
 ---
 
 ### 4.5 🗑️ DELETE - Müşteri Sil
@@ -249,6 +299,12 @@ pm.test("Customer deleted successfully", function () {
     const jsonData = pm.response.json();
     pm.expect(jsonData).to.have.property('message');
 });
+```
+
+#### cURL Komutu
+```bash
+curl -X DELETE "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers/clx2b3c4d5e6f7g8h9i0" \
+  -H "Authorization: Bearer crm-api-token-2025"
 ```
 
 ---
@@ -308,6 +364,16 @@ pm.test("Customer deleted successfully", function () {
 - Server loglarını kontrol edin
 - Request body'nin doğru formatta olduğunu kontrol edin
 - Network bağlantısını kontrol edin
+```
+
+#### ❌ Vercel Deployment Protection
+```
+Çözüm:
+- Vercel dashboard'dan bypass token alın
+- URL'ye şu parametreleri ekleyin:
+  ?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=YOUR_BYPASS_TOKEN
+- Örnek: https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=YOUR_TOKEN
+- Bypass token almak için: Vercel Dashboard → Project → Settings → Deployment Protection
 ```
 
 ---
