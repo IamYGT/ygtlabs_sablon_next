@@ -100,8 +100,14 @@ Ana collection altında şu alt koleksiyonları oluşturun:
 
 #### cURL Komutu
 ```bash
-curl -X GET "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers" \
+# Vercel Deployment Protection için bypass token ile
+curl -X GET "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=HGyEfnPvfMTdOrZbuYpdVEgGcVtJYeVr" \
   -H "Authorization: Bearer crm-api-token-2025"
+```
+
+#### Alternatif: PowerShell için
+```powershell
+curl.exe -X GET "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=HGyEfnPvfMTdOrZbuYpdVEgGcVtJYeVr" -H "Authorization: Bearer crm-api-token-2025"
 ```
 
 #### Test Scripti Ekleyin
@@ -172,7 +178,7 @@ pm.environment.set("customer_id", jsonData.id);
 
 #### cURL Komutu
 ```bash
-curl -X POST "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers" \
+curl -X POST "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=HGyEfnPvfMTdOrZbuYpdVEgGcVtJYeVr" \
   -H "Authorization: Bearer crm-api-token-2025" \
   -H "Content-Type: application/json" \
   -d '{
@@ -217,7 +223,7 @@ pm.test("Customer data is correct", function () {
 ```bash
 # Önce POST isteği ile müşteri oluşturun, dönen ID'yi kullanın
 # Örnek ID: oluşturulan müşterinin ID'si
-curl -X GET "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers/clx2b3c4d5e6f7g8h9i0" \
+curl -X GET "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers/clx2b3c4d5e6f7g8h9i0?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=HGyEfnPvfMTdOrZbuYpdVEgGcVtJYeVr" \
   -H "Authorization: Bearer crm-api-token-2025"
 ```
 
@@ -262,7 +268,7 @@ pm.test("Customer updated successfully", function () {
 
 #### cURL Komutu
 ```bash
-curl -X PUT "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers/clx2b3c4d5e6f7g8h9i0" \
+curl -X PUT "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers/clx2b3c4d5e6f7g8h9i0?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=HGyEfnPvfMTdOrZbuYpdVEgGcVtJYeVr" \
   -H "Authorization: Bearer crm-api-token-2025" \
   -H "Content-Type: application/json" \
   -d '{
@@ -303,7 +309,7 @@ pm.test("Customer deleted successfully", function () {
 
 #### cURL Komutu
 ```bash
-curl -X DELETE "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers/clx2b3c4d5e6f7g8h9i0" \
+curl -X DELETE "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers/clx2b3c4d5e6f7g8h9i0?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=HGyEfnPvfMTdOrZbuYpdVEgGcVtJYeVr" \
   -H "Authorization: Bearer crm-api-token-2025"
 ```
 
@@ -374,6 +380,17 @@ curl -X DELETE "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/publi
   ?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=YOUR_BYPASS_TOKEN
 - Örnek: https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=YOUR_TOKEN
 - Bypass token almak için: Vercel Dashboard → Project → Settings → Deployment Protection
+
+Not: İlk istekte "Redirecting..." görürsünüz, bu normaldir. Cookie set edildikten sonra tekrar aynı URL'yi çağırın.
+```
+
+#### ❌ cURL Redirect Loop
+```
+Çözüm:
+- İlk kez çağırdığınızda cookie set edilir ama redirect döngüsü oluşabilir
+- İkinci kez aynı komutu çalıştırın veya:
+- Browser'da önce şu URL'yi açın: https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=HGyEfnPvfMTdOrZbuYpdVEgGcVtJYeVr
+- Sonra API çağrılarınızı yapın
 ```
 
 ---

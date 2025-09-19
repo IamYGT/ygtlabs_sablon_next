@@ -63,7 +63,7 @@ const DocumentPage: React.FC = () => {
             endpoint: '/api/public/customers',
             description: 'Tüm müşterileri listele',
             icon: '📋',
-            code: `fetch('https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers', {
+            code: `fetch('https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=HGyEfnPvfMTdOrZbuYpdVEgGcVtJYeVr', {
   headers: {
     'Authorization': 'Bearer crm-api-token-2025'
   }
@@ -76,7 +76,7 @@ const DocumentPage: React.FC = () => {
             endpoint: '/api/public/customers',
             description: 'Yeni müşteri ekle',
             icon: '➕',
-            code: `fetch('https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers', {
+            code: `fetch('https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=HGyEfnPvfMTdOrZbuYpdVEgGcVtJYeVr', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -97,7 +97,7 @@ const DocumentPage: React.FC = () => {
             endpoint: '/api/public/customers/[id]',
             description: 'Müşteri güncelle',
             icon: '✏️',
-            code: `fetch('https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers/musteri-id', {
+            code: `fetch('https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers/clx2b3c4d5e6f7g8h9i0?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=HGyEfnPvfMTdOrZbuYpdVEgGcVtJYeVr', {
   method: 'PUT',
   headers: {
     'Content-Type': 'application/json',
@@ -116,7 +116,7 @@ const DocumentPage: React.FC = () => {
             endpoint: '/api/public/customers/[id]',
             description: 'Müşteri sil',
             icon: '🗑️',
-            code: `fetch('https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers/musteri-id', {
+            code: `fetch('https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers/clx2b3c4d5e6f7g8h9i0?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=HGyEfnPvfMTdOrZbuYpdVEgGcVtJYeVr', {
   method: 'DELETE',
   headers: {
     'Authorization': 'Bearer crm-api-token-2025'
@@ -394,14 +394,14 @@ const DocumentPage: React.FC = () => {
                                                 <p className="font-medium mb-2">Müşteri Listele:</p>
                                                 <pre className="bg-slate-900 text-slate-100 p-3 rounded text-xs">
 {`curl -H "Authorization: Bearer crm-api-token-2025" \\
-  "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers"`}
+  "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=HGyEfnPvfMTdOrZbuYpdVEgGcVtJYeVr"`}
                                                 </pre>
                                             </div>
                                             <Separator />
                                             <div>
                                                 <p className="font-medium mb-2">Yeni Müşteri Ekle:</p>
                                                 <pre className="bg-slate-900 text-slate-100 p-3 rounded text-xs">
-{`curl -X POST "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers" \\
+{`curl -X POST "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=HGyEfnPvfMTdOrZbuYpdVEgGcVtJYeVr" \\
   -H "Authorization: Bearer crm-api-token-2025" \\
   -H "Content-Type: application/json" \\
   -d '{"name":"Test Müşteri"}'`}
@@ -466,14 +466,14 @@ const DocumentPage: React.FC = () => {
                                             <Badge className="mb-2">1. Müşteri Listele</Badge>
                                             <pre className="bg-slate-900 text-slate-100 p-4 rounded text-sm">
 {`curl -H "Authorization: Bearer crm-api-token-2025" \\
-  "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers"`}
+  "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=HGyEfnPvfMTdOrZbuYpdVEgGcVtJYeVr"`}
                                             </pre>
                                         </div>
                                         <Separator />
                                         <div>
                                             <Badge className="mb-2">2. Yeni Müşteri Oluştur</Badge>
                                             <pre className="bg-slate-900 text-slate-100 p-4 rounded text-sm">
-{`curl -X POST "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers" \\
+{`curl -X POST "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=HGyEfnPvfMTdOrZbuYpdVEgGcVtJYeVr" \\
   -H "Authorization: Bearer crm-api-token-2025" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -487,7 +487,7 @@ const DocumentPage: React.FC = () => {
                                         <div>
                                             <Badge className="mb-2">3. Müşteri Güncelle</Badge>
                                             <pre className="bg-slate-900 text-slate-100 p-4 rounded text-sm">
-{`curl -X PUT "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers/[ID]" \\
+{`curl -X PUT "https://fdggfh-73pn1zxc9-storytels-projects.vercel.app/api/public/customers/clx2b3c4d5e6f7g8h9i0?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=HGyEfnPvfMTdOrZbuYpdVEgGcVtJYeVr" \\
   -H "Authorization: Bearer crm-api-token-2025" \\
   -H "Content-Type: application/json" \\
   -d '{"name": "Güncellenmiş İsim"}'`}
