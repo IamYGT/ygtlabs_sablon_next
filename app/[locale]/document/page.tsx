@@ -16,8 +16,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Copy, Eye, EyeOff, Lock, Unlock, BookOpen, Terminal, AlertTriangle, Moon, Sun } from "lucide-react";
 
 const DocumentPage: React.FC = () => {
-    const router = useRouter();
-    const { theme, setTheme, resolvedTheme } = useTheme();
+    const _router = useRouter();
+    const { theme: _theme, setTheme, resolvedTheme } = useTheme();
     const [password, setPassword] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -224,7 +224,7 @@ const DocumentPage: React.FC = () => {
                             🚀 CRM API Dokümantasyonu
                         </h1>
                         <p className="text-muted-foreground">
-                            Müşteri yönetimi API'si için kapsamlı dokümantasyon
+                            Müşteri yönetimi API&apos;si için kapsamlı dokümantasyon
                         </p>
                     </div>
                     <Button
@@ -240,7 +240,7 @@ const DocumentPage: React.FC = () => {
                 <Tabs defaultValue="overview" className="space-y-6">
                     <TabsList className="grid w-full grid-cols-4 lg:w-auto">
                         <TabsTrigger value="overview">Genel Bakış</TabsTrigger>
-                        <TabsTrigger value="endpoints">Endpoint'ler</TabsTrigger>
+                        <TabsTrigger value="endpoints">Endpoint&apos;ler</TabsTrigger>
                         <TabsTrigger value="examples">Örnekler</TabsTrigger>
                         <TabsTrigger value="test">Test</TabsTrigger>
                     </TabsList>
@@ -320,11 +320,11 @@ const DocumentPage: React.FC = () => {
                                     </li>
                                     <li className="flex items-start gap-2">
                                         <span className="text-amber-500 mt-0.5">•</span>
-                                        Access token'ı güvende tutun ve asla paylaşmayın
+                                        Access token&apos;ı güvende tutun ve asla paylaşmayın
                                     </li>
                                     <li className="flex items-start gap-2">
                                         <span className="text-amber-500 mt-0.5">•</span>
-                                        Production ortamında token'ı environment variable'dan alın
+                                        Production ortamında token&apos;ı environment variable&apos;dan alın
                                     </li>
                                     <li className="flex items-start gap-2">
                                         <span className="text-amber-500 mt-0.5">•</span>
@@ -448,7 +448,7 @@ const DocumentPage: React.FC = () => {
                             <Terminal className="h-4 w-4" />
                             <AlertTitle>Hızlı Test</AlertTitle>
                             <AlertDescription>
-                                Aşağıdaki komutları terminalde çalıştırarak API'yi test edebilirsiniz.
+                                Aşağıdaki komutları terminalde çalıştırarak API&apos;yi test edebilirsiniz.
                             </AlertDescription>
                         </Alert>
 

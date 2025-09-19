@@ -97,6 +97,11 @@ interface DashboardData {
     time: string;
     status?: string;
     priority?: string;
+    translationKey?: string;
+    titleKey?: string;
+    descriptionKey?: string;
+    titleParams?: Record<string, string | number>;
+    descriptionParams?: Record<string, string | number>;
   }>;
   upcomingEvents: Array<{
     id: string;
@@ -175,7 +180,7 @@ function MetricCard({
 }
 
 
-function RecentActivities({ activities, t, locale }: { activities: DashboardData['recentActivities'], t: any, locale: string }) {
+function RecentActivities({ activities, t, locale }: { activities: DashboardData['recentActivities'], t: (key: string, params?: Record<string, string | number>) => string, locale: string }) {
 
   const getActivityIcon = (type: string) => {
     switch (type) {
@@ -233,7 +238,7 @@ function RecentActivities({ activities, t, locale }: { activities: DashboardData
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {activities.slice(0, 8).map((activity: any) => (
+            {activities.slice(0, 8).map((activity) => (
               <div key={activity.id} className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors">
                 {getActivityIcon(activity.type)}
                 <div className="flex-1 min-w-0">
