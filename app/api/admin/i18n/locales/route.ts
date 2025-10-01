@@ -5,7 +5,7 @@ import path from "node:path";
 
 const GENERATED_FILE = path.join(
   process.cwd(),
-  "src",
+  "lib",
   "i18n",
   "locales.generated.ts"
 );

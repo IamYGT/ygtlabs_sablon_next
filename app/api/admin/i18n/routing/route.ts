@@ -36,7 +36,7 @@ export async function POST() {
 
   const outPath = path.join(
     process.cwd(),
-    "src",
+    "lib",
     "i18n",
     "routing.generated.ts"
   );
